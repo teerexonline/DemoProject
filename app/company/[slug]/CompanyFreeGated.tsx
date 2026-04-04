@@ -3,6 +3,7 @@
 import { useState, useTransition } from 'react'
 import Link from 'next/link'
 import { useMonthlyToken } from './actions'
+import CompanyOverview from './CompanyOverview'
 
 interface Company {
   id: string
@@ -22,75 +23,13 @@ interface Company {
 const NAV = [
   { id: 'overview',   label: 'Company Overview',  icon: '🏢', pro: false },
   { id: 'org',        label: 'Org Chart',          icon: '🗂️',  pro: true },
-  { id: 'revenue',    label: 'Revenue',             icon: '💰', pro: true },
-  { id: 'revdept',    label: 'Revenue by Dept',     icon: '📊', pro: true },
-  { id: 'market',     label: 'Market Share',        icon: '🥧', pro: true },
-  { id: 'units',      label: 'Business Units',      icon: '🔷', pro: true },
+  { id: 'financials', label: 'Financials',          icon: '💹', pro: true },
   { id: 'tools',      label: 'Internal Tools',      icon: '🔧', pro: true },
   { id: 'processes',  label: 'Internal Processes',  icon: '⚙️',  pro: true },
   { id: 'product',    label: 'Product Use Case',    icon: '🎯', pro: true },
 ] as const
 type SectionId = typeof NAV[number]['id']
 
-function CompanyOverview({ company }: { company: Company }) {
-  const color = company.logo_color ?? '#7C3AED'
-  return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-      <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-        <div style={{ width: '52px', height: '52px', borderRadius: '14px', background: color, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, boxShadow: `0 4px 12px ${color}33` }}>
-          <span style={{ color: '#fff', fontSize: '20px', fontWeight: 800 }}>{company.name.charAt(0)}</span>
-        </div>
-        <div>
-          <h1 style={{ margin: 0, fontSize: '22px', fontWeight: 800, letterSpacing: '-0.04em', color: '#09090B' }}>{company.name}</h1>
-          <div style={{ color: '#71717A', fontSize: '13px', marginTop: '2px' }}>
-            {company.category} · {company.hq ?? 'Global'} · Founded {company.founded ?? '—'}
-          </div>
-        </div>
-        <div style={{ marginLeft: 'auto', background: '#F0FDF4', color: '#16A34A', fontSize: '11px', fontWeight: 700, padding: '4px 12px', borderRadius: '100px', border: '1px solid #BBF7D0' }}>Active</div>
-      </div>
-
-      {company.description && (
-        <p style={{ color: '#374151', fontSize: '14.5px', lineHeight: 1.7, margin: 0, padding: '16px 18px', background: '#F7F7F8', borderRadius: '12px', border: '1px solid #F0F0F2' }}>
-          {company.description}
-        </p>
-      )}
-
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '12px' }}>
-        {[
-          { label: 'Valuation', value: company.valuation ?? '—' },
-          { label: 'Revenue', value: company.revenue ?? '—' },
-          { label: 'Employees', value: company.employees ? company.employees >= 1000 ? `${(company.employees / 1000).toFixed(0)}k+` : `${company.employees}` : '—' },
-          { label: 'Founded', value: company.founded?.toString() ?? '—' },
-        ].map(s => (
-          <div key={s.label} style={{ padding: '16px', borderRadius: '12px', background: '#F7F7F8', border: '1px solid #F0F0F2', textAlign: 'center' }}>
-            <div style={{ color: '#09090B', fontSize: '18px', fontWeight: 800, letterSpacing: '-0.04em' }}>{s.value}</div>
-            <div style={{ color: '#A1A1AA', fontSize: '11.5px', marginTop: '3px' }}>{s.label}</div>
-          </div>
-        ))}
-      </div>
-
-      <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
-        {[company.category, 'B2B', 'SaaS', 'Developer-first'].filter(Boolean).map(t => (
-          <span key={t} style={{ padding: '4px 11px', borderRadius: '6px', background: '#F5F3FF', border: '1px solid #DDD6FE', color: '#7C3AED', fontSize: '12px', fontWeight: 500 }}>{t}</span>
-        ))}
-      </div>
-
-      {/* Teaser of what's locked */}
-      <div style={{ padding: '18px 20px', borderRadius: '12px', background: '#FAFAFA', border: '1px solid #F0F0F2' }}>
-        <div style={{ color: '#71717A', fontSize: '11.5px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '10px' }}>
-          More available with Pro
-        </div>
-        <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
-          {NAV.filter(n => n.pro).map(n => (
-            <span key={n.id} style={{ padding: '4px 10px', borderRadius: '6px', background: '#fff', border: '1px solid #E4E4E7', color: '#A1A1AA', fontSize: '12px', display: 'flex', alignItems: 'center', gap: '4px' }}>
-              <span style={{ fontSize: '11px' }}>🔒</span> {n.label}
-            </span>
-          ))}
-        </div>
-      </div>
-    </div>
-  )
-}
 
 function ProGatePanel({
   section,
@@ -324,7 +263,7 @@ export default function CompanyFreeGated({ company, hasToken }: { company: Compa
           style={{ background: '#fff', borderRadius: '14px', border: '1px solid #E4E4E7', padding: '28px', boxShadow: '0 1px 4px rgba(0,0,0,0.04)', minHeight: '500px' }}
         >
           {activeSection === 'overview' ? (
-            <CompanyOverview company={company} />
+            <CompanyOverview company={company} showProTeaser />
           ) : (
             <ProGatePanel
               section={activeNav}

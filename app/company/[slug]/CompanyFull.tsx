@@ -2,6 +2,8 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
+import CompanyOverview from './CompanyOverview'
+import OrgChart from './OrgChart'
 
 interface Company {
   id: string
@@ -21,10 +23,7 @@ interface Company {
 const NAV = [
   { id: 'overview',   label: 'Company Overview',  icon: '🏢' },
   { id: 'org',        label: 'Org Chart',          icon: '🗂️' },
-  { id: 'revenue',    label: 'Revenue',             icon: '💰' },
-  { id: 'revdept',    label: 'Revenue by Dept',     icon: '📊' },
-  { id: 'market',     label: 'Market Share',        icon: '🥧' },
-  { id: 'units',      label: 'Business Units',      icon: '🔷' },
+  { id: 'financials', label: 'Financials',          icon: '💹' },
   { id: 'tools',      label: 'Internal Tools',      icon: '🔧' },
   { id: 'processes',  label: 'Internal Processes',  icon: '⚙️' },
   { id: 'product',    label: 'Product Use Case',    icon: '🎯' },
@@ -36,180 +35,211 @@ function SectionContent({ id, company }: { id: SectionId; company: Company }) {
 
   switch (id) {
     case 'overview':
-      return (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '16px', flexWrap: 'wrap' }}>
-            <div style={{ width: '52px', height: '52px', borderRadius: '14px', background: color, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, boxShadow: `0 4px 12px ${color}33` }}>
-              <span style={{ color: '#fff', fontSize: '20px', fontWeight: 800 }}>{company.name.charAt(0)}</span>
-            </div>
-            <div style={{ flex: 1, minWidth: 0 }}>
-              <h1 style={{ margin: 0, fontSize: '22px', fontWeight: 800, letterSpacing: '-0.04em', color: '#09090B' }}>{company.name}</h1>
-              <div style={{ color: '#71717A', fontSize: '13px', marginTop: '2px' }}>
-                {company.category} · {company.hq ?? 'Global'} · Founded {company.founded ?? '—'}
-              </div>
-            </div>
-            <div style={{ background: '#F0FDF4', color: '#16A34A', fontSize: '11px', fontWeight: 700, padding: '4px 12px', borderRadius: '100px', border: '1px solid #BBF7D0', flexShrink: 0 }}>Active</div>
-          </div>
-          {company.description && (
-            <p style={{ color: '#374151', fontSize: '14.5px', lineHeight: 1.7, margin: 0, padding: '16px 18px', background: '#F7F7F8', borderRadius: '12px', border: '1px solid #F0F0F2' }}>
-              {company.description}
-            </p>
-          )}
-          <div className="co-4col" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '12px' }}>
-            {[
-              { label: 'Valuation', value: company.valuation ?? '—' },
-              { label: 'Revenue', value: company.revenue ?? '—' },
-              { label: 'Employees', value: company.employees ? company.employees >= 1000 ? `${(company.employees/1000).toFixed(0)}k+` : `${company.employees}` : '—' },
-              { label: 'Founded', value: company.founded?.toString() ?? '—' },
-            ].map(s => (
-              <div key={s.label} style={{ padding: '16px', borderRadius: '12px', background: '#F7F7F8', border: '1px solid #F0F0F2', textAlign: 'center' }}>
-                <div style={{ color: '#09090B', fontSize: '18px', fontWeight: 800, letterSpacing: '-0.04em' }}>{s.value}</div>
-                <div style={{ color: '#A1A1AA', fontSize: '11.5px', marginTop: '3px' }}>{s.label}</div>
-              </div>
-            ))}
-          </div>
-          <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
-            {[company.category, 'B2B', 'SaaS', 'Developer-first'].filter(Boolean).map(t => (
-              <span key={t} style={{ padding: '4px 11px', borderRadius: '6px', background: '#F5F3FF', border: '1px solid #DDD6FE', color: '#7C3AED', fontSize: '12px', fontWeight: 500 }}>{t}</span>
-            ))}
-          </div>
-        </div>
-      )
+      return <CompanyOverview company={company} />
 
     case 'org':
-      return (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
-          <div style={{ textAlign: 'center' }}>
-            <div style={{ display: 'inline-block', padding: '10px 28px', borderRadius: '10px', background: color, color: '#fff', fontWeight: 700, fontSize: '13px', boxShadow: `0 4px 12px ${color}40` }}>
-              CEO &amp; Co-founder<br />
-              <span style={{ fontSize: '11px', fontWeight: 400, opacity: 0.8 }}>{company.name} Leadership</span>
-            </div>
-          </div>
-          <div className="co-4col" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '10px' }}>
-            {['President', 'CFO', 'CTO', 'CPO', 'CMO', 'CLO', 'CHRO', 'CRO'].map(title => (
-              <div key={title} style={{ padding: '12px', borderRadius: '10px', background: '#F5F3FF', border: '1px solid #DDD6FE', textAlign: 'center' }}>
-                <div style={{ width: '32px', height: '32px', borderRadius: '50%', background: '#E5E7EB', margin: '0 auto 8px' }} />
-                <div style={{ color: '#6D28D9', fontSize: '11.5px', fontWeight: 700 }}>{title}</div>
-              </div>
-            ))}
-          </div>
-          <div className="co-3col" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '10px' }}>
-            {['Engineering', 'Product', 'Design', 'Sales', 'Marketing', 'Operations'].map(dept => (
-              <div key={dept} style={{ padding: '12px 14px', borderRadius: '10px', background: '#fff', border: '1px solid #E4E4E7' }}>
-                <div style={{ color: '#09090B', fontSize: '13px', fontWeight: 600, marginBottom: '4px' }}>{dept}</div>
-                <div style={{ color: '#A1A1AA', fontSize: '11.5px' }}>{Math.floor(Math.random() * 300 + 50)} people</div>
-              </div>
-            ))}
-          </div>
-        </div>
-      )
+      return <OrgChart company={company} />
 
-    case 'revenue':
+    case 'financials': {
+      const MARKET = [
+        { name: company.name,    pct: 34, clr: color },
+        { name: 'Competitor A',  pct: 28, clr: '#94A3B8' },
+        { name: 'Competitor B',  pct: 19, clr: '#CBD5E1' },
+        { name: 'Others',        pct: 19, clr: '#E2E8F0' },
+      ]
+      let cum = 0
+      const donut = `conic-gradient(${MARKET.map(m => { const f = cum; cum += m.pct; return `${m.clr} ${f}% ${cum}%` }).join(', ')})`
+
+      const STREAMS = [
+        { name: 'Core Product / Services',    pct: 62, clr: color },
+        { name: 'Enterprise & Partnerships',  pct: 22, clr: '#06B6D4' },
+        { name: 'Platform & APIs',            pct: 11, clr: '#F59E0B' },
+        { name: 'Other / Misc',               pct: 5,  clr: '#10B981' },
+      ]
+
+      const UNITS = [
+        { name: 'Core Platform',       growth: '+24%',  status: 'primary', desc: 'Main product · ~62% of revenue' },
+        { name: 'Enterprise Division', growth: '+41%',  status: 'growing', desc: 'Custom integrations & enterprise' },
+        { name: 'Developer Tools',     growth: '+18%',  status: 'growing', desc: 'SDKs, APIs & third-party platform' },
+        { name: 'Emerging Products',   growth: 'Early', status: 'early',   desc: 'New bets & experimental lines' },
+      ]
+
+      const unitColor = (s: string) => s === 'primary' ? color : s === 'growing' ? '#10B981' : '#F59E0B'
+
+      const cat = (company.category ?? '').toLowerCase()
+      const marketLabel = (() => {
+        if (cat.includes('payment') || cat.includes('fintech'))            return 'Digital Payments'
+        if (cat.includes('cloud') || cat.includes('infrastructure'))       return 'Cloud Infrastructure'
+        if (cat.includes('ecommerce') || cat.includes('e-commerce') || cat.includes('retail')) return 'E-commerce Platforms'
+        if (cat.includes('saas') || cat.includes('software'))              return 'B2B SaaS Software'
+        if (cat.includes('social') || cat.includes('media'))               return 'Social Media Platforms'
+        if (cat.includes('health') || cat.includes('medical'))             return 'Health Technology'
+        if (cat.includes('ai') || cat.includes('machine learning') || cat.includes('artificial')) return 'AI & ML Platforms'
+        if (cat.includes('marketplace'))                                    return 'Online Marketplaces'
+        if (cat.includes('gaming'))                                         return 'Gaming Platforms'
+        if (cat.includes('crypto') || cat.includes('blockchain'))          return 'Crypto & Blockchain'
+        if (cat.includes('cyber') || cat.includes('security'))             return 'Cybersecurity'
+        if (cat.includes('data') || cat.includes('analytics'))             return 'Data & Analytics'
+        if (cat.includes('hr') || cat.includes('workforce'))               return 'HR Technology'
+        if (cat.includes('crm') || cat.includes('sales'))                  return 'CRM & Sales Tech'
+        if (cat.includes('logistics') || cat.includes('supply'))           return 'Logistics & Supply Chain'
+        if (cat.includes('devtools') || cat.includes('developer'))         return 'Developer Tools'
+        if (cat.includes('streaming') || cat.includes('video'))            return 'Video Streaming'
+        if (cat.includes('travel') || cat.includes('hospitality'))         return 'Travel & Hospitality'
+        return company.category ?? 'Technology'
+      })()
+
       return (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-          <div className="co-3col" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '12px' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+
+          {/* ── KPIs ──────────────────────────────────────────── */}
+          <div className="co-3col" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 10 }}>
             {[
-              { label: 'Annual Revenue', value: company.revenue ?? '$—', change: '+24%' },
-              { label: 'YoY Growth', value: '24%', change: '+5pp' },
-              { label: 'Revenue / Employee', value: '$1.8M', change: '+12%' },
-            ].map(m => (
-              <div key={m.label} style={{ padding: '20px', borderRadius: '12px', background: '#F7F7F8', border: '1px solid #F0F0F2' }}>
-                <div style={{ color: '#A1A1AA', fontSize: '11.5px', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '8px' }}>{m.label}</div>
-                <div style={{ color: '#09090B', fontSize: '24px', fontWeight: 800, letterSpacing: '-0.04em' }}>{m.value}</div>
-                <div style={{ color: '#16A34A', fontSize: '12px', fontWeight: 600, marginTop: '4px' }}>{m.change} vs last year</div>
+              { label: 'Annual Revenue',       value: company.revenue ?? '$—', sub: '+24% vs prior year' },
+              { label: 'YoY Growth',           value: '24%',                   sub: '+5 pp vs prior year' },
+              { label: 'Revenue / Employee',   value: '$1.8M',                 sub: '+12% vs prior year' },
+            ].map(kpi => (
+              <div key={kpi.label} style={{ padding: '14px 16px', borderRadius: 12, background: '#F7F7F8', border: '1px solid #F0F0F2' }}>
+                <div style={{ color: '#A1A1AA', fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 6 }}>
+                  {kpi.label}
+                </div>
+                <div style={{ color: '#09090B', fontSize: 22, fontWeight: 800, letterSpacing: '-0.04em', marginBottom: 3 }}>
+                  {kpi.value}
+                </div>
+                <div style={{ color: '#16A34A', fontSize: 10.5, fontWeight: 600 }}>{kpi.sub}</div>
               </div>
             ))}
           </div>
-          <div style={{ padding: '20px', borderRadius: '12px', background: '#fff', border: '1px solid #E4E4E7' }}>
-            <div style={{ color: '#09090B', fontSize: '13px', fontWeight: 700, marginBottom: '14px' }}>Revenue Growth (Last 5 Years)</div>
-            <div className="co-bar" style={{ display: 'flex', alignItems: 'flex-end', gap: '10px', height: '100px' }}>
-              {[40, 58, 72, 84, 100].map((pct, i) => (
-                <div key={i} style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '6px' }}>
-                  <div style={{ width: '100%', background: i === 4 ? color : '#E4E4E7', borderRadius: '4px 4px 0 0', height: `${pct}px`, transition: 'height 0.4s' }} />
-                  <div style={{ color: '#A1A1AA', fontSize: '10.5px' }}>{2020 + i}</div>
+
+          {/* ── Revenue chart + Market share ──────────────────── */}
+          <div className="co-2col" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+
+            {/* Revenue growth bars */}
+            <div style={{ padding: '14px 16px', borderRadius: 12, background: '#fff', border: '1px solid #E4E4E7' }}>
+              <div style={{ color: '#A1A1AA', fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 14 }}>
+                Revenue Growth
+              </div>
+              <div style={{ display: 'flex', alignItems: 'flex-end', gap: 6, height: 76 }}>
+                {[
+                  { y: '2020', h: 40 }, { y: '2021', h: 54 },
+                  { y: '2022', h: 66 }, { y: '2023', h: 81 }, { y: '2024', h: 100 },
+                ].map((bar, i) => (
+                  <div key={bar.y} style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 5 }}>
+                    <div style={{
+                      width: '100%',
+                      height: `${Math.round(bar.h * 0.72)}px`,
+                      background: i === 4 ? color : '#E4E4E7',
+                      borderRadius: '3px 3px 0 0',
+                      transition: 'height 0.4s ease',
+                    }} />
+                    <div style={{ color: '#A1A1AA', fontSize: 9.5 }}>{bar.y}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Market share donut */}
+            <div style={{ padding: '14px 16px', borderRadius: 12, background: '#fff', border: '1px solid #E4E4E7' }}>
+              <div style={{ marginBottom: 12 }}>
+                <div style={{ color: '#A1A1AA', fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 2 }}>
+                  Market Share
                 </div>
-              ))}
+                <div style={{ color: '#09090B', fontSize: 12, fontWeight: 700, letterSpacing: '-0.02em' }}>
+                  {marketLabel} Market
+                </div>
+              </div>
+              <div style={{ display: 'flex', gap: 14, alignItems: 'center' }}>
+                {/* Donut via conic-gradient */}
+                <div style={{
+                  width: 88, height: 88, borderRadius: '50%',
+                  background: donut,
+                  flexShrink: 0, position: 'relative',
+                }}>
+                  <div style={{
+                    position: 'absolute', top: '50%', left: '50%',
+                    transform: 'translate(-50%, -50%)',
+                    width: 52, height: 52, borderRadius: '50%', background: '#fff',
+                    display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
+                  }}>
+                    <div style={{ fontSize: 13, fontWeight: 800, color: '#09090B', lineHeight: 1 }}>34%</div>
+                    <div style={{ fontSize: 8, color: '#A1A1AA', marginTop: 1 }}>#1</div>
+                  </div>
+                </div>
+                {/* Legend */}
+                <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 6 }}>
+                  {MARKET.map(m => (
+                    <div key={m.name} style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                      <div style={{ width: 7, height: 7, borderRadius: 2, background: m.clr, flexShrink: 0 }} />
+                      <div style={{ flex: 1, color: '#52525B', fontSize: 11, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{m.name}</div>
+                      <div style={{ color: m.clr === color ? color : '#71717A', fontSize: 11, fontWeight: m.clr === color ? 700 : 400 }}>{m.pct}%</div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+              {/* TAM/SAM/SOM */}
+              <div style={{ marginTop: 11, paddingTop: 10, borderTop: '1px solid #F0F0F2', display: 'flex', gap: 16 }}>
+                {[{ l: 'TAM', v: '$420B' }, { l: 'SAM', v: '$86B' }, { l: 'SOM', v: '$14B' }].map(m => (
+                  <div key={m.l}>
+                    <div style={{ color: '#09090B', fontSize: 12, fontWeight: 800, letterSpacing: '-0.02em' }}>{m.v}</div>
+                    <div style={{ color: '#A1A1AA', fontSize: 9.5 }}>{m.l}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* ── Revenue streams + Business units ──────────────── */}
+          <div className="co-2col" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+
+            {/* Revenue streams */}
+            <div style={{ padding: '14px 16px', borderRadius: 12, background: '#fff', border: '1px solid #E4E4E7' }}>
+              <div style={{ color: '#A1A1AA', fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 12 }}>
+                Revenue Streams
+              </div>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+                {STREAMS.map(s => (
+                  <div key={s.name}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 4 }}>
+                      <span style={{ color: '#52525B', fontSize: 11.5 }}>{s.name}</span>
+                      <span style={{ color: '#09090B', fontSize: 11.5, fontWeight: 700 }}>{s.pct}%</span>
+                    </div>
+                    <div style={{ height: 6, background: '#F0F0F2', borderRadius: 100, overflow: 'hidden' }}>
+                      <div style={{ width: `${s.pct}%`, height: '100%', background: s.clr, borderRadius: 100, transition: 'width 0.6s cubic-bezier(0.22,1,0.36,1)' }} />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Business units */}
+            <div style={{ padding: '14px 16px', borderRadius: 12, background: '#fff', border: '1px solid #E4E4E7' }}>
+              <div style={{ color: '#A1A1AA', fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 12 }}>
+                Business Units
+              </div>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 9 }}>
+                {UNITS.map(u => (
+                  <div key={u.name} style={{ display: 'flex', alignItems: 'flex-start', gap: 9 }}>
+                    <div style={{ width: 7, height: 7, borderRadius: '50%', background: unitColor(u.status), flexShrink: 0, marginTop: 4 }} />
+                    <div style={{ flex: 1, minWidth: 0 }}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 6 }}>
+                        <span style={{ color: '#09090B', fontSize: 12, fontWeight: 600 }}>{u.name}</span>
+                        <span style={{
+                          padding: '1px 7px', borderRadius: 5, flexShrink: 0,
+                          background: u.status === 'early' ? '#FEF3C7' : '#DCFCE7',
+                          color: u.status === 'early' ? '#92400E' : '#15803D',
+                          fontSize: 10, fontWeight: 700,
+                        }}>{u.growth}</span>
+                      </div>
+                      <div style={{ color: '#A1A1AA', fontSize: 11, marginTop: 1 }}>{u.desc}</div>
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         </div>
       )
-
-    case 'revdept':
-      return (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-          <div style={{ color: '#09090B', fontSize: '16px', fontWeight: 700, letterSpacing: '-0.03em' }}>Revenue by Department</div>
-          {[
-            { dept: 'Core Product / Services', pct: 62, color },
-            { dept: 'Enterprise & Partnerships', pct: 22, color: '#06B6D4' },
-            { dept: 'Platform & APIs', pct: 11, color: '#F59E0B' },
-            { dept: 'Other / Misc', pct: 5, color: '#10B981' },
-          ].map(d => (
-            <div key={d.dept} style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-              <div style={{ width: '110px', color: '#52525B', fontSize: '12.5px', flexShrink: 0 }}>{d.dept}</div>
-              <div style={{ flex: 1, height: '10px', background: '#F0F0F2', borderRadius: '100px', overflow: 'hidden' }}>
-                <div style={{ width: `${d.pct}%`, height: '100%', background: d.color, borderRadius: '100px', transition: 'width 0.6s cubic-bezier(0.22,1,0.36,1)' }} />
-              </div>
-              <div style={{ width: '36px', textAlign: 'right', color: '#09090B', fontSize: '13px', fontWeight: 700 }}>{d.pct}%</div>
-            </div>
-          ))}
-        </div>
-      )
-
-    case 'market':
-      return (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-          <div style={{ color: '#09090B', fontSize: '16px', fontWeight: 700, letterSpacing: '-0.03em' }}>Market Share Analysis</div>
-          <div className="co-2col" style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '12px' }}>
-            {[
-              { name: company.name, share: '34%', color },
-              { name: 'Competitor A', share: '28%', color: '#E5E7EB' },
-              { name: 'Competitor B', share: '19%', color: '#E5E7EB' },
-              { name: 'Others', share: '19%', color: '#E5E7EB' },
-            ].map(c => (
-              <div key={c.name} style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '14px', borderRadius: '10px', background: c.color === color ? '#F5F3FF' : '#F7F7F8', border: `1px solid ${c.color === color ? '#DDD6FE' : '#F0F0F2'}` }}>
-                <div style={{ width: '12px', height: '12px', borderRadius: '50%', background: c.color, flexShrink: 0 }} />
-                <div style={{ flex: 1, color: '#374151', fontSize: '13px', fontWeight: c.color === color ? 700 : 400 }}>{c.name}</div>
-                <div style={{ color: c.color === color ? color : '#71717A', fontSize: '16px', fontWeight: 800 }}>{c.share}</div>
-              </div>
-            ))}
-          </div>
-          <div style={{ padding: '16px', borderRadius: '12px', background: '#F5F3FF', border: '1px solid #DDD6FE' }}>
-            <div style={{ color: '#7C3AED', fontSize: '12px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '6px' }}>TAM / SAM / SOM</div>
-            <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap' }}>
-              {[{ l: 'TAM', v: '$420B' }, { l: 'SAM', v: '$86B' }, { l: 'SOM', v: '$14B' }].map(m => (
-                <div key={m.l}>
-                  <div style={{ color: '#09090B', fontSize: '18px', fontWeight: 800, letterSpacing: '-0.03em' }}>{m.v}</div>
-                  <div style={{ color: '#A1A1AA', fontSize: '11px' }}>{m.l}</div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      )
-
-    case 'units':
-      return (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-          <div style={{ color: '#09090B', fontSize: '16px', fontWeight: 700, letterSpacing: '-0.03em' }}>Business Units</div>
-          {[
-            { name: 'Core Platform', status: 'primary', description: 'Main product serving the majority of customers. Drives ~62% of revenue.', growth: '+24%' },
-            { name: 'Enterprise Division', status: 'growing', description: 'Dedicated enterprise sales and custom integration team.', growth: '+41%' },
-            { name: 'Developer Tools', status: 'growing', description: 'SDKs, APIs, and developer platform for third-party integrations.', growth: '+18%' },
-            { name: 'Emerging Products', status: 'early', description: 'New bets and experimental product lines.', growth: 'Early' },
-          ].map(u => (
-            <div key={u.name} style={{ padding: '16px', borderRadius: '12px', background: '#fff', border: '1px solid #E4E4E7', display: 'flex', gap: '14px', alignItems: 'flex-start' }}>
-              <div style={{ width: '10px', height: '10px', borderRadius: '50%', marginTop: '4px', flexShrink: 0, background: u.status === 'primary' ? color : u.status === 'growing' ? '#10B981' : '#F59E0B' }} />
-              <div style={{ flex: 1, minWidth: 0 }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '4px', gap: '8px' }}>
-                  <div style={{ color: '#09090B', fontSize: '14px', fontWeight: 700 }}>{u.name}</div>
-                  <div style={{ color: '#16A34A', fontSize: '12px', fontWeight: 600, flexShrink: 0 }}>{u.growth}</div>
-                </div>
-                <div style={{ color: '#71717A', fontSize: '12.5px', lineHeight: 1.5 }}>{u.description}</div>
-              </div>
-            </div>
-          ))}
-        </div>
-      )
+    }
 
     case 'tools':
       return (
