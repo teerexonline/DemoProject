@@ -22,14 +22,14 @@ export default function Trending() {
   return (
     <section style={{ padding: '96px 24px', background: '#FAFAFA', borderTop: '1px solid #F4F4F5' }}>
       <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
-        <div style={{
+        <div className="trending-grid" style={{
           display: 'grid',
           gridTemplateColumns: '1fr 1fr',
           gap: '80px',
           alignItems: 'start',
         }}>
           {/* Left: heading */}
-          <div style={{ position: 'sticky', top: '80px' }}>
+          <div className="trending-sticky" style={{ position: 'sticky', top: '80px' }}>
             <p style={{
               color: '#7C3AED', fontSize: '12px', fontWeight: 700,
               textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '12px',

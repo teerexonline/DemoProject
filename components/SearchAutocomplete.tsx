@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
+import type { User } from '@supabase/supabase-js'
 
 interface Company {
   id: string
@@ -25,9 +26,27 @@ export default function SearchAutocomplete({ placeholder = 'Search any company..
   const [open, setOpen] = useState(false)
   const [loading, setLoading] = useState(false)
   const [activeIdx, setActiveIdx] = useState(-1)
+  const [user, setUser] = useState<User | null>(null)
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const containerRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
+
+  useEffect(() => {
+    const supabase = createClient()
+    supabase.auth.getUser().then(({ data }) => setUser(data.user))
+    const { data: listener } = supabase.auth.onAuthStateChange((_e, session) => {
+      setUser(session?.user ?? null)
+    })
+    return () => listener.subscription.unsubscribe()
+  }, [])
+
+  function navigate(path: string) {
+    if (!user) {
+      router.push('/signup')
+      return
+    }
+    router.push(path)
+  }
 
   const search = useCallback(async (q: string) => {
     if (!q.trim()) { setResults([]); setOpen(false); return }
@@ -65,7 +84,7 @@ export default function SearchAutocomplete({ placeholder = 'Search any company..
   function handleSelect(company: Company) {
     setQuery(company.name)
     setOpen(false)
-    router.push(`/company/${company.slug}`)
+    navigate(`/company/${company.slug}`)
   }
 
   function handleKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
@@ -75,7 +94,7 @@ export default function SearchAutocomplete({ placeholder = 'Search any company..
     else if (e.key === 'Enter') {
       e.preventDefault()
       if (activeIdx >= 0 && results[activeIdx]) handleSelect(results[activeIdx])
-      else if (query.trim()) router.push(`/company?q=${encodeURIComponent(query)}`)
+      else if (query.trim()) navigate(`/company?q=${encodeURIComponent(query)}`)
     }
     else if (e.key === 'Escape') { setOpen(false); setActiveIdx(-1) }
   }
@@ -140,7 +159,7 @@ export default function SearchAutocomplete({ placeholder = 'Search any company..
         />
         {isLg && (
           <button
-            onClick={() => query.trim() && router.push(`/company?q=${encodeURIComponent(query)}`)}
+            onClick={() => query.trim() && navigate(`/company?q=${encodeURIComponent(query)}`)}
             style={{
               margin: '5px', padding: '9px 16px',
               background: '#7C3AED', color: '#fff', border: 'none', borderRadius: '8px',
@@ -212,7 +231,7 @@ export default function SearchAutocomplete({ placeholder = 'Search any company..
           ))}
           <div style={{ padding: '8px 14px 10px', borderTop: '1px solid #F4F4F5' }}>
             <button
-              onClick={() => query.trim() && router.push(`/company?q=${encodeURIComponent(query)}`)}
+              onClick={() => query.trim() && navigate(`/company?q=${encodeURIComponent(query)}`)}
               style={{
                 color: '#7C3AED', fontSize: '12px', fontWeight: 600,
                 background: 'none', border: 'none', cursor: 'pointer', padding: 0,

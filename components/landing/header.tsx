@@ -9,6 +9,7 @@ import SearchAutocomplete from '@/components/SearchAutocomplete'
 export default function Header() {
   const [user, setUser] = useState<User | null>(null)
   const [scrolled, setScrolled] = useState(false)
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
   useEffect(() => {
     const supabase = createClient()
@@ -36,7 +37,7 @@ export default function Header() {
       transition: 'box-shadow 0.2s',
       boxShadow: scrolled ? '0 1px 12px rgba(0,0,0,0.06)' : 'none',
     }}>
-      <div style={{
+      <div className="header-inner" style={{
         maxWidth: '1200px',
         margin: '0 auto',
         padding: '0 24px',
@@ -58,12 +59,12 @@ export default function Header() {
         </Link>
 
         {/* Search bar */}
-        <div style={{ flex: 1, maxWidth: '340px' }}>
+        <div className="header-search" style={{ flex: 1, maxWidth: '340px' }}>
           <SearchAutocomplete placeholder="Search any company..." size="sm" />
         </div>
 
         {/* Nav */}
-        <nav style={{ display: 'flex', gap: '2px', marginLeft: '4px' }}>
+        <nav className="header-nav" style={{ display: 'flex', gap: '2px', marginLeft: '4px' }}>
           {['Features', 'Enterprise', 'Pricing'].map((item) => (
             <Link
               key={item}
@@ -95,7 +96,7 @@ export default function Header() {
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginLeft: 'auto', flexShrink: 0 }}>
           {user ? (
             <>
-              <span style={{ color: '#71717A', fontSize: '13px' }}>
+              <span className="header-username" style={{ color: '#71717A', fontSize: '13px' }}>
                 {user.email?.split('@')[0]}
               </span>
               <Link
@@ -125,6 +126,7 @@ export default function Header() {
             <>
               <Link
                 href="/login"
+                className="header-signin-link"
                 style={{
                   color: '#52525B',
                   textDecoration: 'none',
@@ -141,6 +143,7 @@ export default function Header() {
               </Link>
               <Link
                 href="/signup"
+                className="header-cta-link"
                 style={{
                   color: '#fff',
                   textDecoration: 'none',
@@ -161,7 +164,75 @@ export default function Header() {
             </>
           )}
         </div>
+
+        {/* Mobile hamburger */}
+        <button
+          className="header-hamburger"
+          onClick={() => setMobileMenuOpen(v => !v)}
+          style={{
+            display: 'none',
+            background: 'none',
+            border: '1px solid #E4E4E7',
+            borderRadius: '7px',
+            padding: '6px 8px',
+            cursor: 'pointer',
+            color: '#52525B',
+            flexShrink: 0,
+          }}
+          aria-label="Toggle menu"
+        >
+          {mobileMenuOpen ? (
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M18 6 6 18M6 6l12 12"/>
+            </svg>
+          ) : (
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+              <line x1="4" y1="8" x2="20" y2="8"/><line x1="4" y1="16" x2="20" y2="16"/>
+            </svg>
+          )}
+        </button>
       </div>
+
+      {/* Mobile dropdown menu */}
+      {mobileMenuOpen && (
+        <div className="header-mobile-menu" style={{
+          borderTop: '1px solid #F4F4F5',
+          background: '#fff',
+          padding: '12px 16px 16px',
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '4px',
+        }}>
+          {/* Search in mobile menu */}
+          <div style={{ marginBottom: '8px' }}>
+            <SearchAutocomplete placeholder="Search any company..." size="sm" />
+          </div>
+          {['Features', 'Enterprise', 'Pricing'].map((item) => (
+            <Link
+              key={item}
+              href={`#${item.toLowerCase()}`}
+              onClick={() => setMobileMenuOpen(false)}
+              style={{
+                color: '#52525B',
+                textDecoration: 'none',
+                fontSize: '14px',
+                fontWeight: 500,
+                padding: '10px 12px',
+                borderRadius: '8px',
+                background: '#FAFAFA',
+              }}
+            >
+              {item}
+            </Link>
+          ))}
+        </div>
+      )}
+
+      <style>{`
+        @media (max-width: 768px) {
+          .header-hamburger { display: flex !important; align-items: center; }
+        }
+      `}</style>
     </header>
   )
 }

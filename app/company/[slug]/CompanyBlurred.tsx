@@ -73,7 +73,7 @@ export default function CompanyBlurred({ company }: { company: Company }) {
                 onMouseEnter={e => (e.currentTarget as HTMLElement).style.background = '#6D28D9'}
                 onMouseLeave={e => (e.currentTarget as HTMLElement).style.background = '#7C3AED'}
               >
-                Upgrade to Pro — $29/mo
+                Upgrade to Pro — from $4.99/mo
               </Link>
               <Link
                 href="/"

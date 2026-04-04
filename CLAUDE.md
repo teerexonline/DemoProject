@@ -46,9 +46,9 @@ You are an expert full-stack developer specializing in Next.js 16 (App Router), 
 
 ## Project Structure
 
-The Next.js app lives in `demoproject/`. The root-level `package.json` only holds Supabase client dependencies (`@supabase/supabase-js`, `@supabase/ssr`) and is not a Next.js app itself.
+The Next.js app lives at the repository root. All app files (`app/`, `components/`, `lib/`, `hooks/`, `public/`) are at the top level.
 
-## Commands (run from inside `demoproject/`)
+## Commands (run from the project root)
 
 ```bash
 npm run dev        # Next.js dev server with Turbopack (http://localhost:3000)
@@ -78,7 +78,7 @@ npm run typecheck  # TypeScript type check without emitting
 
 ## Adding shadcn/ui Components
 
-Use the shadcn CLI from inside `demo/` or `demoproject/`:
+Use the shadcn CLI from the project root:
 
 ```bash
 npx shadcn@latest add <component-name>

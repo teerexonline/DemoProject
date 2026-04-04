@@ -1,13 +1,25 @@
 'use client'
 
+import { useState } from 'react'
 import Link from 'next/link'
 
+type BillingPeriod = 'monthly' | 'yearly' | '3years'
+
+const PRO_PRICING: Record<BillingPeriod, { price: string; period: string; savings: string | null }> = {
+  monthly: { price: '$4.99', period: 'per month',    savings: null },
+  yearly:  { price: '$39.99', period: 'per year',    savings: 'Save 33%' },
+  '3years':{ price: '$79.99', period: 'per 3 years', savings: 'Save 55%' },
+}
+
 export default function Pricing() {
+  const [billing, setBilling] = useState<BillingPeriod>('monthly')
+
   const tiers = [
     {
       name: 'Free',
       price: '$0',
       period: 'forever',
+      savings: null,
       desc: 'For students and casual job seekers.',
       cta: 'Get Started',
       href: '/signup',
@@ -16,8 +28,9 @@ export default function Pricing() {
     },
     {
       name: 'Pro',
-      price: '$29',
-      period: 'per month',
+      price: PRO_PRICING[billing].price,
+      period: PRO_PRICING[billing].period,
+      savings: PRO_PRICING[billing].savings,
       desc: 'For serious job seekers and career changers.',
       cta: 'Start Free Trial',
       href: '/signup',
@@ -28,6 +41,7 @@ export default function Pricing() {
       name: 'Enterprise',
       price: 'Custom',
       period: 'contact us',
+      savings: null,
       desc: 'For recruiting teams and career services.',
       cta: 'Contact Sales',
       href: '/contact',
@@ -36,10 +50,16 @@ export default function Pricing() {
     },
   ]
 
+  const toggleOptions: { key: BillingPeriod; label: string }[] = [
+    { key: 'monthly', label: 'Monthly' },
+    { key: 'yearly',  label: 'Yearly' },
+    { key: '3years',  label: '3 Years' },
+  ]
+
   return (
     <section id="pricing" style={{ padding: '96px 24px', background: '#fff', borderTop: '1px solid #F4F4F5' }}>
       <div style={{ maxWidth: '1100px', margin: '0 auto' }}>
-        <div style={{ textAlign: 'center', marginBottom: '56px' }}>
+        <div style={{ textAlign: 'center', marginBottom: '40px' }}>
           <p style={{ color: '#7C3AED', fontSize: '12px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '12px' }}>PRICING</p>
           <h2 style={{
             fontSize: 'clamp(26px, 3.5vw, 40px)',
@@ -48,10 +68,49 @@ export default function Pricing() {
             color: '#09090B',
             margin: '0 0 14px',
           }}>Simple, transparent pricing.</h2>
-          <p style={{ color: '#71717A', fontSize: '16px', margin: 0 }}>Start free. Upgrade when you need more depth.</p>
+          <p style={{ color: '#71717A', fontSize: '16px', margin: '0 0 32px' }}>Start free. Upgrade when you need more depth.</p>
+
+          {/* Billing toggle */}
+          <div style={{ display: 'inline-flex', alignItems: 'center', background: '#F4F4F5', borderRadius: '10px', padding: '4px', gap: '2px' }}>
+            {toggleOptions.map(({ key, label }) => (
+              <button
+                key={key}
+                onClick={() => setBilling(key)}
+                style={{
+                  padding: '7px 18px',
+                  borderRadius: '7px',
+                  border: 'none',
+                  cursor: 'pointer',
+                  fontSize: '13px',
+                  fontWeight: 600,
+                  letterSpacing: '-0.01em',
+                  transition: 'background 0.15s, color 0.15s, box-shadow 0.15s',
+                  background: billing === key ? '#fff' : 'transparent',
+                  color: billing === key ? '#09090B' : '#71717A',
+                  boxShadow: billing === key ? '0 1px 4px rgba(0,0,0,0.10)' : 'none',
+                }}
+              >
+                {label}
+                {key !== 'monthly' && (
+                  <span style={{
+                    marginLeft: '6px',
+                    fontSize: '10px',
+                    fontWeight: 700,
+                    color: billing === key ? '#7C3AED' : '#A1A1AA',
+                    background: billing === key ? '#F5F3FF' : 'transparent',
+                    padding: billing === key ? '1px 5px' : '0',
+                    borderRadius: '4px',
+                    transition: 'all 0.15s',
+                  }}>
+                    {key === 'yearly' ? '33% off' : '55% off'}
+                  </span>
+                )}
+              </button>
+            ))}
+          </div>
         </div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '16px', alignItems: 'start' }}>
+        <div className="grid-3col" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '16px', alignItems: 'start' }}>
           {tiers.map((tier) => (
             <div
               key={tier.name}
@@ -92,7 +151,8 @@ export default function Pricing() {
                   color: tier.highlight ? 'rgba(255,255,255,0.75)' : '#71717A',
                   margin: '0 0 8px', letterSpacing: '-0.01em',
                 }}>{tier.name}</h3>
-                <div style={{ display: 'flex', alignItems: 'baseline', gap: '6px', marginBottom: '8px' }}>
+
+                <div style={{ display: 'flex', alignItems: 'baseline', gap: '6px', marginBottom: tier.savings ? '6px' : '8px' }}>
                   <span style={{
                     fontSize: '38px', fontWeight: 800,
                     color: tier.highlight ? '#fff' : '#09090B',
@@ -100,6 +160,20 @@ export default function Pricing() {
                   }}>{tier.price}</span>
                   <span style={{ color: tier.highlight ? 'rgba(255,255,255,0.55)' : '#A1A1AA', fontSize: '13px' }}>/{tier.period}</span>
                 </div>
+
+                {tier.savings && (
+                  <div style={{ marginBottom: '8px' }}>
+                    <span style={{
+                      display: 'inline-block',
+                      background: 'rgba(255,255,255,0.2)',
+                      color: '#fff',
+                      fontSize: '11px', fontWeight: 700,
+                      padding: '2px 10px', borderRadius: '100px',
+                      letterSpacing: '0.02em',
+                    }}>{tier.savings} vs monthly</span>
+                  </div>
+                )}
+
                 <p style={{ color: tier.highlight ? 'rgba(255,255,255,0.65)' : '#71717A', fontSize: '13px', margin: 0, lineHeight: 1.5 }}>{tier.desc}</p>
               </div>
 

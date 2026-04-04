@@ -1,9 +1,11 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import SearchAutocomplete from '@/components/SearchAutocomplete'
+import { createClient } from '@/lib/supabase/client'
+import type { User } from '@supabase/supabase-js'
 
 // ─── Sidebar nav items ────────────────────────────────────────────
 const NAV = [
@@ -396,6 +398,21 @@ function ProductUseCase() {
 export default function Hero() {
   const router = useRouter()
   const [activeSection, setActiveSection] = useState<SectionId>('overview')
+  const [user, setUser] = useState<User | null>(null)
+
+  useEffect(() => {
+    const supabase = createClient()
+    supabase.auth.getUser().then(({ data }) => setUser(data.user))
+    const { data: listener } = supabase.auth.onAuthStateChange((_e, session) => {
+      setUser(session?.user ?? null)
+    })
+    return () => listener.subscription.unsubscribe()
+  }, [])
+
+  function navigateCompany(slug: string) {
+    if (!user) { router.push('/signup'); return }
+    router.push(`/company/${slug}`)
+  }
 
   const sectionContent: Record<SectionId, React.ReactNode> = {
     overview:   <CompanyOverview />,
@@ -410,10 +427,10 @@ export default function Hero() {
   }
 
   return (
-    <section style={{
+    <section className="hero-section" style={{
       paddingTop: '96px', paddingBottom: '72px',
       paddingLeft: '24px', paddingRight: '0',
-      background: '#fff', position: 'relative', overflow: 'hidden',
+      background: '#fff', position: 'relative', overflow: 'visible',
     }}>
       <div style={{
         position: 'absolute', top: '-80px', right: '-60px',
@@ -422,8 +439,8 @@ export default function Hero() {
         pointerEvents: 'none',
       }} />
 
-      <div style={{ maxWidth: '1440px', margin: '0 auto', paddingRight: '0', position: 'relative' }}>
-        <div style={{
+      <div className="hero-container" style={{ maxWidth: '1440px', margin: '0 auto', paddingRight: '0', position: 'relative' }}>
+        <div className="hero-grid" style={{
           display: 'grid',
           gridTemplateColumns: 'minmax(0, 520px) 1fr',
           gap: '48px',
@@ -456,7 +473,7 @@ export default function Hero() {
             </p>
 
             {/* Search bar */}
-            <div className="animate-fadeUp delay-225" style={{ marginBottom: '12px' }}>
+            <div className="animate-fadeUp delay-225" style={{ marginBottom: '12px', position: 'relative', zIndex: 10 }}>
               <SearchAutocomplete
                 placeholder="Search any company — Google, Stripe, Airbnb..."
                 size="lg"
@@ -464,10 +481,10 @@ export default function Hero() {
             </div>
 
             {/* Popular chips */}
-            <div className="animate-fadeUp delay-300" style={{ display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap', marginBottom: '24px' }}>
+            <div className="animate-fadeUp delay-300 hero-chips" style={{ display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap', marginBottom: '24px' }}>
               <span style={{ color: '#A1A1AA', fontSize: '12px' }}>Popular:</span>
               {['Google', 'Stripe', 'Notion', 'Airbnb', 'OpenAI'].map(co => (
-                <button key={co} onClick={() => router.push(`/company/${co.toLowerCase()}`)}
+                <button key={co} onClick={() => navigateCompany(co.toLowerCase())}
                   style={{ background: 'none', border: '1px solid #E4E4E7', borderRadius: '6px', padding: '3px 9px', fontSize: '12px', color: '#52525B', cursor: 'pointer', transition: 'border-color 0.15s, color 0.15s, background 0.15s' }}
                   onMouseEnter={e => { const el = e.currentTarget as HTMLElement; el.style.borderColor = '#7C3AED'; el.style.color = '#7C3AED'; el.style.background = '#F5F3FF' }}
                   onMouseLeave={e => { const el = e.currentTarget as HTMLElement; el.style.borderColor = '#E4E4E7'; el.style.color = '#52525B'; el.style.background = 'none' }}
@@ -486,7 +503,7 @@ export default function Hero() {
           </div>
 
           {/* ── Right: Full-bleed tabbed mockup ── */}
-          <div className="animate-fadeUp delay-150" style={{
+          <div className="animate-fadeUp delay-150 hero-mockup" style={{
             borderRadius: '16px 0 0 16px',
             border: '1px solid #E4E4E7',
             borderRight: 'none',
@@ -549,11 +566,11 @@ export default function Hero() {
         </div>
 
         {/* Logo strip */}
-        <div style={{ marginTop: '56px', paddingTop: '32px', borderTop: '1px solid #F4F4F5', paddingRight: '24px', paddingLeft: 'max(24px, calc((100% - 1200px) / 2))' }}>
+        <div className="hero-logo-strip" style={{ marginTop: '56px', paddingTop: '32px', borderTop: '1px solid #F4F4F5', paddingRight: '24px', paddingLeft: 'max(24px, calc((100% - 1200px) / 2))' }}>
           <p style={{ color: '#A1A1AA', fontSize: '12px', textAlign: 'center', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '16px' }}>
             Used by job seekers researching teams at
           </p>
-          <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '44px', flexWrap: 'wrap' }}>
+          <div className="hero-logo-strip-inner" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '44px', flexWrap: 'wrap' }}>
             {['Google', 'Meta', 'Stripe', 'Airbnb', 'Notion', 'OpenAI'].map(name => (
               <span key={name} style={{ fontWeight: 700, fontSize: '14px', color: '#D4D4D8', letterSpacing: '-0.02em' }}>{name}</span>
             ))}

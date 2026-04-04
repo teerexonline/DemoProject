@@ -13,7 +13,7 @@ export default function Footer() {
   return (
     <footer style={{ borderTop: '1px solid #F4F4F5', padding: '60px 24px 36px', background: '#FAFAFA' }}>
       <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
-        <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr 1fr 1fr', gap: '48px', marginBottom: '48px' }}>
+        <div className="footer-grid" style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr 1fr 1fr', gap: '48px', marginBottom: '48px' }}>
           {/* Brand */}
           <div>
             <div style={{ fontWeight: 800, fontSize: '17px', letterSpacing: '-0.04em', color: '#09090B', marginBottom: '10px' }}>

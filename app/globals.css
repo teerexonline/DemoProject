@@ -187,3 +187,48 @@
 
 /* Blur upgrade overlay */
 .content-blur { filter: blur(5px); user-select: none; pointer-events: none; }
+
+/* ── Mobile responsive ─────────────────────────────────────────── */
+@media (max-width: 768px) {
+  /* Header */
+  .header-nav { display: none !important; }
+  .header-search { display: none !important; }
+  .header-username { display: none !important; }
+  .header-inner { gap: 8px !important; padding: 0 16px !important; }
+  .header-signin-link { padding: 7px 10px !important; font-size: 13px !important; }
+  .header-cta-link { padding: 7px 12px !important; font-size: 13px !important; }
+
+  /* Hero */
+  .hero-section { overflow: visible !important; padding-right: 24px !important; padding-left: 16px !important; }
+  .hero-container { padding-right: 0 !important; }
+  .hero-grid {
+    grid-template-columns: 1fr !important;
+    gap: 32px !important;
+    padding-left: 0 !important;
+  }
+  .hero-mockup { display: none !important; }
+  .hero-logo-strip { padding-right: 16px !important; padding-left: 0 !important; margin-top: 40px !important; }
+  .hero-logo-strip-inner { gap: 20px !important; }
+  .hero-chips { flex-wrap: wrap !important; }
+
+  /* 2-col page sections */
+  .section-2col { grid-template-columns: 1fr !important; gap: 32px !important; }
+  .section-mockup-first { order: 2 !important; }
+
+  /* Stat callout */
+  .stat-callout-inner { flex-direction: column !important; align-items: flex-start !important; gap: 16px !important; }
+
+  /* Section padding */
+  .section-pad { padding: 56px 16px !important; }
+  .section-pad-sm { padding: 48px 16px !important; }
+
+  /* 3-col grids → single col */
+  .grid-3col { grid-template-columns: 1fr !important; }
+  /* 2-col grids → single col */
+  .grid-2col { grid-template-columns: 1fr !important; }
+  /* Footer grid */
+  .footer-grid { grid-template-columns: 1fr 1fr !important; gap: 32px !important; }
+  /* Trending */
+  .trending-grid { grid-template-columns: 1fr !important; }
+  .trending-sticky { position: static !important; top: auto !important; }
+}

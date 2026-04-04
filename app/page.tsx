@@ -15,7 +15,7 @@ export default function Page() {
       <Hero />
 
       {/* Showcase 1: Remove knowledge gaps */}
-      <section style={{ padding: '96px 24px', background: '#fff', borderTop: '1px solid #F4F4F5' }}>
+      <section className="section-pad" style={{ padding: '96px 24px', background: '#fff', borderTop: '1px solid #F4F4F5' }}>
         <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
           <p style={{ color: '#7C3AED', fontSize: '12px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '12px' }}>DEEP RESEARCH</p>
           <h2 style={{
@@ -26,7 +26,7 @@ export default function Page() {
             Remove knowledge gaps<br />before every interview.
           </h2>
 
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1.5fr', gap: '56px', alignItems: 'center' }}>
+          <div className="section-2col" style={{ display: 'grid', gridTemplateColumns: '1fr 1.5fr', gap: '56px', alignItems: 'center' }}>
             <div>
               <p style={{ color: '#52525B', fontSize: '16px', lineHeight: 1.7, margin: '0 0 24px' }}>
                 Most candidates show up knowing only what&apos;s on a company&apos;s homepage. ResearchOrg gives you everything else — org depth, team structure, tooling, and strategic context.
@@ -86,8 +86,8 @@ export default function Page() {
       </section>
 
       {/* Stat callout 1 */}
-      <section style={{ padding: '72px 24px', background: '#F7F5FF', borderTop: '1px solid #EDE9FE', borderBottom: '1px solid #EDE9FE' }}>
-        <div style={{ maxWidth: '1200px', margin: '0 auto', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '24px' }}>
+      <section className="section-pad-sm" style={{ padding: '72px 24px', background: '#F7F5FF', borderTop: '1px solid #EDE9FE', borderBottom: '1px solid #EDE9FE' }}>
+        <div className="stat-callout-inner" style={{ maxWidth: '1200px', margin: '0 auto', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '24px' }}>
           <h3 style={{
             fontSize: 'clamp(20px, 3vw, 36px)', fontWeight: 800,
             letterSpacing: '-0.04em', color: '#09090B', margin: 0, lineHeight: 1.15,
@@ -103,9 +103,9 @@ export default function Page() {
       <Features />
 
       {/* Showcase 2: Organize & save */}
-      <section style={{ padding: '96px 24px', background: '#fff', borderTop: '1px solid #F4F4F5' }}>
+      <section className="section-pad" style={{ padding: '96px 24px', background: '#fff', borderTop: '1px solid #F4F4F5' }}>
         <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
-          <div style={{ display: 'grid', gridTemplateColumns: '1.5fr 1fr', gap: '56px', alignItems: 'center' }}>
+          <div className="section-2col" style={{ display: 'grid', gridTemplateColumns: '1.5fr 1fr', gap: '56px', alignItems: 'center' }}>
             {/* Saved list mockup */}
             <div style={{
               borderRadius: '14px', border: '1px solid #E4E4E7',
@@ -162,9 +162,9 @@ export default function Page() {
       </section>
 
       {/* Showcase 3: Accuracy & control */}
-      <section style={{ padding: '96px 24px', background: '#FAFAFA', borderTop: '1px solid #F4F4F5' }}>
+      <section className="section-pad" style={{ padding: '96px 24px', background: '#FAFAFA', borderTop: '1px solid #F4F4F5' }}>
         <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1.5fr', gap: '56px', alignItems: 'center' }}>
+          <div className="section-2col" style={{ display: 'grid', gridTemplateColumns: '1fr 1.5fr', gap: '56px', alignItems: 'center' }}>
             <div>
               <p style={{ color: '#7C3AED', fontSize: '12px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '14px' }}>DATA QUALITY</p>
               <h2 style={{
