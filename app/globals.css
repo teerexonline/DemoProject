@@ -231,4 +231,15 @@
   /* Trending */
   .trending-grid { grid-template-columns: 1fr !important; }
   .trending-sticky { position: static !important; top: auto !important; }
+
+  /* Company pages */
+  .company-layout { grid-template-columns: 1fr !important; }
+  .company-sidebar { display: none !important; }
+  .company-mobile-tabs { display: flex !important; }
+  .company-panel { padding: 20px 16px !important; min-height: auto !important; }
+  .company-breadcrumb { padding: 0 16px !important; }
+  .co-4col { grid-template-columns: repeat(2, 1fr) !important; }
+  .co-3col { grid-template-columns: 1fr 1fr !important; }
+  .co-2col { grid-template-columns: 1fr !important; }
+  .co-bar { height: 70px !important; }
 }

@@ -38,26 +38,24 @@ function SectionContent({ id, company }: { id: SectionId; company: Company }) {
     case 'overview':
       return (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '16px', flexWrap: 'wrap' }}>
             <div style={{ width: '52px', height: '52px', borderRadius: '14px', background: color, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, boxShadow: `0 4px 12px ${color}33` }}>
               <span style={{ color: '#fff', fontSize: '20px', fontWeight: 800 }}>{company.name.charAt(0)}</span>
             </div>
-            <div>
+            <div style={{ flex: 1, minWidth: 0 }}>
               <h1 style={{ margin: 0, fontSize: '22px', fontWeight: 800, letterSpacing: '-0.04em', color: '#09090B' }}>{company.name}</h1>
               <div style={{ color: '#71717A', fontSize: '13px', marginTop: '2px' }}>
                 {company.category} · {company.hq ?? 'Global'} · Founded {company.founded ?? '—'}
               </div>
             </div>
-            <div style={{ marginLeft: 'auto', background: '#F0FDF4', color: '#16A34A', fontSize: '11px', fontWeight: 700, padding: '4px 12px', borderRadius: '100px', border: '1px solid #BBF7D0' }}>Active</div>
+            <div style={{ background: '#F0FDF4', color: '#16A34A', fontSize: '11px', fontWeight: 700, padding: '4px 12px', borderRadius: '100px', border: '1px solid #BBF7D0', flexShrink: 0 }}>Active</div>
           </div>
-
           {company.description && (
             <p style={{ color: '#374151', fontSize: '14.5px', lineHeight: 1.7, margin: 0, padding: '16px 18px', background: '#F7F7F8', borderRadius: '12px', border: '1px solid #F0F0F2' }}>
               {company.description}
             </p>
           )}
-
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '12px' }}>
+          <div className="co-4col" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '12px' }}>
             {[
               { label: 'Valuation', value: company.valuation ?? '—' },
               { label: 'Revenue', value: company.revenue ?? '—' },
@@ -70,7 +68,6 @@ function SectionContent({ id, company }: { id: SectionId; company: Company }) {
               </div>
             ))}
           </div>
-
           <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
             {[company.category, 'B2B', 'SaaS', 'Developer-first'].filter(Boolean).map(t => (
               <span key={t} style={{ padding: '4px 11px', borderRadius: '6px', background: '#F5F3FF', border: '1px solid #DDD6FE', color: '#7C3AED', fontSize: '12px', fontWeight: 500 }}>{t}</span>
@@ -88,7 +85,7 @@ function SectionContent({ id, company }: { id: SectionId; company: Company }) {
               <span style={{ fontSize: '11px', fontWeight: 400, opacity: 0.8 }}>{company.name} Leadership</span>
             </div>
           </div>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '10px' }}>
+          <div className="co-4col" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '10px' }}>
             {['President', 'CFO', 'CTO', 'CPO', 'CMO', 'CLO', 'CHRO', 'CRO'].map(title => (
               <div key={title} style={{ padding: '12px', borderRadius: '10px', background: '#F5F3FF', border: '1px solid #DDD6FE', textAlign: 'center' }}>
                 <div style={{ width: '32px', height: '32px', borderRadius: '50%', background: '#E5E7EB', margin: '0 auto 8px' }} />
@@ -96,7 +93,7 @@ function SectionContent({ id, company }: { id: SectionId; company: Company }) {
               </div>
             ))}
           </div>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '10px' }}>
+          <div className="co-3col" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '10px' }}>
             {['Engineering', 'Product', 'Design', 'Sales', 'Marketing', 'Operations'].map(dept => (
               <div key={dept} style={{ padding: '12px 14px', borderRadius: '10px', background: '#fff', border: '1px solid #E4E4E7' }}>
                 <div style={{ color: '#09090B', fontSize: '13px', fontWeight: 600, marginBottom: '4px' }}>{dept}</div>
@@ -110,7 +107,7 @@ function SectionContent({ id, company }: { id: SectionId; company: Company }) {
     case 'revenue':
       return (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '12px' }}>
+          <div className="co-3col" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '12px' }}>
             {[
               { label: 'Annual Revenue', value: company.revenue ?? '$—', change: '+24%' },
               { label: 'YoY Growth', value: '24%', change: '+5pp' },
@@ -125,7 +122,7 @@ function SectionContent({ id, company }: { id: SectionId; company: Company }) {
           </div>
           <div style={{ padding: '20px', borderRadius: '12px', background: '#fff', border: '1px solid #E4E4E7' }}>
             <div style={{ color: '#09090B', fontSize: '13px', fontWeight: 700, marginBottom: '14px' }}>Revenue Growth (Last 5 Years)</div>
-            <div style={{ display: 'flex', alignItems: 'flex-end', gap: '10px', height: '100px' }}>
+            <div className="co-bar" style={{ display: 'flex', alignItems: 'flex-end', gap: '10px', height: '100px' }}>
               {[40, 58, 72, 84, 100].map((pct, i) => (
                 <div key={i} style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '6px' }}>
                   <div style={{ width: '100%', background: i === 4 ? color : '#E4E4E7', borderRadius: '4px 4px 0 0', height: `${pct}px`, transition: 'height 0.4s' }} />
@@ -147,8 +144,8 @@ function SectionContent({ id, company }: { id: SectionId; company: Company }) {
             { dept: 'Platform & APIs', pct: 11, color: '#F59E0B' },
             { dept: 'Other / Misc', pct: 5, color: '#10B981' },
           ].map(d => (
-            <div key={d.dept} style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
-              <div style={{ width: '120px', color: '#52525B', fontSize: '13px', flexShrink: 0 }}>{d.dept}</div>
+            <div key={d.dept} style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+              <div style={{ width: '110px', color: '#52525B', fontSize: '12.5px', flexShrink: 0 }}>{d.dept}</div>
               <div style={{ flex: 1, height: '10px', background: '#F0F0F2', borderRadius: '100px', overflow: 'hidden' }}>
                 <div style={{ width: `${d.pct}%`, height: '100%', background: d.color, borderRadius: '100px', transition: 'width 0.6s cubic-bezier(0.22,1,0.36,1)' }} />
               </div>
@@ -162,7 +159,7 @@ function SectionContent({ id, company }: { id: SectionId; company: Company }) {
       return (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
           <div style={{ color: '#09090B', fontSize: '16px', fontWeight: 700, letterSpacing: '-0.03em' }}>Market Share Analysis</div>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '12px' }}>
+          <div className="co-2col" style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '12px' }}>
             {[
               { name: company.name, share: '34%', color },
               { name: 'Competitor A', share: '28%', color: '#E5E7EB' },
@@ -178,7 +175,7 @@ function SectionContent({ id, company }: { id: SectionId; company: Company }) {
           </div>
           <div style={{ padding: '16px', borderRadius: '12px', background: '#F5F3FF', border: '1px solid #DDD6FE' }}>
             <div style={{ color: '#7C3AED', fontSize: '12px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '6px' }}>TAM / SAM / SOM</div>
-            <div style={{ display: 'flex', gap: '16px' }}>
+            <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap' }}>
               {[{ l: 'TAM', v: '$420B' }, { l: 'SAM', v: '$86B' }, { l: 'SOM', v: '$14B' }].map(m => (
                 <div key={m.l}>
                   <div style={{ color: '#09090B', fontSize: '18px', fontWeight: 800, letterSpacing: '-0.03em' }}>{m.v}</div>
@@ -202,10 +199,10 @@ function SectionContent({ id, company }: { id: SectionId; company: Company }) {
           ].map(u => (
             <div key={u.name} style={{ padding: '16px', borderRadius: '12px', background: '#fff', border: '1px solid #E4E4E7', display: 'flex', gap: '14px', alignItems: 'flex-start' }}>
               <div style={{ width: '10px', height: '10px', borderRadius: '50%', marginTop: '4px', flexShrink: 0, background: u.status === 'primary' ? color : u.status === 'growing' ? '#10B981' : '#F59E0B' }} />
-              <div style={{ flex: 1 }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '4px' }}>
+              <div style={{ flex: 1, minWidth: 0 }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '4px', gap: '8px' }}>
                   <div style={{ color: '#09090B', fontSize: '14px', fontWeight: 700 }}>{u.name}</div>
-                  <div style={{ color: '#16A34A', fontSize: '12px', fontWeight: 600 }}>{u.growth}</div>
+                  <div style={{ color: '#16A34A', fontSize: '12px', fontWeight: 600, flexShrink: 0 }}>{u.growth}</div>
                 </div>
                 <div style={{ color: '#71717A', fontSize: '12.5px', lineHeight: 1.5 }}>{u.description}</div>
               </div>
@@ -266,7 +263,7 @@ function SectionContent({ id, company }: { id: SectionId; company: Company }) {
             <div style={{ color: '#09090B', fontSize: '15px', fontWeight: 800, marginBottom: '6px', letterSpacing: '-0.03em' }}>{company.category ?? 'Technology Platform'}</div>
             <div style={{ color: '#52525B', fontSize: '13px', lineHeight: 1.6 }}>{company.description ?? `${company.name} provides industry-leading solutions for enterprises and developers worldwide.`}</div>
           </div>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
+          <div className="co-2col" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
             <div style={{ padding: '16px', borderRadius: '12px', background: '#F0FDF4', border: '1px solid #BBF7D0' }}>
               <div style={{ color: '#15803D', fontSize: '11px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '8px' }}>Primary Users</div>
               {['Enterprises', 'Developers', 'SMBs', 'Startups'].map(u => (
@@ -306,24 +303,53 @@ export default function CompanyFull({ company }: { company: Company }) {
 
   return (
     <div style={{ minHeight: '100vh', background: '#FAFAFA' }}>
-      {/* Back nav */}
-      <div style={{ position: 'sticky', top: 0, zIndex: 40, background: 'rgba(255,255,255,0.92)', backdropFilter: 'blur(12px)', borderBottom: '1px solid #E4E4E7', padding: '0 24px' }}>
-        <div style={{ maxWidth: '1200px', margin: '0 auto', height: '56px', display: 'flex', alignItems: 'center', gap: '16px' }}>
-          <Link href="/" style={{ color: '#7C3AED', textDecoration: 'none', fontWeight: 800, fontSize: '15px', letterSpacing: '-0.03em' }}>
-            Research<span style={{ color: '#09090B' }}>Org</span>
-          </Link>
-          <span style={{ color: '#D4D4D8' }}>›</span>
-          <span style={{ color: '#52525B', fontSize: '14px' }}>{company.category}</span>
-          <span style={{ color: '#D4D4D8' }}>›</span>
-          <span style={{ color: '#09090B', fontSize: '14px', fontWeight: 600 }}>{company.name}</span>
+      {/* Breadcrumb */}
+      <div style={{ background: '#fff', borderBottom: '1px solid #F4F4F5' }}>
+        <div className="company-breadcrumb" style={{ maxWidth: '1200px', margin: '0 auto', height: '44px', display: 'flex', alignItems: 'center', gap: '8px', padding: '0 24px' }}>
+          <Link href="/" style={{ color: '#A1A1AA', textDecoration: 'none', fontSize: '13px', transition: 'color 0.15s' }}
+            onMouseEnter={e => (e.currentTarget as HTMLElement).style.color = '#7C3AED'}
+            onMouseLeave={e => (e.currentTarget as HTMLElement).style.color = '#A1A1AA'}
+          >Home</Link>
+          <span style={{ color: '#D4D4D8', fontSize: '13px' }}>›</span>
+          <span style={{ color: '#A1A1AA', fontSize: '13px' }}>{company.category}</span>
+          <span style={{ color: '#D4D4D8', fontSize: '13px' }}>›</span>
+          <span style={{ color: '#09090B', fontSize: '13px', fontWeight: 600 }}>{company.name}</span>
         </div>
       </div>
 
+      {/* Mobile tab strip — hidden on desktop via CSS */}
+      <div className="company-mobile-tabs" style={{
+        display: 'none',
+        overflowX: 'auto',
+        padding: '10px 16px',
+        gap: '6px',
+        background: '#fff',
+        borderBottom: '1px solid #E4E4E7',
+        WebkitOverflowScrolling: 'touch' as React.CSSProperties['WebkitOverflowScrolling'],
+        scrollbarWidth: 'none' as React.CSSProperties['scrollbarWidth'],
+      }}>
+        {NAV.map(nav => (
+          <button
+            key={nav.id}
+            onClick={() => changeSection(nav.id)}
+            style={{
+              flexShrink: 0, padding: '7px 12px', borderRadius: '8px', border: 'none',
+              background: activeSection === nav.id ? '#F5F3FF' : '#F4F4F5',
+              color: activeSection === nav.id ? '#7C3AED' : '#52525B',
+              fontSize: '12.5px', fontWeight: activeSection === nav.id ? 600 : 400,
+              cursor: 'pointer', whiteSpace: 'nowrap',
+              transition: 'background 0.15s, color 0.15s',
+            }}
+          >
+            {nav.icon} {nav.label}
+          </button>
+        ))}
+      </div>
+
       {/* Main layout */}
-      <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '32px 24px', display: 'grid', gridTemplateColumns: '220px 1fr', gap: '24px', alignItems: 'start' }}>
-        {/* Sidebar */}
-        <div style={{ position: 'sticky', top: '80px', background: '#fff', borderRadius: '14px', border: '1px solid #E4E4E7', padding: '12px 8px', boxShadow: '0 1px 4px rgba(0,0,0,0.04)' }}>
-          {/* Company header */}
+      <div className="company-layout" style={{ maxWidth: '1200px', margin: '0 auto', padding: '24px 24px', display: 'grid', gridTemplateColumns: '220px 1fr', gap: '24px', alignItems: 'start' }}>
+        {/* Sidebar — hidden on mobile via CSS */}
+        <div className="company-sidebar" style={{ position: 'sticky', top: '80px', background: '#fff', borderRadius: '14px', border: '1px solid #E4E4E7', padding: '12px 8px', boxShadow: '0 1px 4px rgba(0,0,0,0.04)' }}>
           <div style={{ padding: '8px 8px 14px', borderBottom: '1px solid #F4F4F5', marginBottom: '8px' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
               <div style={{ width: '36px', height: '36px', borderRadius: '9px', background: color, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
@@ -361,7 +387,7 @@ export default function CompanyFull({ company }: { company: Company }) {
         {/* Content panel */}
         <div
           key={animKey}
-          className="animate-tabIn"
+          className="animate-tabIn company-panel"
           style={{ background: '#fff', borderRadius: '14px', border: '1px solid #E4E4E7', padding: '28px', boxShadow: '0 1px 4px rgba(0,0,0,0.04)', minHeight: '500px' }}
         >
           <SectionContent id={activeSection} company={company} />

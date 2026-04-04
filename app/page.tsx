@@ -1,6 +1,5 @@
 'use client'
 
-import Header from '@/components/landing/header'
 import Hero from '@/components/landing/hero'
 import Features from '@/components/landing/features'
 import Testimonials from '@/components/landing/testimonials'
@@ -11,7 +10,6 @@ import Footer from '@/components/landing/footer'
 export default function Page() {
   return (
     <main style={{ background: '#fff', minHeight: '100vh' }}>
-      <Header />
       <Hero />
 
       {/* Showcase 1: Remove knowledge gaps */}

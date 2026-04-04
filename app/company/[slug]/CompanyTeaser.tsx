@@ -17,15 +17,6 @@ export default function CompanyTeaser({ company }: { company: Company }) {
 
   return (
     <div style={{ minHeight: '100vh', background: '#FAFAFA', display: 'flex', flexDirection: 'column' }}>
-      {/* Nav */}
-      <div style={{ background: '#fff', borderBottom: '1px solid #E4E4E7', padding: '0 24px' }}>
-        <div style={{ maxWidth: '1200px', margin: '0 auto', height: '56px', display: 'flex', alignItems: 'center' }}>
-          <Link href="/" style={{ color: '#7C3AED', textDecoration: 'none', fontWeight: 800, fontSize: '15px', letterSpacing: '-0.03em' }}>
-            Research<span style={{ color: '#09090B' }}>Org</span>
-          </Link>
-        </div>
-      </div>
-
       <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '48px 24px' }}>
         <div style={{ maxWidth: '480px', width: '100%', textAlign: 'center' }}>
           {/* Company pill */}

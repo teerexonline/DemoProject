@@ -428,7 +428,7 @@ export default function Hero() {
 
   return (
     <section className="hero-section" style={{
-      paddingTop: '96px', paddingBottom: '72px',
+      paddingTop: '48px', paddingBottom: '72px',
       paddingLeft: '24px', paddingRight: '0',
       background: '#fff', position: 'relative', overflow: 'visible',
     }}>

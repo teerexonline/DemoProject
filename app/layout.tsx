@@ -1,7 +1,8 @@
 import { Plus_Jakarta_Sans } from "next/font/google"
 
 import "./globals.css"
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/utils"
+import Header from "@/components/landing/header"
 
 const jakarta = Plus_Jakarta_Sans({
   subsets: ['latin'],
@@ -17,7 +18,10 @@ export default function RootLayout({
   return (
     <html lang="en" className={cn(jakarta.variable)}>
       <body style={{ fontFamily: 'var(--font-sans), sans-serif', background: '#FFFFFF', color: '#09090B', margin: 0 }}>
-        {children}
+        <Header />
+        <div style={{ paddingTop: '60px' }}>
+          {children}
+        </div>
       </body>
     </html>
   )

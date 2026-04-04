@@ -15,20 +15,9 @@ export default function CompanyBlurred({ company }: { company: Company }) {
 
   return (
     <div style={{ minHeight: '100vh', background: '#FAFAFA' }}>
-      {/* Nav */}
-      <div style={{ background: '#fff', borderBottom: '1px solid #E4E4E7', padding: '0 24px' }}>
-        <div style={{ maxWidth: '1200px', margin: '0 auto', height: '56px', display: 'flex', alignItems: 'center', gap: '16px' }}>
-          <Link href="/" style={{ color: '#7C3AED', textDecoration: 'none', fontWeight: 800, fontSize: '15px', letterSpacing: '-0.03em' }}>
-            Research<span style={{ color: '#09090B' }}>Org</span>
-          </Link>
-          <span style={{ color: '#D4D4D8' }}>›</span>
-          <span style={{ color: '#09090B', fontSize: '14px', fontWeight: 600 }}>{company.name}</span>
-        </div>
-      </div>
-
-      <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '32px 24px', display: 'grid', gridTemplateColumns: '220px 1fr', gap: '24px', alignItems: 'start' }}>
-        {/* Blurred sidebar */}
-        <div style={{ filter: 'blur(4px)', userSelect: 'none', pointerEvents: 'none', background: '#fff', borderRadius: '14px', border: '1px solid #E4E4E7', padding: '20px 12px', opacity: 0.6 }}>
+      <div className="company-layout" style={{ maxWidth: '1200px', margin: '0 auto', padding: '32px 24px', display: 'grid', gridTemplateColumns: '220px 1fr', gap: '24px', alignItems: 'start' }}>
+        {/* Blurred sidebar — hidden on mobile */}
+        <div className="company-sidebar" style={{ filter: 'blur(4px)', userSelect: 'none', pointerEvents: 'none', background: '#fff', borderRadius: '14px', border: '1px solid #E4E4E7', padding: '20px 12px', opacity: 0.6 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '16px' }}>
             <div style={{ width: '36px', height: '36px', borderRadius: '9px', background: color }} />
             <div>

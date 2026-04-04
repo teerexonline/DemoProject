@@ -209,29 +209,61 @@ export default function CompanyFreeGated({ company, hasToken }: { company: Compa
 
   return (
     <div style={{ minHeight: '100vh', background: '#FAFAFA' }}>
-      {/* Back nav */}
-      <div style={{ position: 'sticky', top: 0, zIndex: 40, background: 'rgba(255,255,255,0.92)', backdropFilter: 'blur(12px)', borderBottom: '1px solid #E4E4E7', padding: '0 24px' }}>
-        <div style={{ maxWidth: '1200px', margin: '0 auto', height: '56px', display: 'flex', alignItems: 'center', gap: '16px' }}>
-          <Link href="/" style={{ color: '#7C3AED', textDecoration: 'none', fontWeight: 800, fontSize: '15px', letterSpacing: '-0.03em' }}>
-            Research<span style={{ color: '#09090B' }}>Org</span>
-          </Link>
-          <span style={{ color: '#D4D4D8' }}>›</span>
-          <span style={{ color: '#52525B', fontSize: '14px' }}>{company.category}</span>
-          <span style={{ color: '#D4D4D8' }}>›</span>
-          <span style={{ color: '#09090B', fontSize: '14px', fontWeight: 600 }}>{company.name}</span>
-
+      {/* Breadcrumb */}
+      <div style={{ background: '#fff', borderBottom: '1px solid #F4F4F5' }}>
+        <div className="company-breadcrumb" style={{ maxWidth: '1200px', margin: '0 auto', height: '44px', display: 'flex', alignItems: 'center', gap: '8px', padding: '0 24px' }}>
+          <Link href="/" style={{ color: '#A1A1AA', textDecoration: 'none', fontSize: '13px', transition: 'color 0.15s' }}
+            onMouseEnter={e => (e.currentTarget as HTMLElement).style.color = '#7C3AED'}
+            onMouseLeave={e => (e.currentTarget as HTMLElement).style.color = '#A1A1AA'}
+          >Home</Link>
+          <span style={{ color: '#D4D4D8', fontSize: '13px' }}>›</span>
+          <span style={{ color: '#A1A1AA', fontSize: '13px' }}>{company.category}</span>
+          <span style={{ color: '#D4D4D8', fontSize: '13px' }}>›</span>
+          <span style={{ color: '#09090B', fontSize: '13px', fontWeight: 600 }}>{company.name}</span>
           {hasToken && (
-            <div style={{ marginLeft: 'auto', background: '#F5F3FF', border: '1px solid #DDD6FE', borderRadius: '8px', padding: '5px 12px', display: 'flex', alignItems: 'center', gap: '6px' }}>
-              <span style={{ fontSize: '13px' }}>🎁</span>
-              <span style={{ color: '#7C3AED', fontSize: '12px', fontWeight: 600 }}>1 free unlock available</span>
+            <div style={{ marginLeft: 'auto', background: '#F5F3FF', border: '1px solid #DDD6FE', borderRadius: '8px', padding: '4px 10px', display: 'flex', alignItems: 'center', gap: '5px' }}>
+              <span style={{ fontSize: '12px' }}>🎁</span>
+              <span style={{ color: '#7C3AED', fontSize: '12px', fontWeight: 600 }}>1 free unlock</span>
             </div>
           )}
         </div>
       </div>
 
-      <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '32px 24px', display: 'grid', gridTemplateColumns: '220px 1fr', gap: '24px', alignItems: 'start' }}>
-        {/* Sidebar */}
-        <div style={{ position: 'sticky', top: '80px', background: '#fff', borderRadius: '14px', border: '1px solid #E4E4E7', padding: '12px 8px', boxShadow: '0 1px 4px rgba(0,0,0,0.04)' }}>
+      {/* Mobile tab strip */}
+      <div className="company-mobile-tabs" style={{
+        display: 'none',
+        overflowX: 'auto',
+        padding: '10px 16px',
+        gap: '6px',
+        background: '#fff',
+        borderBottom: '1px solid #E4E4E7',
+        WebkitOverflowScrolling: 'touch' as React.CSSProperties['WebkitOverflowScrolling'],
+        scrollbarWidth: 'none' as React.CSSProperties['scrollbarWidth'],
+      }}>
+        {NAV.map(nav => (
+          <button
+            key={nav.id}
+            onClick={() => changeSection(nav.id)}
+            style={{
+              flexShrink: 0, padding: '7px 12px', borderRadius: '8px', border: 'none',
+              background: activeSection === nav.id ? '#F5F3FF' : '#F4F4F5',
+              color: activeSection === nav.id ? '#7C3AED' : '#52525B',
+              fontSize: '12.5px', fontWeight: activeSection === nav.id ? 600 : 400,
+              cursor: 'pointer', whiteSpace: 'nowrap',
+              transition: 'background 0.15s, color 0.15s',
+              display: 'flex', alignItems: 'center', gap: '4px',
+            }}
+          >
+            <span>{nav.icon}</span>
+            <span>{nav.label}</span>
+            {nav.pro && <span style={{ fontSize: '10px', opacity: 0.6 }}>🔒</span>}
+          </button>
+        ))}
+      </div>
+
+      <div className="company-layout" style={{ maxWidth: '1200px', margin: '0 auto', padding: '24px 24px', display: 'grid', gridTemplateColumns: '220px 1fr', gap: '24px', alignItems: 'start' }}>
+        {/* Sidebar — hidden on mobile */}
+        <div className="company-sidebar" style={{ position: 'sticky', top: '80px', background: '#fff', borderRadius: '14px', border: '1px solid #E4E4E7', padding: '12px 8px', boxShadow: '0 1px 4px rgba(0,0,0,0.04)' }}>
           <div style={{ padding: '8px 8px 14px', borderBottom: '1px solid #F4F4F5', marginBottom: '8px' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
               <div style={{ width: '36px', height: '36px', borderRadius: '9px', background: color, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
@@ -288,7 +320,7 @@ export default function CompanyFreeGated({ company, hasToken }: { company: Compa
         {/* Content panel */}
         <div
           key={animKey}
-          className="animate-tabIn"
+          className="animate-tabIn company-panel"
           style={{ background: '#fff', borderRadius: '14px', border: '1px solid #E4E4E7', padding: '28px', boxShadow: '0 1px 4px rgba(0,0,0,0.04)', minHeight: '500px' }}
         >
           {activeSection === 'overview' ? (
