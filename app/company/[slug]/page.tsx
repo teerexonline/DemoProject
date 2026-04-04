@@ -1,10 +1,10 @@
 import { notFound } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import { getUserTier } from '@/lib/access'
-import { getMonthlyViewCount, hasViewedThisMonth, recordCompanyView } from '@/lib/quota'
+import { getMonthlyViewCount, hasViewedThisMonth } from '@/lib/quota'
 import CompanyFull from './CompanyFull'
-import CompanyBlurred from './CompanyBlurred'
 import CompanyTeaser from './CompanyTeaser'
+import CompanyFreeGated from './CompanyFreeGated'
 
 interface Props {
   params: Promise<{ slug: string }>
@@ -35,20 +35,16 @@ export default async function CompanyPage({ params }: Props) {
     return <CompanyFull company={company} />
   }
 
-  // Free tier: check if they've already viewed this company this month
+  // Free tier: if they've already used their token on this company, show full
   const alreadyViewed = await hasViewedThisMonth(user!.id, company.id)
   if (alreadyViewed) {
     return <CompanyFull company={company} />
   }
 
-  // Check monthly count
+  // Check if token is still available
   const monthlyCount = await getMonthlyViewCount(user!.id)
-  if (monthlyCount === 0) {
-    // Still have their free slot — record and show full
-    await recordCompanyView(user!.id, company.id)
-    return <CompanyFull company={company} />
-  }
+  const hasToken = monthlyCount === 0
 
-  // Quota exhausted — show blurred with upgrade prompt
-  return <CompanyBlurred company={company} />
+  // Show overview freely; gate other sections with token/upgrade options
+  return <CompanyFreeGated company={company} hasToken={hasToken} />
 }
