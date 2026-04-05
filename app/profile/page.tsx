@@ -8,10 +8,10 @@ export default async function Page() {
   if (!user) redirect('/login')
 
   const [profileResult, savedResult] = await Promise.all([
-    supabase.from('profiles').select('name, job_role, job_company, plan').eq('id', user.id).single(),
+    supabase.from('profiles').select('name, job_role, job_company, plan, email').eq('id', user.id).single(),
     supabase
       .from('saved_companies')
-      .select('company_id, companies(id, name, slug, category, logo_color, hq, employees, valuation)')
+      .select('company_id, companies(id, name, slug, category, logo_color, logo_url, hq, employees, valuation)')
       .eq('user_id', user.id)
       .order('created_at', { ascending: false }),
   ])
@@ -20,7 +20,7 @@ export default async function Page() {
   const savedRows = savedResult.data ?? []
 
   // Flatten and sort alphabetically
-  type SavedCompany = { id: string; name: string; slug: string; category: string | null; logo_color: string | null; hq: string | null; employees: number | null; valuation: string | null }
+  type SavedCompany = { id: string; name: string; slug: string; category: string | null; logo_color: string | null; logo_url: string | null; hq: string | null; employees: number | null; valuation: string | null }
   const savedCompanies = savedRows
     .map(r => {
       const c = r.companies

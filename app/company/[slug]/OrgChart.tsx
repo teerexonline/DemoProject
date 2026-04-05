@@ -7,6 +7,7 @@ interface Company {
   id: string
   name: string
   logo_color: string | null
+  logo_url: string | null
   employees: number | null
 }
 

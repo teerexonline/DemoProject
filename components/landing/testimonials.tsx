@@ -1,5 +1,38 @@
 'use client'
 
+import { useState } from 'react'
+import Image from 'next/image'
+
+const COMPANY_LOGOS: Record<string, string> = {
+  Google:  'https://logo.clearbit.com/google.com',
+  Stripe:  'https://logo.clearbit.com/stripe.com',
+  Notion:  'https://notion.so/front-static/logo-ios.png',
+  Airbnb:  'https://logo.clearbit.com/airbnb.com',
+  Linear:  'https://linear.app/static/favicon.svg',
+}
+
+function CompanyBadge({ company, color }: { company: string; color: string }) {
+  const [failed, setFailed] = useState(false)
+  // Extract company name for logo lookup (strip "Joined " prefix)
+  const coName = company.replace(/^Joined /, '')
+  const logoUrl = COMPANY_LOGOS[coName]
+
+  return (
+    <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+      {logoUrl && !failed ? (
+        <div style={{ width: 16, height: 16, borderRadius: 4, background: '#fff', border: '1px solid #E4E4E7', overflow: 'hidden', flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <Image src={logoUrl} alt={coName} width={16} height={16} style={{ objectFit: 'contain', width: '100%', height: '100%' }} unoptimized onError={() => setFailed(true)} />
+        </div>
+      ) : logoUrl ? (
+        <div style={{ width: 16, height: 16, borderRadius: 4, background: color, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+          <span style={{ color: '#fff', fontSize: 8, fontWeight: 800 }}>{coName[0]}</span>
+        </div>
+      ) : null}
+      <span style={{ color: '#7C3AED', fontWeight: 500 }}>{company}</span>
+    </div>
+  )
+}
+
 const testimonials = [
   {
     quote: "I used ResearchOrg before my Google L5 interview and already knew the exact teams, their tools, and how the org was structured. The interviewer was visibly impressed.",
@@ -135,8 +168,8 @@ export default function Testimonials() {
                 </div>
                 <div>
                   <div style={{ color: '#09090B', fontSize: '13.5px', fontWeight: 700 }}>{t.name}</div>
-                  <div style={{ color: '#71717A', fontSize: '12px', marginTop: '1px' }}>
-                    {t.role} · <span style={{ color: '#7C3AED', fontWeight: 500 }}>{t.company}</span>
+                  <div style={{ color: '#71717A', fontSize: '12px', marginTop: '1px', display: 'flex', alignItems: 'center', gap: '5px', flexWrap: 'wrap' }}>
+                    {t.role} · <CompanyBadge company={t.company} color={t.color} />
                   </div>
                 </div>
               </div>

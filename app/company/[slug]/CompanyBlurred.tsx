@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import CompanyLogo from '@/components/CompanyLogo'
 
 interface Company {
   id: string
@@ -8,18 +9,17 @@ interface Company {
   slug: string
   category: string | null
   logo_color: string | null
+  logo_url: string | null
 }
 
 export default function CompanyBlurred({ company }: { company: Company }) {
-  const color = company.logo_color ?? '#7C3AED'
-
   return (
     <div style={{ minHeight: '100vh', background: '#FAFAFA' }}>
       <div className="company-layout" style={{ maxWidth: '1200px', margin: '0 auto', padding: '32px 24px', display: 'grid', gridTemplateColumns: '220px 1fr', gap: '24px', alignItems: 'start' }}>
         {/* Blurred sidebar — hidden on mobile */}
         <div className="company-sidebar" style={{ filter: 'blur(4px)', userSelect: 'none', pointerEvents: 'none', background: '#fff', borderRadius: '14px', border: '1px solid #E4E4E7', padding: '20px 12px', opacity: 0.6 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '16px' }}>
-            <div style={{ width: '36px', height: '36px', borderRadius: '9px', background: color }} />
+            <CompanyLogo name={company.name} logoUrl={company.logo_url} logoColor={company.logo_color} size={36} />
             <div>
               <div style={{ height: '10px', width: '80px', background: '#E4E4E7', borderRadius: '4px', marginBottom: '5px' }} />
               <div style={{ height: '8px', width: '56px', background: '#F0F0F2', borderRadius: '4px' }} />

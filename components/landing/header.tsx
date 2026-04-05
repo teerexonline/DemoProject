@@ -9,6 +9,7 @@ import SearchAutocomplete from '@/components/SearchAutocomplete'
 export default function Header() {
   const [user, setUser] = useState<User | null>(null)
   const [profile, setProfile] = useState<{ name?: string; plan?: string } | null>(null)
+  const [profileLoaded, setProfileLoaded] = useState(false)
   const [scrolled, setScrolled] = useState(false)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [dropdownOpen, setDropdownOpen] = useState(false)
@@ -16,18 +17,33 @@ export default function Header() {
 
   useEffect(() => {
     const supabase = createClient()
-    supabase.auth.getUser().then(async ({ data }) => {
-      setUser(data.user)
-      if (data.user) {
-        const { data: p } = await supabase.from('profiles').select('name, plan').eq('id', data.user.id).single()
-        setProfile(p)
+    let mounted = true
+
+    async function sync(u: User | null) {
+      if (!mounted) return
+      setUser(u)
+      if (u) {
+        const { data } = await supabase
+          .from('profiles')
+          .select('name, plan, email')
+          .eq('id', u.id)
+          .single()
+        if (mounted) { setProfile(data); setProfileLoaded(true) }
+      } else {
+        setProfile(null)
+        setProfileLoaded(true)
       }
+    }
+
+    // getUser() is reliable for initial load regardless of storage events
+    supabase.auth.getUser().then(({ data: { user } }) => sync(user))
+
+    // onAuthStateChange keeps things in sync on token refresh / sign-in / sign-out
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_e, session) => {
+      sync(session?.user ?? null)
     })
-    const { data: listener } = supabase.auth.onAuthStateChange((_e, session) => {
-      setUser(session?.user ?? null)
-      if (!session?.user) setProfile(null)
-    })
-    return () => listener.subscription.unsubscribe()
+
+    return () => { mounted = false; subscription.unsubscribe() }
   }, [])
 
   useEffect(() => {
@@ -47,12 +63,19 @@ export default function Header() {
     return () => document.removeEventListener('mousedown', handleClickOutside)
   }, [])
 
+  async function handleSignOut() {
+    const supabase = createClient()
+    await supabase.auth.signOut()
+    window.location.href = '/'
+  }
+
   const displayName = profile?.name || user?.email?.split('@')[0] || ''
   const initials = displayName
     ? displayName.split(' ').map((w: string) => w[0]).join('').toUpperCase().slice(0, 2)
     : '?'
-  const isPro = profile?.plan === 'Pro' || profile?.plan === 'Admin' || profile?.plan === 'SuperAdmin'
-  const isAdmin = profile?.plan === 'Admin' || profile?.plan === 'SuperAdmin'
+  const plan = profileLoaded ? (profile?.plan ?? 'Free') : null
+  const isPro = plan === 'Pro' || plan === 'Admin' || plan === 'SuperAdmin'
+  const isAdmin = plan === 'Admin' || plan === 'SuperAdmin'
 
   return (
     <header style={{
@@ -144,7 +167,7 @@ export default function Header() {
                     </div>
                     <div style={{ marginTop: 10, display: 'flex', alignItems: 'center', gap: 6, padding: '4px 8px', borderRadius: 6, background: isPro ? '#7C3AED10' : '#F4F4F5', border: `1px solid ${isPro ? '#DDD6FE' : '#EBEBED'}`, width: 'fit-content' }}>
                       {isPro && <svg width="9" height="9" viewBox="0 0 24 24" fill="#7C3AED"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>}
-                      <span style={{ fontSize: 10.5, fontWeight: 700, color: isPro ? '#7C3AED' : '#71717A' }}>{profile?.plan ?? 'Free'} Plan</span>
+                      <span style={{ fontSize: 10.5, fontWeight: 700, color: isPro ? '#7C3AED' : '#71717A' }}>{plan ?? '…'} Plan</span>
                     </div>
                   </div>
 
@@ -188,14 +211,15 @@ export default function Header() {
                   </div>
 
                   <div style={{ borderTop: '1px solid #F4F4F5', padding: '6px' }}>
-                    <Link href="/logout" onClick={() => setDropdownOpen(false)}
-                      style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '9px 10px', borderRadius: 8, textDecoration: 'none', color: '#71717A', fontSize: 13, fontWeight: 500, transition: 'background 0.12s, color 0.12s' }}
+                    <button
+                      onClick={() => { setDropdownOpen(false); handleSignOut() }}
+                      style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '9px 10px', borderRadius: 8, border: 'none', background: 'transparent', color: '#71717A', fontSize: 13, fontWeight: 500, cursor: 'pointer', width: '100%', transition: 'background 0.12s, color 0.12s' }}
                       onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = '#FEF2F2'; (e.currentTarget as HTMLElement).style.color = '#DC2626' }}
                       onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = 'transparent'; (e.currentTarget as HTMLElement).style.color = '#71717A' }}
                     >
                       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
                       Sign out
-                    </Link>
+                    </button>
                   </div>
                 </div>
               )}

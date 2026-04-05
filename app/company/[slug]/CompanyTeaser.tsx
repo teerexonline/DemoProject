@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import CompanyLogo from '@/components/CompanyLogo'
 
 interface Company {
   id: string
@@ -9,21 +10,18 @@ interface Company {
   category: string | null
   description: string | null
   logo_color: string | null
+  logo_url: string | null
   hq: string | null
 }
 
 export default function CompanyTeaser({ company }: { company: Company }) {
-  const color = company.logo_color ?? '#7C3AED'
-
   return (
     <div style={{ minHeight: '100vh', background: '#FAFAFA', display: 'flex', flexDirection: 'column' }}>
       <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '48px 24px' }}>
         <div style={{ maxWidth: '480px', width: '100%', textAlign: 'center' }}>
           {/* Company pill */}
           <div style={{ display: 'inline-flex', alignItems: 'center', gap: '10px', padding: '6px 14px 6px 6px', borderRadius: '100px', background: '#F5F3FF', border: '1px solid #DDD6FE', marginBottom: '24px' }}>
-            <div style={{ width: '28px', height: '28px', borderRadius: '7px', background: color, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <span style={{ color: '#fff', fontSize: '12px', fontWeight: 800 }}>{company.name.charAt(0)}</span>
-            </div>
+            <CompanyLogo name={company.name} logoUrl={company.logo_url} logoColor={company.logo_color} size={28} />
             <span style={{ color: '#6D28D9', fontSize: '13px', fontWeight: 600 }}>{company.name}</span>
           </div>
 

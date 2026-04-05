@@ -1,10 +1,11 @@
 'use client'
 
-import { useState, useTransition, useEffect } from 'react'
+import { useState, useTransition, useEffect, useRef } from 'react'
+import { createClient } from '@/lib/supabase/client'
 import Link from 'next/link'
 import {
   adminUpsertCompany, adminDeleteCompany,
-  adminUpdateUserPlan,
+  adminUpdateUserPlan, adminUpdateUserProfile,
   adminGetCompanyContent,
   adminUpsertNews, adminDeleteNews,
   adminUpsertMilestone, adminDeleteMilestone,
@@ -19,8 +20,19 @@ import {
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
-interface Company { id: string; name: string; slug: string; category: string; description: string | null; logo_color: string; employees: number | null; founded: number | null; hq: string | null; valuation: string | null; revenue: string | null; website: string | null; is_hiring: boolean; trending_rank: number | null; tags: string[]; created_at: string }
-interface Profile { id: string; plan: string; name: string | null; job_role: string | null; job_company: string | null; created_at: string }
+interface Company { id: string; name: string; slug: string; category: string; description: string | null; logo_color: string; logo_url: string | null; employees: number | null; founded: number | null; hq: string | null; valuation: string | null; revenue: string | null; website: string | null; is_hiring: boolean; trending_rank: number | null; tags: string[]; created_at: string }
+interface Profile {
+  id: string
+  email: string | null
+  name: string | null
+  job_role: string | null
+  job_company: string | null
+  plan: string
+  created_at: string
+  updated_at: string | null
+  last_sign_in_at: string | null
+  email_confirmed_at: string | null
+}
 interface Props {
   currentUser: { id: string; email: string; name: string; plan: string }
   initialCompanies: Company[]
@@ -193,6 +205,121 @@ function DeleteBtn({ onClick, pending }: { onClick: () => void; pending: boolean
   )
 }
 
+function SeedIcon() {
+  return (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M12 22V12"/><path d="M5 3a7 7 0 0 0 7 7 7 7 0 0 0 7-7"/>
+      <path d="M5 3c0 4.97 3.13 9.16 7 10.93"/>
+    </svg>
+  )
+}
+
+function SpinnerIcon() {
+  return (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"
+      style={{ animation: 'spin 0.75s linear infinite' }}>
+      <path d="M21 12a9 9 0 1 1-6.219-8.56"/>
+      <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
+    </svg>
+  )
+}
+
+// ─── Logo upload field ────────────────────────────────────────────────────────
+
+function LogoField({
+  logoUrl, slug, onLogoUrl,
+}: {
+  logoUrl: string | null | undefined
+  slug: string | undefined
+  onLogoUrl: (url: string) => void
+}) {
+  const inputRef   = useRef<HTMLInputElement>(null)
+  const [uploading, setUploading] = useState(false)
+  const [uploadErr, setUploadErr] = useState('')
+
+  async function handleFile(file: File) {
+    if (!file.type.startsWith('image/')) { setUploadErr('File must be an image'); return }
+    if (file.size > 524_288) { setUploadErr('Image must be under 512 KB'); return }
+    if (!slug) { setUploadErr('Enter a slug before uploading'); return }
+
+    setUploading(true); setUploadErr('')
+    try {
+      const supabase = createClient()
+      const ext      = file.name.split('.').pop() ?? 'png'
+      const filePath = `${slug}.${ext}`
+      const { error } = await supabase.storage
+        .from('logos')
+        .upload(filePath, file, { upsert: true, cacheControl: '3600' })
+      if (error) { setUploadErr(error.message); return }
+      const { data: { publicUrl } } = supabase.storage.from('logos').getPublicUrl(filePath)
+      onLogoUrl(publicUrl)
+    } catch (e) {
+      setUploadErr(e instanceof Error ? e.message : 'Upload failed')
+    } finally {
+      setUploading(false)
+    }
+  }
+
+  return (
+    <div style={{ marginBottom: 12 }}>
+      <label style={{ display: 'block', fontSize: 11, fontWeight: 700, color: '#A1A1AA', textTransform: 'uppercase', letterSpacing: '0.07em', marginBottom: 6 }}>
+        Logo
+      </label>
+
+      {/* Preview + drop zone */}
+      <div
+        onClick={() => inputRef.current?.click()}
+        onDragOver={e => e.preventDefault()}
+        onDrop={e => { e.preventDefault(); const f = e.dataTransfer.files[0]; if (f) handleFile(f) }}
+        style={{
+          width: '100%', height: 88, borderRadius: 10,
+          border: '1.5px dashed #D4D4D8', background: '#F7F7F8',
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          cursor: 'pointer', gap: 12, position: 'relative', overflow: 'hidden',
+          transition: 'border-color 0.15s',
+        }}
+        onMouseEnter={e => (e.currentTarget as HTMLElement).style.borderColor = '#7C3AED'}
+        onMouseLeave={e => (e.currentTarget as HTMLElement).style.borderColor = '#D4D4D8'}
+      >
+        {logoUrl ? (
+          <>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={logoUrl} alt="Logo" style={{ maxHeight: 56, maxWidth: 120, objectFit: 'contain', borderRadius: 6 }} />
+            <div style={{ fontSize: 11, color: '#71717A' }}>Click or drag to replace</div>
+          </>
+        ) : (
+          <div style={{ textAlign: 'center' }}>
+            <div style={{ fontSize: 22, marginBottom: 4 }}>🖼</div>
+            <div style={{ fontSize: 12, color: '#71717A' }}>{uploading ? 'Uploading…' : 'Click or drag an image'}</div>
+            <div style={{ fontSize: 10.5, color: '#A1A1AA', marginTop: 2 }}>PNG · JPG · SVG · WebP · max 512 KB</div>
+          </div>
+        )}
+        {uploading && (
+          <div style={{ position: 'absolute', inset: 0, background: 'rgba(255,255,255,0.8)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 12, color: '#7C3AED', fontWeight: 600 }}>
+            Uploading…
+          </div>
+        )}
+      </div>
+
+      {/* Hidden file input */}
+      <input ref={inputRef} type="file" accept="image/*" style={{ display: 'none' }}
+        onChange={e => { const f = e.target.files?.[0]; if (f) handleFile(f); e.target.value = '' }} />
+
+      {/* URL field — shows stored URL, allows manual paste */}
+      <input
+        value={logoUrl ?? ''}
+        onChange={e => onLogoUrl(e.target.value)}
+        placeholder="Logo URL (auto-filled by Seed or upload)"
+        style={{ marginTop: 6, width: '100%', padding: '7px 10px', borderRadius: 8, border: '1.5px solid #E4E4E7', background: '#F7F7F8', fontSize: 11.5, outline: 'none', boxSizing: 'border-box', color: '#09090B' }}
+        onFocus={e => (e.currentTarget as HTMLInputElement).style.borderColor = '#7C3AED'}
+        onBlur={e => (e.currentTarget as HTMLInputElement).style.borderColor = '#E4E4E7'}
+      />
+
+      {uploadErr && <div style={{ fontSize: 11, color: '#DC2626', marginTop: 3 }}>{uploadErr}</div>}
+    </div>
+  )
+}
+
 // ─── Section components ───────────────────────────────────────────────────────
 
 // Companies
@@ -203,12 +330,65 @@ function CompaniesSection({ companies, onRefresh }: { companies: Company[]; onRe
   const [search, setSearch] = useState('')
   const [form, setForm] = useState<Partial<Company>>({})
   const [err, setErr] = useState('')
+  const [seeding, setSeeding] = useState(false)
+  const [seedMsg, setSeedMsg] = useState<{ type: 'ok' | 'err'; text: string } | null>(null)
 
   const filtered = companies.filter(c => c.name.toLowerCase().includes(search.toLowerCase()) || c.category?.toLowerCase().includes(search.toLowerCase()))
 
-  function openEdit(c: Company) { setForm(c); setEditing(c); setIsNew(false); setErr('') }
-  function openNew() { setForm({ logo_color: '#7C3AED', is_hiring: true, tags: [] }); setEditing({} as Company); setIsNew(true); setErr('') }
-  function close() { setEditing(null); setForm({}) }
+  function openEdit(c: Company) { setForm(c); setEditing(c); setIsNew(false); setErr(''); setSeedMsg(null) }
+  function openNew() { setForm({ logo_color: '#7C3AED', logo_url: null, is_hiring: true, tags: [] }); setEditing({} as Company); setIsNew(true); setErr(''); setSeedMsg(null) }
+  function close() { setEditing(null); setForm({}); setSeedMsg(null) }
+
+  async function handleSeed() {
+    setSeedMsg(null)
+    const name    = (form.name    ?? '').trim()
+    const website = (form.website ?? '').trim()
+    const missing: string[] = []
+    if (!name)    missing.push('Company Name')
+    if (!website) missing.push('Website')
+    if (missing.length) {
+      setSeedMsg({ type: 'err', text: `Please fill in: ${missing.join(' and ')} before seeding.` })
+      return
+    }
+    setSeeding(true)
+    try {
+      const res = await fetch('/api/seed-company', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, website }),
+      })
+      const json = await res.json()
+      if (!res.ok || json.error) {
+        setSeedMsg({ type: 'err', text: json.error ?? 'Seed failed. Check server logs.' })
+        return
+      }
+      const d = json.data
+      // Merge scraped data into form — only overwrite empty fields
+      setForm(prev => ({
+        ...prev,
+        slug:        prev.slug        || d.slug        || prev.slug,
+        category:    prev.category    || d.category    || prev.category,
+        description: prev.description || d.description || prev.description,
+        employees:   prev.employees   ?? (d.employees  ?? prev.employees),
+        founded:     prev.founded     ?? (d.founded     ?? prev.founded),
+        hq:          prev.hq          || d.hq          || prev.hq,
+        valuation:   prev.valuation   || d.valuation   || prev.valuation,
+        revenue:     prev.revenue     || d.revenue     || prev.revenue,
+        is_hiring:   d.is_hiring      ?? prev.is_hiring,
+        tags:        (prev.tags && prev.tags.length > 0) ? prev.tags : (d.tags ?? prev.tags ?? []),
+        logo_url:    prev.logo_url    || d.logo_url    || prev.logo_url,
+      }))
+      const filledCount = [
+        d.slug, d.category, d.description, d.employees, d.founded,
+        d.hq, d.valuation, d.revenue,
+      ].filter(Boolean).length
+      setSeedMsg({ type: 'ok', text: `Seeded ${filledCount} fields from ${Object.keys(d._sources ?? {}).length > 0 ? Object.keys(d._sources ?? {}).length + ' sources' : 'web'}.` })
+    } catch (e) {
+      setSeedMsg({ type: 'err', text: `Network error: ${e instanceof Error ? e.message : String(e)}` })
+    } finally {
+      setSeeding(false)
+    }
+  }
 
   function save() {
     if (!form.name || !form.slug || !form.category) { setErr('Name, slug and category are required'); return }
@@ -217,6 +397,7 @@ function CompaniesSection({ companies, onRefresh }: { companies: Company[]; onRe
         ...(isNew ? {} : { id: form.id }),
         name: form.name!, slug: form.slug!, category: form.category!,
         description: form.description ?? undefined, logo_color: form.logo_color ?? '#7C3AED',
+        logo_url: form.logo_url ?? undefined,
         employees: form.employees ? Number(form.employees) : null,
         founded: form.founded ? Number(form.founded) : null,
         hq: form.hq ?? undefined, valuation: form.valuation ?? undefined, revenue: form.revenue ?? undefined,
@@ -264,6 +445,13 @@ function CompaniesSection({ companies, onRefresh }: { companies: Company[]; onRe
 
       {editing !== null && (
         <SlideOver title={isNew ? 'Add Company' : `Edit: ${editing.name}`} onClose={close}>
+          {/* Logo upload spans full width */}
+          <LogoField
+            logoUrl={form.logo_url}
+            slug={form.slug}
+            onLogoUrl={url => setForm(p => ({ ...p, logo_url: url }))}
+          />
+
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0 12px' }}>
             <Field label="Name"><Input value={form.name ?? ''} onChange={v => setForm(p => ({ ...p, name: v }))} /></Field>
             <Field label="Slug"><Input value={form.slug ?? ''} onChange={v => setForm(p => ({ ...p, slug: v }))} /></Field>
@@ -286,6 +474,41 @@ function CompaniesSection({ companies, onRefresh }: { companies: Company[]; onRe
           <Field label="Description"><Textarea value={form.description ?? ''} onChange={v => setForm(p => ({ ...p, description: v }))} rows={3} /></Field>
           {err && <div style={{ padding: '8px 12px', borderRadius: 8, background: '#FEF2F2', border: '1px solid #FECACA', color: '#DC2626', fontSize: 12.5, marginBottom: 8 }}>{err}</div>}
           <SaveBtn onClick={save} pending={pending} />
+
+          {/* ── Seed button ──────────────────────────────────────── */}
+          <button
+            onClick={handleSeed}
+            disabled={seeding || pending}
+            style={{
+              width: '100%', marginTop: 8, padding: '10px', borderRadius: 9,
+              border: '1.5px solid #D97706',
+              background: seeding ? '#FEF3C7' : '#FFFBEB',
+              color: seeding ? '#92400E' : '#B45309',
+              fontSize: 13, fontWeight: 600,
+              cursor: (seeding || pending) ? 'default' : 'pointer',
+              display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
+              transition: 'background 0.15s, color 0.15s',
+            }}
+            onMouseEnter={e => { if (!seeding && !pending) (e.currentTarget as HTMLElement).style.background = '#FEF3C7' }}
+            onMouseLeave={e => { if (!seeding && !pending) (e.currentTarget as HTMLElement).style.background = '#FFFBEB' }}
+          >
+            {seeding
+              ? (<><SpinnerIcon />Scraping web sources…</>)
+              : (<><SeedIcon />Seed from Web</>)
+            }
+          </button>
+
+          {seedMsg && (
+            <div style={{
+              marginTop: 8, padding: '8px 12px', borderRadius: 8, fontSize: 12.5,
+              background: seedMsg.type === 'ok' ? '#F0FDF4' : '#FEF2F2',
+              border:     `1px solid ${seedMsg.type === 'ok' ? '#BBF7D0' : '#FECACA'}`,
+              color:      seedMsg.type === 'ok' ? '#15803D' : '#DC2626',
+            }}>
+              {seedMsg.type === 'ok' ? '✓ ' : '⚠ '}{seedMsg.text}
+            </div>
+          )}
+
           {!isNew && <DeleteBtn onClick={del} pending={pending} />}
         </SlideOver>
       )}
@@ -294,50 +517,93 @@ function CompaniesSection({ companies, onRefresh }: { companies: Company[]; onRe
 }
 
 // Users
-function UsersSection({ profiles }: { profiles: Profile[] }) {
+function UsersSection({ profiles, onPlanUpdate }: { profiles: Profile[]; onPlanUpdate: (id: string, fields: Partial<Profile>) => void }) {
   const [editing, setEditing] = useState<Profile | null>(null)
-  const [form, setForm] = useState<{ plan: string }>({ plan: 'Free' })
+  const [form, setForm] = useState({ name: '', job_role: '', job_company: '', plan: 'Free' })
   const [pending, startTx] = useTransition()
   const [msg, setMsg] = useState('')
 
-  function openEdit(p: Profile) { setEditing(p); setForm({ plan: p.plan }); setMsg('') }
+  function openEdit(p: Profile) {
+    setEditing(p)
+    setForm({ name: p.name ?? '', job_role: p.job_role ?? '', job_company: p.job_company ?? '', plan: p.plan })
+    setMsg('')
+  }
 
   function save() {
     if (!editing) return
     startTx(async () => {
-      const res = await adminUpdateUserPlan(editing.id, form.plan)
+      const res = await adminUpdateUserProfile(editing.id, {
+        name: form.name || undefined,
+        job_role: form.job_role || undefined,
+        job_company: form.job_company || undefined,
+        plan: form.plan,
+      })
       if (res.error) { setMsg(res.error); return }
-      setMsg('✓ Plan updated')
+      onPlanUpdate(editing.id, { name: form.name || null, job_role: form.job_role || null, job_company: form.job_company || null, plan: form.plan })
+      setMsg('✓ Saved')
       setTimeout(() => { setMsg(''); setEditing(null) }, 1200)
     })
   }
 
   const planColor = (p: string) => p === 'SuperAdmin' ? '#EF4444' : p === 'Admin' ? '#F59E0B' : p === 'Pro' ? '#7C3AED' : '#A1A1AA'
+  const fmt = (d: string | null) => d ? new Date(d).toLocaleDateString() : '—'
+  const fmtFull = (d: string | null) => d ? new Date(d).toLocaleString() : '—'
 
   return (
     <div>
       <DataTable
-        cols={['User ID', 'Name', 'Role', 'Company', 'Plan', 'Joined']}
+        cols={['Email', 'Name', 'Position', 'Company', 'Plan', 'Joined', 'Last Sign In', 'Verified']}
         rows={profiles.map(p => [
-          <span key="id" style={{ fontFamily: 'monospace', fontSize: 11, color: '#A1A1AA' }}>{p.id.slice(0, 8)}…</span>,
+          <span key="email" style={{ fontSize: 12, color: '#52525B' }}>{p.email ?? '—'}</span>,
           p.name ?? '—',
           p.job_role ?? '—',
           p.job_company ?? '—',
           <Badge key="plan" label={p.plan} color={planColor(p.plan)} />,
-          new Date(p.created_at).toLocaleDateString(),
+          fmt(p.created_at),
+          fmt(p.last_sign_in_at),
+          p.email_confirmed_at
+            ? <Badge key="v" label="Verified" color="#10B981" />
+            : <Badge key="v" label="Unverified" color="#A1A1AA" />,
         ])}
         onEdit={i => openEdit(profiles[i])}
       />
+
       {editing && (
-        <SlideOver title="Edit User Plan" onClose={() => setEditing(null)}>
-          <div style={{ marginBottom: 16, padding: '14px', borderRadius: 10, background: '#F7F7F8', border: '1px solid #E4E4E7' }}>
-            <div style={{ fontSize: 13, fontWeight: 700, color: '#09090B', marginBottom: 2 }}>{editing.name ?? 'Unnamed'}</div>
-            <div style={{ fontSize: 12, color: '#A1A1AA', fontFamily: 'monospace' }}>{editing.id}</div>
-            {editing.job_role && <div style={{ fontSize: 12, color: '#71717A', marginTop: 4 }}>{editing.job_role} {editing.job_company ? `@ ${editing.job_company}` : ''}</div>}
+        <SlideOver title="Edit User" onClose={() => setEditing(null)}>
+          {/* Read-only info */}
+          <div style={{ marginBottom: 16, padding: 14, borderRadius: 10, background: '#F7F7F8', border: '1px solid #E4E4E7', fontSize: 12 }}>
+            <div style={{ fontWeight: 700, color: '#09090B', marginBottom: 4, fontSize: 13 }}>{editing.email ?? 'No email'}</div>
+            <div style={{ color: '#A1A1AA', fontFamily: 'monospace', marginBottom: 6 }}>{editing.id}</div>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 4, color: '#71717A' }}>
+              <div><span style={{ fontWeight: 600 }}>Joined:</span> {fmtFull(editing.created_at)}</div>
+              <div><span style={{ fontWeight: 600 }}>Last sign in:</span> {fmtFull(editing.last_sign_in_at)}</div>
+              <div><span style={{ fontWeight: 600 }}>Updated:</span> {fmtFull(editing.updated_at)}</div>
+              <div><span style={{ fontWeight: 600 }}>Email verified:</span> {editing.email_confirmed_at ? fmtFull(editing.email_confirmed_at) : 'No'}</div>
+            </div>
           </div>
-          <Field label="Plan"><Select value={form.plan} onChange={v => setForm({ plan: v })} options={PLANS} /></Field>
+
+          {/* Editable fields */}
+          <Field label="Name">
+            <input value={form.name} onChange={e => setForm(f => ({ ...f, name: e.target.value }))}
+              placeholder="Full name"
+              style={{ width: '100%', padding: '8px 10px', borderRadius: 8, border: '1px solid #E4E4E7', fontSize: 13, outline: 'none', boxSizing: 'border-box' }} />
+          </Field>
+          <Field label="Position / Role">
+            <input value={form.job_role} onChange={e => setForm(f => ({ ...f, job_role: e.target.value }))}
+              placeholder="e.g. Software Engineer"
+              style={{ width: '100%', padding: '8px 10px', borderRadius: 8, border: '1px solid #E4E4E7', fontSize: 13, outline: 'none', boxSizing: 'border-box' }} />
+          </Field>
+          <Field label="Company">
+            <input value={form.job_company} onChange={e => setForm(f => ({ ...f, job_company: e.target.value }))}
+              placeholder="e.g. Google"
+              style={{ width: '100%', padding: '8px 10px', borderRadius: 8, border: '1px solid #E4E4E7', fontSize: 13, outline: 'none', boxSizing: 'border-box' }} />
+          </Field>
+          <Field label="Plan">
+            <Select value={form.plan} onChange={v => setForm(f => ({ ...f, plan: v }))} options={PLANS} />
+          </Field>
+
           {msg && <div style={{ fontSize: 12.5, color: msg.startsWith('✓') ? '#10B981' : '#EF4444', marginBottom: 8 }}>{msg}</div>}
-          <SaveBtn onClick={save} pending={pending} label="Update Plan" />
+          <SaveBtn onClick={save} pending={pending} label="Save Changes" />
         </SlideOver>
       )}
     </div>
@@ -738,6 +1004,11 @@ function ContentSection({ companies }: { companies: Company[] }) {
 export default function AdminDashboard({ currentUser, initialCompanies, initialProfiles, analytics }: Props) {
   const [nav, setNav] = useState<NavSection>('companies')
   const [companies, setCompanies] = useState<Company[]>(initialCompanies)
+  const [profiles, setProfiles] = useState<Profile[]>(initialProfiles)
+
+  function handlePlanUpdate(id: string, fields: Partial<Profile>) {
+    setProfiles(prev => prev.map(p => p.id === id ? { ...p, ...fields } : p))
+  }
 
   const isSuperAdmin = currentUser.plan === 'SuperAdmin'
 
@@ -775,7 +1046,7 @@ export default function AdminDashboard({ currentUser, initialCompanies, initialP
           <NavItem label="Company Content" active={nav === 'content'} onClick={() => setNav('content')} />
 
           <SectionTitle>Users</SectionTitle>
-          <NavItem label="All Users" active={nav === 'users'} onClick={() => setNav('users')} count={initialProfiles.length} />
+          <NavItem label="All Users" active={nav === 'users'} onClick={() => setNav('users')} count={profiles.length} />
 
           <SectionTitle>Analytics</SectionTitle>
           <NavItem label="Views & Saves" active={nav === 'analytics'} onClick={() => setNav('analytics')} />
@@ -785,7 +1056,7 @@ export default function AdminDashboard({ currentUser, initialCompanies, initialP
               <div style={{ fontSize: 11, fontWeight: 700, color: '#7C3AED', marginBottom: 4 }}>DB Summary</div>
               {[
                 { label: 'Companies', value: companies.length },
-                { label: 'Users', value: initialProfiles.length },
+                { label: 'Users', value: profiles.length },
                 { label: 'Views', value: analytics.views.length },
                 { label: 'Saves', value: analytics.saves.length },
               ].map(s => (
@@ -807,14 +1078,14 @@ export default function AdminDashboard({ currentUser, initialCompanies, initialP
             <div style={{ fontSize: 12.5, color: '#A1A1AA', marginTop: 2 }}>
               {nav === 'companies' && `${companies.length} companies in the database`}
               {nav === 'content' && 'View and edit per-company content — news, products, financials, org chart and more'}
-              {nav === 'users' && `${initialProfiles.length} registered users`}
+              {nav === 'users' && `${profiles.length} registered users`}
               {nav === 'analytics' && 'Company view and save activity'}
             </div>
           </div>
 
           {nav === 'companies' && <CompaniesSection companies={companies} onRefresh={setCompanies} />}
           {nav === 'content' && <ContentSection companies={companies} />}
-          {nav === 'users' && <UsersSection profiles={initialProfiles} />}
+          {nav === 'users' && <UsersSection profiles={profiles} onPlanUpdate={handlePlanUpdate} />}
           {nav === 'analytics' && <AnalyticsSection analytics={analytics} />}
         </div>
       </div>

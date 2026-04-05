@@ -28,7 +28,7 @@ export async function adminGetCompanies() {
 
 export async function adminUpsertCompany(company: {
   id?: string; name: string; slug: string; category: string; description?: string
-  logo_color?: string; employees?: number | null; founded?: number | null; hq?: string
+  logo_color?: string; logo_url?: string; employees?: number | null; founded?: number | null; hq?: string
   valuation?: string; revenue?: string; website?: string; is_hiring?: boolean; trending_rank?: number | null; tags?: string[]
 }) {
   const { supabase } = await requireAdmin()
@@ -52,10 +52,7 @@ export async function adminDeleteCompany(id: string) {
 
 export async function adminGetProfiles() {
   const { supabase } = await requireAdmin()
-  const { data, error } = await supabase
-    .from('profiles')
-    .select('id, plan, name, job_role, job_company, created_at, updated_at')
-    .order('created_at', { ascending: false })
+  const { data, error } = await supabase.rpc('admin_get_users')
   if (error) return { error: error.message, data: null }
   return { data, error: null }
 }
@@ -63,6 +60,15 @@ export async function adminGetProfiles() {
 export async function adminUpdateUserPlan(userId: string, plan: string) {
   const { supabase } = await requireAdmin()
   const { error } = await supabase.from('profiles').update({ plan }).eq('id', userId)
+  revalidatePath('/admin')
+  return error ? { error: error.message } : { error: null }
+}
+
+export async function adminUpdateUserProfile(userId: string, fields: {
+  name?: string; job_role?: string; job_company?: string; plan?: string; email?: string
+}) {
+  const { supabase } = await requireAdmin()
+  const { error } = await supabase.from('profiles').update(fields).eq('id', userId)
   revalidatePath('/admin')
   return error ? { error: error.message } : { error: null }
 }

@@ -2,10 +2,47 @@
 
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import SearchAutocomplete from '@/components/SearchAutocomplete'
 import { createClient } from '@/lib/supabase/client'
 import type { User } from '@supabase/supabase-js'
+
+// ─── Logo helper ──────────────────────────────────────────────────────────────
+const LOGOS: Record<string, { url: string; color: string }> = {
+  Google:    { url: 'https://logo.clearbit.com/google.com',     color: '#4285F4' },
+  Meta:      { url: 'https://logo.clearbit.com/meta.com',       color: '#0866FF' },
+  Stripe:    { url: 'https://logo.clearbit.com/stripe.com',     color: '#635BFF' },
+  Airbnb:    { url: 'https://logo.clearbit.com/airbnb.com',     color: '#FF5A5F' },
+  Notion:    { url: 'https://notion.so/front-static/logo-ios.png', color: '#000' },
+  OpenAI:    { url: 'https://logo.clearbit.com/openai.com',     color: '#000'    },
+  Linear:    { url: 'https://linear.app/static/favicon.svg',    color: '#5E6AD2' },
+  Figma:     { url: 'https://logo.clearbit.com/figma.com',      color: '#F24E1E' },
+  Datadog:   { url: 'https://logo.clearbit.com/datadoghq.com',  color: '#632CA6' },
+  Slack:     { url: 'https://logo.clearbit.com/slack.com',      color: '#4A154B' },
+  GitHub:    { url: 'https://logo.clearbit.com/github.com',     color: '#24292E' },
+  PagerDuty: { url: 'https://logo.clearbit.com/pagerduty.com',  color: '#06AC38' },
+  Terraform: { url: 'https://logo.clearbit.com/hashicorp.com',  color: '#7B42BC' },
+  Retool:    { url: 'https://logo.clearbit.com/retool.com',     color: '#3D63DD' },
+  Hex:       { url: 'https://logo.clearbit.com/hex.tech',       color: '#FF6B35' },
+}
+
+function LogoImg({ name, size = 24, radius = 6 }: { name: string; size?: number; radius?: number }) {
+  const [failed, setFailed] = useState(false)
+  const entry = LOGOS[name]
+  if (!entry || failed) {
+    return (
+      <div style={{ width: size, height: size, borderRadius: radius, background: entry?.color ?? '#E4E4E7', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+        <span style={{ color: '#fff', fontSize: size * 0.42, fontWeight: 800 }}>{name[0]}</span>
+      </div>
+    )
+  }
+  return (
+    <div style={{ width: size, height: size, borderRadius: radius, background: '#fff', border: '1px solid #F0F0F2', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', flexShrink: 0 }}>
+      <Image src={entry.url} alt={name} width={size} height={size} style={{ objectFit: 'contain', width: '100%', height: '100%' }} unoptimized onError={() => setFailed(true)} />
+    </div>
+  )
+}
 
 // ─── Sidebar nav items ────────────────────────────────────────────
 const NAV = [
@@ -28,7 +65,7 @@ function CompanyOverview() {
     <div style={{ padding: '14px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
       {/* Header */}
       <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-        <div style={{ width: '38px', height: '38px', borderRadius: '10px', background: '#635BFF', flexShrink: 0 }} />
+        <LogoImg name="Stripe" size={38} radius={10} />
         <div style={{ flex: 1 }}>
           <div style={{ color: '#09090B', fontSize: '14px', fontWeight: 700 }}>Stripe, Inc.</div>
           <div style={{ color: '#71717A', fontSize: '11px' }}>Financial Infrastructure · San Francisco, CA · Founded 2010</div>
@@ -325,7 +362,7 @@ function InternalTools() {
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '6px' }}>
         {tools.map(t => (
           <div key={t.name} style={{ display: 'flex', alignItems: 'center', gap: '9px', padding: '8px 10px', borderRadius: '8px', background: '#FAFAFA', border: '1px solid #F0F0F2' }}>
-            <div style={{ width: '24px', height: '24px', borderRadius: '6px', background: t.color, flexShrink: 0, opacity: t.color === '#000' ? 0.8 : 0.9, border: t.color === '#000' ? '1px solid #E4E4E7' : 'none' }} />
+            <LogoImg name={t.name} size={24} radius={6} />
             <div>
               <div style={{ color: '#09090B', fontSize: '11.5px', fontWeight: 600 }}>{t.name}</div>
               <div style={{ color: '#A1A1AA', fontSize: '10px', marginTop: '1px' }}>{t.category}</div>
@@ -520,7 +557,7 @@ export default function Hero() {
                 <div key={i} style={{ width: '9px', height: '9px', borderRadius: '50%', background: c }} />
               ))}
               <div style={{ marginLeft: '8px', flex: 1, height: '22px', borderRadius: '5px', background: '#F0F0F2', display: 'flex', alignItems: 'center', paddingLeft: '10px', gap: '7px' }}>
-                <div style={{ width: '12px', height: '12px', borderRadius: '3px', background: '#635BFF', flexShrink: 0 }} />
+                <LogoImg name="Stripe" size={12} radius={3} />
                 <span style={{ color: '#71717A', fontSize: '11px' }}>researchorg.com/company/stripe</span>
               </div>
             </div>
@@ -531,7 +568,7 @@ export default function Hero() {
               <div style={{ width: '152px', borderRight: '1px solid #F4F4F5', background: '#FAFAFA', padding: '10px 6px', display: 'flex', flexDirection: 'column', gap: '1px', flexShrink: 0, overflowY: 'auto' }}>
                 <div style={{ padding: '4px 8px', marginBottom: '4px' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '7px' }}>
-                    <div style={{ width: '20px', height: '20px', borderRadius: '5px', background: '#635BFF', flexShrink: 0 }} />
+                    <LogoImg name="Stripe" size={20} radius={5} />
                     <span style={{ color: '#09090B', fontSize: '11.5px', fontWeight: 700 }}>Stripe</span>
                   </div>
                 </div>
@@ -567,12 +604,20 @@ export default function Hero() {
 
         {/* Logo strip */}
         <div className="hero-logo-strip" style={{ marginTop: '56px', paddingTop: '32px', borderTop: '1px solid #F4F4F5', paddingRight: '24px', paddingLeft: 'max(24px, calc((100% - 1200px) / 2))' }}>
-          <p style={{ color: '#A1A1AA', fontSize: '12px', textAlign: 'center', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '16px' }}>
+          <p style={{ color: '#A1A1AA', fontSize: '12px', textAlign: 'center', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '24px' }}>
             Used by job seekers researching teams at
           </p>
-          <div className="hero-logo-strip-inner" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '44px', flexWrap: 'wrap' }}>
+          <div className="hero-logo-strip-inner" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '36px', flexWrap: 'wrap' }}>
             {['Google', 'Meta', 'Stripe', 'Airbnb', 'Notion', 'OpenAI'].map(name => (
-              <span key={name} style={{ fontWeight: 700, fontSize: '14px', color: '#D4D4D8', letterSpacing: '-0.02em' }}>{name}</span>
+              <div key={name} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '6px', opacity: 0.55, transition: 'opacity 0.15s' }}
+                onMouseEnter={e => (e.currentTarget as HTMLElement).style.opacity = '1'}
+                onMouseLeave={e => (e.currentTarget as HTMLElement).style.opacity = '0.55'}
+              >
+                <div style={{ width: 36, height: 36, borderRadius: 10, background: '#fff', border: '1px solid #E4E4E7', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', boxShadow: '0 1px 4px rgba(0,0,0,0.05)' }}>
+                  <LogoImg name={name} size={36} radius={10} />
+                </div>
+                <span style={{ fontSize: '11px', fontWeight: 600, color: '#A1A1AA', letterSpacing: '-0.01em' }}>{name}</span>
+              </div>
             ))}
           </div>
         </div>

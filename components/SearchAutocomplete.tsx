@@ -4,6 +4,7 @@ import { useEffect, useRef, useState, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 import type { User } from '@supabase/supabase-js'
+import CompanyLogo from '@/components/CompanyLogo'
 
 interface Company {
   id: string
@@ -11,6 +12,7 @@ interface Company {
   slug: string
   category: string | null
   logo_color: string | null
+  logo_url: string | null
 }
 
 interface Props {
@@ -54,7 +56,7 @@ export default function SearchAutocomplete({ placeholder = 'Search any company..
     const supabase = createClient()
     const { data } = await supabase
       .from('companies')
-      .select('id, name, slug, category, logo_color')
+      .select('id, name, slug, category, logo_color, logo_url')
       .ilike('name', `%${q}%`)
       .order('name')
       .limit(7)
@@ -205,17 +207,7 @@ export default function SearchAutocomplete({ placeholder = 'Search any company..
                 borderBottom: i < results.length - 1 ? '1px solid #F4F4F5' : 'none',
               }}
             >
-              <div style={{
-                width: '28px', height: '28px',
-                borderRadius: '7px',
-                background: company.logo_color ?? '#7C3AED',
-                flexShrink: 0,
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-              }}>
-                <span style={{ color: '#fff', fontSize: '11px', fontWeight: 800, letterSpacing: '-0.02em' }}>
-                  {company.name.charAt(0)}
-                </span>
-              </div>
+              <CompanyLogo name={company.name} logoUrl={company.logo_url} logoColor={company.logo_color} size={28} />
               <div style={{ flex: 1, minWidth: 0 }}>
                 <div style={{ color: '#09090B', fontSize: '13.5px', fontWeight: 600, lineHeight: 1.3 }}>
                   {highlightMatch(company.name, query)}

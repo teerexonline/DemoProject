@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
+import CompanyLogo from '@/components/CompanyLogo'
 
 interface Company {
   id: string
@@ -10,6 +11,7 @@ interface Company {
   category: string | null
   description: string | null
   logo_color: string | null
+  logo_url: string | null
   employees: number | null
   founded: number | null
   hq: string | null
@@ -447,16 +449,13 @@ export default function CompanyOverview({ company, showProTeaser = false, dbNews
         border: `1px solid ${color}20`,
       }}>
         {/* Logo */}
-        <div style={{
-          width: '56px', height: '56px', borderRadius: '14px',
-          background: color, flexShrink: 0,
-          display: 'flex', alignItems: 'center', justifyContent: 'center',
-          boxShadow: `0 4px 16px ${color}40`,
-        }}>
-          <span style={{ color: '#fff', fontSize: '22px', fontWeight: 800, letterSpacing: '-0.04em' }}>
-            {company.name.charAt(0)}
-          </span>
-        </div>
+        <CompanyLogo
+          name={company.name}
+          logoUrl={company.logo_url}
+          logoColor={company.logo_color}
+          size={56}
+          style={{ boxShadow: `0 4px 16px ${color}40` }}
+        />
 
         {/* Info */}
         <div style={{ flex: 1, minWidth: 0 }}>

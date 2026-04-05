@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { useMonthlyToken } from './actions'
 import CompanyOverview from './CompanyOverview'
 import SaveButton from '@/components/SaveButton'
+import CompanyLogo from '@/components/CompanyLogo'
 
 interface Company {
   id: string
@@ -13,6 +14,7 @@ interface Company {
   category: string | null
   description: string | null
   logo_color: string | null
+  logo_url: string | null
   employees: number | null
   founded: number | null
   hq: string | null
@@ -209,9 +211,7 @@ export default function CompanyFreeGated({ company, hasToken, initialSaved }: { 
         <div className="company-sidebar" style={{ position: 'sticky', top: '80px', background: '#fff', borderRadius: '14px', border: '1px solid #E4E4E7', padding: '12px 8px', boxShadow: '0 1px 4px rgba(0,0,0,0.04)' }}>
           <div style={{ padding: '8px 8px 14px', borderBottom: '1px solid #F4F4F5', marginBottom: '8px' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-              <div style={{ width: '36px', height: '36px', borderRadius: '9px', background: color, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                <span style={{ color: '#fff', fontSize: '14px', fontWeight: 800 }}>{company.name.charAt(0)}</span>
-              </div>
+              <CompanyLogo name={company.name} logoUrl={company.logo_url} logoColor={company.logo_color} size={36} />
               <div>
                 <div style={{ color: '#09090B', fontSize: '13px', fontWeight: 700 }}>{company.name}</div>
                 <div style={{ color: '#A1A1AA', fontSize: '11px' }}>{company.category}</div>

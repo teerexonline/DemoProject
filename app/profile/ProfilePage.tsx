@@ -4,6 +4,7 @@ import { useState, useTransition } from 'react'
 import Link from 'next/link'
 import type { User } from '@supabase/supabase-js'
 import { updateProfile, unsaveCompany } from '@/app/actions/profile'
+import CompanyLogo from '@/components/CompanyLogo'
 
 interface SavedCompany {
   id: string
@@ -11,6 +12,7 @@ interface SavedCompany {
   slug: string
   category: string | null
   logo_color: string | null
+  logo_url: string | null
   hq: string | null
   employees: number | null
   valuation: string | null
@@ -236,9 +238,7 @@ export default function ProfilePage({ user, profile, savedCompanies: initialSave
                       <div style={{ padding: '14px 14px 12px' }}>
                         <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: 10 }}>
                           <Link href={`/company/${c.slug}`} style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 9 }}>
-                            <div style={{ width: 32, height: 32, borderRadius: 8, background: color, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, boxShadow: `0 2px 8px ${color}30` }}>
-                              <span style={{ color: '#fff', fontSize: 13, fontWeight: 800 }}>{c.name.charAt(0)}</span>
-                            </div>
+                            <CompanyLogo name={c.name} logoUrl={c.logo_url} logoColor={c.logo_color} size={32} style={{ boxShadow: `0 2px 8px ${color}30` }} />
                             <div>
                               <div style={{ fontSize: 13, fontWeight: 700, color: '#09090B', letterSpacing: '-0.02em' }}>{c.name}</div>
                               <div style={{ fontSize: 11, color: '#A1A1AA' }}>{c.category}</div>

@@ -5,6 +5,7 @@ import Link from 'next/link'
 import type { User } from '@supabase/supabase-js'
 import SearchAutocomplete from '@/components/SearchAutocomplete'
 import SaveButton from '@/components/SaveButton'
+import CompanyLogo from '@/components/CompanyLogo'
 
 interface Company {
   id: string
@@ -13,6 +14,7 @@ interface Company {
   category: string | null
   description: string | null
   logo_color: string | null
+  logo_url: string | null
   employees: number | null
   founded: number | null
   hq: string | null
@@ -30,26 +32,26 @@ interface Props {
 // ─── Data ────────────────────────────────────────────────────────────────────
 
 const FALLBACK: Company[] = [
-  { id: '1',  name: 'Stripe',     slug: 'stripe',     category: 'Fintech',        description: 'Global payment infrastructure for the internet.',             logo_color: '#635BFF', employees: 7000,  founded: 2010, hq: 'San Francisco, CA', valuation: '$65B'    },
-  { id: '2',  name: 'Linear',     slug: 'linear',     category: 'SaaS',           description: 'Issue tracking built for high-performance teams.',             logo_color: '#5E6AD2', employees: 80,    founded: 2019, hq: 'San Francisco, CA', valuation: '$1.2B'   },
-  { id: '3',  name: 'Vercel',     slug: 'vercel',     category: 'Infrastructure', description: 'The platform for frontend developers.',                        logo_color: '#000000', employees: 400,   founded: 2015, hq: 'San Francisco, CA', valuation: '$3.25B'  },
-  { id: '4',  name: 'Figma',      slug: 'figma',      category: 'SaaS',           description: 'Collaborative design for all.',                                logo_color: '#F24E1E', employees: 1000,  founded: 2012, hq: 'San Francisco, CA', valuation: '$20B'    },
-  { id: '5',  name: 'Notion',     slug: 'notion',     category: 'SaaS',           description: 'The connected workspace for notes, docs, and tasks.',          logo_color: '#191919', employees: 400,   founded: 2016, hq: 'San Francisco, CA', valuation: '$10B'    },
-  { id: '6',  name: 'Shopify',    slug: 'shopify',    category: 'E-Commerce',     description: 'Commerce platform powering millions of businesses.',           logo_color: '#96BF48', employees: 11600, founded: 2006, hq: 'Ottawa, Canada',     valuation: '$70B'    },
-  { id: '7',  name: 'Anthropic',  slug: 'anthropic',  category: 'AI Research',    description: 'AI safety research and advanced model deployment.',            logo_color: '#C4875A', employees: 500,   founded: 2021, hq: 'San Francisco, CA', valuation: '$18B'    },
-  { id: '8',  name: 'Airbnb',     slug: 'airbnb',     category: 'E-Commerce',     description: 'Marketplace for unique travel experiences globally.',          logo_color: '#FF5A5F', employees: 6900,  founded: 2008, hq: 'San Francisco, CA', valuation: '$78B'    },
-  { id: '9',  name: 'OpenAI',     slug: 'openai',     category: 'AI Research',    description: 'Advancing artificial intelligence for all of humanity.',       logo_color: '#10A37F', employees: 900,   founded: 2015, hq: 'San Francisco, CA', valuation: '$80B'    },
-  { id: '10', name: 'Twilio',     slug: 'twilio',     category: 'SaaS',           description: 'Cloud communications platform for developers.',                logo_color: '#F22F46', employees: 8000,  founded: 2008, hq: 'San Francisco, CA', valuation: '$12B'    },
-  { id: '11', name: 'Datadog',    slug: 'datadog',    category: 'Infrastructure', description: 'Monitoring and security for cloud-scale apps.',                logo_color: '#632CA6', employees: 5200,  founded: 2010, hq: 'New York, NY',       valuation: '$28B'    },
-  { id: '12', name: 'HubSpot',    slug: 'hubspot',    category: 'SaaS',           description: 'CRM platform for scaling businesses.',                         logo_color: '#FF7A59', employees: 7400,  founded: 2006, hq: 'Cambridge, MA',      valuation: '$16B'    },
-  { id: '13', name: 'Snowflake',  slug: 'snowflake',  category: 'Infrastructure', description: 'The AI Data Cloud — data warehousing at scale.',               logo_color: '#29B5E8', employees: 6800,  founded: 2012, hq: 'Bozeman, MT',        valuation: '$50B'    },
-  { id: '14', name: 'Canva',      slug: 'canva',      category: 'SaaS',           description: 'Visual communication platform for everyone.',                  logo_color: '#00C4CC', employees: 4000,  founded: 2013, hq: 'Sydney, Australia',  valuation: '$26B'    },
-  { id: '15', name: 'Brex',       slug: 'brex',       category: 'Fintech',        description: 'AI-powered spend management for modern companies.',            logo_color: '#FF4E00', employees: 1200,  founded: 2017, hq: 'San Francisco, CA', valuation: '$12.3B'  },
-  { id: '16', name: 'Rippling',   slug: 'rippling',   category: 'SaaS',           description: 'Workforce management connecting HR, IT, and Finance.',         logo_color: '#F5A623', employees: 2500,  founded: 2016, hq: 'San Francisco, CA', valuation: '$11.25B' },
-  { id: '17', name: 'Retool',     slug: 'retool',     category: 'Infrastructure', description: 'Build internal tools at the speed of thought.',                logo_color: '#3D63DD', employees: 300,   founded: 2017, hq: 'San Francisco, CA', valuation: '$3.2B'   },
-  { id: '18', name: 'Scale AI',   slug: 'scale-ai',   category: 'AI Research',    description: 'The data foundry accelerating AI development.',                logo_color: '#FF6B35', employees: 800,   founded: 2016, hq: 'San Francisco, CA', valuation: '$7.3B'   },
-  { id: '19', name: 'Intercom',   slug: 'intercom',   category: 'SaaS',           description: 'Complete customer messaging for support and engagement.',      logo_color: '#286EFA', employees: 1300,  founded: 2011, hq: 'San Francisco, CA', valuation: '$1.3B'   },
-  { id: '20', name: 'Plaid',      slug: 'plaid',      category: 'Fintech',        description: 'The financial data network powering the fintech ecosystem.',   logo_color: '#111827', employees: 1400,  founded: 2013, hq: 'San Francisco, CA', valuation: '$13.4B'  },
+  { id: '1',  name: 'Stripe',     slug: 'stripe',     category: 'Fintech',        description: 'Global payment infrastructure for the internet.',             logo_color: '#635BFF', logo_url: null, employees: 7000,  founded: 2010, hq: 'San Francisco, CA', valuation: '$65B'    },
+  { id: '2',  name: 'Linear',     slug: 'linear',     category: 'SaaS',           description: 'Issue tracking built for high-performance teams.',             logo_color: '#5E6AD2', logo_url: null, employees: 80,    founded: 2019, hq: 'San Francisco, CA', valuation: '$1.2B'   },
+  { id: '3',  name: 'Vercel',     slug: 'vercel',     category: 'Infrastructure', description: 'The platform for frontend developers.',                        logo_color: '#000000', logo_url: null, employees: 400,   founded: 2015, hq: 'San Francisco, CA', valuation: '$3.25B'  },
+  { id: '4',  name: 'Figma',      slug: 'figma',      category: 'SaaS',           description: 'Collaborative design for all.',                                logo_color: '#F24E1E', logo_url: null, employees: 1000,  founded: 2012, hq: 'San Francisco, CA', valuation: '$20B'    },
+  { id: '5',  name: 'Notion',     slug: 'notion',     category: 'SaaS',           description: 'The connected workspace for notes, docs, and tasks.',          logo_color: '#191919', logo_url: null, employees: 400,   founded: 2016, hq: 'San Francisco, CA', valuation: '$10B'    },
+  { id: '6',  name: 'Shopify',    slug: 'shopify',    category: 'E-Commerce',     description: 'Commerce platform powering millions of businesses.',           logo_color: '#96BF48', logo_url: null, employees: 11600, founded: 2006, hq: 'Ottawa, Canada',     valuation: '$70B'    },
+  { id: '7',  name: 'Anthropic',  slug: 'anthropic',  category: 'AI Research',    description: 'AI safety research and advanced model deployment.',            logo_color: '#C4875A', logo_url: null, employees: 500,   founded: 2021, hq: 'San Francisco, CA', valuation: '$18B'    },
+  { id: '8',  name: 'Airbnb',     slug: 'airbnb',     category: 'E-Commerce',     description: 'Marketplace for unique travel experiences globally.',          logo_color: '#FF5A5F', logo_url: null, employees: 6900,  founded: 2008, hq: 'San Francisco, CA', valuation: '$78B'    },
+  { id: '9',  name: 'OpenAI',     slug: 'openai',     category: 'AI Research',    description: 'Advancing artificial intelligence for all of humanity.',       logo_color: '#10A37F', logo_url: null, employees: 900,   founded: 2015, hq: 'San Francisco, CA', valuation: '$80B'    },
+  { id: '10', name: 'Twilio',     slug: 'twilio',     category: 'SaaS',           description: 'Cloud communications platform for developers.',                logo_color: '#F22F46', logo_url: null, employees: 8000,  founded: 2008, hq: 'San Francisco, CA', valuation: '$12B'    },
+  { id: '11', name: 'Datadog',    slug: 'datadog',    category: 'Infrastructure', description: 'Monitoring and security for cloud-scale apps.',                logo_color: '#632CA6', logo_url: null, employees: 5200,  founded: 2010, hq: 'New York, NY',       valuation: '$28B'    },
+  { id: '12', name: 'HubSpot',    slug: 'hubspot',    category: 'SaaS',           description: 'CRM platform for scaling businesses.',                         logo_color: '#FF7A59', logo_url: null, employees: 7400,  founded: 2006, hq: 'Cambridge, MA',      valuation: '$16B'    },
+  { id: '13', name: 'Snowflake',  slug: 'snowflake',  category: 'Infrastructure', description: 'The AI Data Cloud — data warehousing at scale.',               logo_color: '#29B5E8', logo_url: null, employees: 6800,  founded: 2012, hq: 'Bozeman, MT',        valuation: '$50B'    },
+  { id: '14', name: 'Canva',      slug: 'canva',      category: 'SaaS',           description: 'Visual communication platform for everyone.',                  logo_color: '#00C4CC', logo_url: null, employees: 4000,  founded: 2013, hq: 'Sydney, Australia',  valuation: '$26B'    },
+  { id: '15', name: 'Brex',       slug: 'brex',       category: 'Fintech',        description: 'AI-powered spend management for modern companies.',            logo_color: '#FF4E00', logo_url: null, employees: 1200,  founded: 2017, hq: 'San Francisco, CA', valuation: '$12.3B'  },
+  { id: '16', name: 'Rippling',   slug: 'rippling',   category: 'SaaS',           description: 'Workforce management connecting HR, IT, and Finance.',         logo_color: '#F5A623', logo_url: null, employees: 2500,  founded: 2016, hq: 'San Francisco, CA', valuation: '$11.25B' },
+  { id: '17', name: 'Retool',     slug: 'retool',     category: 'Infrastructure', description: 'Build internal tools at the speed of thought.',                logo_color: '#3D63DD', logo_url: null, employees: 300,   founded: 2017, hq: 'San Francisco, CA', valuation: '$3.2B'   },
+  { id: '18', name: 'Scale AI',   slug: 'scale-ai',   category: 'AI Research',    description: 'The data foundry accelerating AI development.',                logo_color: '#FF6B35', logo_url: null, employees: 800,   founded: 2016, hq: 'San Francisco, CA', valuation: '$7.3B'   },
+  { id: '19', name: 'Intercom',   slug: 'intercom',   category: 'SaaS',           description: 'Complete customer messaging for support and engagement.',      logo_color: '#286EFA', logo_url: null, employees: 1300,  founded: 2011, hq: 'San Francisco, CA', valuation: '$1.3B'   },
+  { id: '20', name: 'Plaid',      slug: 'plaid',      category: 'Fintech',        description: 'The financial data network powering the fintech ecosystem.',   logo_color: '#111827', logo_url: null, employees: 1400,  founded: 2013, hq: 'San Francisco, CA', valuation: '$13.4B'  },
 ]
 
 const SECTORS = [
@@ -89,21 +91,18 @@ function inSector(c: Company, sectorId: string): boolean {
   return s.kw.some(k => cat.includes(k))
 }
 
-// ─── Shared logo initial ─────────────────────────────────────────────────────
+// ─── Logo helper (thin wrapper so card code stays terse) ─────────────────────
 
 function Logo({ c, size = 36 }: { c: Company; size?: number }) {
-  const bg = c.logo_color ?? '#7C3AED'
+  const color = c.logo_color ?? '#7C3AED'
   return (
-    <div style={{
-      width: size, height: size, borderRadius: Math.round(size * 0.26),
-      background: bg, flexShrink: 0,
-      display: 'flex', alignItems: 'center', justifyContent: 'center',
-      boxShadow: `0 2px 8px ${bg}35`,
-    }}>
-      <span style={{ color: '#fff', fontSize: size * 0.38, fontWeight: 800 }}>
-        {c.name.charAt(0)}
-      </span>
-    </div>
+    <CompanyLogo
+      name={c.name}
+      logoUrl={c.logo_url}
+      logoColor={c.logo_color}
+      size={size}
+      style={{ boxShadow: `0 2px 8px ${color}35` }}
+    />
   )
 }
 
