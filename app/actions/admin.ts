@@ -14,6 +14,17 @@ async function requireAdmin() {
   return { supabase, user }
 }
 
+// ─── Cache helper ─────────────────────────────────────────────────────────────
+// Revalidates the company profile page whenever company content is written.
+// Called after every upsert/delete that touches a company_* table.
+
+type SupabaseClient = Awaited<ReturnType<typeof createClient>>
+
+async function revalidateCompanyProfile(supabase: SupabaseClient, companyId: string) {
+  const { data } = await supabase.from('companies').select('slug').eq('id', companyId).single()
+  if (data?.slug) revalidatePath(`/company/${data.slug}`)
+}
+
 // ─── Companies ────────────────────────────────────────────────────────────────
 
 export async function adminGetCompanies() {
@@ -38,6 +49,7 @@ export async function adminUpsertCompany(company: {
     .select()
     .single()
   revalidatePath('/admin')
+  if (!error && data?.slug) revalidatePath(`/company/${data.slug}`)
   return error ? { error: error.message, data: null } : { data, error: null }
 }
 
@@ -122,13 +134,15 @@ export async function adminUpsertNews(row: {
   const { supabase } = await requireAdmin()
   const { data, error } = await supabase.from('company_news').upsert(row, { onConflict: 'id' }).select().single()
   revalidatePath('/admin')
+  await revalidateCompanyProfile(supabase, row.company_id)
   return error ? { error: error.message, data: null } : { data, error: null }
 }
 
-export async function adminDeleteNews(id: string) {
+export async function adminDeleteNews(id: string, companyId: string) {
   const { supabase } = await requireAdmin()
   const { error } = await supabase.from('company_news').delete().eq('id', id)
   revalidatePath('/admin')
+  await revalidateCompanyProfile(supabase, companyId)
   return error ? { error: error.message } : { error: null }
 }
 
@@ -141,13 +155,15 @@ export async function adminUpsertMilestone(row: {
   const { supabase } = await requireAdmin()
   const { data, error } = await supabase.from('company_milestones').upsert(row, { onConflict: 'id' }).select().single()
   revalidatePath('/admin')
+  await revalidateCompanyProfile(supabase, row.company_id)
   return error ? { error: error.message, data: null } : { data, error: null }
 }
 
-export async function adminDeleteMilestone(id: string) {
+export async function adminDeleteMilestone(id: string, companyId: string) {
   const { supabase } = await requireAdmin()
   const { error } = await supabase.from('company_milestones').delete().eq('id', id)
   revalidatePath('/admin')
+  await revalidateCompanyProfile(supabase, companyId)
   return error ? { error: error.message } : { error: null }
 }
 
@@ -155,18 +171,20 @@ export async function adminDeleteMilestone(id: string) {
 
 export async function adminUpsertProduct(row: {
   id?: string; company_id: string; name: string; tagline?: string; description?: string
-  category?: string; cat_color?: string; use_cases?: unknown; customers?: unknown; competitors?: unknown; sort_order?: number
+  category?: string; cat_color?: string; use_cases?: unknown; customers?: unknown; competitors?: unknown; image_url?: string; sort_order?: number
 }) {
   const { supabase } = await requireAdmin()
   const { data, error } = await supabase.from('company_products').upsert(row, { onConflict: 'id' }).select().single()
   revalidatePath('/admin')
+  await revalidateCompanyProfile(supabase, row.company_id)
   return error ? { error: error.message, data: null } : { data, error: null }
 }
 
-export async function adminDeleteProduct(id: string) {
+export async function adminDeleteProduct(id: string, companyId: string) {
   const { supabase } = await requireAdmin()
   const { error } = await supabase.from('company_products').delete().eq('id', id)
   revalidatePath('/admin')
+  await revalidateCompanyProfile(supabase, companyId)
   return error ? { error: error.message } : { error: null }
 }
 
@@ -183,6 +201,7 @@ export async function adminUpsertFinancials(row: {
     .upsert({ ...row, updated_at: new Date().toISOString() }, { onConflict: 'company_id' })
     .select().single()
   revalidatePath('/admin')
+  await revalidateCompanyProfile(supabase, row.company_id)
   return error ? { error: error.message, data: null } : { data, error: null }
 }
 
@@ -195,13 +214,15 @@ export async function adminUpsertStandard(row: {
   const { supabase } = await requireAdmin()
   const { data, error } = await supabase.from('company_standards').upsert(row, { onConflict: 'id' }).select().single()
   revalidatePath('/admin')
+  await revalidateCompanyProfile(supabase, row.company_id)
   return error ? { error: error.message, data: null } : { data, error: null }
 }
 
-export async function adminDeleteStandard(id: string) {
+export async function adminDeleteStandard(id: string, companyId: string) {
   const { supabase } = await requireAdmin()
   const { error } = await supabase.from('company_standards').delete().eq('id', id)
   revalidatePath('/admin')
+  await revalidateCompanyProfile(supabase, companyId)
   return error ? { error: error.message } : { error: null }
 }
 
@@ -213,13 +234,15 @@ export async function adminUpsertDepartment(row: {
   const { supabase } = await requireAdmin()
   const { data, error } = await supabase.from('company_departments').upsert(row, { onConflict: 'id' }).select().single()
   revalidatePath('/admin')
+  await revalidateCompanyProfile(supabase, row.company_id)
   return error ? { error: error.message, data: null } : { data, error: null }
 }
 
-export async function adminDeleteDepartment(id: string) {
+export async function adminDeleteDepartment(id: string, companyId: string) {
   const { supabase } = await requireAdmin()
   const { error } = await supabase.from('company_departments').delete().eq('id', id)
   revalidatePath('/admin')
+  await revalidateCompanyProfile(supabase, companyId)
   return error ? { error: error.message } : { error: null }
 }
 
@@ -232,13 +255,15 @@ export async function adminUpsertRole(row: {
   const { supabase } = await requireAdmin()
   const { data, error } = await supabase.from('company_roles').upsert(row, { onConflict: 'id' }).select().single()
   revalidatePath('/admin')
+  await revalidateCompanyProfile(supabase, row.company_id)
   return error ? { error: error.message, data: null } : { data, error: null }
 }
 
-export async function adminDeleteRole(id: string) {
+export async function adminDeleteRole(id: string, companyId: string) {
   const { supabase } = await requireAdmin()
   const { error } = await supabase.from('company_roles').delete().eq('id', id)
   revalidatePath('/admin')
+  await revalidateCompanyProfile(supabase, companyId)
   return error ? { error: error.message } : { error: null }
 }
 
@@ -250,13 +275,15 @@ export async function adminUpsertExecGroup(row: {
   const { supabase } = await requireAdmin()
   const { data, error } = await supabase.from('company_exec_groups').upsert(row, { onConflict: 'id' }).select().single()
   revalidatePath('/admin')
+  await revalidateCompanyProfile(supabase, row.company_id)
   return error ? { error: error.message, data: null } : { data, error: null }
 }
 
-export async function adminDeleteExecGroup(id: string) {
+export async function adminDeleteExecGroup(id: string, companyId: string) {
   const { supabase } = await requireAdmin()
   const { error } = await supabase.from('company_exec_groups').delete().eq('id', id)
   revalidatePath('/admin')
+  await revalidateCompanyProfile(supabase, companyId)
   return error ? { error: error.message } : { error: null }
 }
 
@@ -430,5 +457,6 @@ export async function adminSeedCompanyContent(companyId: string) {
   }
 
   revalidatePath('/admin')
+  await revalidateCompanyProfile(supabase, companyId)
   return { error: null }
 }

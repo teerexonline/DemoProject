@@ -6,6 +6,9 @@ import CompanyFull from './CompanyFull'
 import CompanyTeaser from './CompanyTeaser'
 import CompanyFreeGated from './CompanyFreeGated'
 
+// Always fetch fresh data — never serve a cached version of a company profile
+export const dynamic = 'force-dynamic'
+
 interface Props {
   params: Promise<{ slug: string }>
 }

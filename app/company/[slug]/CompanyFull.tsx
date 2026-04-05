@@ -52,9 +52,9 @@ interface Company {
 
 // DB-driven content (from company_* tables). Empty arrays = fall back to hardcoded.
 export interface DbContent {
-  news:        { type: string; headline: string; summary: string | null; published_date: string | null; type_color: string; type_bg: string; dot_color: string }[]
+  news:        { type: string; headline: string; summary: string | null; published_date: string | null; type_color: string; type_bg: string; dot_color: string; source_url?: string | null }[]
   milestones:  { year: number; type: string; icon: string; accent_color: string; bg_color: string; title: string; detail: string | null; badge: string | null }[]
-  products:    { id: string; name: string; tagline: string | null; description: string | null; category: string | null; cat_color: string; use_cases: unknown; customers: unknown; competitors: unknown }[]
+  products:    { id: string; name: string; tagline: string | null; description: string | null; category: string | null; cat_color: string; use_cases: unknown; customers: unknown; competitors: unknown; image_url: string | null }[]
   financials:  { tam?: string | null; sam?: string | null; som?: string | null; arr?: string | null; yoy_growth?: string | null; revenue_per_employee?: string | null; revenue_streams?: unknown; business_units?: unknown; market_share?: unknown; revenue_growth?: unknown; competitors?: unknown } | null
   standards:   { code: string; category: string | null; cat_color: string; status: string; description: string | null }[]
   departments: { id: string; name: string; icon: string; color: string; headcount: number }[]
@@ -182,38 +182,53 @@ function InternalSection({ company, dbDepts, dbRoles, dbStandards }: { company: 
 
                 {isOpen && (
                   <div style={{ padding: '0 16px 16px', borderTop: '1px solid #F5F5F5' }}>
-                    <div className="co-3col" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 10, marginTop: 12 }}>
-                      {/* Tools */}
-                      <div style={{ padding: 12, borderRadius: 10, background: '#F7F7F8', border: '1px solid #F0F0F2' }}>
-                        <div style={{ color: '#71717A', fontSize: 9.5, fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.09em', marginBottom: 8 }}>🔧 Tools</div>
-                        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 5 }}>
-                          {role.tools.map(t => (
-                            <span key={t} style={{ padding: '3px 8px', borderRadius: 5, background: '#fff', border: '1px solid #E4E4E7', color: '#374151', fontSize: 11, fontWeight: 500 }}>{t}</span>
-                          ))}
+                    {role.tools.length === 0 && role.skills.length === 0 && role.processes.length === 0 ? (
+                      <div style={{ marginTop: 12, padding: '14px 16px', borderRadius: 10, background: '#F7F7F8', border: '1px dashed #E4E4E7', textAlign: 'center' }}>
+                        <span style={{ color: '#A1A1AA', fontSize: 12 }}>No data yet — re-seed roles from the Admin Dashboard to populate tools, skills &amp; processes.</span>
+                      </div>
+                    ) : (
+                      <div className="co-3col" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 10, marginTop: 12 }}>
+                        {/* Tools */}
+                        <div style={{ padding: 12, borderRadius: 10, background: '#F7F7F8', border: '1px solid #F0F0F2' }}>
+                          <div style={{ color: '#71717A', fontSize: 9.5, fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.09em', marginBottom: 8 }}>🔧 Tools</div>
+                          {role.tools.length > 0
+                            ? <div style={{ display: 'flex', flexWrap: 'wrap', gap: 5 }}>
+                                {role.tools.map(t => (
+                                  <span key={t} style={{ padding: '3px 8px', borderRadius: 5, background: '#fff', border: '1px solid #E4E4E7', color: '#374151', fontSize: 11, fontWeight: 500 }}>{t}</span>
+                                ))}
+                              </div>
+                            : <span style={{ color: '#A1A1AA', fontSize: 11 }}>—</span>
+                          }
+                        </div>
+                        {/* Skills */}
+                        <div style={{ padding: 12, borderRadius: 10, background: '#F7F7F8', border: '1px solid #F0F0F2' }}>
+                          <div style={{ color: '#71717A', fontSize: 9.5, fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.09em', marginBottom: 8 }}>⚡ Key Skills</div>
+                          {role.skills.length > 0
+                            ? <div style={{ display: 'flex', flexWrap: 'wrap', gap: 5 }}>
+                                {role.skills.map(s => (
+                                  <span key={s} style={{ padding: '3px 8px', borderRadius: 5, background: '#EFF6FF', border: '1px solid #BFDBFE', color: '#1D4ED8', fontSize: 11 }}>{s}</span>
+                                ))}
+                              </div>
+                            : <span style={{ color: '#A1A1AA', fontSize: 11 }}>—</span>
+                          }
+                        </div>
+                        {/* Processes */}
+                        <div style={{ padding: 12, borderRadius: 10, background: '#F7F7F8', border: '1px solid #F0F0F2' }}>
+                          <div style={{ color: '#71717A', fontSize: 9.5, fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.09em', marginBottom: 8 }}>⚙️ Processes</div>
+                          {role.processes.length > 0
+                            ? <div style={{ display: 'flex', flexDirection: 'column', gap: 5 }}>
+                                {role.processes.map(p => (
+                                  <div key={p} style={{ display: 'flex', gap: 6, alignItems: 'flex-start' }}>
+                                    <span style={{ color: '#10B981', fontSize: 11, lineHeight: '17px', flexShrink: 0 }}>•</span>
+                                    <span style={{ color: '#52525B', fontSize: 11, lineHeight: 1.5 }}>{p}</span>
+                                  </div>
+                                ))}
+                              </div>
+                            : <span style={{ color: '#A1A1AA', fontSize: 11 }}>—</span>
+                          }
                         </div>
                       </div>
-                      {/* Skills */}
-                      <div style={{ padding: 12, borderRadius: 10, background: '#F7F7F8', border: '1px solid #F0F0F2' }}>
-                        <div style={{ color: '#71717A', fontSize: 9.5, fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.09em', marginBottom: 8 }}>⚡ Key Skills</div>
-                        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 5 }}>
-                          {role.skills.map(s => (
-                            <span key={s} style={{ padding: '3px 8px', borderRadius: 5, background: '#EFF6FF', border: '1px solid #BFDBFE', color: '#1D4ED8', fontSize: 11 }}>{s}</span>
-                          ))}
-                        </div>
-                      </div>
-                      {/* Processes */}
-                      <div style={{ padding: 12, borderRadius: 10, background: '#F7F7F8', border: '1px solid #F0F0F2' }}>
-                        <div style={{ color: '#71717A', fontSize: 9.5, fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.09em', marginBottom: 8 }}>⚙️ Processes</div>
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: 5 }}>
-                          {role.processes.map(p => (
-                            <div key={p} style={{ display: 'flex', gap: 6, alignItems: 'flex-start' }}>
-                              <span style={{ color: '#10B981', fontSize: 11, lineHeight: '17px', flexShrink: 0 }}>•</span>
-                              <span style={{ color: '#52525B', fontSize: 11, lineHeight: 1.5 }}>{p}</span>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    </div>
+                    )}
                   </div>
                 )}
               </div>
@@ -384,6 +399,7 @@ interface Product {
   useCases: string[]
   customers: { name: string; abbr: string; bg: string }[]
   competitors: { name: string; edge: string }[]
+  imageUrl?: string | null
 }
 
 const PRODUCTS: Product[] = [
@@ -483,12 +499,14 @@ function ProductSection({ company, dbProducts }: { company: Company; dbProducts:
         useCases:    (p.use_cases as string[]) ?? [],
         customers:   (p.customers as { name: string; abbr: string; bg: string }[]) ?? [],
         competitors: (p.competitors as { name: string; edge: string }[]) ?? [],
+        imageUrl:    p.image_url ?? null,
       }))
     : PRODUCTS
   const [activeId, setActiveId] = useState<string>(products[0]?.id ?? 'core')
-  const [imgError, setImgError] = useState(false)
+  const [imgErrors, setImgErrors] = useState<Record<string, boolean>>({})
 
   const p = products.find(x => x.id === activeId) ?? products[0]
+  const imgError = imgErrors[p?.id ?? ''] ?? false
 
   return (
     <div>
@@ -512,7 +530,7 @@ function ProductSection({ company, dbProducts }: { company: Company; dbProducts:
           return (
             <button
               key={prod.id}
-              onClick={() => { setActiveId(prod.id); setImgError(false) }}
+              onClick={() => { setActiveId(prod.id) }}
               style={{
                 padding: '7px 14px', borderRadius: 9,
                 border: isActive ? `1.5px solid ${color}` : '1.5px solid #E4E4E7',
@@ -539,16 +557,16 @@ function ProductSection({ company, dbProducts }: { company: Company; dbProducts:
 
         {/* Product screenshot */}
         <div style={{ position: 'relative', background: '#F4F4F5', borderBottom: '1px solid #E4E4E7', overflow: 'hidden', height: 200 }}>
-          {!imgError ? (
+          {p.imageUrl && !imgError ? (
             <img
-              src={`https://placehold.co/900x200/${color.replace('#', '')}15/${color.replace('#', '')}?text=${encodeURIComponent(p.name)}`}
+              src={p.imageUrl}
               alt={p.name}
-              onError={() => setImgError(true)}
+              onError={() => setImgErrors(prev => ({ ...prev, [p.id]: true }))}
               style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
             />
           ) : (
             <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', background: `${color}08` }}>
-              <span style={{ color, fontSize: 13, fontWeight: 600, opacity: 0.5 }}>{p.name}</span>
+              <span style={{ color, fontSize: 18, fontWeight: 700, opacity: 0.25, letterSpacing: '-0.03em' }}>{p.name}</span>
             </div>
           )}
           {/* Category pill overlay */}

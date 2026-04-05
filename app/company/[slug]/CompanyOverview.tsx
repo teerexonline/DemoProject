@@ -20,7 +20,7 @@ interface Company {
   website: string | null
 }
 
-type DbNewsItem = { type: string; headline: string; summary: string | null; published_date: string | null; type_color: string; type_bg: string; dot_color: string }
+type DbNewsItem = { type: string; headline: string; summary: string | null; published_date: string | null; type_color: string; type_bg: string; dot_color: string; source_url?: string | null }
 type DbMilestone = { year: number; type: string; icon: string; accent_color: string; bg_color: string; title: string; detail: string | null; badge: string | null }
 
 interface Props {
@@ -40,6 +40,7 @@ type NewsItem = {
   headline: string
   summary: string
   date: string
+  sourceUrl?: string | null
 }
 
 type Milestone = {
@@ -236,59 +237,89 @@ function NewsTimeline({ items, color }: { items: NewsItem[]; color: string }) {
         background: 'linear-gradient(to bottom, #E4E4E7, #F4F4F5)',
       }} />
 
-      {items.map((item, i) => (
-        <div
-          key={i}
-          onMouseEnter={() => setHovered(i)}
-          onMouseLeave={() => setHovered(null)}
-          style={{
-            position: 'relative',
-            marginBottom: i < items.length - 1 ? '20px' : 0,
-            padding: '14px 16px',
-            borderRadius: '12px',
-            background: hovered === i ? '#FAFAFA' : '#fff',
-            border: `1px solid ${hovered === i ? '#E4E4E7' : '#F4F4F5'}`,
-            transition: 'background 0.15s, border-color 0.15s, box-shadow 0.15s',
-            boxShadow: hovered === i ? '0 2px 12px rgba(0,0,0,0.06)' : 'none',
-            cursor: 'default',
-          }}
-        >
-          {/* Timeline dot */}
-          <div style={{
-            position: 'absolute',
-            left: '-20px',
-            top: '18px',
-            width: '10px',
-            height: '10px',
-            borderRadius: '50%',
-            background: item.dotColor,
-            border: '2px solid #fff',
-            boxShadow: `0 0 0 2px ${item.dotColor}33`,
-          }} />
+      {items.map((item, i) => {
+        const isLink = !!item.sourceUrl
+        const cardStyle: React.CSSProperties = {
+          position: 'relative',
+          marginBottom: i < items.length - 1 ? '20px' : 0,
+          padding: '14px 16px',
+          borderRadius: '12px',
+          background: hovered === i ? '#FAFAFA' : '#fff',
+          border: `1px solid ${hovered === i ? '#E4E4E7' : '#F4F4F5'}`,
+          transition: 'background 0.15s, border-color 0.15s, box-shadow 0.15s',
+          boxShadow: hovered === i ? '0 2px 12px rgba(0,0,0,0.06)' : 'none',
+          cursor: isLink ? 'pointer' : 'default',
+          textDecoration: 'none',
+          display: 'block',
+        }
+        const inner = (
+          <>
+            {/* Timeline dot */}
+            <div style={{
+              position: 'absolute',
+              left: '-20px',
+              top: '18px',
+              width: '10px',
+              height: '10px',
+              borderRadius: '50%',
+              background: item.dotColor,
+              border: '2px solid #fff',
+              boxShadow: `0 0 0 2px ${item.dotColor}33`,
+            }} />
 
-          {/* Header row */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px', flexWrap: 'wrap' }}>
-            <span style={{
-              fontSize: '10px', fontWeight: 700, letterSpacing: '0.08em',
-              color: item.typeColor, background: item.typeBg,
-              padding: '2px 8px', borderRadius: '4px',
-              border: `1px solid ${item.typeColor}22`,
-              flexShrink: 0,
-            }}>
-              {item.type}
-            </span>
-            <span style={{ color: '#C4C4C7', fontSize: '11px' }}>·</span>
-            <span style={{ color: '#A1A1AA', fontSize: '11.5px' }}>{item.date}</span>
-          </div>
+            {/* Header row */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px', flexWrap: 'wrap' }}>
+              <span style={{
+                fontSize: '10px', fontWeight: 700, letterSpacing: '0.08em',
+                color: item.typeColor, background: item.typeBg,
+                padding: '2px 8px', borderRadius: '4px',
+                border: `1px solid ${item.typeColor}22`,
+                flexShrink: 0,
+              }}>
+                {item.type}
+              </span>
+              <span style={{ color: '#C4C4C7', fontSize: '11px' }}>·</span>
+              <span style={{ color: '#A1A1AA', fontSize: '11.5px' }}>{item.date}</span>
+              {isLink && (
+                <span style={{ marginLeft: 'auto', color: '#A1A1AA', display: 'flex', alignItems: 'center' }}>
+                  <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/>
+                  </svg>
+                </span>
+              )}
+            </div>
 
-          <div style={{ color: '#09090B', fontSize: '13.5px', fontWeight: 700, lineHeight: 1.4, marginBottom: '6px', letterSpacing: '-0.01em' }}>
-            {item.headline}
+            <div style={{ color: '#09090B', fontSize: '13.5px', fontWeight: 700, lineHeight: 1.4, marginBottom: '6px', letterSpacing: '-0.01em' }}>
+              {item.headline}
+            </div>
+            <div style={{ color: '#71717A', fontSize: '12.5px', lineHeight: 1.65 }}>
+              {item.summary}
+            </div>
+          </>
+        )
+        return isLink ? (
+          <a
+            key={i}
+            href={item.sourceUrl!}
+            target="_blank"
+            rel="noopener noreferrer"
+            onMouseEnter={() => setHovered(i)}
+            onMouseLeave={() => setHovered(null)}
+            style={cardStyle}
+          >
+            {inner}
+          </a>
+        ) : (
+          <div
+            key={i}
+            onMouseEnter={() => setHovered(i)}
+            onMouseLeave={() => setHovered(null)}
+            style={cardStyle}
+          >
+            {inner}
           </div>
-          <div style={{ color: '#71717A', fontSize: '12.5px', lineHeight: 1.65 }}>
-            {item.summary}
-          </div>
-        </div>
-      ))}
+        )
+      })}
     </div>
   )
 }
@@ -411,6 +442,7 @@ export default function CompanyOverview({ company, showProTeaser = false, dbNews
         headline:  n.headline,
         summary:   n.summary ?? '',
         date:      n.published_date ?? '',
+        sourceUrl: n.source_url ?? null,
       }))
     : generateNews(company)
 

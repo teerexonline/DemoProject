@@ -22,7 +22,7 @@ function runScraper(
   timeoutMs: number = 90_000,
 ): Promise<{ stdout: string; stderr: string }> {
   return new Promise((resolve, reject) => {
-    const scriptPath = path.join(process.cwd(), 'scripts', 'seed_financials.py')
+    const scriptPath = path.join(process.cwd(), 'scripts', 'seed_exec_groups.py')
     const pythonBin  = process.platform === 'win32' ? 'python' : 'python3'
 
     const child = spawn(pythonBin, [scriptPath, ...args], {
@@ -36,7 +36,7 @@ function runScraper(
 
     const timer = setTimeout(() => {
       child.kill('SIGTERM')
-      reject(new Error('Scraper timed out after 90 seconds'))
+      reject(new Error('Exec groups scraper timed out after 90 seconds'))
     }, timeoutMs)
 
     child.on('close', (code) => {
@@ -86,60 +86,51 @@ export async function POST(req: NextRequest) {
       .eq('id', companyId!)
       .single()
 
-    const { stdout, stderr } = await runScraper(
-      ['--company', name!, '--website', website!, '--timeout', '14'],
-      90_000,
-    )
+    const { data: { session } } = await supabase.auth.getSession()
+    const authToken = session?.access_token ?? ''
+
+    const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? `http://localhost:${process.env.PORT ?? 3000}`
+
+    const scriptArgs = [
+      '--company',    name!,
+      '--website',    website!,
+      '--timeout',    '14',
+      '--company-id', companyId!,
+      '--auth-token', authToken,
+      '--app-url',    appUrl,
+    ]
+
+    const { stdout, stderr } = await runScraper(scriptArgs, 90_000)
 
     if (process.env.NODE_ENV === 'development' && stderr) {
-      console.log('[seed-financials] scraper log:\n', stderr)
+      console.log('[seed-exec-groups] scraper log:\n', stderr)
     }
 
-    const json = JSON.parse(stdout.trim())
+    const parsed = JSON.parse(stdout.trim())
 
-    if (json.error) {
-      return NextResponse.json({ error: json.error }, { status: 500 })
+    if (parsed?.error) {
+      return NextResponse.json({ error: parsed.error }, { status: 500 })
     }
 
-    const { _sources, ...data } = json
-    void _sources
-
-    const { error: upsertError } = await supabase
-      .from('company_financials')
-      .upsert({
-        company_id:           companyId,
-        tam:                  data.tam                  || null,
-        sam:                  data.sam                  || null,
-        som:                  data.som                  || null,
-        arr:                  data.arr                  || null,
-        yoy_growth:           data.yoy_growth           || null,
-        revenue_per_employee: data.revenue_per_employee || null,
-        revenue_streams:      data.revenue_streams?.length ? data.revenue_streams : null,
-        business_units:       data.business_units?.length  ? data.business_units  : null,
-        market_share:         data.market_share?.length    ? data.market_share    : null,
-        revenue_growth:       data.revenue_growth?.length  ? data.revenue_growth  : null,
-        updated_at:           new Date().toISOString(),
-      }, { onConflict: 'company_id' })
-
-    if (upsertError) {
-      console.error('[seed-financials] upsert error:', upsertError.message)
-      return NextResponse.json({ error: `Database error: ${upsertError.message}` }, { status: 500 })
+    const count: number = parsed?.count ?? 0
+    if (count === 0) {
+      return NextResponse.json({ error: `No exec groups found for "${name}"` }, { status: 404 })
     }
 
     if (company?.slug) revalidatePath(`/company/${company.slug}`)
 
-    return NextResponse.json({ data }, { status: 200 })
+    return NextResponse.json({ count }, { status: 200 })
 
   } catch (err: unknown) {
     const message = err instanceof Error ? err.message : String(err)
-    console.error('[seed-financials] error:', message)
+    console.error('[seed-exec-groups] error:', message)
 
     if (message.includes('Python not found') || message.includes('requirements')) {
       return NextResponse.json({ error: message }, { status: 500 })
     }
     if (message.includes('timed out')) {
       return NextResponse.json(
-        { error: 'Scraper timed out. Try again — financial APIs can be slow.' },
+        { error: 'Exec groups scraper timed out. Try again.' },
         { status: 504 },
       )
     }

@@ -152,16 +152,144 @@ function SlideOver({ title, onClose, children }: { title: string; onClose: () =>
   )
 }
 
+// ─── Role card list ───────────────────────────────────────────────────────────
+
+function RoleCardList({
+  roles,
+  onEdit,
+  onDelete,
+}: {
+  roles: { id?: string; title: string; level: string; tools: unknown; skills: unknown; processes: unknown; interview_questions: unknown; keywords: unknown; department_name?: string }[]
+  onEdit?: (i: number) => void
+  onDelete?: (i: number) => void
+}) {
+  const [expanded, setExpanded] = useState<number | null>(null)
+
+  const LEVEL_COLORS: Record<string, string> = {
+    'L3': '#71717A', 'L4': '#2563EB', 'L5': '#7C3AED',
+    'L7 / Staff': '#0891B2', 'Manager': '#16A34A',
+    'Director': '#CA8A04', 'VP': '#DC2626',
+  }
+
+  if (roles.length === 0) {
+    return (
+      <div style={{ textAlign: 'center', padding: '40px 20px', color: '#A1A1AA', fontSize: 13, border: '1px dashed #E4E4E7', borderRadius: 12 }}>
+        No roles seeded yet. Use the Seed button above to populate.
+      </div>
+    )
+  }
+
+  return (
+    <div style={{ borderRadius: 12, border: '1px solid #E4E4E7', overflow: 'hidden' }}>
+      {roles.map((r, i) => {
+        const isOpen = expanded === i
+        const tools   = (r.tools as string[]) ?? []
+        const skills  = (r.skills as string[]) ?? []
+        const procs   = (r.processes as string[]) ?? []
+        const qs      = (r.interview_questions as string[]) ?? []
+        const color   = LEVEL_COLORS[r.level] ?? '#71717A'
+        const hasData = tools.length > 0 || skills.length > 0 || procs.length > 0
+
+        return (
+          <div key={r.id ?? i} style={{ borderBottom: i < roles.length - 1 ? '1px solid #F0F0F2' : 'none' }}>
+            {/* Row header */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '10px 14px', background: isOpen ? '#FAFAFA' : '#fff', cursor: 'pointer' }}
+              onClick={() => setExpanded(isOpen ? null : i)}>
+              <span style={{ padding: '2px 8px', borderRadius: 5, background: `${color}15`, color, fontSize: 10.5, fontWeight: 700, flexShrink: 0 }}>{r.level}</span>
+              <span style={{ flex: 1, fontSize: 13, fontWeight: 600, color: '#09090B' }}>{r.title}</span>
+              {!hasData && (
+                <span style={{ fontSize: 10, color: '#EF4444', background: '#FEF2F2', padding: '1px 6px', borderRadius: 4, border: '1px solid #FECACA' }}>no data</span>
+              )}
+              {hasData && (
+                <span style={{ fontSize: 10, color: '#71717A' }}>
+                  {tools.length} tools · {skills.length} skills · {procs.length} processes · {qs.length} questions
+                </span>
+              )}
+              <span style={{ color: '#A1A1AA', fontSize: 11, transform: isOpen ? 'rotate(180deg)' : 'none', transition: 'transform 0.15s', flexShrink: 0 }}>▼</span>
+              {/* Edit / Delete */}
+              <div onClick={e => e.stopPropagation()} style={{ display: 'flex', gap: 4, flexShrink: 0 }}>
+                {onEdit && (
+                  <button onClick={() => onEdit(i)} style={{ padding: '4px 10px', borderRadius: 6, border: '1px solid #E4E4E7', background: '#fff', fontSize: 11, cursor: 'pointer', color: '#52525B' }}>Edit</button>
+                )}
+                {onDelete && (
+                  <button onClick={() => onDelete(i)} style={{ padding: '4px 10px', borderRadius: 6, border: '1px solid #FEE2E2', background: '#FFF5F5', fontSize: 11, cursor: 'pointer', color: '#EF4444' }}>Del</button>
+                )}
+              </div>
+            </div>
+
+            {/* Expanded content */}
+            {isOpen && (
+              <div style={{ padding: '0 14px 14px', borderTop: '1px solid #F5F5F5', background: '#FAFAFA' }}>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 10, marginTop: 12 }}>
+                  {/* Tools */}
+                  <div style={{ padding: 10, borderRadius: 8, background: '#fff', border: '1px solid #E4E4E7' }}>
+                    <div style={{ fontSize: 9.5, fontWeight: 800, color: '#71717A', textTransform: 'uppercase', letterSpacing: '0.09em', marginBottom: 7 }}>🔧 Tools</div>
+                    {tools.length > 0
+                      ? <div style={{ display: 'flex', flexWrap: 'wrap', gap: 4 }}>
+                          {tools.map(t => <span key={t} style={{ padding: '2px 7px', borderRadius: 4, background: '#F4F4F5', border: '1px solid #E4E4E7', color: '#374151', fontSize: 11 }}>{t}</span>)}
+                        </div>
+                      : <span style={{ color: '#A1A1AA', fontSize: 11 }}>—</span>
+                    }
+                  </div>
+                  {/* Key Skills */}
+                  <div style={{ padding: 10, borderRadius: 8, background: '#fff', border: '1px solid #E4E4E7' }}>
+                    <div style={{ fontSize: 9.5, fontWeight: 800, color: '#71717A', textTransform: 'uppercase', letterSpacing: '0.09em', marginBottom: 7 }}>⚡ Key Skills</div>
+                    {skills.length > 0
+                      ? <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+                          {skills.map(s => <span key={s} style={{ padding: '2px 7px', borderRadius: 4, background: '#EFF6FF', border: '1px solid #BFDBFE', color: '#1D4ED8', fontSize: 11 }}>{s}</span>)}
+                        </div>
+                      : <span style={{ color: '#A1A1AA', fontSize: 11 }}>—</span>
+                    }
+                  </div>
+                  {/* Processes */}
+                  <div style={{ padding: 10, borderRadius: 8, background: '#fff', border: '1px solid #E4E4E7' }}>
+                    <div style={{ fontSize: 9.5, fontWeight: 800, color: '#71717A', textTransform: 'uppercase', letterSpacing: '0.09em', marginBottom: 7 }}>⚙️ Processes</div>
+                    {procs.length > 0
+                      ? <div style={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
+                          {procs.map(p => <div key={p} style={{ display: 'flex', gap: 5, alignItems: 'flex-start' }}>
+                            <span style={{ color: '#10B981', fontSize: 11, lineHeight: '17px', flexShrink: 0 }}>•</span>
+                            <span style={{ color: '#52525B', fontSize: 11, lineHeight: 1.5 }}>{p}</span>
+                          </div>)}
+                        </div>
+                      : <span style={{ color: '#A1A1AA', fontSize: 11 }}>—</span>
+                    }
+                  </div>
+                </div>
+                {/* Interview questions preview */}
+                {qs.length > 0 && (
+                  <div style={{ marginTop: 10, padding: 10, borderRadius: 8, background: '#fff', border: '1px solid #E4E4E7' }}>
+                    <div style={{ fontSize: 9.5, fontWeight: 800, color: '#71717A', textTransform: 'uppercase', letterSpacing: '0.09em', marginBottom: 7 }}>🎯 Interview Questions ({qs.length})</div>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+                      {qs.slice(0, 3).map((q, qi) => (
+                        <div key={qi} style={{ display: 'flex', gap: 7, alignItems: 'flex-start' }}>
+                          <span style={{ fontSize: 10, fontWeight: 700, color: '#7C3AED', flexShrink: 0, marginTop: 1 }}>{qi + 1}.</span>
+                          <span style={{ color: '#374151', fontSize: 11.5, lineHeight: 1.5 }}>{q}</span>
+                        </div>
+                      ))}
+                      {qs.length > 3 && <span style={{ color: '#A1A1AA', fontSize: 11 }}>+{qs.length - 3} more…</span>}
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
+        )
+      })}
+    </div>
+  )
+}
+
+
 // ─── Data table ───────────────────────────────────────────────────────────────
 
-function DataTable({ cols, rows, onEdit, onDelete }: { cols: string[]; rows: (string | React.ReactNode)[][]; onEdit?: (i: number) => void; onDelete?: (i: number) => void }) {
+function DataTable({ cols, rows, onEdit, onDelete, onContent }: { cols: string[]; rows: (string | React.ReactNode)[][]; onEdit?: (i: number) => void; onDelete?: (i: number) => void; onContent?: (i: number) => void }) {
   return (
     <div style={{ borderRadius: 12, border: '1px solid #E4E4E7', overflow: 'hidden' }}>
       <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 12.5 }}>
         <thead>
           <tr style={{ background: '#F7F7F8', borderBottom: '1px solid #E4E4E7' }}>
             {cols.map(c => <th key={c} style={{ padding: '9px 14px', textAlign: 'left', fontWeight: 700, color: '#71717A', fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.07em', whiteSpace: 'nowrap' }}>{c}</th>)}
-            {(onEdit || onDelete) && <th style={{ width: 80, padding: '9px 14px' }} />}
+            {(onEdit || onDelete || onContent) && <th style={{ width: 80, padding: '9px 14px' }} />}
           </tr>
         </thead>
         <tbody>
@@ -174,9 +302,10 @@ function DataTable({ cols, rows, onEdit, onDelete }: { cols: string[]; rows: (st
               {row.map((cell, j) => (
                 <td key={j} style={{ padding: '9px 14px', color: '#09090B', maxWidth: 240, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{cell}</td>
               ))}
-              {(onEdit || onDelete) && (
+              {(onEdit || onDelete || onContent) && (
                 <td style={{ padding: '6px 14px', whiteSpace: 'nowrap' }}>
                   <div style={{ display: 'flex', gap: 6 }}>
+                    {onContent && <button onClick={() => onContent(i)} style={{ padding: '4px 10px', borderRadius: 6, border: '1px solid #DDD6FE', background: '#F5F3FF', fontSize: 11.5, fontWeight: 600, color: '#7C3AED', cursor: 'pointer' }}>Content</button>}
                     {onEdit && <button onClick={() => onEdit(i)} style={{ padding: '4px 10px', borderRadius: 6, border: '1px solid #E4E4E7', background: '#fff', fontSize: 11.5, fontWeight: 600, color: '#52525B', cursor: 'pointer' }}>Edit</button>}
                     {onDelete && <button onClick={() => onDelete(i)} style={{ padding: '4px 10px', borderRadius: 6, border: '1px solid #FECACA', background: '#FEF2F2', fontSize: 11.5, fontWeight: 600, color: '#DC2626', cursor: 'pointer' }}>Del</button>}
                   </div>
@@ -324,7 +453,7 @@ function LogoField({
 // ─── Section components ───────────────────────────────────────────────────────
 
 // Companies
-function CompaniesSection({ companies, onRefresh }: { companies: Company[]; onRefresh: (c: Company[]) => void }) {
+function CompaniesSection({ companies, onRefresh, onViewContent }: { companies: Company[]; onRefresh: (c: Company[]) => void; onViewContent: (id: string) => void }) {
   const [editing, setEditing] = useState<Company | null>(null)
   const [isNew, setIsNew] = useState(false)
   const [pending, startTx] = useTransition()
@@ -448,6 +577,7 @@ function CompaniesSection({ companies, onRefresh }: { companies: Company[]; onRe
           c.valuation ?? '—',
           c.is_hiring ? <Badge key="h" label="Yes" color="#10B981" /> : <span style={{ color: '#A1A1AA' }}>No</span>,
         ])}
+        onContent={i => onViewContent(filtered[i].id)}
         onEdit={i => openEdit(filtered[i])}
         onDelete={i => { setForm(filtered[i]); setEditing(filtered[i]); startTx(async () => { await adminDeleteCompany(filtered[i].id); onRefresh(companies.filter(c => c.id !== filtered[i].id)) }) }}
       />
@@ -668,8 +798,8 @@ function AnalyticsSection({ analytics }: { analytics: Props['analytics'] }) {
 
 type ContentData = Awaited<ReturnType<typeof adminGetCompanyContent>>
 
-function ContentSection({ companies }: { companies: Company[] }) {
-  const [selectedId, setSelectedId] = useState(companies[0]?.id ?? '')
+function ContentSection({ companies, initialSelectedId }: { companies: Company[]; initialSelectedId?: string }) {
+  const [selectedId, setSelectedId] = useState(initialSelectedId ?? companies[0]?.id ?? '')
   const [tab, setTab] = useState<ContentTab>('news')
   const [content, setContent] = useState<ContentData | null>(null)
   const [loading, setLoading] = useState(false)
@@ -700,6 +830,138 @@ function ContentSection({ companies }: { companies: Company[] }) {
       if (res?.error) { setSeedMsg(`Error: ${res.error}`); return }
       setSeedMsg('✓ Content seeded from web successfully.')
       adminGetCompanyContent(selectedId).then(setContent)
+    })
+  }
+
+  function handleSeedNews() {
+    setSeedMsg('')
+    const name    = (company?.name    ?? '').trim()
+    const website = (company?.website ?? '').trim()
+    if (!name || !website) { setSeedMsg('Error: Company name and website are required.'); return }
+    startSeed(async () => {
+      try {
+        const resp = await fetch('/api/seed-news', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ companyId: selectedId, name, website }),
+        })
+        const json = await resp.json()
+        if (!resp.ok || json.error) { setSeedMsg(`Error: ${json.error ?? 'Unknown error'}`); return }
+        setSeedMsg(`✓ ${json.count} news items scraped and saved.`)
+        adminGetCompanyContent(selectedId).then(setContent)
+      } catch (e) {
+        setSeedMsg(`Error: ${e instanceof Error ? e.message : 'Network error'}`)
+      }
+    })
+  }
+
+  function handleSeedMilestones() {
+    setSeedMsg('')
+    const name    = (company?.name    ?? '').trim()
+    const website = (company?.website ?? '').trim()
+    if (!name || !website) { setSeedMsg('Error: Company name and website are required.'); return }
+    startSeed(async () => {
+      try {
+        const resp = await fetch('/api/seed-milestones', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ companyId: selectedId, name, website }),
+        })
+        const json = await resp.json()
+        if (!resp.ok || json.error) { setSeedMsg(`Error: ${json.error ?? 'Unknown error'}`); return }
+        setSeedMsg(`✓ ${json.count} milestones scraped and saved.`)
+        adminGetCompanyContent(selectedId).then(setContent)
+      } catch (e) {
+        setSeedMsg(`Error: ${e instanceof Error ? e.message : 'Network error'}`)
+      }
+    })
+  }
+
+  function handleSeedProducts() {
+    setSeedMsg('')
+    const name    = (company?.name    ?? '').trim()
+    const website = (company?.website ?? '').trim()
+    if (!name || !website) { setSeedMsg('Error: Company name and website are required.'); return }
+    startSeed(async () => {
+      try {
+        const resp = await fetch('/api/seed-products', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ companyId: selectedId, name, website }),
+        })
+        const json = await resp.json()
+        if (!resp.ok || json.error) { setSeedMsg(`Error: ${json.error ?? 'Unknown error'}`); return }
+        setSeedMsg(`✓ ${json.count} products scraped and saved.`)
+        adminGetCompanyContent(selectedId).then(setContent)
+      } catch (e) {
+        setSeedMsg(`Error: ${e instanceof Error ? e.message : 'Network error'}`)
+      }
+    })
+  }
+
+  function handleSeedExecGroups() {
+    setSeedMsg('')
+    const name    = (company?.name    ?? '').trim()
+    const website = (company?.website ?? '').trim()
+    if (!name || !website) { setSeedMsg('Error: Company name and website are required.'); return }
+    startSeed(async () => {
+      try {
+        const resp = await fetch('/api/seed-exec-groups', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ companyId: selectedId, name, website }),
+        })
+        const json = await resp.json()
+        if (!resp.ok || json.error) { setSeedMsg(`Error: ${json.error ?? 'Unknown error'}`); return }
+        setSeedMsg(`✓ ${json.count} exec groups scraped and saved.`)
+        adminGetCompanyContent(selectedId).then(setContent)
+      } catch (e) {
+        setSeedMsg(`Error: ${e instanceof Error ? e.message : 'Network error'}`)
+      }
+    })
+  }
+
+  function handleSeedDepartments() {
+    setSeedMsg('')
+    const name    = (company?.name    ?? '').trim()
+    const website = (company?.website ?? '').trim()
+    if (!name || !website) { setSeedMsg('Error: Company name and website are required.'); return }
+    startSeed(async () => {
+      try {
+        const resp = await fetch('/api/seed-departments', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ companyId: selectedId, name, website }),
+        })
+        const json = await resp.json()
+        if (!resp.ok || json.error) { setSeedMsg(`Error: ${json.error ?? 'Unknown error'}`); return }
+        setSeedMsg(`✓ ${json.count} departments scraped and saved.`)
+        adminGetCompanyContent(selectedId).then(setContent)
+      } catch (e) {
+        setSeedMsg(`Error: ${e instanceof Error ? e.message : 'Network error'}`)
+      }
+    })
+  }
+
+  function handleSeedRoles() {
+    setSeedMsg('')
+    const name    = (company?.name    ?? '').trim()
+    const website = (company?.website ?? '').trim()
+    if (!name || !website) { setSeedMsg('Error: Company name and website are required.'); return }
+    startSeed(async () => {
+      try {
+        const resp = await fetch('/api/seed-roles', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ companyId: selectedId, name, website }),
+        })
+        const json = await resp.json()
+        if (!resp.ok || json.error) { setSeedMsg(`Error: ${json.error ?? 'Unknown error'}`); return }
+        setSeedMsg(`✓ ${json.count} roles scraped and saved.`)
+        adminGetCompanyContent(selectedId).then(setContent)
+      } catch (e) {
+        setSeedMsg(`Error: ${e instanceof Error ? e.message : 'Network error'}`)
+      }
     })
   }
 
@@ -748,7 +1010,7 @@ function ContentSection({ companies }: { companies: Company[] }) {
     refresh(); closePanel()
   }
   async function saveProduct(form: Record<string, unknown>) {
-    const res = await adminUpsertProduct({ company_id: selectedId, name: String(form.name ?? ''), tagline: String(form.tagline ?? ''), description: String(form.description ?? ''), category: String(form.category ?? ''), cat_color: String(form.cat_color ?? '#7C3AED'), use_cases: form.use_cases ?? [], customers: form.customers ?? [], competitors: form.competitors ?? [], sort_order: Number(form.sort_order ?? 0), ...(form.id ? { id: String(form.id) } : {}) })
+    const res = await adminUpsertProduct({ company_id: selectedId, name: String(form.name ?? ''), tagline: String(form.tagline ?? ''), description: String(form.description ?? ''), category: String(form.category ?? ''), cat_color: String(form.cat_color ?? '#7C3AED'), use_cases: form.use_cases ?? [], customers: form.customers ?? [], competitors: form.competitors ?? [], image_url: form.image_url ? String(form.image_url) : undefined, sort_order: Number(form.sort_order ?? 0), ...(form.id ? { id: String(form.id) } : {}) })
     if (res.error) { setErr(res.error); return }
     refresh(); closePanel()
   }
@@ -795,13 +1057,13 @@ function ContentSection({ companies }: { companies: Company[] }) {
 
   function handleDelete(type: ContentTab, id: string) {
     startTx(async () => {
-      if (type === 'news') await adminDeleteNews(id)
-      else if (type === 'milestones') await adminDeleteMilestone(id)
-      else if (type === 'products') await adminDeleteProduct(id)
-      else if (type === 'standards') await adminDeleteStandard(id)
-      else if (type === 'departments') await adminDeleteDepartment(id)
-      else if (type === 'roles') await adminDeleteRole(id)
-      else if (type === 'exec_groups') await adminDeleteExecGroup(id)
+      if (type === 'news') await adminDeleteNews(id, selectedId)
+      else if (type === 'milestones') await adminDeleteMilestone(id, selectedId)
+      else if (type === 'products') await adminDeleteProduct(id, selectedId)
+      else if (type === 'standards') await adminDeleteStandard(id, selectedId)
+      else if (type === 'departments') await adminDeleteDepartment(id, selectedId)
+      else if (type === 'roles') await adminDeleteRole(id, selectedId)
+      else if (type === 'exec_groups') await adminDeleteExecGroup(id, selectedId)
       refresh()
     })
   }
@@ -919,8 +1181,15 @@ function ContentSection({ companies }: { companies: Company[] }) {
     )
     if (tab === 'products') return (
       <div><div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: 12 }}>{addBtn('products')}</div>
-        <DataTable cols={['Name', 'Category', 'Use Cases', 'Competitors']}
-          rows={content.products.map(p => [<span key="n" style={{ fontWeight: 700 }}>{p.name}</span>, p.category ?? '—', String((p.use_cases as unknown[])?.length ?? 0), String((p.competitors as unknown[])?.length ?? 0)])}
+        <DataTable cols={['Image', 'Name', 'Category', 'Use Cases']}
+          rows={content.products.map(p => [
+            p.image_url
+              ? <img key="img" src={p.image_url} alt={p.name} style={{ width: 48, height: 32, objectFit: 'cover', borderRadius: 5, border: '1px solid #E4E4E7', background: '#F4F4F5' }} onError={e => { (e.currentTarget as HTMLImageElement).style.display = 'none' }} />
+              : <div key="img" style={{ width: 48, height: 32, borderRadius: 5, background: '#F4F4F5', border: '1px solid #E4E4E7', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><span style={{ fontSize: 9, color: '#A1A1AA' }}>—</span></div>,
+            <span key="n" style={{ fontWeight: 700 }}>{p.name}</span>,
+            p.category ?? '—',
+            String((p.use_cases as unknown[])?.length ?? 0),
+          ])}
           onEdit={i => setPanel({ type: 'products', data: content.products[i] as unknown as Record<string, unknown> })}
           onDelete={i => handleDelete('products', content.products[i].id)} /></div>
     )
@@ -1050,11 +1319,14 @@ function ContentSection({ companies }: { companies: Company[] }) {
           onDelete={i => handleDelete('departments', content.departments[i].id)} /></div>
     )
     if (tab === 'roles') return (
-      <div><div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: 12 }}>{addBtn('roles')}</div>
-        <DataTable cols={['Title', 'Level', 'Tools', 'Questions']}
-          rows={content.roles.map(r => [r.title, <Pill key="l" label={r.level} />, String((r.tools as unknown[])?.length ?? 0), String((r.interview_questions as unknown[])?.length ?? 0)])}
+      <div>
+        <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: 12 }}>{addBtn('roles')}</div>
+        <RoleCardList
+          roles={content.roles}
           onEdit={i => setPanel({ type: 'roles', data: content.roles[i] as unknown as Record<string, unknown> })}
-          onDelete={i => handleDelete('roles', content.roles[i].id)} /></div>
+          onDelete={i => handleDelete('roles', content.roles[i].id)}
+        />
+      </div>
     )
     if (tab === 'exec_groups') return (
       <div><div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: 12 }}>{addBtn('exec_groups')}</div>
@@ -1091,14 +1363,14 @@ function ContentSection({ companies }: { companies: Company[] }) {
       {/* Tab-specific seed from web banner */}
       {content && (() => {
         const TAB_SEED: Record<ContentTab, { title: string; desc: string }> = {
-          news:        { title: 'Seed News from Web',        desc: 'Fetches recent headlines and company announcements from the company website and public news sources.' },
-          milestones:  { title: 'Seed Milestones from Web',  desc: 'Pulls key company events, product launches, and funding rounds from Wikipedia and web sources.' },
+          news:        { title: 'Seed News from Web',        desc: 'Scrapes 5 latest press releases from the company newsroom RSS, Google News, GlobeNewswire, and Bing News. Replaces existing news.' },
+          milestones:  { title: 'Seed Milestones from Web',  desc: 'Scrapes founding, funding rounds, acquisitions, IPOs, and key events from Wikipedia history sections, Wikidata, and SEC EDGAR. Replaces existing milestones.' },
           products:    { title: 'Seed Products from Web',    desc: 'Imports product lines and service offerings from the company website and public data sources.' },
           financials:  { title: 'Seed Financials from Web',  desc: 'Fetches revenue, market share, TAM/SAM/SOM, and growth metrics from SEC EDGAR, Yahoo Finance, and Wikipedia. Updates all existing values.' },
           standards:   { title: 'Seed Standards from Web',   desc: 'Imports compliance certifications and industry standards from the company\'s public documentation.' },
-          departments: { title: 'Seed Departments from Web', desc: 'Pulls organisational structure and department headcount from public sources and the company website.' },
-          roles:       { title: 'Seed Roles from Web',       desc: 'Imports common job roles and level structures from public job postings and company data.' },
-          exec_groups: { title: 'Seed Exec Groups from Web', desc: 'Fetches executive leadership and C-suite structure from Wikipedia, LinkedIn, and public filings.' },
+          departments: { title: 'Seed Departments from Web', desc: 'Pulls organisational departments from Wikipedia divisions, Indeed job-category patterns, and the company careers page. Replaces existing departments.' },
+          roles:       { title: 'Seed Roles from Web',       desc: 'Scrapes job titles from Indeed and the company careers page, then enriches each role with curated tools, skills, processes, and interview questions. Requires departments to be seeded first. Replaces existing roles.' },
+          exec_groups: { title: 'Seed Exec Groups from Web', desc: 'Scrapes C-suite executives from Wikipedia infobox, Yahoo Finance officers API, SEC EDGAR proxy filings, and the company leadership page. Auto-assigns departments by functional area. Replaces existing exec groups.' },
         }
         const s = TAB_SEED[tab]
         return (
@@ -1108,11 +1380,20 @@ function ContentSection({ companies }: { companies: Company[] }) {
                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#92400E" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
                 <span style={{ fontSize: 12.5, fontWeight: 700, color: '#92400E' }}>{s.title}</span>
               </div>
-              <div style={{ fontSize: 11.5, color: '#A16207' }}>{s.desc}{tab !== 'financials' && ' Only populates empty tables — existing data is never overwritten.'}</div>
+              <div style={{ fontSize: 11.5, color: '#A16207' }}>{s.desc}{tab !== 'financials' && tab !== 'news' && tab !== 'milestones' && ' Only populates empty tables — existing data is never overwritten.'}</div>
               {seedMsg && <div style={{ fontSize: 11.5, color: seedMsg.startsWith('Error') ? '#DC2626' : '#16A34A', marginTop: 4, fontWeight: 600 }}>{seedMsg}</div>}
             </div>
             <button
-              onClick={tab === 'financials' ? handleSeedFinancials : handleSeedDefaults}
+              onClick={
+                tab === 'financials'   ? handleSeedFinancials  :
+                tab === 'news'         ? handleSeedNews        :
+                tab === 'milestones'   ? handleSeedMilestones  :
+                tab === 'products'     ? handleSeedProducts    :
+                tab === 'exec_groups'  ? handleSeedExecGroups  :
+                tab === 'departments'  ? handleSeedDepartments :
+                tab === 'roles'        ? handleSeedRoles       :
+                handleSeedDefaults
+              }
               disabled={seeding}
               style={{ padding: '8px 16px', borderRadius: 8, border: 'none', background: seeding ? '#D1D5DB' : '#F59E0B', color: seeding ? '#9CA3AF' : '#fff', fontSize: 12.5, fontWeight: 700, cursor: seeding ? 'default' : 'pointer', flexShrink: 0, transition: 'background 0.15s', display: 'flex', alignItems: 'center', gap: 6, whiteSpace: 'nowrap' }}
             >
@@ -1145,8 +1426,14 @@ function ContentSection({ companies }: { companies: Company[] }) {
 
 export default function AdminDashboard({ currentUser, initialCompanies, initialProfiles, analytics }: Props) {
   const [nav, setNav] = useState<NavSection>('companies')
+  const [contentCompanyId, setContentCompanyId] = useState<string | undefined>(undefined)
   const [companies, setCompanies] = useState<Company[]>(initialCompanies)
   const [profiles, setProfiles] = useState<Profile[]>(initialProfiles)
+
+  function handleViewContent(id: string) {
+    setContentCompanyId(id)
+    setNav('content')
+  }
 
   function handlePlanUpdate(id: string, fields: Partial<Profile>) {
     setProfiles(prev => prev.map(p => p.id === id ? { ...p, ...fields } : p))
@@ -1225,8 +1512,8 @@ export default function AdminDashboard({ currentUser, initialCompanies, initialP
             </div>
           </div>
 
-          {nav === 'companies' && <CompaniesSection companies={companies} onRefresh={setCompanies} />}
-          {nav === 'content' && <ContentSection companies={companies} />}
+          {nav === 'companies' && <CompaniesSection companies={companies} onRefresh={setCompanies} onViewContent={handleViewContent} />}
+          {nav === 'content' && <ContentSection companies={companies} initialSelectedId={contentCompanyId} />}
           {nav === 'users' && <UsersSection profiles={profiles} onPlanUpdate={handlePlanUpdate} />}
           {nav === 'analytics' && <AnalyticsSection analytics={analytics} />}
         </div>
