@@ -4,6 +4,7 @@ import { useState, useTransition } from 'react'
 import Link from 'next/link'
 import { useMonthlyToken } from './actions'
 import CompanyOverview from './CompanyOverview'
+import SaveButton from '@/components/SaveButton'
 
 interface Company {
   id: string
@@ -24,9 +25,9 @@ const NAV = [
   { id: 'overview',   label: 'Company Overview',  icon: '🏢', pro: false },
   { id: 'org',        label: 'Org Chart',          icon: '🗂️',  pro: true },
   { id: 'financials', label: 'Financials',          icon: '💹', pro: true },
-  { id: 'tools',      label: 'Internal Tools',      icon: '🔧', pro: true },
-  { id: 'processes',  label: 'Internal Processes',  icon: '⚙️',  pro: true },
-  { id: 'product',    label: 'Product Use Case',    icon: '🎯', pro: true },
+  { id: 'internal',   label: 'Internal Tools & Processes', icon: '🔧', pro: true },
+  { id: 'prep',       label: 'Interview Prep',              icon: '🎯', pro: true },
+  { id: 'product',    label: 'Product Use Case',            icon: '📦', pro: true },
 ] as const
 type SectionId = typeof NAV[number]['id']
 
@@ -127,7 +128,7 @@ function ProGatePanel({
   )
 }
 
-export default function CompanyFreeGated({ company, hasToken }: { company: Company; hasToken: boolean }) {
+export default function CompanyFreeGated({ company, hasToken, initialSaved }: { company: Company; hasToken: boolean; initialSaved: boolean }) {
   const [activeSection, setActiveSection] = useState<SectionId>('overview')
   const [animKey, setAnimKey] = useState(0)
   const [isPending, startTransition] = useTransition()
@@ -159,12 +160,15 @@ export default function CompanyFreeGated({ company, hasToken }: { company: Compa
           <span style={{ color: '#A1A1AA', fontSize: '13px' }}>{company.category}</span>
           <span style={{ color: '#D4D4D8', fontSize: '13px' }}>›</span>
           <span style={{ color: '#09090B', fontSize: '13px', fontWeight: 600 }}>{company.name}</span>
-          {hasToken && (
-            <div style={{ marginLeft: 'auto', background: '#F5F3FF', border: '1px solid #DDD6FE', borderRadius: '8px', padding: '4px 10px', display: 'flex', alignItems: 'center', gap: '5px' }}>
-              <span style={{ fontSize: '12px' }}>🎁</span>
-              <span style={{ color: '#7C3AED', fontSize: '12px', fontWeight: 600 }}>1 free unlock</span>
-            </div>
-          )}
+          <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: 8 }}>
+            {hasToken && (
+              <div style={{ background: '#F5F3FF', border: '1px solid #DDD6FE', borderRadius: '8px', padding: '4px 10px', display: 'flex', alignItems: 'center', gap: '5px' }}>
+                <span style={{ fontSize: '12px' }}>🎁</span>
+                <span style={{ color: '#7C3AED', fontSize: '12px', fontWeight: 600 }}>1 free unlock</span>
+              </div>
+            )}
+            <SaveButton companyId={company.id} companyName={company.name} initialSaved={initialSaved} logoColor={color} />
+          </div>
         </div>
       </div>
 

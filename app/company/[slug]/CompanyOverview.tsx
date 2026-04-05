@@ -18,9 +18,14 @@ interface Company {
   website: string | null
 }
 
+type DbNewsItem = { type: string; headline: string; summary: string | null; published_date: string | null; type_color: string; type_bg: string; dot_color: string }
+type DbMilestone = { year: number; type: string; icon: string; accent_color: string; bg_color: string; title: string; detail: string | null; badge: string | null }
+
 interface Props {
   company: Company
   showProTeaser?: boolean
+  dbNews?: DbNewsItem[]
+  dbMilestones?: DbMilestone[]
 }
 
 // ─── Data generators ──────────────────────────────────────────────
@@ -392,10 +397,33 @@ function HistoryTimeline({ milestones, color }: { milestones: Milestone[]; color
 
 // ─── Main component ───────────────────────────────────────────────
 
-export default function CompanyOverview({ company, showProTeaser = false }: Props) {
+export default function CompanyOverview({ company, showProTeaser = false, dbNews, dbMilestones }: Props) {
   const color = company.logo_color ?? '#7C3AED'
-  const news = generateNews(company)
-  const milestones = generateMilestones(company)
+
+  const news: NewsItem[] = dbNews && dbNews.length > 0
+    ? dbNews.map(n => ({
+        type:      n.type,
+        typeColor: n.type_color,
+        typeBg:    n.type_bg,
+        dotColor:  n.dot_color,
+        headline:  n.headline,
+        summary:   n.summary ?? '',
+        date:      n.published_date ?? '',
+      }))
+    : generateNews(company)
+
+  const milestones: Milestone[] = dbMilestones && dbMilestones.length > 0
+    ? dbMilestones.map(m => ({
+        year:        m.year,
+        type:        m.type as Milestone['type'],
+        icon:        m.icon,
+        accentColor: m.accent_color,
+        bgColor:     m.bg_color,
+        title:       m.title,
+        detail:      m.detail ?? '',
+        badge:       m.badge ?? undefined,
+      }))
+    : generateMilestones(company)
 
   const employeeStr = company.employees
     ? company.employees >= 1000
@@ -405,7 +433,7 @@ export default function CompanyOverview({ company, showProTeaser = false }: Prop
 
   const NAV_LOCKED = [
     'Org Chart', 'Financials',
-    'Internal Tools', 'Internal Processes', 'Product Use Case',
+    'Internal Tools & Processes', 'Interview Prep', 'Product Use Case',
   ]
 
   return (

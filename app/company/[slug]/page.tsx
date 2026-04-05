@@ -30,33 +30,50 @@ export default async function CompanyPage({ params }: Props) {
     return <CompanyTeaser company={company} />
   }
 
-  // Fetch plan from profiles table
-  const { data: profile } = await supabase
-    .from('profiles')
-    .select('plan')
-    .eq('id', user.id)
-    .single()
+  // Fetch plan + saved state + all company content in parallel
+  const [profileResult, savedResult, newsRes, milestonesRes, productsRes, financialsRes, standardsRes, deptsRes, rolesRes, execRes] = await Promise.all([
+    supabase.from('profiles').select('plan').eq('id', user.id).single(),
+    supabase.from('saved_companies').select('id').eq('user_id', user.id).eq('company_id', company.id).maybeSingle(),
+    supabase.from('company_news').select('*').eq('company_id', company.id).order('sort_order'),
+    supabase.from('company_milestones').select('*').eq('company_id', company.id).order('sort_order'),
+    supabase.from('company_products').select('*').eq('company_id', company.id).order('sort_order'),
+    supabase.from('company_financials').select('*').eq('company_id', company.id).maybeSingle(),
+    supabase.from('company_standards').select('*').eq('company_id', company.id).order('sort_order'),
+    supabase.from('company_departments').select('*').eq('company_id', company.id).order('sort_order'),
+    supabase.from('company_roles').select('*').eq('company_id', company.id).order('sort_order'),
+    supabase.from('company_exec_groups').select('*').eq('company_id', company.id).order('sort_order'),
+  ])
 
-  const tier = getUserTier(user, profile?.plan)
+  const tier = getUserTier(user, profileResult.data?.plan)
+  const initialSaved = savedResult.data !== null
+
+  // Bundle all DB content — components fall back to hardcoded defaults when arrays are empty
+  const dbContent = {
+    news:        newsRes.data ?? [],
+    milestones:  milestonesRes.data ?? [],
+    products:    productsRes.data ?? [],
+    financials:  financialsRes.data ?? null,
+    standards:   standardsRes.data ?? [],
+    departments: deptsRes.data ?? [],
+    roles:       rolesRes.data ?? [],
+    execGroups:  execRes.data ?? [],
+  }
 
   if (tier === 'anonymous') {
     return <CompanyTeaser company={company} />
   }
 
-  // Pro / Admin / SuperAdmin get full access
   if (isPaidTier(tier)) {
-    return <CompanyFull company={company} />
+    return <CompanyFull company={company} initialSaved={initialSaved} dbContent={dbContent} />
   }
 
-  // Free tier: if they've already used their token on this company, show full
   const alreadyViewed = await hasViewedThisMonth(user.id, company.id)
   if (alreadyViewed) {
-    return <CompanyFull company={company} />
+    return <CompanyFull company={company} initialSaved={initialSaved} dbContent={dbContent} />
   }
 
-  // Check if monthly token is still available
   const monthlyCount = await getMonthlyViewCount(user.id)
   const hasToken = monthlyCount === 0
 
-  return <CompanyFreeGated company={company} hasToken={hasToken} />
+  return <CompanyFreeGated company={company} hasToken={hasToken} initialSaved={initialSaved} />
 }
