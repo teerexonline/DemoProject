@@ -371,7 +371,7 @@ export default function LoggedInHome({ user, plan, companies, isPro, savedIds }:
 
       {/* ── Welcome strip ──────────────────────────────────────── */}
       <div style={{ background: '#09090B' }}>
-        <div style={{ maxWidth: 1200, margin: '0 auto', padding: '14px 24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 16, flexWrap: 'wrap' }}>
+        <div className="lh-welcome-inner" style={{ maxWidth: 1200, margin: '0 auto', padding: '14px 24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 16, flexWrap: 'wrap' }}>
 
           <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
             {/* Avatar */}
@@ -388,9 +388,9 @@ export default function LoggedInHome({ user, plan, companies, isPro, savedIds }:
             </div>
           </div>
 
-          <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
+          <div className="lh-welcome-right" style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
             {/* Mini stats */}
-            <div style={{ display: 'flex', gap: 16, borderRight: '1px solid #1C1C1E', paddingRight: 16 }}>
+            <div className="lh-welcome-stats" style={{ display: 'flex', gap: 16, borderRight: '1px solid #1C1C1E', paddingRight: 16 }}>
               {[{ v: `${all.length}+`, l: 'companies' }, { v: '18', l: 'sectors' }, { v: '8.2k', l: 'weekly users' }].map(s => (
                 <div key={s.l} style={{ textAlign: 'center' }}>
                   <div style={{ color: '#fff', fontSize: 12.5, fontWeight: 800, lineHeight: 1.2 }}>{s.v}</div>
@@ -420,7 +420,7 @@ export default function LoggedInHome({ user, plan, companies, isPro, savedIds }:
       </div>
 
       {/* ── Search zone ────────────────────────────────────────── */}
-      <div style={{ background: '#fff', borderBottom: '1px solid #EBEBED', padding: '28px 24px 24px' }}>
+      <div className="lh-search-zone" style={{ background: '#fff', borderBottom: '1px solid #EBEBED', padding: '28px 24px 24px' }}>
         <div style={{ maxWidth: 600, margin: '0 auto', textAlign: 'center' }}>
           <h1 style={{ fontSize: 22, fontWeight: 800, color: '#09090B', letterSpacing: '-0.05em', lineHeight: 1.2, margin: '0 0 6px' }}>
             Research any company, inside out.
@@ -433,7 +433,7 @@ export default function LoggedInHome({ user, plan, companies, isPro, savedIds }:
       </div>
 
       {/* ── Main 2-column layout ───────────────────────────────── */}
-      <div style={{ maxWidth: 1200, margin: '0 auto', padding: '28px 24px', display: 'grid', gridTemplateColumns: 'minmax(0, 1fr) 272px', gap: 24, alignItems: 'start' }}>
+      <div className="lh-layout" style={{ maxWidth: 1200, margin: '0 auto', padding: '28px 24px', display: 'grid', gridTemplateColumns: 'minmax(0, 1fr) 272px', gap: 24, alignItems: 'start' }}>
 
         {/* ──────────────── LEFT: main content ──────────────── */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: 32, minWidth: 0, overflow: 'hidden' }}>
@@ -447,7 +447,7 @@ export default function LoggedInHome({ user, plan, companies, isPro, savedIds }:
           {/* 2. Trending This Week */}
           <section>
             <SLabel title="Trending This Week" sub="Most-viewed companies in the last 7 days" accent="#F59E0B" action="See all" href="/" />
-            <div style={{ display: 'flex', gap: 10, overflowX: 'auto', paddingBottom: 8, scrollbarWidth: 'none', marginRight: -4 } as React.CSSProperties}>
+            <div className="lh-trend-scroll" style={{ display: 'flex', gap: 10, overflowX: 'auto', paddingBottom: 8, scrollbarWidth: 'none', marginRight: -4 } as React.CSSProperties}>
               {trending.map((c, i) => <TrendCard key={c.id} c={c} rank={i + 1} initialSaved={savedIds.includes(c.id)} />)}
             </div>
           </section>
@@ -455,7 +455,7 @@ export default function LoggedInHome({ user, plan, companies, isPro, savedIds }:
           {/* 3. Recently Added */}
           <section>
             <SLabel title="Recently Added" sub="New companies on ResearchOrg" accent="#10B981" action="View all" href="/" />
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 10 }}>
+            <div className="lh-recent-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 10 }}>
               {recentlyAdded.map((c, i) => (
                 <RecentCard key={c.id} c={c} daysAgo={[2, 3, 4, 5, 6, 7][i] ?? 8} initialSaved={savedIds.includes(c.id)} />
               ))}
@@ -475,7 +475,7 @@ export default function LoggedInHome({ user, plan, companies, isPro, savedIds }:
         </div>
 
         {/* ──────────────── RIGHT: sidebar ──────────────────── */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 16, position: 'sticky', top: 80 }}>
+        <div className="lh-sidebar" style={{ display: 'flex', flexDirection: 'column', gap: 16, position: 'sticky', top: 80 }}>
 
           {/* Browse by sector */}
           <div style={{ background: '#fff', borderRadius: 14, border: '1px solid #EBEBED', overflow: 'hidden', boxShadow: '0 1px 5px rgba(0,0,0,0.04)' }}>
@@ -585,8 +585,56 @@ export default function LoggedInHome({ user, plan, companies, isPro, savedIds }:
       </div>
 
       <style>{`
+        /* ── Tablet: hide sidebar stats, collapse to 1 col ── */
         @media (max-width: 960px) {
-          .lh-layout { grid-template-columns: 1fr !important; }
+          .lh-layout {
+            grid-template-columns: 1fr !important;
+            padding: 20px 16px !important;
+          }
+          .lh-sidebar {
+            position: static !important;
+          }
+          .lh-welcome-stats {
+            display: none !important;
+          }
+        }
+
+        /* ── Mobile ── */
+        @media (max-width: 640px) {
+          .lh-search-zone {
+            padding: 20px 16px 18px !important;
+          }
+          .lh-layout {
+            padding: 16px 12px !important;
+            gap: 24px !important;
+          }
+          .lh-welcome-inner {
+            padding: 12px 16px !important;
+            flex-direction: column !important;
+            align-items: flex-start !important;
+            gap: 10px !important;
+          }
+          .lh-welcome-right {
+            width: 100% !important;
+            justify-content: flex-start !important;
+            gap: 10px !important;
+          }
+          .lh-recent-grid {
+            grid-template-columns: repeat(2, 1fr) !important;
+          }
+          .lh-trend-scroll {
+            margin-left: -12px !important;
+            margin-right: -12px !important;
+            padding-left: 12px !important;
+            padding-right: 12px !important;
+          }
+        }
+
+        /* ── Very small (< 400px) ── */
+        @media (max-width: 400px) {
+          .lh-recent-grid {
+            grid-template-columns: 1fr !important;
+          }
         }
       `}</style>
     </div>
