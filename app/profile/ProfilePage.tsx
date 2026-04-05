@@ -89,7 +89,7 @@ export default function ProfilePage({ user, profile, savedCompanies: initialSave
 
   return (
     <div style={{ minHeight: '100vh', background: '#F5F5F7' }}>
-      <div style={{ maxWidth: 1100, margin: '0 auto', padding: '36px 24px' }}>
+      <div className="pp-container" style={{ maxWidth: 1100, margin: '0 auto', padding: '36px 24px' }}>
 
         {/* Page header */}
         <div style={{ marginBottom: 28 }}>
@@ -97,7 +97,7 @@ export default function ProfilePage({ user, profile, savedCompanies: initialSave
           <div style={{ fontSize: 13, color: '#A1A1AA' }}>Manage your personal info and saved companies</div>
         </div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: '340px 1fr', gap: 24, alignItems: 'start' }}>
+        <div className="pp-grid" style={{ display: 'grid', gridTemplateColumns: '340px 1fr', gap: 24, alignItems: 'start' }}>
 
           {/* ── Left: Profile card ── */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
@@ -226,7 +226,7 @@ export default function ProfilePage({ user, profile, savedCompanies: initialSave
                 </Link>
               </div>
             ) : (
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 10 }}>
+              <div className="pp-saved-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 10 }}>
                 {saved.map(c => {
                   const color = c.logo_color ?? '#7C3AED'
                   return (
@@ -273,6 +273,27 @@ export default function ProfilePage({ user, profile, savedCompanies: initialSave
 
         </div>
       </div>
+
+      <style>{`
+        @media (max-width: 860px) {
+          .pp-grid {
+            grid-template-columns: 1fr !important;
+          }
+        }
+        @media (max-width: 640px) {
+          .pp-container {
+            padding: 20px 16px !important;
+          }
+          .pp-saved-grid {
+            grid-template-columns: 1fr !important;
+          }
+        }
+        @media (max-width: 400px) {
+          .pp-container {
+            padding: 16px 12px !important;
+          }
+        }
+      `}</style>
     </div>
   )
 }
