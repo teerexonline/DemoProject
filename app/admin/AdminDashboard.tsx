@@ -3,6 +3,7 @@
 import { useState, useTransition, useEffect, useRef } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import Link from 'next/link'
+import CompanyLogo from '@/components/CompanyLogo'
 import {
   adminUpsertCompany, adminDeleteCompany,
   adminUpdateUserPlan, adminUpdateUserProfile,
@@ -430,9 +431,17 @@ function CompaniesSection({ companies, onRefresh }: { companies: Company[]; onRe
         <button onClick={openNew} style={{ padding: '8px 16px', borderRadius: 9, border: 'none', background: '#7C3AED', color: '#fff', fontSize: 13, fontWeight: 600, cursor: 'pointer', whiteSpace: 'nowrap' }}>+ Add Company</button>
       </div>
       <DataTable
-        cols={['Name', 'Category', 'HQ', 'Employees', 'Valuation', 'Hiring']}
+        cols={['Company', 'Category', 'HQ', 'Employees', 'Valuation', 'Hiring']}
         rows={filtered.map(c => [
-          <span key="n" style={{ fontWeight: 700, color: c.logo_color }}>{c.name}</span>,
+          <span key="n" style={{ display: 'flex', alignItems: 'center', gap: 9 }}>
+            <CompanyLogo name={c.name} logoUrl={c.logo_url} logoColor={c.logo_color} size={28} />
+            <span style={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
+              <span style={{ fontWeight: 700, color: '#09090B', fontSize: 13 }}>{c.name}</span>
+              {!c.logo_url && (
+                <span style={{ fontSize: 10, color: '#F59E0B', fontWeight: 600 }}>No logo</span>
+              )}
+            </span>
+          </span>,
           c.category,
           c.hq ?? '—',
           c.employees?.toLocaleString() ?? '—',
@@ -689,8 +698,30 @@ function ContentSection({ companies }: { companies: Company[] }) {
     startSeed(async () => {
       const res = await adminSeedCompanyContent(selectedId)
       if (res?.error) { setSeedMsg(`Error: ${res.error}`); return }
-      setSeedMsg('Defaults seeded successfully.')
+      setSeedMsg('✓ Content seeded from web successfully.')
       adminGetCompanyContent(selectedId).then(setContent)
+    })
+  }
+
+  function handleSeedFinancials() {
+    setSeedMsg('')
+    const name    = (company?.name    ?? '').trim()
+    const website = (company?.website ?? '').trim()
+    if (!name || !website) { setSeedMsg('Error: Company name and website are required.'); return }
+    startSeed(async () => {
+      try {
+        const resp = await fetch('/api/seed-financials', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ companyId: selectedId, name, website }),
+        })
+        const json = await resp.json()
+        if (!resp.ok || json.error) { setSeedMsg(`Error: ${json.error ?? 'Unknown error'}`); return }
+        setSeedMsg('✓ Financials updated from web successfully.')
+        adminGetCompanyContent(selectedId).then(setContent)
+      } catch (e) {
+        setSeedMsg(`Error: ${e instanceof Error ? e.message : 'Network error'}`)
+      }
     })
   }
 
@@ -898,16 +929,110 @@ function ContentSection({ companies }: { companies: Company[] }) {
         <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: 12 }}>
           <button onClick={() => setPanel({ type: 'financials', data: (content.financials as unknown as Record<string, unknown>) ?? { company_id: selectedId } })} style={{ padding: '7px 14px', borderRadius: 8, border: 'none', background: '#7C3AED', color: '#fff', fontSize: 12.5, fontWeight: 600, cursor: 'pointer' }}>{content.financials ? 'Edit Financials' : '+ Add Financials'}</button>
         </div>
-        {content.financials ? (
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 10 }}>
-            {(['tam','sam','som','arr','yoy_growth','revenue_per_employee'] as const).map(k => (
-              <div key={k} style={{ padding: '12px 14px', borderRadius: 10, background: '#F7F7F8', border: '1px solid #E4E4E7' }}>
-                <div style={{ fontSize: 10, color: '#A1A1AA', textTransform: 'uppercase', letterSpacing: '0.07em', marginBottom: 4 }}>{k.replace(/_/g,' ')}</div>
-                <div style={{ fontSize: 15, fontWeight: 800, color: '#09090B' }}>{(content.financials as Record<string,unknown>)[k] as string || '—'}</div>
+        {content.financials ? (() => {
+          const fin = content.financials as Record<string, unknown>
+          const revenueStreams  = (fin.revenue_streams  as {name:string;description:string;percentage:number;type:string}[]|null) ?? []
+          const businessUnits  = (fin.business_units   as {name:string;description:string;revenue_contribution:string}[]|null) ?? []
+          const marketShare    = (fin.market_share      as {segment:string;percentage:number;context:string;year:number}[]|null) ?? []
+          const revenueGrowth  = (fin.revenue_growth    as {year:number;revenue:string;growth_rate:string|null}[]|null) ?? []
+          const streamTypeColor: Record<string,string> = { subscription:'#7C3AED', transactional:'#2563EB', advertising:'#D97706', product:'#059669', services:'#0891B2', other:'#71717A' }
+          return (
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+              {/* ── Scalar metrics ── */}
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 10 }}>
+                {(['tam','sam','som','arr','yoy_growth','revenue_per_employee'] as const).map(k => (
+                  <div key={k} style={{ padding: '12px 14px', borderRadius: 10, background: '#F7F7F8', border: '1px solid #E4E4E7' }}>
+                    <div style={{ fontSize: 10, color: '#A1A1AA', textTransform: 'uppercase', letterSpacing: '0.07em', marginBottom: 4 }}>{k.replace(/_/g,' ')}</div>
+                    <div style={{ fontSize: 15, fontWeight: 800, color: '#09090B' }}>{fin[k] as string || '—'}</div>
+                  </div>
+                ))}
               </div>
-            ))}
-          </div>
-        ) : <div style={{ padding: 24, textAlign: 'center', color: '#A1A1AA', fontSize: 13 }}>No financial data yet</div>}
+
+              {/* ── Revenue Growth History ── */}
+              {revenueGrowth.length > 0 && (
+                <div style={{ background: '#F7F7F8', border: '1px solid #E4E4E7', borderRadius: 10, padding: '14px 16px' }}>
+                  <div style={{ fontSize: 11, fontWeight: 700, color: '#71717A', textTransform: 'uppercase', letterSpacing: '0.07em', marginBottom: 10 }}>Revenue Growth History</div>
+                  <div style={{ display: 'grid', gridTemplateColumns: `repeat(${Math.min(revenueGrowth.length, 5)}, 1fr)`, gap: 8 }}>
+                    {revenueGrowth.slice(0, 5).map((rg, i) => {
+                      const rate = rg.growth_rate
+                      const isPos = rate && (rate.startsWith('+') || (rate.startsWith('~') && !rate.includes('-')))
+                      const isNeg = rate && rate.includes('-')
+                      return (
+                        <div key={i} style={{ textAlign: 'center', padding: '8px 6px', background: '#fff', borderRadius: 8, border: '1px solid #F0F0F2' }}>
+                          <div style={{ fontSize: 10, color: '#A1A1AA', marginBottom: 2 }}>{rg.year}</div>
+                          <div style={{ fontSize: 13, fontWeight: 800, color: '#09090B', marginBottom: 2 }}>{rg.revenue}</div>
+                          {rate && <div style={{ fontSize: 10.5, fontWeight: 700, color: isNeg ? '#DC2626' : isPos ? '#16A34A' : '#D97706' }}>{rate}</div>}
+                        </div>
+                      )
+                    })}
+                  </div>
+                </div>
+              )}
+
+              {/* ── Revenue Streams + Business Units (side by side) ── */}
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+                {revenueStreams.length > 0 && (
+                  <div style={{ background: '#F7F7F8', border: '1px solid #E4E4E7', borderRadius: 10, padding: '14px 16px' }}>
+                    <div style={{ fontSize: 11, fontWeight: 700, color: '#71717A', textTransform: 'uppercase', letterSpacing: '0.07em', marginBottom: 10 }}>Revenue Streams</div>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                      {revenueStreams.map((s, i) => (
+                        <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                          <div style={{ flexShrink: 0, width: 34, textAlign: 'right', fontSize: 12, fontWeight: 800, color: '#09090B' }}>{s.percentage}%</div>
+                          <div style={{ flex: 1, minWidth: 0 }}>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: 5, marginBottom: 1 }}>
+                              <span style={{ fontSize: 12, fontWeight: 700, color: '#09090B' }}>{s.name}</span>
+                              <span style={{ fontSize: 9.5, fontWeight: 700, padding: '1px 5px', borderRadius: 4, background: streamTypeColor[s.type] ?? '#71717A', color: '#fff', textTransform: 'uppercase' }}>{s.type}</span>
+                            </div>
+                            <div style={{ fontSize: 11, color: '#71717A', lineHeight: 1.4 }}>{s.description}</div>
+                          </div>
+                          <div style={{ width: 60, height: 5, borderRadius: 3, background: '#E4E4E7', flexShrink: 0, overflow: 'hidden' }}>
+                            <div style={{ height: '100%', width: `${s.percentage}%`, background: streamTypeColor[s.type] ?? '#7C3AED', borderRadius: 3 }} />
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+                {businessUnits.length > 0 && (
+                  <div style={{ background: '#F7F7F8', border: '1px solid #E4E4E7', borderRadius: 10, padding: '14px 16px' }}>
+                    <div style={{ fontSize: 11, fontWeight: 700, color: '#71717A', textTransform: 'uppercase', letterSpacing: '0.07em', marginBottom: 10 }}>Business Units</div>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                      {businessUnits.map((u, i) => (
+                        <div key={i} style={{ padding: '8px 10px', background: '#fff', borderRadius: 8, border: '1px solid #F0F0F2' }}>
+                          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 2 }}>
+                            <span style={{ fontSize: 12, fontWeight: 700, color: '#09090B' }}>{u.name}</span>
+                            <span style={{ fontSize: 11.5, fontWeight: 800, color: '#7C3AED' }}>{u.revenue_contribution}</span>
+                          </div>
+                          <div style={{ fontSize: 11, color: '#71717A', lineHeight: 1.4 }}>{u.description}</div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {/* ── Market Share ── */}
+              {marketShare.length > 0 && (
+                <div style={{ background: '#F7F7F8', border: '1px solid #E4E4E7', borderRadius: 10, padding: '14px 16px' }}>
+                  <div style={{ fontSize: 11, fontWeight: 700, color: '#71717A', textTransform: 'uppercase', letterSpacing: '0.07em', marginBottom: 10 }}>Market Share</div>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                    {marketShare.map((ms, i) => (
+                      <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                        <div style={{ flexShrink: 0 }}>
+                          <div style={{ fontSize: 11, color: '#A1A1AA' }}>{ms.segment} {ms.year && <span style={{ color: '#C4C4C8' }}>({ms.year})</span>}</div>
+                          <div style={{ fontSize: 11, color: '#71717A', marginTop: 1 }}>{ms.context}</div>
+                        </div>
+                        <div style={{ marginLeft: 'auto', flexShrink: 0, textAlign: 'right' }}>
+                          <span style={{ fontSize: 15, fontWeight: 800, color: '#09090B' }}>{ms.percentage}%</span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+          )
+        })() : <div style={{ padding: 24, textAlign: 'center', color: '#A1A1AA', fontSize: 13 }}>No financial data yet</div>}
       </div>
     )
     if (tab === 'standards') return (
@@ -954,26 +1079,6 @@ function ContentSection({ companies }: { companies: Company[] }) {
         {loading && <span style={{ fontSize: 12, color: '#A1A1AA' }}>Loading…</span>}
       </div>
 
-      {/* Seed defaults banner */}
-      {content && (
-        <div style={{ marginBottom: 16, padding: '10px 14px', borderRadius: 10, background: '#FFFBEB', border: '1px solid #FDE68A', display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap' }}>
-          <div style={{ flex: 1, minWidth: 0 }}>
-            <div style={{ fontSize: 12.5, fontWeight: 700, color: '#92400E', marginBottom: 2 }}>Seed Default Content</div>
-            <div style={{ fontSize: 11.5, color: '#A16207' }}>
-              Pre-populate all empty tables (news, milestones, products, financials, standards, departments, roles, exec groups) with the website defaults. Only fills empty tables — existing data is never overwritten.
-            </div>
-            {seedMsg && <div style={{ fontSize: 11.5, color: seedMsg.startsWith('Error') ? '#DC2626' : '#16A34A', marginTop: 4, fontWeight: 600 }}>{seedMsg}</div>}
-          </div>
-          <button
-            onClick={handleSeedDefaults}
-            disabled={seeding}
-            style={{ padding: '8px 16px', borderRadius: 8, border: 'none', background: seeding ? '#D1D5DB' : '#F59E0B', color: seeding ? '#9CA3AF' : '#fff', fontSize: 12.5, fontWeight: 700, cursor: seeding ? 'default' : 'pointer', flexShrink: 0, transition: 'background 0.15s' }}
-          >
-            {seeding ? 'Seeding…' : '⚡ Seed Defaults'}
-          </button>
-        </div>
-      )}
-
       {/* Sub-tabs */}
       <div style={{ display: 'flex', gap: 4, marginBottom: 16, borderBottom: '1px solid #E4E4E7', paddingBottom: 1 }}>
         {TABS.map(t => (
@@ -982,6 +1087,43 @@ function ContentSection({ companies }: { companies: Company[] }) {
           </button>
         ))}
       </div>
+
+      {/* Tab-specific seed from web banner */}
+      {content && (() => {
+        const TAB_SEED: Record<ContentTab, { title: string; desc: string }> = {
+          news:        { title: 'Seed News from Web',        desc: 'Fetches recent headlines and company announcements from the company website and public news sources.' },
+          milestones:  { title: 'Seed Milestones from Web',  desc: 'Pulls key company events, product launches, and funding rounds from Wikipedia and web sources.' },
+          products:    { title: 'Seed Products from Web',    desc: 'Imports product lines and service offerings from the company website and public data sources.' },
+          financials:  { title: 'Seed Financials from Web',  desc: 'Fetches revenue, market share, TAM/SAM/SOM, and growth metrics from SEC EDGAR, Yahoo Finance, and Wikipedia. Updates all existing values.' },
+          standards:   { title: 'Seed Standards from Web',   desc: 'Imports compliance certifications and industry standards from the company\'s public documentation.' },
+          departments: { title: 'Seed Departments from Web', desc: 'Pulls organisational structure and department headcount from public sources and the company website.' },
+          roles:       { title: 'Seed Roles from Web',       desc: 'Imports common job roles and level structures from public job postings and company data.' },
+          exec_groups: { title: 'Seed Exec Groups from Web', desc: 'Fetches executive leadership and C-suite structure from Wikipedia, LinkedIn, and public filings.' },
+        }
+        const s = TAB_SEED[tab]
+        return (
+          <div style={{ marginBottom: 16, padding: '10px 14px', borderRadius: 10, background: '#FFFBEB', border: '1px solid #FDE68A', display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap' }}>
+            <div style={{ flex: 1, minWidth: 0 }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 3 }}>
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#92400E" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+                <span style={{ fontSize: 12.5, fontWeight: 700, color: '#92400E' }}>{s.title}</span>
+              </div>
+              <div style={{ fontSize: 11.5, color: '#A16207' }}>{s.desc}{tab !== 'financials' && ' Only populates empty tables — existing data is never overwritten.'}</div>
+              {seedMsg && <div style={{ fontSize: 11.5, color: seedMsg.startsWith('Error') ? '#DC2626' : '#16A34A', marginTop: 4, fontWeight: 600 }}>{seedMsg}</div>}
+            </div>
+            <button
+              onClick={tab === 'financials' ? handleSeedFinancials : handleSeedDefaults}
+              disabled={seeding}
+              style={{ padding: '8px 16px', borderRadius: 8, border: 'none', background: seeding ? '#D1D5DB' : '#F59E0B', color: seeding ? '#9CA3AF' : '#fff', fontSize: 12.5, fontWeight: 700, cursor: seeding ? 'default' : 'pointer', flexShrink: 0, transition: 'background 0.15s', display: 'flex', alignItems: 'center', gap: 6, whiteSpace: 'nowrap' }}
+            >
+              {seeding
+                ? <><SpinnerIcon />Fetching from web…</>
+                : <><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>{s.title}</>
+              }
+            </button>
+          </div>
+        )
+      })()}
 
       {renderTabContent()}
 

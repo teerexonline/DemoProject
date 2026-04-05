@@ -84,8 +84,10 @@ export default function SearchAutocomplete({ placeholder = 'Search any company..
   }, [])
 
   function handleSelect(company: Company) {
-    setQuery(company.name)
+    setQuery('')
+    setResults([])
     setOpen(false)
+    inputRef.current?.blur()
     navigate(`/company/${company.slug}`)
   }
 

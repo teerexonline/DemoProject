@@ -55,7 +55,7 @@ export interface DbContent {
   news:        { type: string; headline: string; summary: string | null; published_date: string | null; type_color: string; type_bg: string; dot_color: string }[]
   milestones:  { year: number; type: string; icon: string; accent_color: string; bg_color: string; title: string; detail: string | null; badge: string | null }[]
   products:    { id: string; name: string; tagline: string | null; description: string | null; category: string | null; cat_color: string; use_cases: unknown; customers: unknown; competitors: unknown }[]
-  financials:  { tam?: string | null; sam?: string | null; som?: string | null; arr?: string | null; yoy_growth?: string | null; revenue_per_employee?: string | null; revenue_streams?: unknown; business_units?: unknown; market_share?: unknown; revenue_growth?: unknown } | null
+  financials:  { tam?: string | null; sam?: string | null; som?: string | null; arr?: string | null; yoy_growth?: string | null; revenue_per_employee?: string | null; revenue_streams?: unknown; business_units?: unknown; market_share?: unknown; revenue_growth?: unknown; competitors?: unknown } | null
   standards:   { code: string; category: string | null; cat_color: string; status: string; description: string | null }[]
   departments: { id: string; name: string; icon: string; color: string; headcount: number }[]
   roles:       { department_id: string; title: string; level: string; tools: unknown; skills: unknown; processes: unknown; interview_questions: unknown; keywords: unknown }[]
@@ -633,58 +633,107 @@ function SectionContent({ id, company, dbContent }: { id: SectionId; company: Co
       return <OrgChart company={company} dbDepts={dbContent.departments} dbRoles={dbContent.roles} dbExecGroups={dbContent.execGroups} />
 
     case 'financials': {
-      // Use DB data if available, otherwise fall back to hardcoded defaults
       const fin = dbContent.financials
-      const dbMarket = fin?.market_share as { name: string; pct: number; clr: string }[] | null
-      const MARKET = dbMarket && dbMarket.length > 0 ? dbMarket : [
-        { name: company.name,    pct: 34, clr: color },
-        { name: 'Competitor A',  pct: 28, clr: '#94A3B8' },
-        { name: 'Competitor B',  pct: 19, clr: '#CBD5E1' },
-        { name: 'Others',        pct: 19, clr: '#E2E8F0' },
-      ]
-      let cum = 0
-      const donut = `conic-gradient(${MARKET.map(m => { const f = cum; cum += m.pct; return `${m.clr} ${f}% ${cum}%` }).join(', ')})`
 
-      const dbStreams = fin?.revenue_streams as { name: string; pct: number; clr: string }[] | null
-      const STREAMS = dbStreams && dbStreams.length > 0 ? dbStreams : [
-        { name: 'Core Product / Services',    pct: 62, clr: color },
-        { name: 'Enterprise & Partnerships',  pct: 22, clr: '#06B6D4' },
-        { name: 'Platform & APIs',            pct: 11, clr: '#F59E0B' },
-        { name: 'Other / Misc',               pct: 5,  clr: '#10B981' },
-      ]
+      // ── Parse revenue_growth → normalised bar heights ──────────────────────
+      type RgDb = { year: number; revenue: string; growth_rate: string | null }
+      const rgRaw = (fin?.revenue_growth as RgDb[] | null) ?? []
+      // Parse revenue strings like "$12.2B", "$391.0B", "~$500M" into numbers
+      const parseRev = (s: string): number => {
+        const m = s.replace(/[~,]/g, '').match(/([\d.]+)\s*([TBMKtbmk])?/)
+        if (!m) return 0
+        const n = parseFloat(m[1])
+        const mult: Record<string, number> = { T:1e12, B:1e9, M:1e6, K:1e3, t:1e12, b:1e9, m:1e6, k:1e3 }
+        return n * (mult[m[2] ?? ''] ?? 1)
+      }
+      const rgSorted = [...rgRaw].sort((a, b) => a.year - b.year).slice(-6)
+      const maxRev = Math.max(...rgSorted.map(r => parseRev(r.revenue)), 1)
+      const BARS = rgSorted.length > 0
+        ? rgSorted.map(r => ({ year: r.year, revenue: r.revenue, growth_rate: r.growth_rate, height: Math.max(12, Math.round(parseRev(r.revenue) / maxRev * 100)) }))
+        : [{ year: 2020, revenue: '', growth_rate: null, height: 40 }, { year: 2021, revenue: '', growth_rate: null, height: 54 },
+           { year: 2022, revenue: '', growth_rate: null, height: 66 }, { year: 2023, revenue: '', growth_rate: null, height: 81 },
+           { year: 2024, revenue: '', growth_rate: null, height: 100 }]
 
-      const dbUnits = fin?.business_units as { name: string; growth: string; status: string; desc: string }[] | null
-      const UNITS = dbUnits && dbUnits.length > 0 ? dbUnits : [
-        { name: 'Core Platform',       growth: '+24%',  status: 'primary', desc: 'Main product · ~62% of revenue' },
-        { name: 'Enterprise Division', growth: '+41%',  status: 'growing', desc: 'Custom integrations & enterprise' },
-        { name: 'Developer Tools',     growth: '+18%',  status: 'growing', desc: 'SDKs, APIs & third-party platform' },
-        { name: 'Emerging Products',   growth: 'Early', status: 'early',   desc: 'New bets & experimental lines' },
-      ]
+      // ── Parse revenue_streams ──────────────────────────────────────────────
+      type StreamDb = { name: string; description?: string; percentage: number; type?: string }
+      const STREAM_COLORS: Record<string, string> = {
+        subscription: color, transactional: '#2563EB', advertising: '#D97706',
+        product: '#059669', services: '#0891B2', other: '#A1A1AA',
+      }
+      const FALLBACK_STREAM_COLORS = [color, '#06B6D4', '#F59E0B', '#10B981', '#8B5CF6', '#EC4899']
+      const rawStreams = (fin?.revenue_streams as StreamDb[] | null) ?? []
+      const STREAMS = rawStreams.length > 0
+        ? rawStreams.map((s, i) => ({
+            name: s.name,
+            desc: s.description ?? '',
+            pct:  s.percentage,
+            clr:  STREAM_COLORS[s.type ?? ''] ?? FALLBACK_STREAM_COLORS[i % FALLBACK_STREAM_COLORS.length],
+          }))
+        : [
+            { name: 'Core Product / Services',   desc: '', pct: 62, clr: color },
+            { name: 'Enterprise & Partnerships', desc: '', pct: 22, clr: '#06B6D4' },
+            { name: 'Platform & APIs',           desc: '', pct: 11, clr: '#F59E0B' },
+            { name: 'Other / Misc',              desc: '', pct: 5,  clr: '#10B981' },
+          ]
 
+      // ── Parse business_units ───────────────────────────────────────────────
+      type UnitDb = { name: string; description?: string; revenue_contribution?: string }
+      const rawUnits = (fin?.business_units as UnitDb[] | null) ?? []
+      const UNITS = rawUnits.length > 0
+        ? rawUnits.map((u, i) => {
+            const pctNum = parseInt(u.revenue_contribution ?? '0')
+            const status = i === 0 || pctNum >= 40 ? 'primary' : pctNum >= 15 ? 'growing' : 'early'
+            return { name: u.name, growth: u.revenue_contribution ?? '—', status, desc: u.description ?? '' }
+          })
+        : [
+            { name: 'Core Platform',       growth: '~62%',  status: 'primary', desc: 'Main product · primary revenue driver' },
+            { name: 'Enterprise Division', growth: '~22%',  status: 'growing', desc: 'Custom integrations & enterprise' },
+            { name: 'Developer Tools',     growth: '~11%',  status: 'growing', desc: 'SDKs, APIs & third-party platform' },
+            { name: 'Emerging Products',   growth: 'Early', status: 'early',   desc: 'New bets & experimental lines' },
+          ]
       const unitColor = (s: string) => s === 'primary' ? color : s === 'growing' ? '#10B981' : '#F59E0B'
 
-      const cat = (company.category ?? '').toLowerCase()
-      const marketLabel = (() => {
-        if (cat.includes('payment') || cat.includes('fintech'))            return 'Digital Payments'
-        if (cat.includes('cloud') || cat.includes('infrastructure'))       return 'Cloud Infrastructure'
-        if (cat.includes('ecommerce') || cat.includes('e-commerce') || cat.includes('retail')) return 'E-commerce Platforms'
-        if (cat.includes('saas') || cat.includes('software'))              return 'B2B SaaS Software'
-        if (cat.includes('social') || cat.includes('media'))               return 'Social Media Platforms'
-        if (cat.includes('health') || cat.includes('medical'))             return 'Health Technology'
-        if (cat.includes('ai') || cat.includes('machine learning') || cat.includes('artificial')) return 'AI & ML Platforms'
-        if (cat.includes('marketplace'))                                    return 'Online Marketplaces'
-        if (cat.includes('gaming'))                                         return 'Gaming Platforms'
-        if (cat.includes('crypto') || cat.includes('blockchain'))          return 'Crypto & Blockchain'
-        if (cat.includes('cyber') || cat.includes('security'))             return 'Cybersecurity'
-        if (cat.includes('data') || cat.includes('analytics'))             return 'Data & Analytics'
-        if (cat.includes('hr') || cat.includes('workforce'))               return 'HR Technology'
-        if (cat.includes('crm') || cat.includes('sales'))                  return 'CRM & Sales Tech'
-        if (cat.includes('logistics') || cat.includes('supply'))           return 'Logistics & Supply Chain'
-        if (cat.includes('devtools') || cat.includes('developer'))         return 'Developer Tools'
-        if (cat.includes('streaming') || cat.includes('video'))            return 'Video Streaming'
-        if (cat.includes('travel') || cat.includes('hospitality'))         return 'Travel & Hospitality'
+      // ── Parse competitors for market-share donut ───────────────────────────
+      // DB stores {name, pct, clr}[] in competitors field; fallback to market_share context
+      type CompDb = { name: string; pct: number; clr: string }
+      type MsDb   = { segment: string; percentage: number; context: string; year?: number }
+      const rawCompetitors = (fin?.competitors as CompDb[] | null) ?? []
+      const rawMarketShare = (fin?.market_share as MsDb[] | null) ?? []
+
+      // Build MARKET array: company first, then competitors
+      const MARKET: { name: string; pct: number; clr: string }[] = rawCompetitors.length > 0
+        ? rawCompetitors
+        : [
+            { name: company.name,   pct: 34, clr: color },
+            { name: 'Competitor A', pct: 28, clr: '#94A3B8' },
+            { name: 'Competitor B', pct: 19, clr: '#CBD5E1' },
+            { name: 'Others',       pct: 19, clr: '#E2E8F0' },
+          ]
+
+      // Company's own share for donut centre label
+      const ownEntry = MARKET.find(m => m.name === company.name) ?? MARKET[0]
+      const ownPct   = ownEntry?.pct ?? rawMarketShare[0]?.percentage ?? 34
+
+      // Market label from market_share context or category
+      const msContext  = rawMarketShare[0]?.segment ?? ''
+      const cat        = (company.category ?? '').toLowerCase()
+      const marketLabel = msContext || (() => {
+        if (cat.includes('payment') || cat.includes('fintech'))      return 'Digital Payments'
+        if (cat.includes('cloud') || cat.includes('infrastructure')) return 'Cloud Infrastructure'
+        if (cat.includes('ecommerce') || cat.includes('e-commerce')) return 'E-commerce Platforms'
+        if (cat.includes('saas') || cat.includes('software'))        return 'B2B SaaS Software'
+        if (cat.includes('social') || cat.includes('media'))         return 'Social Media Platforms'
+        if (cat.includes('ai') || cat.includes('machine learning'))  return 'AI & ML Platforms'
+        if (cat.includes('crypto') || cat.includes('blockchain'))    return 'Crypto & Blockchain'
+        if (cat.includes('cyber') || cat.includes('security'))       return 'Cybersecurity'
+        if (cat.includes('data') || cat.includes('analytics'))       return 'Data & Analytics'
+        if (cat.includes('streaming') || cat.includes('video'))      return 'Video Streaming'
+        if (cat.includes('travel') || cat.includes('hospitality'))   return 'Travel & Hospitality'
         return company.category ?? 'Technology'
       })()
+
+      let cum = 0
+      const donut = `conic-gradient(${MARKET.map(m => { const f = cum; cum += m.pct; return `${m.clr} ${f}% ${cum}%` }).join(', ')})`
 
       return (
         <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
@@ -692,18 +741,14 @@ function SectionContent({ id, company, dbContent }: { id: SectionId; company: Co
           {/* ── KPIs ──────────────────────────────────────────── */}
           <div className="co-3col" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 10 }}>
             {[
-              { label: 'Annual Revenue',       value: company.revenue ?? fin?.arr ?? '$—',                sub: fin?.yoy_growth ? `${fin.yoy_growth} vs prior year` : '+24% vs prior year' },
-              { label: 'YoY Growth',           value: fin?.yoy_growth ?? '24%',                           sub: '+5 pp vs prior year' },
-              { label: 'Revenue / Employee',   value: fin?.revenue_per_employee ?? '$1.8M',               sub: '+12% vs prior year' },
+              { label: 'Annual Revenue',     value: company.revenue ?? fin?.arr ?? '$—',      sub: fin?.yoy_growth ? `${fin.yoy_growth} vs prior year` : 'See revenue growth below' },
+              { label: 'YoY Growth',         value: fin?.yoy_growth ?? '—',                    sub: BARS.length > 1 ? `From ${BARS[0]?.revenue} to ${BARS[BARS.length-1]?.revenue}` : 'Year-over-year revenue change' },
+              { label: 'Revenue / Employee', value: fin?.revenue_per_employee ?? '—',           sub: 'Annual revenue per full-time employee' },
             ].map(kpi => (
               <div key={kpi.label} style={{ padding: '14px 16px', borderRadius: 12, background: '#F7F7F8', border: '1px solid #F0F0F2' }}>
-                <div style={{ color: '#A1A1AA', fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 6 }}>
-                  {kpi.label}
-                </div>
-                <div style={{ color: '#09090B', fontSize: 22, fontWeight: 800, letterSpacing: '-0.04em', marginBottom: 3 }}>
-                  {kpi.value}
-                </div>
-                <div style={{ color: '#16A34A', fontSize: 10.5, fontWeight: 600 }}>{kpi.sub}</div>
+                <div style={{ color: '#A1A1AA', fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 6 }}>{kpi.label}</div>
+                <div style={{ color: '#09090B', fontSize: 22, fontWeight: 800, letterSpacing: '-0.04em', marginBottom: 3 }}>{kpi.value}</div>
+                <div style={{ color: '#71717A', fontSize: 10.5, fontWeight: 500 }}>{kpi.sub}</div>
               </div>
             ))}
           </div>
@@ -713,69 +758,57 @@ function SectionContent({ id, company, dbContent }: { id: SectionId; company: Co
 
             {/* Revenue growth bars */}
             <div style={{ padding: '14px 16px', borderRadius: 12, background: '#fff', border: '1px solid #E4E4E7' }}>
-              <div style={{ color: '#A1A1AA', fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 14 }}>
-                Revenue Growth
-              </div>
+              <div style={{ color: '#A1A1AA', fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 14 }}>Revenue Growth</div>
               <div style={{ display: 'flex', alignItems: 'flex-end', gap: 6, height: 76 }}>
-                {((fin?.revenue_growth as { year: number; height: number }[] | null) ?? [
-                  { year: 2020, height: 40 }, { year: 2021, height: 54 },
-                  { year: 2022, height: 66 }, { year: 2023, height: 81 }, { year: 2024, height: 100 },
-                ]).map((bar, i, arr) => (
+                {BARS.map((bar, i, arr) => (
                   <div key={bar.year} style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 5 }}>
-                    <div style={{
-                      width: '100%',
-                      height: `${Math.round(bar.height * 0.72)}px`,
+                    <div title={bar.revenue || ''} style={{
+                      width: '100%', height: `${Math.round(bar.height * 0.72)}px`,
                       background: i === arr.length - 1 ? color : '#E4E4E7',
-                      borderRadius: '3px 3px 0 0',
-                      transition: 'height 0.4s ease',
+                      borderRadius: '3px 3px 0 0', transition: 'height 0.4s ease',
                     }} />
                     <div style={{ color: '#A1A1AA', fontSize: 9.5 }}>{bar.year}</div>
                   </div>
                 ))}
               </div>
+              {/* Revenue labels under bars */}
+              {BARS.some(b => b.revenue) && (
+                <div style={{ display: 'flex', gap: 6, marginTop: 4 }}>
+                  {BARS.map(bar => (
+                    <div key={bar.year} style={{ flex: 1, textAlign: 'center', fontSize: 8.5, color: '#A1A1AA', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                      {bar.revenue}
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
 
             {/* Market share donut */}
             <div style={{ padding: '14px 16px', borderRadius: 12, background: '#fff', border: '1px solid #E4E4E7' }}>
               <div style={{ marginBottom: 12 }}>
-                <div style={{ color: '#A1A1AA', fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 2 }}>
-                  Market Share
-                </div>
-                <div style={{ color: '#09090B', fontSize: 12, fontWeight: 700, letterSpacing: '-0.02em' }}>
-                  {marketLabel} Market
-                </div>
+                <div style={{ color: '#A1A1AA', fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 2 }}>Market Share</div>
+                <div style={{ color: '#09090B', fontSize: 12, fontWeight: 700, letterSpacing: '-0.02em', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{marketLabel}</div>
               </div>
               <div style={{ display: 'flex', gap: 14, alignItems: 'center' }}>
-                {/* Donut via conic-gradient */}
-                <div style={{
-                  width: 88, height: 88, borderRadius: '50%',
-                  background: donut,
-                  flexShrink: 0, position: 'relative',
-                }}>
-                  <div style={{
-                    position: 'absolute', top: '50%', left: '50%',
-                    transform: 'translate(-50%, -50%)',
-                    width: 52, height: 52, borderRadius: '50%', background: '#fff',
-                    display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
-                  }}>
-                    <div style={{ fontSize: 13, fontWeight: 800, color: '#09090B', lineHeight: 1 }}>34%</div>
-                    <div style={{ fontSize: 8, color: '#A1A1AA', marginTop: 1 }}>#1</div>
+                <div style={{ width: 88, height: 88, borderRadius: '50%', background: donut, flexShrink: 0, position: 'relative' }}>
+                  <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,-50%)', width: 52, height: 52, borderRadius: '50%', background: '#fff', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+                    <div style={{ fontSize: 13, fontWeight: 800, color: '#09090B', lineHeight: 1 }}>{ownPct}%</div>
+                    <div style={{ fontSize: 8, color: '#A1A1AA', marginTop: 1 }}>share</div>
                   </div>
                 </div>
-                {/* Legend */}
                 <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 6 }}>
-                  {MARKET.map(m => (
+                  {MARKET.slice(0, 5).map(m => (
                     <div key={m.name} style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
                       <div style={{ width: 7, height: 7, borderRadius: 2, background: m.clr, flexShrink: 0 }} />
                       <div style={{ flex: 1, color: '#52525B', fontSize: 11, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{m.name}</div>
-                      <div style={{ color: m.clr === color ? color : '#71717A', fontSize: 11, fontWeight: m.clr === color ? 700 : 400 }}>{m.pct}%</div>
+                      <div style={{ color: m.name === company.name ? color : '#71717A', fontSize: 11, fontWeight: m.name === company.name ? 700 : 400 }}>{m.pct}%</div>
                     </div>
                   ))}
                 </div>
               </div>
               {/* TAM/SAM/SOM */}
               <div style={{ marginTop: 11, paddingTop: 10, borderTop: '1px solid #F0F0F2', display: 'flex', gap: 16 }}>
-                {[{ l: 'TAM', v: fin?.tam ?? '$420B' }, { l: 'SAM', v: fin?.sam ?? '$86B' }, { l: 'SOM', v: fin?.som ?? '$14B' }].map(m => (
+                {[{ l: 'TAM', v: fin?.tam ?? '—' }, { l: 'SAM', v: fin?.sam ?? '—' }, { l: 'SOM', v: fin?.som ?? '—' }].map(m => (
                   <div key={m.l}>
                     <div style={{ color: '#09090B', fontSize: 12, fontWeight: 800, letterSpacing: '-0.02em' }}>{m.v}</div>
                     <div style={{ color: '#A1A1AA', fontSize: 9.5 }}>{m.l}</div>
@@ -790,9 +823,7 @@ function SectionContent({ id, company, dbContent }: { id: SectionId; company: Co
 
             {/* Revenue streams */}
             <div style={{ padding: '14px 16px', borderRadius: 12, background: '#fff', border: '1px solid #E4E4E7' }}>
-              <div style={{ color: '#A1A1AA', fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 12 }}>
-                Revenue Streams
-              </div>
+              <div style={{ color: '#A1A1AA', fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 12 }}>Revenue Streams</div>
               <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
                 {STREAMS.map(s => (
                   <div key={s.name}>
@@ -810,9 +841,7 @@ function SectionContent({ id, company, dbContent }: { id: SectionId; company: Co
 
             {/* Business units */}
             <div style={{ padding: '14px 16px', borderRadius: 12, background: '#fff', border: '1px solid #E4E4E7' }}>
-              <div style={{ color: '#A1A1AA', fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 12 }}>
-                Business Units
-              </div>
+              <div style={{ color: '#A1A1AA', fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 12 }}>Business Units</div>
               <div style={{ display: 'flex', flexDirection: 'column', gap: 9 }}>
                 {UNITS.map(u => (
                   <div key={u.name} style={{ display: 'flex', alignItems: 'flex-start', gap: 9 }}>
@@ -820,12 +849,7 @@ function SectionContent({ id, company, dbContent }: { id: SectionId; company: Co
                     <div style={{ flex: 1, minWidth: 0 }}>
                       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 6 }}>
                         <span style={{ color: '#09090B', fontSize: 12, fontWeight: 600 }}>{u.name}</span>
-                        <span style={{
-                          padding: '1px 7px', borderRadius: 5, flexShrink: 0,
-                          background: u.status === 'early' ? '#FEF3C7' : '#DCFCE7',
-                          color: u.status === 'early' ? '#92400E' : '#15803D',
-                          fontSize: 10, fontWeight: 700,
-                        }}>{u.growth}</span>
+                        <span style={{ padding: '1px 7px', borderRadius: 5, flexShrink: 0, background: u.status === 'early' ? '#FEF3C7' : '#DCFCE7', color: u.status === 'early' ? '#92400E' : '#15803D', fontSize: 10, fontWeight: 700 }}>{u.growth}</span>
                       </div>
                       <div style={{ color: '#A1A1AA', fontSize: 11, marginTop: 1 }}>{u.desc}</div>
                     </div>
