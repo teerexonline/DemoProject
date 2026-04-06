@@ -746,6 +746,75 @@ KNOWN_PROCESSES_SET: list[str] = [
 ]
 _PROCS_LOWER: dict[str, str] = {p.lower(): p for p in KNOWN_PROCESSES_SET}
 
+# ─── Known skills — matched directly against JD text ─────────────────────────
+# Professional and technical skills commonly required in job descriptions.
+# Matching these against JD text produces much more accurate skill lists than
+# regex-scraping bullet points from arbitrary section headers.
+KNOWN_SKILLS_SET: list[str] = [
+    # Engineering / Technical
+    "System design", "Distributed systems", "API design", "Microservices",
+    "Software architecture", "Cloud architecture", "Database design",
+    "Performance optimization", "Scalability", "High availability",
+    "Reliability engineering", "Security engineering", "DevSecOps",
+    "Test-driven development", "Unit testing", "Integration testing",
+    "Code review", "Technical mentorship", "Technical leadership",
+    "Mobile development", "iOS development", "Android development",
+    "Embedded systems", "Firmware development", "Machine learning",
+    "Deep learning", "Natural language processing", "Computer vision",
+    "Data modeling", "ETL pipelines", "Data warehousing",
+    "Feature engineering", "Model deployment", "MLOps",
+    "Infrastructure as Code", "CI/CD pipelines", "Container orchestration",
+    "Network engineering", "Zero-trust security", "Penetration testing",
+    "Vulnerability management", "Threat modeling", "Compliance",
+    # Product / PM
+    "Product strategy", "Roadmap planning", "User research", "A/B testing",
+    "Data-driven decision making", "Requirements gathering", "Prioritisation",
+    "Go-to-market strategy", "User story writing", "Feature scoping",
+    # Design
+    "User experience design", "Interaction design", "Visual design",
+    "Prototyping", "Design systems", "Accessibility", "Usability testing",
+    "Information architecture",
+    # Data / Analytics
+    "Statistical analysis", "Experimentation design", "Business intelligence",
+    "Dashboard design", "Data governance", "Analytics engineering",
+    "Quantitative analysis", "SQL", "Python", "R",
+    # Sales / GTM
+    "Enterprise sales", "Solution selling", "MEDDIC", "Pipeline management",
+    "Prospecting", "Cold outreach", "Negotiation", "Commercial negotiation",
+    "Account management", "Territory planning", "Forecasting",
+    "Partner management", "Channel sales",
+    # Marketing
+    "Demand generation", "Content marketing", "SEO", "SEM",
+    "Marketing analytics", "Brand strategy", "Campaign management",
+    "Performance marketing", "Account-based marketing", "GTM execution",
+    # Customer Success / Support
+    "Relationship management", "Customer onboarding", "Churn prevention",
+    "Product adoption", "Escalation management", "Renewal management",
+    "Executive sponsorship", "Customer advocacy",
+    # Finance
+    "Financial modelling", "FP&A", "Budgeting", "Variance analysis",
+    "Investor relations", "Scenario planning", "M&A analysis",
+    "GAAP accounting", "Board reporting",
+    # Operations / PM / Program
+    "Cross-functional coordination", "Stakeholder management",
+    "Risk management", "Milestone tracking", "Dependency management",
+    "Change management", "Process improvement", "Capacity planning",
+    "Vendor management", "OKR alignment", "Executive communication",
+    # People / HR
+    "Talent acquisition", "Performance management", "HRBP",
+    "Compensation design", "Org design", "Culture building",
+    "Learning and development", "Onboarding", "Workforce planning",
+    # Manufacturing
+    "Lean manufacturing", "Six Sigma", "Process engineering",
+    "Root cause analysis", "Quality control", "DFM", "NPI",
+    "Supply chain management", "Supplier quality",
+    # Leadership / General
+    "People management", "Team building", "Hiring", "Coaching",
+    "Conflict resolution", "Executive presence", "Written communication",
+    "Presentation skills", "Analytical thinking", "Problem solving",
+]
+_SKILLS_LOWER: dict[str, str] = {s.lower(): s for s in KNOWN_SKILLS_SET}
+
 
 def extract_tools_from_text(text: str) -> list[str]:
     """Return tools/technologies mentioned in job posting text (longest match first)."""
@@ -761,25 +830,50 @@ def extract_tools_from_text(text: str) -> list[str]:
 
 
 def extract_skills_from_text(text: str) -> list[str]:
-    """Extract skill bullet points from Requirements/Qualifications section."""
+    """
+    Extract skills from JD text using two strategies:
+    1. Match against KNOWN_SKILLS_SET (high precision)
+    2. Extract clean bullet points from Requirements/Qualifications section
+    Combines both, deduplicates, returns up to 8.
+    """
     skills: list[str] = []
-    # Find requirements/qualifications section
-    section_match = re.search(
-        r"(?:requirements?|qualifications?|what you.{0,10}ll bring|"
-        r"what we.{0,10}re looking for|you have|you.{0,5}ll have|"
-        r"must have|we need you to have)[:\n\r](.{50,3000}?)(?=\n\n[A-Z]|$)",
-        text, re.IGNORECASE | re.DOTALL,
-    )
-    if section_match:
-        section = section_match.group(1)
-        bullets = re.findall(r"(?:^|[\n\r])\s*[•\-\*\u2022]\s*(.{15,140})", section)
-        for b in bullets[:8]:
-            b = clean(b).rstrip(".,;:")
-            # Strip "Experience with/in X" → keep the meaningful part
-            b = re.sub(r"^(strong |deep |proven |extensive )?(experience|background|knowledge|proficiency|familiarity)\s+(in|with|using|of)\s+", "", b, flags=re.IGNORECASE).strip()
-            if len(b) > 10 and not re.match(r"^\d+\+?\s+years?", b, re.IGNORECASE):
-                skills.append(b.capitalize())
-    return skills[:6]
+    seen_lower: set[str] = set()
+
+    # Strategy 1: Match known skills directly against the full text
+    tl = text.lower()
+    for skill_lower, skill_display in sorted(_SKILLS_LOWER.items(), key=lambda x: -len(x[0])):
+        if re.search(rf"\b{re.escape(skill_lower)}\b", tl):
+            if skill_lower not in seen_lower:
+                seen_lower.add(skill_lower)
+                skills.append(skill_display)
+        if len(skills) >= 8:
+            break
+
+    # Strategy 2: Extract bullet points from requirements section (fills gaps)
+    if len(skills) < 4:
+        section_match = re.search(
+            r"(?:requirements?|qualifications?|what you.{0,10}ll bring|"
+            r"what we.{0,10}re looking for|you have|you.{0,5}ll have|"
+            r"must have|we need you to have)[:\n\r](.{50,3000}?)(?=\n\n[A-Z]|$)",
+            text, re.IGNORECASE | re.DOTALL,
+        )
+        if section_match:
+            section = section_match.group(1)
+            bullets = re.findall(r"(?:^|[\n\r])\s*[•\-\*\u2022]\s*(.{15,140})", section)
+            for b in bullets[:10]:
+                b = clean(b).rstrip(".,;:")
+                b = re.sub(
+                    r"^(strong |deep |proven |extensive )?(experience|background|knowledge|proficiency|familiarity)\s+(in|with|using|of)\s+",
+                    "", b, flags=re.IGNORECASE,
+                ).strip()
+                if (len(b) > 10 and not re.match(r"^\d+\+?\s+years?", b, re.IGNORECASE)
+                        and b.lower() not in seen_lower):
+                    seen_lower.add(b.lower())
+                    skills.append(b.capitalize())
+                if len(skills) >= 8:
+                    break
+
+    return skills[:8]
 
 
 def extract_processes_from_text(text: str) -> list[str]:
@@ -792,39 +886,148 @@ def extract_processes_from_text(text: str) -> list[str]:
     return found[:8]
 
 
+def generate_interview_questions(
+    title: str, level: str, dept: str, tools: list[str], skills: list[str]
+) -> list[str]:
+    """
+    Generate role-specific interview questions from extracted tools/skills.
+    Produces 3–5 questions mixing technical depth with behavioral/situational.
+    """
+    qs: list[str] = []
+    tl = title.lower()
+    is_manager = level in ("Manager", "Director", "VP")
+    is_ic_senior = level in ("L5", "L7 / Staff")
+
+    # 1. Tool-specific technical question (most concrete, JD-derived)
+    if tools:
+        tool = tools[0]
+        if dept == "Engineering" or re.search(r"\bengineer\b|\bdeveloper\b|\bsre\b", tl):
+            qs.append(f"Walk me through how you've used {tool} in a high-scale production environment.")
+        elif dept in ("Data & Analytics", "Research"):
+            qs.append(f"Describe a data pipeline or analysis you built end-to-end using {tool}.")
+        elif dept == "Sales":
+            qs.append(f"How do you use {tool} to manage your pipeline and forecast accurately?")
+        elif dept == "Marketing":
+            qs.append(f"Walk me through a campaign you ran using {tool}. What did you learn?")
+        else:
+            qs.append(f"How have you used {tool} day-to-day in your current role?")
+
+    # 2. Second tool or primary skill question
+    if len(tools) >= 2:
+        tool2 = tools[1]
+        qs.append(f"Tell me about a time {tool2} helped you solve a difficult problem.")
+    elif skills:
+        skill = skills[0]
+        if "design" in skill.lower() or "architect" in skill.lower():
+            qs.append(f"Walk me through a system or solution you designed that required strong {skill.lower()}.")
+        else:
+            qs.append(f"Give me an example of when {skill.lower()} made a critical difference in your work.")
+
+    # 3. Level-appropriate depth question
+    if is_manager:
+        qs.append(
+            "Tell me about a time you had to give difficult feedback to a direct report. "
+            "What was the outcome?"
+        )
+        qs.append(
+            f"How do you balance shipping velocity with long-term quality on your {dept.lower()} team?"
+        )
+    elif is_ic_senior:
+        if dept == "Engineering":
+            qs.append(
+                "Describe an architectural decision you made that had significant long-term impact. "
+                "What trade-offs did you consider?"
+            )
+        elif dept == "Data & Analytics":
+            qs.append(
+                "Walk me through the most complex data model or experimentation framework you've built. "
+                "What were the key design decisions?"
+            )
+        else:
+            qs.append(
+                f"Describe the most complex {dept.lower()} initiative you've led. "
+                "How did you handle ambiguity and competing priorities?"
+            )
+    else:
+        # Mid-level
+        if dept == "Engineering":
+            qs.append("How do you approach debugging a production issue you've never seen before?")
+        elif dept == "Sales":
+            qs.append("Walk me through how you qualified and closed the most difficult deal of your career.")
+        elif dept == "Product":
+            qs.append("How do you decide what NOT to build when your roadmap is overloaded?")
+        else:
+            qs.append(
+                f"Tell me about a time you had to influence a decision in your {dept.lower()} role "
+                "without direct authority."
+            )
+
+    # 4. Second skill-based behavioral question
+    if len(skills) >= 2:
+        skill2 = skills[1]
+        qs.append(
+            f"Describe a situation where {skill2.lower()} was essential to delivering a successful outcome."
+        )
+
+    return qs[:5]
+
+
 def enrich_role_metadata(role_raw: dict, template: dict) -> dict:
     """
-    Blend scraped job-content metadata with template fallback.
-    Scraped data takes priority; templates fill any gaps.
+    Build final metadata from scraped JD content + template fallback.
+    Scraped data always wins when it yields ≥ N items; templates only fill gaps.
+    Interview questions are generated from extracted data (not templates).
     """
     content = role_raw.get("_content", "")
+    title   = role_raw.get("title", "")
+    level   = role_raw.get("_level", infer_level(title))
+    dept    = role_raw.get("dept", infer_dept_name(title))
 
-    # Tools: scraped content first, template fills gaps
+    # ── Tools ────────────────────────────────────────────────────────────────
     scraped_tools = extract_tools_from_text(content) if content else []
     tmpl_tools    = template.get("tools", [])
     tools = scraped_tools[:]
     for t in tmpl_tools:
         if t not in tools and len(tools) < 8:
             tools.append(t)
+    tools = tools or tmpl_tools
 
-    # Skills: use scraped if we got ≥3, else fall back to template
+    # ── Skills ───────────────────────────────────────────────────────────────
     scraped_skills = extract_skills_from_text(content) if content else []
     tmpl_skills    = template.get("skills", [])
-    skills = scraped_skills if len(scraped_skills) >= 3 else tmpl_skills
+    # Use scraped if ≥2 found; otherwise template fills
+    if len(scraped_skills) >= 2:
+        skills = scraped_skills[:]
+        for s in tmpl_skills:
+            if s not in skills and len(skills) < 8:
+                skills.append(s)
+    else:
+        skills = tmpl_skills[:]
 
-    # Processes: scraped content first, template supplements
+    # ── Processes ────────────────────────────────────────────────────────────
     scraped_procs = extract_processes_from_text(content) if content else []
     tmpl_procs    = template.get("processes", [])
     procs = scraped_procs[:]
     for p in tmpl_procs:
         if p.lower() not in [x.lower() for x in procs] and len(procs) < 6:
             procs.append(p)
+    procs = procs or tmpl_procs
+
+    # ── Interview questions ───────────────────────────────────────────────────
+    # Always generate from extracted data so questions are role/tool-specific.
+    # Fall back to template questions only if generation fails.
+    try:
+        iqs = generate_interview_questions(title, level, dept, tools, skills)
+    except Exception:
+        iqs = []
+    if not iqs:
+        iqs = template.get("interview_questions", [])
 
     return {
-        "tools":               tools or tmpl_tools,
-        "skills":              skills or tmpl_skills,
-        "processes":           procs or tmpl_procs,
-        "interview_questions": template.get("interview_questions", []),
+        "tools":               tools,
+        "skills":              skills,
+        "processes":           procs,
+        "interview_questions": iqs,
         "keywords":            template.get("keywords", []),
     }
 
@@ -871,6 +1074,71 @@ LEVER_SLUGS: dict[str, str] = {
     "openai":     "openai",
     "perplexity": "perplexity",
     "cursor":     "cursor",
+}
+
+# Workday: company.wd1.myworkdayjobs.com (most Fortune 500s)
+# Slug = subdomain used by the company's Workday tenant
+WORKDAY_SLUGS: dict[str, tuple[str, str]] = {
+    # (subdomain, board_name) — board_name = path segment after /en-US/
+    "apple":         ("apple",        "Apple_External_Careers"),
+    "google":        ("google",       "External"),
+    "microsoft":     ("microsoft",    "External"),
+    "netflix":       ("netflix",      "External"),
+    "deloitte":      ("deloitte",     "External"),
+    "johnson":       ("jnj",          "External"),
+    "mckinsey":      ("mckinsey",     "External"),
+    "honeywell":     ("honeywell",    "Honeywell_Ext"),
+    "tesla":         ("tesla",        "Tesla_External_Jobs"),
+    "salesforce":    ("salesforce",   "External"),
+    "uber":          ("uber",         "External"),
+    "nike":          ("nike",         "External"),
+    "boeing":        ("boeing",       "external"),
+    "amazon":        ("amazon",       "external"),
+    "meta":          ("meta",         "External"),
+    "ibm":           ("ibm",          "External"),
+    "intel":         ("intel",        "Intel_External"),
+    "cisco":         ("cisco",        "Cisco_External_Site"),
+    "oracle":        ("oracle",       "External"),
+    "sap":           ("sap",          "External"),
+    "pwc":           ("pwc",          "Global_External_Careers"),
+    "accenture":     ("accenture",    "AccentureCareers"),
+    "zebra":         ("zebra",        "Zebra_External"),
+    "datalogic":     ("datalogic",    "External"),
+}
+
+# SmartRecruiters: api.smartrecruiters.com — used by many B2B SaaS companies
+SMARTRECRUITERS_SLUGS: dict[str, str] = {
+    "zendesk":      "Zendesk",
+    "atlassian":    "ATLASSIAN",
+    "cloudflare":   "Cloudflare",
+    "mongodb":      "MongoDB",
+    "elastic":      "Elastic",
+    "splunk":       "Splunk",
+    "pagerduty":    "PagerDuty",
+    "twilio":       "Twilio",
+    "fastly":       "Fastly",
+    "new relic":    "NewRelic",
+    "okta":         "Okta",
+    "mixpanel":     "Mixpanel",
+    "amplitude":    "Amplitude",
+    "braze":        "Braze",
+    "contentful":   "Contentful",
+    "algolia":      "Algolia",
+}
+
+# Ashby: emerging ATS used by high-growth tech cos
+ASHBY_SLUGS: dict[str, str] = {
+    "linear":     "linear",
+    "vercel":     "vercel",
+    "retool":     "retool",
+    "figma":      "figma",
+    "notion":     "notion",
+    "mercury":    "mercury",
+    "loom":       "loom",
+    "rippling":   "rippling",
+    "gusto":      "gusto",
+    "brex":       "brex",
+    "ramp":       "ramp",
 }
 
 
@@ -976,6 +1244,208 @@ def scrape_lever(sess: Session, company: str, max_jobs: int = 40) -> list[dict]:
         })
 
     log.info("Lever [%s]: %d jobs", slug, len(results))
+    return results
+
+
+def _get_workday_info(company: str) -> Optional[tuple[str, str]]:
+    cl = company.lower()
+    for key, (sub, board) in WORKDAY_SLUGS.items():
+        if key in cl or cl.startswith(key):
+            return sub, board
+    return None
+
+
+def scrape_workday(sess: Session, company: str, max_jobs: int = 30) -> list[dict]:
+    """
+    Fetch open jobs from Workday ATS.
+    API pattern: https://{sub}.wd1.myworkdayjobs.com/wday/cxs/{sub}/{board}/jobs
+    Job detail: POST to jobs/{id} (or GET with content endpoint)
+    """
+    info = _get_workday_info(company)
+    if not info:
+        return []
+    sub, board = info
+
+    # Try multiple Workday tenant numbers (wd1, wd3, wd5)
+    for tenant_num in ["wd1", "wd3", "wd5"]:
+        base = f"https://{sub}.{tenant_num}.myworkdayjobs.com"
+        list_url = f"{base}/wday/cxs/{sub}/{board}/jobs"
+        try:
+            r = sess.s.post(
+                list_url,
+                json={"appliedFacets": {}, "limit": max_jobs, "offset": 0, "searchText": ""},
+                headers={**HEADERS, "Content-Type": "application/json", "Accept": "application/json"},
+                timeout=12,
+            )
+            if r.status_code != 200:
+                continue
+            data = r.json()
+            job_postings = data.get("jobPostings", [])
+            if not job_postings:
+                continue
+
+            results: list[dict] = []
+            for jp in job_postings[:max_jobs]:
+                title = clean(jp.get("title", ""))
+                if not title:
+                    continue
+                # Fetch job description via external URL
+                ext_url = jp.get("externalPath", "")
+                content_text = ""
+                if ext_url:
+                    try:
+                        detail_url = f"{base}/wday/cxs/{sub}/{board}{ext_url}"
+                        dr = sess.s.post(
+                            detail_url,
+                            json={},
+                            headers={**HEADERS, "Content-Type": "application/json", "Accept": "application/json"},
+                            timeout=8,
+                        )
+                        if dr.status_code == 200:
+                            ddata = dr.json()
+                            job_detail = ddata.get("jobPostingInfo", {})
+                            html = job_detail.get("jobDescription", "")
+                            if html:
+                                content_text = BeautifulSoup(html, "html.parser").get_text(" ")
+                    except Exception:
+                        pass
+                results.append({
+                    "title":    title,
+                    "dept":     infer_dept_name(title),
+                    "_content": content_text,
+                    "_score":   7,
+                    "_source":  "workday",
+                })
+                time.sleep(0.05)
+            log.info("Workday [%s/%s]: %d jobs", sub, board, len(results))
+            return results
+        except Exception as e:
+            log.debug("Workday [%s/%s tenant=%s] failed: %s", sub, board, tenant_num, e)
+    return []
+
+
+def _get_smartrecruiters_slug(company: str) -> Optional[str]:
+    cl = company.lower()
+    for key, slug in SMARTRECRUITERS_SLUGS.items():
+        if key in cl or cl.startswith(key):
+            return slug
+    return None
+
+
+def scrape_smartrecruiters(sess: Session, company: str, max_jobs: int = 25) -> list[dict]:
+    """Fetch jobs from SmartRecruiters public API with full description content."""
+    slug = _get_smartrecruiters_slug(company)
+    if not slug:
+        return []
+
+    list_url = f"https://api.smartrecruiters.com/v1/companies/{slug}/postings"
+    try:
+        r = sess.get(list_url, timeout=10)
+        if r.status_code != 200:
+            log.debug("SmartRecruiters [%s] returned %d", slug, r.status_code)
+            return []
+        postings = r.json().get("content", [])[:max_jobs]
+    except Exception as e:
+        log.debug("SmartRecruiters failed: %s", e)
+        return []
+
+    results: list[dict] = []
+    for p in postings:
+        title = clean(p.get("name", ""))
+        job_id = p.get("id", "")
+        if not title or not job_id:
+            continue
+        content_text = ""
+        try:
+            dr = sess.get(f"{list_url}/{job_id}", timeout=8)
+            if dr.status_code == 200:
+                ddata = dr.json()
+                sections = ddata.get("jobAd", {}).get("sections", {})
+                parts = [
+                    sections.get("jobDescription", {}).get("text", ""),
+                    sections.get("qualifications", {}).get("text", ""),
+                    sections.get("additionalInformation", {}).get("text", ""),
+                ]
+                html = " ".join(filter(None, parts))
+                content_text = BeautifulSoup(html, "html.parser").get_text(" ") if html else ""
+        except Exception:
+            pass
+        results.append({
+            "title":    title,
+            "dept":     infer_dept_name(title),
+            "_content": content_text,
+            "_score":   6,
+            "_source":  "smartrecruiters",
+        })
+        time.sleep(0.05)
+
+    log.info("SmartRecruiters [%s]: %d jobs", slug, len(results))
+    return results
+
+
+def _get_ashby_slug(company: str) -> Optional[str]:
+    cl = company.lower()
+    for key, slug in ASHBY_SLUGS.items():
+        if key in cl or cl.startswith(key):
+            return slug
+    return None
+
+
+def scrape_ashby(sess: Session, company: str, max_jobs: int = 25) -> list[dict]:
+    """Fetch jobs from Ashby public jobs API with descriptions."""
+    slug = _get_ashby_slug(company)
+    if not slug:
+        return []
+
+    list_url = "https://api.ashbyhq.com/posting-api/job-board"
+    try:
+        r = sess.s.post(
+            list_url,
+            json={"boardIdentifier": slug},
+            headers={**HEADERS, "Content-Type": "application/json"},
+            timeout=10,
+        )
+        if r.status_code != 200:
+            log.debug("Ashby [%s] returned %d", slug, r.status_code)
+            return []
+        jobs = r.json().get("jobPostings", [])[:max_jobs]
+    except Exception as e:
+        log.debug("Ashby failed: %s", e)
+        return []
+
+    results: list[dict] = []
+    for job in jobs:
+        title = clean(job.get("title", ""))
+        job_id = job.get("id", "")
+        if not title:
+            continue
+        content_text = ""
+        # Description is sometimes embedded in the list response
+        html = job.get("descriptionHtml", "") or job.get("description", "")
+        if html:
+            content_text = BeautifulSoup(html, "html.parser").get_text(" ")
+        elif job_id:
+            try:
+                dr = sess.s.post(
+                    "https://api.ashbyhq.com/posting-api/job-board/posting",
+                    json={"boardIdentifier": slug, "jobPostingId": job_id},
+                    headers={**HEADERS, "Content-Type": "application/json"},
+                    timeout=8,
+                )
+                if dr.status_code == 200:
+                    dhtml = dr.json().get("descriptionHtml", "")
+                    content_text = BeautifulSoup(dhtml, "html.parser").get_text(" ") if dhtml else ""
+            except Exception:
+                pass
+        results.append({
+            "title":    title,
+            "dept":     infer_dept_name(title),
+            "_content": content_text,
+            "_score":   6,
+            "_source":  "ashby",
+        })
+
+    log.info("Ashby [%s]: %d jobs", slug, len(results))
     return results
 
 
@@ -1691,7 +2161,19 @@ def scrape_roles(company: str, website: str, timeout: int = DEFAULT_TIMEOUT,
     except Exception as e:
         log.warning("Greenhouse failed: %s", e)
 
-    # Tier 2: Lever Jobs API (title + full job description)
+    # Tier 2: Workday ATS (Fortune 500s — Apple, Google, Netflix, Deloitte, etc.)
+    try:
+        wd_roles = scrape_workday(sess, company)
+        for r in wd_roles:
+            nt = normalise_title(r["title"], company)
+            if nt:
+                raw_titles.append({**r, "title": nt})
+        if wd_roles:
+            log.info("Workday added %d roles", len(wd_roles))
+    except Exception as e:
+        log.warning("Workday failed: %s", e)
+
+    # Tier 3: Lever Jobs API (title + full job description)
     if len(raw_titles) < 10:
         try:
             lv_roles = scrape_lever(sess, company)
@@ -1702,7 +2184,29 @@ def scrape_roles(company: str, website: str, timeout: int = DEFAULT_TIMEOUT,
         except Exception as e:
             log.warning("Lever failed: %s", e)
 
-    # Tier 3: Indeed with job detail content (slower but gets description text)
+    # Tier 4: SmartRecruiters API (Zendesk, Atlassian, Cloudflare, etc.)
+    if len(raw_titles) < 10:
+        try:
+            sr_roles = scrape_smartrecruiters(sess, company)
+            for r in sr_roles:
+                nt = normalise_title(r["title"], company)
+                if nt:
+                    raw_titles.append({**r, "title": nt})
+        except Exception as e:
+            log.warning("SmartRecruiters failed: %s", e)
+
+    # Tier 5: Ashby ATS (Linear, Vercel, Rippling, Brex, etc.)
+    if len(raw_titles) < 10:
+        try:
+            ab_roles = scrape_ashby(sess, company)
+            for r in ab_roles:
+                nt = normalise_title(r["title"], company)
+                if nt:
+                    raw_titles.append({**r, "title": nt})
+        except Exception as e:
+            log.warning("Ashby failed: %s", e)
+
+    # Tier 6: Indeed with job detail content (slower but gets description text)
     if len(raw_titles) < 8:
         try:
             indeed_roles = scrape_indeed_with_content(sess, company)
@@ -1713,7 +2217,7 @@ def scrape_roles(company: str, website: str, timeout: int = DEFAULT_TIMEOUT,
         except Exception as e:
             log.warning("Indeed with content failed: %s", e)
 
-    # Tier 4: Indeed titles only (fast fallback)
+    # Tier 7: Indeed titles only (fast fallback)
     if len(raw_titles) < 5:
         try:
             for t in scrape_indeed(sess, company):
@@ -1724,7 +2228,7 @@ def scrape_roles(company: str, website: str, timeout: int = DEFAULT_TIMEOUT,
         except Exception as e:
             log.warning("Indeed failed: %s", e)
 
-    # Tier 5: Company careers page
+    # Tier 8: Company careers page
     if len(raw_titles) < 5:
         try:
             for t in scrape_company_careers(sess, website, company):
@@ -1735,7 +2239,7 @@ def scrape_roles(company: str, website: str, timeout: int = DEFAULT_TIMEOUT,
         except Exception as e:
             log.warning("Careers page failed: %s", e)
 
-    # Tier 6: Yahoo search (titles only)
+    # Tier 9: Yahoo search (titles only)
     if len(raw_titles) < 5:
         try:
             for t in scrape_yahoo_jobs(sess, company):
@@ -1786,7 +2290,10 @@ def scrape_roles(company: str, website: str, timeout: int = DEFAULT_TIMEOUT,
         dept_content = dept_pool.get(dept_name, "")
         # Prefer own content (most specific); fall back to dept pool
         content      = own_content if len(own_content) > 100 else dept_content
-        enriched     = enrich_role_metadata({**r, "_content": content}, template)
+        enriched     = enrich_role_metadata(
+            {**r, "_content": content, "_level": level, "dept": dept_name},
+            template,
+        )
 
         result.append({
             "title":               title,

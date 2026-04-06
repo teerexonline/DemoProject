@@ -41,7 +41,7 @@ interface Props {
   analytics: { views: { company_id: string; companies: { name: string } | { name: string }[] | null }[]; saves: { company_id: string; companies: { name: string } | { name: string }[] | null; created_at: string | null }[] }
 }
 
-type NavSection = 'companies' | 'content' | 'users' | 'analytics'
+type NavSection = 'companies' | 'content' | 'users' | 'analytics' | 'data'
 type ContentTab = 'news' | 'milestones' | 'products' | 'financials' | 'standards' | 'departments' | 'roles' | 'exec_groups'
 
 const PLANS = ['Free', 'Pro', 'Admin', 'SuperAdmin']
@@ -91,6 +91,47 @@ function JsonField({ label, value, onChange }: { label: string; value: unknown; 
         style={{ width: '100%', padding: '8px 10px', borderRadius: 8, border: `1.5px solid ${err ? '#EF4444' : '#E4E4E7'}`, background: '#F7F7F8', fontSize: 11.5, fontFamily: 'monospace', resize: 'vertical', outline: 'none', boxSizing: 'border-box', color: '#09090B' }}
       />
       {err && <div style={{ fontSize: 11, color: '#EF4444', marginTop: 3 }}>Invalid JSON</div>}
+    </div>
+  )
+}
+
+// ─── Tags field — comma-separated text input for string[] columns ─────────────
+// Far more user-friendly than raw JSON for tools/skills/processes/keywords.
+
+function TagsField({ label, value, onChange, placeholder }: {
+  label: string; value: unknown; onChange: (v: string[]) => void; placeholder?: string
+}) {
+  const arr = Array.isArray(value) ? (value as string[]) : []
+  const [text, setText] = useState(arr.join(', '))
+
+  function handleChange(raw: string) {
+    setText(raw)
+    const parsed = raw.split(',').map(s => s.trim()).filter(Boolean)
+    onChange(parsed)
+  }
+
+  return (
+    <div style={{ marginBottom: 12 }}>
+      <label style={{ display: 'block', fontSize: 11, fontWeight: 700, color: '#A1A1AA', textTransform: 'uppercase', letterSpacing: '0.07em', marginBottom: 4 }}>
+        {label}
+      </label>
+      <textarea
+        value={text}
+        rows={3}
+        placeholder={placeholder ?? 'Item 1, Item 2, Item 3'}
+        onChange={e => handleChange(e.target.value)}
+        style={{ width: '100%', padding: '8px 10px', borderRadius: 8, border: '1.5px solid #E4E4E7', background: '#F7F7F8', fontSize: 12.5, resize: 'vertical', outline: 'none', boxSizing: 'border-box', color: '#09090B', fontFamily: 'inherit', transition: 'border-color 0.15s', lineHeight: 1.6 }}
+        onFocus={e => (e.currentTarget as HTMLTextAreaElement).style.borderColor = '#7C3AED'}
+        onBlur={e => (e.currentTarget as HTMLTextAreaElement).style.borderColor = '#E4E4E7'}
+      />
+      {arr.length > 0 && (
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 4, marginTop: 6 }}>
+          {arr.map((item, i) => (
+            <span key={i} style={{ padding: '2px 8px', borderRadius: 5, background: '#F4F4F5', border: '1px solid #E4E4E7', fontSize: 11, color: '#52525B' }}>{item}</span>
+          ))}
+        </div>
+      )}
+      <div style={{ fontSize: 10.5, color: '#A1A1AA', marginTop: 4 }}>Separate items with commas</div>
     </div>
   )
 }
@@ -1068,8 +1109,9 @@ function ContentSection({ companies, initialSelectedId }: { companies: Company[]
     })
   }
 
-  function PanelField({ key2, label, type = 'text', options, isJson, placeholder }: { key2: string; label: string; type?: string; options?: string[]; isJson?: boolean; placeholder?: string }) {
+  function PanelField({ key2, label, type = 'text', options, isJson, isTags, placeholder }: { key2: string; label: string; type?: string; options?: string[]; isJson?: boolean; isTags?: boolean; placeholder?: string }) {
     const val = panel?.data?.[key2]
+    if (isTags) return <TagsField key={key2} label={label} value={val ?? []} placeholder={placeholder} onChange={v => setPanel(p => p ? { ...p, data: { ...(p.data ?? {}), [key2]: v } } : p)} />
     if (isJson) return <JsonField key={key2} label={label} value={val ?? []} onChange={v => setPanel(p => p ? { ...p, data: { ...(p.data ?? {}), [key2]: v } } : p)} />
     if (options) return <Field label={label}><Select value={String(val ?? options[0])} onChange={v => setPanel(p => p ? { ...p, data: { ...(p.data ?? {}), [key2]: v } } : p)} options={options} /></Field>
     if (type === 'textarea') return <Field label={label}><Textarea value={String(val ?? '')} onChange={v => setPanel(p => p ? { ...p, data: { ...(p.data ?? {}), [key2]: v } } : p)} /></Field>
@@ -1139,14 +1181,14 @@ function ContentSection({ companies, initialSelectedId }: { companies: Company[]
       <PanelField key2="sort_order" label="Sort Order" type="number" />
     </>)
     if (t === 'roles') return (<>
-      <PanelField key2="department_id" label="Department ID (UUID)" />
+      <PanelField key2="department_id" label="Department ID (UUID)" placeholder="Paste UUID from Departments tab" />
       <PanelField key2="title" label="Title" />
       <PanelField key2="level" label="Level" options={LEVELS} />
-      <PanelField key2="tools" label='Tools (JSON: ["Tool1","Tool2"])' isJson />
-      <PanelField key2="skills" label='Skills (JSON: ["Skill1","Skill2"])' isJson />
-      <PanelField key2="processes" label='Processes (JSON: ["Process1"])' isJson />
-      <PanelField key2="interview_questions" label='Interview Questions (JSON: ["Q1","Q2"])' isJson />
-      <PanelField key2="keywords" label='Keywords (JSON: ["kw1","kw2"])' isJson />
+      <PanelField key2="tools" label="Tools" isTags placeholder="React, TypeScript, AWS, PostgreSQL" />
+      <PanelField key2="skills" label="Key Skills" isTags placeholder="System design, API design, Code review" />
+      <PanelField key2="processes" label="Processes" isTags placeholder="Sprint planning, Code review, On-call rotation" />
+      <PanelField key2="interview_questions" label='Interview Questions (one per line, separate with | or JSON array)' isJson />
+      <PanelField key2="keywords" label="Keywords" isTags placeholder="distributed systems, microservices, agile" />
       <PanelField key2="sort_order" label="Sort Order" type="number" />
     </>)
     if (t === 'exec_groups') return (<>
@@ -1422,6 +1464,246 @@ function ContentSection({ companies, initialSelectedId }: { companies: Company[]
   )
 }
 
+// ─── Data Section ─────────────────────────────────────────────────────────────
+
+function DataSection() {
+  // ── Global Seed state ──
+  const [seedRunning, setSeedRunning] = useState(false)
+  const [seedLog, setSeedLog] = useState<{ text: string; ok: boolean }[]>([])
+  const [seedSummary, setSeedSummary] = useState<{ succeeded: number; failed: number; total: number } | null>(null)
+  const seedLogRef = useRef<HTMLDivElement>(null)
+
+  // ── Bulk Add state ──
+  const [bulkFile, setBulkFile] = useState<File | null>(null)
+  const [bulkRunning, setBulkRunning] = useState(false)
+  const [bulkLog, setBulkLog] = useState<{ text: string; ok: boolean }[]>([])
+  const [bulkSummary, setBulkSummary] = useState<{ added: number; failed: number; total: number } | null>(null)
+  const [bulkError, setBulkError] = useState<string | null>(null)
+  const bulkLogRef = useRef<HTMLDivElement>(null)
+  const fileInputRef = useRef<HTMLInputElement>(null)
+
+  function scrollLog(ref: React.RefObject<HTMLDivElement | null>) {
+    setTimeout(() => { if (ref.current) ref.current.scrollTop = ref.current.scrollHeight }, 10)
+  }
+
+  // ── Global Seed ──
+  async function runGlobalSeed() {
+    setSeedRunning(true)
+    setSeedLog([])
+    setSeedSummary(null)
+    try {
+      const res = await fetch('/api/seed-all', { method: 'POST' })
+      if (!res.ok || !res.body) {
+        setSeedLog([{ text: `Error: ${res.status} ${res.statusText}`, ok: false }])
+        setSeedRunning(false)
+        return
+      }
+      const reader = res.body.getReader()
+      const dec = new TextDecoder()
+      let buf = ''
+      while (true) {
+        const { done, value } = await reader.read()
+        if (done) break
+        buf += dec.decode(value, { stream: true })
+        const parts = buf.split('\n\n')
+        buf = parts.pop() ?? ''
+        for (const part of parts) {
+          const line = part.replace(/^data: /, '').trim()
+          if (!line) continue
+          try {
+            const ev = JSON.parse(line)
+            if (ev.type === 'start') {
+              setSeedLog(l => [...l, { text: `▶ ${ev.company} (${ev.index}/${ev.total})`, ok: true }])
+            } else if (ev.type === 'step') {
+              const icon = ev.status === 'ok' ? '✓' : ev.status === 'warn' ? '⚠' : '✗'
+              const detail = ev.status === 'ok' ? (ev.count != null ? ` — ${ev.count} items` : '') : ` — ${ev.message ?? ''}`
+              setSeedLog(l => [...l, { text: `  ${icon} ${ev.step}${detail}`, ok: ev.status !== 'error' }])
+            } else if (ev.type === 'done') {
+              setSeedLog(l => [...l, { text: `  ✓ done\n`, ok: true }])
+            } else if (ev.type === 'summary') {
+              setSeedSummary({ succeeded: ev.succeeded, failed: ev.failed, total: ev.total })
+            }
+            scrollLog(seedLogRef)
+          } catch { /* malformed line */ }
+        }
+      }
+    } catch (e) {
+      setSeedLog(l => [...l, { text: `Network error: ${e}`, ok: false }])
+    }
+    setSeedRunning(false)
+  }
+
+  // ── Bulk Add ──
+  async function runBulkAdd() {
+    if (!bulkFile) return
+    setBulkRunning(true)
+    setBulkLog([])
+    setBulkSummary(null)
+    setBulkError(null)
+    try {
+      const fd = new FormData()
+      fd.append('file', bulkFile)
+      const res = await fetch('/api/bulk-add', { method: 'POST', body: fd })
+      if (!res.ok) {
+        const json = await res.json().catch(() => ({ error: `HTTP ${res.status}` }))
+        const msg = json.details?.length
+          ? `${json.error}\n${(json.details as string[]).join('\n')}`
+          : (json.error ?? `HTTP ${res.status}`)
+        setBulkError(msg)
+        setBulkRunning(false)
+        return
+      }
+      if (!res.body) { setBulkError('No response body'); setBulkRunning(false); return }
+      const reader = res.body.getReader()
+      const dec = new TextDecoder()
+      let buf = ''
+      while (true) {
+        const { done, value } = await reader.read()
+        if (done) break
+        buf += dec.decode(value, { stream: true })
+        const parts = buf.split('\n\n')
+        buf = parts.pop() ?? ''
+        for (const part of parts) {
+          const line = part.replace(/^data: /, '').trim()
+          if (!line) continue
+          try {
+            const ev = JSON.parse(line)
+            if (ev.type === 'validated') {
+              setBulkLog(l => [...l, { text: `✓ CSV valid — ${ev.rows} rows`, ok: true }])
+            } else if (ev.type === 'start') {
+              setBulkLog(l => [...l, { text: `▶ ${ev.company} (${ev.index}/${ev.total})`, ok: true }])
+            } else if (ev.type === 'step') {
+              const icon = ev.status === 'ok' ? '✓' : ev.status === 'warn' ? '⚠' : '✗'
+              const detail = ev.status === 'ok' ? (ev.count != null ? ` — ${ev.count} items` : (ev.slug ? ` — ${ev.slug}` : '')) : ` — ${ev.message ?? ''}`
+              setBulkLog(l => [...l, { text: `  ${icon} ${ev.step}${detail}`, ok: ev.status !== 'error' }])
+            } else if (ev.type === 'done') {
+              setBulkLog(l => [...l, { text: `  ${ev.success ? '✓' : '✗'} done\n`, ok: !!ev.success }])
+            } else if (ev.type === 'summary') {
+              setBulkSummary({ added: ev.added, failed: ev.failed, total: ev.total })
+            }
+            scrollLog(bulkLogRef)
+          } catch { /* malformed line */ }
+        }
+      }
+    } catch (e) {
+      setBulkError(`Network error: ${e}`)
+    }
+    setBulkRunning(false)
+  }
+
+  const cardStyle: React.CSSProperties = {
+    background: '#fff', borderRadius: 14, border: '1px solid #E4E4E7',
+    padding: 24, marginBottom: 20,
+  }
+  const logStyle: React.CSSProperties = {
+    background: '#09090B', borderRadius: 8, padding: '12px 14px',
+    fontFamily: 'monospace', fontSize: 11.5, lineHeight: 1.7,
+    maxHeight: 320, overflowY: 'auto', marginTop: 14,
+    color: '#A1A1AA',
+  }
+  const btnStyle = (running: boolean): React.CSSProperties => ({
+    padding: '9px 18px', borderRadius: 8, border: 'none', cursor: running ? 'not-allowed' : 'pointer',
+    background: running ? '#E4E4E7' : '#7C3AED', color: running ? '#A1A1AA' : '#fff',
+    fontSize: 13, fontWeight: 600, transition: 'background 0.15s',
+  })
+
+  return (
+    <div>
+      {/* ── Global Seed ── */}
+      <div style={cardStyle}>
+        <div style={{ fontSize: 15, fontWeight: 700, color: '#09090B', marginBottom: 4 }}>Global Seed</div>
+        <div style={{ fontSize: 12.5, color: '#71717A', marginBottom: 16 }}>
+          Runs all scrapers for every company in the database — departments, exec groups, roles, news, milestones, products, financials.
+        </div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+          <button onClick={runGlobalSeed} disabled={seedRunning} style={btnStyle(seedRunning)}>
+            {seedRunning ? 'Seeding…' : 'Seed All Companies'}
+          </button>
+          {seedSummary && (
+            <div style={{ display: 'flex', gap: 8 }}>
+              <span style={{ padding: '3px 10px', borderRadius: 6, background: '#DCFCE7', color: '#16A34A', fontSize: 12, fontWeight: 600, border: '1px solid #BBF7D0' }}>{seedSummary.succeeded} succeeded</span>
+              {seedSummary.failed > 0 && <span style={{ padding: '3px 10px', borderRadius: 6, background: '#FEE2E2', color: '#DC2626', fontSize: 12, fontWeight: 600, border: '1px solid #FECACA' }}>{seedSummary.failed} failed</span>}
+              <span style={{ padding: '3px 10px', borderRadius: 6, background: '#F4F4F5', color: '#71717A', fontSize: 12, fontWeight: 600, border: '1px solid #E4E4E7' }}>{seedSummary.total} total</span>
+            </div>
+          )}
+        </div>
+        {seedLog.length > 0 && (
+          <div ref={seedLogRef} style={logStyle}>
+            {seedLog.map((l, i) => (
+              <div key={i} style={{ color: l.ok ? '#A1A1AA' : '#F87171', whiteSpace: 'pre' }}>{l.text}</div>
+            ))}
+            {seedRunning && <div style={{ color: '#7C3AED', animation: 'pulse 1.4s ease-in-out infinite' }}>●</div>}
+          </div>
+        )}
+      </div>
+
+      {/* ── Bulk Add ── */}
+      <div style={cardStyle}>
+        <div style={{ fontSize: 15, fontWeight: 700, color: '#09090B', marginBottom: 4 }}>Bulk Add Companies</div>
+        <div style={{ fontSize: 12.5, color: '#71717A', marginBottom: 16 }}>
+          Upload a CSV with <code style={{ background: '#F4F4F5', padding: '1px 5px', borderRadius: 4, fontSize: 11.5 }}>name,website</code> columns. Each row will be scraped and seeded in full.
+        </div>
+
+        {/* Drop zone */}
+        <div
+          onClick={() => fileInputRef.current?.click()}
+          onDragOver={e => e.preventDefault()}
+          onDrop={e => { e.preventDefault(); const f = e.dataTransfer.files[0]; if (f) setBulkFile(f) }}
+          style={{
+            border: `2px dashed ${bulkFile ? '#7C3AED' : '#E4E4E7'}`,
+            borderRadius: 10, padding: '20px', textAlign: 'center', cursor: 'pointer',
+            background: bulkFile ? '#F5F3FF' : '#FAFAFA', marginBottom: 14,
+            transition: 'border-color 0.15s, background 0.15s',
+          }}
+        >
+          <input ref={fileInputRef} type="file" accept=".csv,text/csv" style={{ display: 'none' }}
+            onChange={e => { const f = e.target.files?.[0]; if (f) setBulkFile(f); e.target.value = '' }} />
+          {bulkFile ? (
+            <div>
+              <div style={{ fontSize: 13, fontWeight: 600, color: '#7C3AED' }}>{bulkFile.name}</div>
+              <div style={{ fontSize: 11.5, color: '#A1A1AA', marginTop: 2 }}>{(bulkFile.size / 1024).toFixed(1)} KB — click to change</div>
+            </div>
+          ) : (
+            <div>
+              <div style={{ fontSize: 13, color: '#71717A' }}>Drop CSV here or click to browse</div>
+              <div style={{ fontSize: 11.5, color: '#A1A1AA', marginTop: 3 }}>Expected columns: name, website</div>
+            </div>
+          )}
+        </div>
+
+        {bulkError && (
+          <div style={{ background: '#FEF2F2', border: '1px solid #FECACA', borderRadius: 8, padding: '10px 14px', marginBottom: 12 }}>
+            <div style={{ fontSize: 12, fontWeight: 600, color: '#DC2626', marginBottom: 4 }}>CSV Error</div>
+            <pre style={{ fontSize: 11.5, color: '#B91C1C', margin: 0, whiteSpace: 'pre-wrap', fontFamily: 'monospace' }}>{bulkError}</pre>
+          </div>
+        )}
+
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+          <button onClick={runBulkAdd} disabled={!bulkFile || bulkRunning} style={{ ...btnStyle(bulkRunning), background: (!bulkFile || bulkRunning) ? '#E4E4E7' : '#7C3AED', color: (!bulkFile || bulkRunning) ? '#A1A1AA' : '#fff', cursor: (!bulkFile || bulkRunning) ? 'not-allowed' : 'pointer' }}>
+            {bulkRunning ? 'Uploading & Seeding…' : 'Upload & Seed'}
+          </button>
+          {bulkSummary && (
+            <div style={{ display: 'flex', gap: 8 }}>
+              <span style={{ padding: '3px 10px', borderRadius: 6, background: '#DCFCE7', color: '#16A34A', fontSize: 12, fontWeight: 600, border: '1px solid #BBF7D0' }}>{bulkSummary.added} added</span>
+              {bulkSummary.failed > 0 && <span style={{ padding: '3px 10px', borderRadius: 6, background: '#FEE2E2', color: '#DC2626', fontSize: 12, fontWeight: 600, border: '1px solid #FECACA' }}>{bulkSummary.failed} failed</span>}
+              <span style={{ padding: '3px 10px', borderRadius: 6, background: '#F4F4F5', color: '#71717A', fontSize: 12, fontWeight: 600, border: '1px solid #E4E4E7' }}>{bulkSummary.total} total</span>
+            </div>
+          )}
+        </div>
+
+        {bulkLog.length > 0 && (
+          <div ref={bulkLogRef} style={logStyle}>
+            {bulkLog.map((l, i) => (
+              <div key={i} style={{ color: l.ok ? '#A1A1AA' : '#F87171', whiteSpace: 'pre' }}>{l.text}</div>
+            ))}
+            {bulkRunning && <div style={{ color: '#7C3AED' }}>●</div>}
+          </div>
+        )}
+      </div>
+    </div>
+  )
+}
+
 // ─── Main Dashboard ───────────────────────────────────────────────────────────
 
 export default function AdminDashboard({ currentUser, initialCompanies, initialProfiles, analytics }: Props) {
@@ -1480,6 +1762,9 @@ export default function AdminDashboard({ currentUser, initialCompanies, initialP
           <SectionTitle>Analytics</SectionTitle>
           <NavItem label="Views & Saves" active={nav === 'analytics'} onClick={() => setNav('analytics')} />
 
+          <SectionTitle>Data Management</SectionTitle>
+          <NavItem label="Data" active={nav === 'data'} onClick={() => setNav('data')} />
+
           <div style={{ marginTop: 20, padding: '0 8px' }}>
             <div style={{ padding: '12px 14px', borderRadius: 10, background: '#F5F3FF', border: '1px solid #EDE9FE' }}>
               <div style={{ fontSize: 11, fontWeight: 700, color: '#7C3AED', marginBottom: 4 }}>DB Summary</div>
@@ -1502,13 +1787,14 @@ export default function AdminDashboard({ currentUser, initialCompanies, initialP
           {/* Page title */}
           <div style={{ marginBottom: 20 }}>
             <div style={{ fontSize: 20, fontWeight: 800, color: '#09090B', letterSpacing: '-0.04em' }}>
-              {nav === 'companies' ? 'Companies' : nav === 'content' ? 'Company Content' : nav === 'users' ? 'Users' : 'Analytics'}
+              {nav === 'companies' ? 'Companies' : nav === 'content' ? 'Company Content' : nav === 'users' ? 'Users' : nav === 'data' ? 'Data Management' : 'Analytics'}
             </div>
             <div style={{ fontSize: 12.5, color: '#A1A1AA', marginTop: 2 }}>
               {nav === 'companies' && `${companies.length} companies in the database`}
               {nav === 'content' && 'View and edit per-company content — news, products, financials, org chart and more'}
               {nav === 'users' && `${profiles.length} registered users`}
               {nav === 'analytics' && 'Company view and save activity'}
+              {nav === 'data' && 'Run global seed or bulk-add companies via CSV'}
             </div>
           </div>
 
@@ -1516,6 +1802,7 @@ export default function AdminDashboard({ currentUser, initialCompanies, initialP
           {nav === 'content' && <ContentSection companies={companies} initialSelectedId={contentCompanyId} />}
           {nav === 'users' && <UsersSection profiles={profiles} onPlanUpdate={handlePlanUpdate} />}
           {nav === 'analytics' && <AnalyticsSection analytics={analytics} />}
+          {nav === 'data' && <DataSection />}
         </div>
       </div>
     </div>

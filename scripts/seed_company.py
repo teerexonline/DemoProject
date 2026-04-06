@@ -1178,16 +1178,66 @@ class LogoScraper:
     # ── Source 4: Wikipedia infobox image ─────────────────────────────────────
     def _wikipedia(self, company_name: str) -> Optional[str]:
         """
-        Fetch the first image from the Wikipedia infobox — typically the company logo.
-        Uses the Wikipedia API to get the page thumbnail URL.
+        Fetch the company logo from the Wikipedia infobox.
+        Uses the Wikipedia opensearch API to find the correct company article
+        (e.g., "Apple Inc." not "Apple" which would return an apple-fruit image),
+        then fetches the thumbnail for that specific article.
+
+        Key fix: always search for the company article via opensearch first and
+        match the title that looks like a corporate entity (contains "Inc", "Corp",
+        etc.) before falling back to the raw company name. This prevents ambiguous
+        single-word names like "Apple" or "Stripe" from resolving to the wrong page.
         """
+        CORP_SUFFIX_RE = re.compile(
+            r"\b(inc|corp|ltd|llc|plc|gmbh|company|incorporated|limited|technologies|"
+            r"systems|group|holdings|international|services)\b",
+            re.IGNORECASE,
+        )
+        name_words = company_name.lower().split()
+
+        def _opensearch(query: str) -> list[str]:
+            r = self.s.fetch(
+                "https://en.wikipedia.org/w/api.php",
+                agent=BROWSER_AGENT,
+                params={"action": "opensearch", "search": query, "limit": 8,
+                        "namespace": 0, "format": "json"},
+            )
+            if not r:
+                return []
+            try:
+                return r.json()[1]
+            except (ValueError, IndexError):
+                return []
+
+        def _best_title(titles: list[str]) -> Optional[str]:
+            # Priority 1: title starts with company name AND has corporate suffix
+            for t in titles:
+                tl = t.lower()
+                if any(tl.startswith(w) for w in name_words[:2]) and CORP_SUFFIX_RE.search(tl):
+                    return t
+            # Priority 2: title contains majority of name words
+            for t in titles:
+                tl = t.lower()
+                if sum(1 for w in name_words if w in tl) >= max(1, len(name_words) - 1):
+                    return t
+            return None
+
         try:
+            # First try "Company Name company" to bias toward the corporate entity
+            titles = _opensearch(f"{company_name} company")
+            best = _best_title(titles)
+            if not best:
+                titles = _opensearch(company_name)
+                best = _best_title(titles)
+            if not best:
+                return None
+
             resp = self.s.fetch(
                 "https://en.wikipedia.org/w/api.php",
                 agent=BROWSER_AGENT,
                 params={
                     "action": "query",
-                    "titles": company_name,
+                    "titles": best,
                     "prop": "pageimages",
                     "pithumbsize": 200,
                     "format": "json",
@@ -1200,6 +1250,18 @@ class LogoScraper:
             for page in pages.values():
                 thumb = page.get("thumbnail", {}).get("source")
                 if thumb:
+                    # Sanity-check: reject obvious non-logo images
+                    # (plant/food/band photos that sneak in for ambiguous names)
+                    thumb_l = thumb.lower()
+                    reject_patterns = [
+                        "pink_lady", "apple_fruit", "fruit", "plant",
+                        "food", "band_", "musician", "singer", "album",
+                    ]
+                    if any(p in thumb_l for p in reject_patterns):
+                        log.info(
+                            "[Logo] Wikipedia thumbnail looks like wrong subject, skipping: %s", thumb
+                        )
+                        return None
                     log.info("[Logo] Wikipedia thumbnail: %s", thumb)
                     return thumb
         except Exception as e:
@@ -1401,6 +1463,12 @@ def seed_company(name: str, website: str, timeout: int = DEFAULT_TIMEOUT) -> dic
 
     def run_wikipedia():
         try:
+            # Wikipedia runs at priority 1 — community-maintained infobox is the most
+            # reliable single source for revenue, employees, and founded year because:
+            # • It is updated within days of earnings releases by multiple editors
+            # • SEC EDGAR XBRL "Revenues" sometimes returns a sub-segment or TTM figure
+            #   rather than the true annual total (e.g., Microsoft $62.5B segment vs
+            #   $245B actual), causing systematically wrong revenue when SEC wins.
             return "wikipedia", 1, wiki.fetch(name)
         except Exception as e:
             log.warning("[Wikipedia] fatal: %s", e, exc_info=True)
@@ -1408,10 +1476,12 @@ def seed_company(name: str, website: str, timeout: int = DEFAULT_TIMEOUT) -> dic
 
     def run_edgar():
         try:
-            return "sec_edgar", 1, edgar.fetch(name)
+            # SEC EDGAR runs at priority 2 for revenue/employees (Wikipedia is more reliable
+            # for those). SEC is still primary for HQ, SIC category, and valuation (public float).
+            return "sec_edgar", 2, edgar.fetch(name)
         except Exception as e:
             log.warning("[SEC EDGAR] fatal: %s", e, exc_info=True)
-            return "sec_edgar", 1, {}
+            return "sec_edgar", 2, {}
 
     def run_yahoo():
         try:
@@ -1514,20 +1584,32 @@ def main() -> None:
     parser = argparse.ArgumentParser(
         description="Scrape company data from Wikipedia, SEC EDGAR, Yahoo Finance, and the company website.",
     )
-    parser.add_argument("--name",    required=True)
-    parser.add_argument("--website", required=True)
-    parser.add_argument("--timeout", type=int, default=DEFAULT_TIMEOUT)
+    # Accept both --name and --company for backwards-compat (API routes call with --company,
+    # legacy callers used --name). We resolve the actual value after parsing.
+    name_group = parser.add_mutually_exclusive_group(required=True)
+    name_group.add_argument("--name",    default=None, help="Company name (legacy)")
+    name_group.add_argument("--company", default=None, help="Company name")
+    parser.add_argument("--website",    required=True)
+    parser.add_argument("--timeout",    type=int, default=DEFAULT_TIMEOUT)
+    # Accept Supabase args for CLI compatibility (unused — this script outputs JSON to stdout
+    # and the API route handles DB writes, but accepting them prevents argparse exit code 2
+    # when called from seed-all which passes these flags to all sub-scrapers).
+    parser.add_argument("--company-id", default="", help="Unused; accepted for compatibility")
+    parser.add_argument("--auth-token", default="", help="Unused; accepted for compatibility")
+    parser.add_argument("--app-url",    default="", help="Unused; accepted for compatibility")
     args = parser.parse_args()
 
-    if not args.name.strip():
-        print(json.dumps({"error": "Company name is required"}))
+    # Resolve company name from whichever flag was provided
+    company_name = (args.name or args.company or "").strip()
+    if not company_name:
+        print(json.dumps({"error": "Company name is required (use --name or --company)"}))
         sys.exit(1)
     if not args.website.strip():
         print(json.dumps({"error": "Company website is required"}))
         sys.exit(1)
 
     try:
-        data = seed_company(args.name.strip(), args.website.strip(), args.timeout)
+        data = seed_company(company_name, args.website.strip(), args.timeout)
         print(json.dumps(data, ensure_ascii=False, default=str))
     except Exception as e:
         log.error("Fatal: %s", e, exc_info=True)

@@ -1258,6 +1258,30 @@ def scrape_milestones(
 
     log.info("Total raw: %d", len(all_ms))
 
+    # ── Second founding guarantee pass ────────────────────────────────────────
+    # The first pass above only synthesises founding when `fy` is known.
+    # If fy was never resolved (Wikidata returned nothing, no founding text in
+    # raw milestones), we still guarantee at least one founding milestone so
+    # the UI always has an origin anchor. Estimate year from earliest milestone
+    # or use a generic "~decade ago" guess for very new companies.
+    if not any(m.type == "founding" for m in all_ms):
+        if all_ms:
+            # Use the earliest known event year as a lower bound for founding
+            earliest = min(m.year for m in all_ms)
+            # Company was founded at most a few years before their first recorded event
+            fy_estimate = max(MIN_YEAR, earliest - 2)
+        else:
+            fy_estimate = CURRENT_YEAR - 5
+        log.warning(
+            "Could not determine founding year — synthesising placeholder for %d", fy_estimate
+        )
+        all_ms.append(ME(
+            year=fy_estimate, type="founding",
+            title=f"{company} founded",
+            detail=f"{company} was founded (est. {fy_estimate}).",
+            score=95, key=f"{fy_estimate}_founding",
+        ))
+
     if not all_ms:
         # Last resort: single founding placeholder so we never return empty
         log.warning("All sources returned 0 — returning minimal placeholder")

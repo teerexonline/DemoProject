@@ -1361,22 +1361,30 @@ def scrape_products(company: str, website: str,
                 log.warning("Wikipedia failed: %s", e)
 
     # Tier 6 — Synthetic fallback (guaranteed result)
+    is_synthetic = False
     if len(all_products) < 1:
         log.info("All sources failed — using synthetic fallback")
         all_products = synthetic_products(company, company_category)
+        is_synthetic = True
 
     # Sort → deduplicate → cap at 8
     all_products.sort(key=lambda x: x.get("_score", 0), reverse=True)
     deduped = deduplicate(all_products)[:8]
     enriched = enrich(deduped, company)
 
-    # Fetch CC-licensed images for any product missing one
-    log.info("Fetching free images from Wikimedia...")
-    for p in enriched:
-        if not p.get("image_url"):
-            img = get_free_image(sess, p["name"], company, p["category"])
-            if img:
-                p["image_url"] = img
+    # Fetch CC-licensed images only for non-synthetic products.
+    # Synthetic products have generic names like "Core Product" or "Enterprise Suite"
+    # that produce wrong, unrelated images from Wikimedia (e.g., White Stripes band photo
+    # for "Stripe Core Product"). Skip image search entirely for synthetic results.
+    if not is_synthetic:
+        log.info("Fetching free images from Wikimedia...")
+        for p in enriched:
+            if not p.get("image_url"):
+                img = get_free_image(sess, p["name"], company, p["category"])
+                if img:
+                    p["image_url"] = img
+    else:
+        log.info("Skipping Wikimedia image fetch for synthetic fallback products")
 
     log.info("Final: %d products", len(enriched))
     return enriched

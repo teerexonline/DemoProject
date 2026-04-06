@@ -899,9 +899,13 @@ class FinancialResult:
                 })
             if streams:
                 self.revenue_streams = streams
-        elif self.revenue_raw:
-            # Category-based default streams
-            self.revenue_streams = _default_revenue_streams(self.category, self.revenue_raw)
+        if not self.revenue_streams:
+            # Category-based default streams — used when no segment data or no revenue_raw.
+            # Always populate with at least placeholder streams so the UI has data to display.
+            # Pass revenue_raw=0 as a sentinel; templates don't use the raw value for rendering.
+            self.revenue_streams = _default_revenue_streams(
+                self.category, self.revenue_raw or 0
+            )
 
         # ── Business units (from segments or category defaults) ────────────────
         if self._segments and self.revenue_raw:
@@ -914,7 +918,7 @@ class FinancialResult:
                 })
             if units:
                 self.business_units = units
-        elif self.revenue_raw:
+        if not self.business_units:
             self.business_units = _default_business_units(self.category)
 
     def to_dict(self) -> dict[str, Any]:
@@ -1037,9 +1041,12 @@ def scrape_financials(company_name: str, website: str, timeout: int) -> dict[str
 
 def main() -> None:
     parser = argparse.ArgumentParser(description="Scrape financial data for a company")
-    parser.add_argument("--company",  required=True,  help="Company name (e.g. 'Stripe')")
-    parser.add_argument("--website",  required=True,  help="Company website (e.g. 'stripe.com')")
-    parser.add_argument("--timeout",  type=int, default=DEFAULT_TIMEOUT, help="HTTP timeout per request (seconds)")
+    parser.add_argument("--company",    required=True,  help="Company name (e.g. 'Stripe')")
+    parser.add_argument("--website",    required=True,  help="Company website (e.g. 'stripe.com')")
+    parser.add_argument("--timeout",    type=int, default=DEFAULT_TIMEOUT, help="HTTP timeout per request (seconds)")
+    parser.add_argument("--company-id", default="",    help="Supabase company UUID (unused, accepted for CLI compatibility)")
+    parser.add_argument("--auth-token", default="",    help="Supabase auth token (unused, accepted for CLI compatibility)")
+    parser.add_argument("--app-url",    default="",    help="App base URL (unused, accepted for CLI compatibility)")
     args = parser.parse_args()
 
     company = args.company.strip()
