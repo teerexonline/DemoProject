@@ -58,17 +58,20 @@ export default function MarketingPage() {
               </div>
               <div style={{ padding: '12px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
                 {[
-                  { name: 'Stripe', role: 'Engineering · Payments Infra', color: '#635BFF', badge: '340 roles' },
-                  { name: 'Linear', role: 'Design · Product Design', color: '#5E6AD2', badge: '12 roles' },
-                  { name: 'Vercel', role: 'DevRel · Developer Experience', color: '#000', badge: '28 roles' },
-                  { name: 'Figma', role: 'PM · Core Editor', color: '#F24E1E', badge: '45 roles' },
+                  { name: 'Stripe', role: 'Engineering · Payments Infra', color: '#533AFD', logo: '/logo/Stripe.svg',     badge: '340 roles' },
+                  { name: 'Linear', role: 'Design · Product Design',     color: '#222326', logo: '/logo/Linear.svg',     badge: '12 roles'  },
+                  { name: 'Vercel', role: 'DevRel · Developer Experience',color: '#000',    logo: '/logo/Vercel.svg',     badge: '28 roles'  },
+                  { name: 'Figma',  role: 'PM · Core Editor',            color: '#F24E1E', logo: '/logo/Figma.svg',      badge: '45 roles'  },
                 ].map((item) => (
                   <div key={item.name} style={{
                     display: 'flex', alignItems: 'center', gap: '12px',
                     padding: '10px 12px', borderRadius: '9px',
                     background: '#f8fbfe', border: '1px solid #eef4fb',
                   }}>
-                    <div style={{ width: '28px', height: '28px', borderRadius: '7px', background: item.color, flexShrink: 0 }} />
+                    {item.logo
+                      ? <img src={item.logo} alt={item.name} style={{ width: '28px', height: '28px', borderRadius: '7px', flexShrink: 0, display: 'block' }} />
+                      : <div style={{ width: '28px', height: '28px', borderRadius: '7px', background: item.color, flexShrink: 0 }} />
+                    }
                     <div style={{ flex: 1 }}>
                       <div style={{ color: '#09090B', fontSize: '12.5px', fontWeight: 600 }}>{item.name}</div>
                       <div style={{ color: '#A1A1AA', fontSize: '11px', marginTop: '1px' }}>{item.role}</div>
@@ -193,7 +196,7 @@ export default function MarketingPage() {
               boxShadow: '0 4px 24px rgba(6,63,118,0.07)', padding: '20px',
             }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px', paddingBottom: '14px', borderBottom: '1px solid #f0f6fc' }}>
-                <div style={{ width: '36px', height: '36px', borderRadius: '9px', background: '#4285F4', flexShrink: 0 }} />
+                <img src="/logo/Google.svg" alt="Google" style={{ width: '36px', height: '36px', borderRadius: '9px', flexShrink: 0, display: 'block', objectFit: 'contain', background: '#fff', border: '1px solid #f0f0f2' }} />
                 <div>
                   <div style={{ color: '#09090B', fontSize: '14px', fontWeight: 700 }}>Google</div>
                   <div style={{ color: '#71717A', fontSize: '12px' }}>Technology · Mountain View, CA</div>

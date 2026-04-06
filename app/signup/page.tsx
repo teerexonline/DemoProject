@@ -83,7 +83,7 @@ export default function SignupPage() {
         boxShadow: '0 4px 24px rgba(0,0,0,0.08)',
       }}>
         <Link href="/" style={{ textDecoration: 'none', display: 'block', marginBottom: '32px' }}>
-          <LogoFull height={32} />
+          <LogoFull height={44} />
         </Link>
 
         {sent ? (
@@ -167,7 +167,7 @@ export default function SignupPage() {
                 type="submit" disabled={loading}
                 style={{
                   width: '100%', padding: '12px',
-                  background: loading ? '#4C1D95' : '#063f76',
+                  background: loading ? '#04294f' : '#063f76',
                   border: '1px solid rgba(6,63,118,0.4)', borderRadius: '9px',
                   color: '#fff', fontSize: '14px', fontWeight: 600,
                   cursor: loading ? 'default' : 'pointer',

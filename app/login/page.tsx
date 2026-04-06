@@ -68,7 +68,7 @@ export default function LoginPage() {
         boxShadow: '0 4px 24px rgba(0,0,0,0.08)',
       }}>
         <Link href="/" style={{ textDecoration: 'none', display: 'block', marginBottom: '32px' }}>
-          <LogoFull height={32} />
+          <LogoFull height={44} />
         </Link>
 
         <h1 style={{
@@ -191,10 +191,10 @@ export default function LoginPage() {
             style={{
               width: '100%',
               padding: '12px',
-              background: loading ? '#4C1D95' : '#063f76',
+              background: loading ? '#04294f' : '#063f76',
               border: '1px solid rgba(6,63,118,0.4)',
               borderRadius: '9px',
-              color: '#09090B',
+              color: '#fff',
               fontSize: '14px',
               fontWeight: 600,
               cursor: loading ? 'default' : 'pointer',

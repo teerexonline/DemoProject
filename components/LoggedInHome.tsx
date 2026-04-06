@@ -32,7 +32,7 @@ interface Props {
 // ─── Data ────────────────────────────────────────────────────────────────────
 
 const FALLBACK: Company[] = [
-  { id: '1',  name: 'Stripe',     slug: 'stripe',     category: 'Fintech',        description: 'Global payment infrastructure for the internet.',             logo_color: '#635BFF', logo_url: null, employees: 7000,  founded: 2010, hq: 'San Francisco, CA', valuation: '$65B'    },
+  { id: '1',  name: 'Stripe',     slug: 'stripe',     category: 'Fintech',        description: 'Global payment infrastructure for the internet.',             logo_color: '#533AFD', logo_url: null, employees: 7000,  founded: 2010, hq: 'San Francisco, CA', valuation: '$65B'    },
   { id: '2',  name: 'Linear',     slug: 'linear',     category: 'SaaS',           description: 'Issue tracking built for high-performance teams.',             logo_color: '#5E6AD2', logo_url: null, employees: 80,    founded: 2019, hq: 'San Francisco, CA', valuation: '$1.2B'   },
   { id: '3',  name: 'Vercel',     slug: 'vercel',     category: 'Infrastructure', description: 'The platform for frontend developers.',                        logo_color: '#000000', logo_url: null, employees: 400,   founded: 2015, hq: 'San Francisco, CA', valuation: '$3.25B'  },
   { id: '4',  name: 'Figma',      slug: 'figma',      category: 'SaaS',           description: 'Collaborative design for all.',                                logo_color: '#F24E1E', logo_url: null, employees: 1000,  founded: 2012, hq: 'San Francisco, CA', valuation: '$20B'    },

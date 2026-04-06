@@ -4,11 +4,11 @@ import { useState } from 'react'
 import Image from 'next/image'
 
 const COMPANY_LOGOS: Record<string, string> = {
-  Google:  'https://logo.clearbit.com/google.com',
-  Stripe:  'https://logo.clearbit.com/stripe.com',
-  Notion:  'https://notion.so/front-static/logo-ios.png',
-  Airbnb:  'https://logo.clearbit.com/airbnb.com',
-  Linear:  'https://linear.app/static/favicon.svg',
+  Google:  '/logo/Google.svg',
+  Stripe:  '/logo/Stripe.svg',
+  Notion:  '/logo/Notion.svg',
+  Airbnb:  '/logo/Airbnb.svg',
+  Linear:  '/logo/Linear.svg',
 }
 
 function CompanyBadge({ company, color }: { company: string; color: string }) {
@@ -36,7 +36,7 @@ function CompanyBadge({ company, color }: { company: string; color: string }) {
 const testimonials = [
   {
     quote: "I used ResearchOrg before my Google L5 interview and already knew the exact teams, their tools, and how the org was structured. The interviewer was visibly impressed.",
-    name: "Priya Sharma",
+    name: "Priya S.",
     role: "Software Engineer",
     company: "Joined Google",
     initials: "PS",
@@ -44,7 +44,7 @@ const testimonials = [
   },
   {
     quote: "I researched three competing fintechs side by side. Showed up knowing their product strategy cold. Got the offer at Stripe.",
-    name: "Marcus Webb",
+    name: "Marcus W.",
     role: "Product Manager",
     company: "Joined Stripe",
     initials: "MW",
@@ -52,7 +52,7 @@ const testimonials = [
   },
   {
     quote: "The internal tools breakdown is something I haven't seen anywhere else. Knowing they ran on Notion + Linear before my interview made a massive difference.",
-    name: "Aisha Okafor",
+    name: "Aisha O.",
     role: "Operations Lead",
     company: "Joined Notion",
     initials: "AO",
@@ -60,7 +60,7 @@ const testimonials = [
   },
   {
     quote: "As a career changer, I had no network. ResearchOrg gave me the company intelligence I needed to compete with people who'd been in the industry for years.",
-    name: "James Liu",
+    name: "James L.",
     role: "Data Analyst",
     company: "Joined Airbnb",
     initials: "JL",
@@ -68,7 +68,7 @@ const testimonials = [
   },
   {
     quote: "I send every student I mentor to ResearchOrg. It's the one tool that actually levels the playing field for people without insider access.",
-    name: "Dr. Sarah Okonkwo",
+    name: "Dr. Sarah O.",
     role: "Career Coach",
     company: "500+ students placed",
     initials: "SO",
@@ -76,7 +76,7 @@ const testimonials = [
   },
   {
     quote: "The org chart data helped me identify who the real decision-makers were before my series of interviews. I asked the right questions to the right people.",
-    name: "Tomás Rivera",
+    name: "Tomás R.",
     role: "UX Designer",
     company: "Joined Linear",
     initials: "TR",

@@ -5,16 +5,16 @@ import Link from 'next/link'
 import Image from 'next/image'
 
 const companies = [
-  { rank: 1,  name: 'OpenAI',     category: 'AI Research',         searches: '24.3k', delta: '+142%', color: '#000',    logo: 'https://logo.clearbit.com/openai.com',      hot: true  },
-  { rank: 2,  name: 'Anthropic',  category: 'AI Safety',           searches: '18.7k', delta: '+98%',  color: '#c85f3e', logo: 'https://logo.clearbit.com/anthropic.com',   hot: true  },
-  { rank: 3,  name: 'Stripe',     category: 'Fintech',             searches: '15.2k', delta: '+12%',  color: '#635BFF', logo: 'https://logo.clearbit.com/stripe.com',      hot: false },
-  { rank: 4,  name: 'Figma',      category: 'Design Tools',        searches: '12.8k', delta: '+34%',  color: '#F24E1E', logo: 'https://logo.clearbit.com/figma.com',       hot: false },
-  { rank: 5,  name: 'Notion',     category: 'Productivity',        searches: '11.4k', delta: '+8%',   color: '#000',    logo: 'https://logo.clearbit.com/notion.so',       hot: false },
-  { rank: 6,  name: 'Linear',     category: 'Dev Tools',           searches: '9.6k',  delta: '+67%',  color: '#5E6AD2', logo: 'https://logo.clearbit.com/linear.app',      hot: true  },
-  { rank: 7,  name: 'Vercel',     category: 'Infrastructure',      searches: '8.9k',  delta: '+22%',  color: '#000',    logo: 'https://logo.clearbit.com/vercel.com',      hot: false },
-  { rank: 8,  name: 'Airbnb',     category: 'Travel & Hospitality',searches: '8.1k',  delta: '+5%',   color: '#FF5A5F', logo: 'https://logo.clearbit.com/airbnb.com',      hot: false },
-  { rank: 9,  name: 'Databricks', category: 'Data & AI',           searches: '7.4k',  delta: '+55%',  color: '#FF3621', logo: 'https://logo.clearbit.com/databricks.com',  hot: true  },
-  { rank: 10, name: 'Canva',      category: 'Design',              searches: '6.8k',  delta: '+19%',  color: '#00C4CC', logo: 'https://logo.clearbit.com/canva.com',       hot: false },
+  { rank: 1,  name: 'OpenAI',     category: 'AI Research',         searches: '24.3k', delta: '+142%', color: '#000',    logo: '/logo/OpenAI.svg',      hot: true  },
+  { rank: 2,  name: 'Anthropic',  category: 'AI Safety',           searches: '18.7k', delta: '+98%',  color: '#181818', logo: '/logo/Anthropic.svg',   hot: true  },
+  { rank: 3,  name: 'Stripe',     category: 'Fintech',             searches: '15.2k', delta: '+12%',  color: '#533AFD', logo: '/logo/Stripe.svg',       hot: false },
+  { rank: 4,  name: 'Figma',      category: 'Design Tools',        searches: '12.8k', delta: '+34%',  color: '#F24E1E', logo: '/logo/Figma.svg',        hot: false },
+  { rank: 5,  name: 'Notion',     category: 'Productivity',        searches: '11.4k', delta: '+8%',   color: '#000',    logo: '/logo/Notion.svg',       hot: false },
+  { rank: 6,  name: 'Linear',     category: 'Dev Tools',           searches: '9.6k',  delta: '+67%',  color: '#222326', logo: '/logo/Linear.svg',       hot: true  },
+  { rank: 7,  name: 'Vercel',     category: 'Infrastructure',      searches: '8.9k',  delta: '+22%',  color: '#000',    logo: '/logo/Vercel.svg',       hot: false },
+  { rank: 8,  name: 'Airbnb',     category: 'Travel & Hospitality',searches: '8.1k',  delta: '+5%',   color: '#FF385C', logo: '/logo/Airbnb.svg',       hot: false },
+  { rank: 9,  name: 'Databricks', category: 'Data & AI',           searches: '7.4k',  delta: '+55%',  color: '#FF3621', logo: '/logo/Databricks.svg',   hot: true  },
+  { rank: 10, name: 'Canva',      category: 'Design',              searches: '6.8k',  delta: '+19%',  color: '#00C4CC', logo: '/logo/Canva.jpeg',        hot: false },
 ]
 
 function CompanyAvatar({ name, logo, color }: { name: string; logo: string; color: string }) {
