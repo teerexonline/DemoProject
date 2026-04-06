@@ -69,14 +69,14 @@ function ProGatePanel({
         {hasToken && (
           <>
             {/* Token option */}
-            <div style={{ background: '#F5F3FF', border: '1px solid #DDD6FE', borderRadius: '12px', padding: '16px', marginBottom: '12px', textAlign: 'left' }}>
+            <div style={{ background: '#eef4fb', border: '1px solid #a8cbe8', borderRadius: '12px', padding: '16px', marginBottom: '12px', textAlign: 'left' }}>
               <div style={{ display: 'flex', alignItems: 'flex-start', gap: '10px', marginBottom: '12px' }}>
                 <div style={{ fontSize: '20px', lineHeight: 1 }}>🎁</div>
                 <div>
-                  <div style={{ color: '#6D28D9', fontSize: '13px', fontWeight: 700, marginBottom: '3px' }}>
+                  <div style={{ color: '#04294f', fontSize: '13px', fontWeight: 700, marginBottom: '3px' }}>
                     You have 1 free company unlock
                   </div>
-                  <div style={{ color: '#7C3AED', fontSize: '12px', lineHeight: 1.5, opacity: 0.8 }}>
+                  <div style={{ color: '#063f76', fontSize: '12px', lineHeight: 1.5, opacity: 0.8 }}>
                     Use your monthly token to unlock all sections of {company.name} for the rest of this month.
                   </div>
                 </div>
@@ -86,13 +86,13 @@ function ProGatePanel({
                 disabled={isPending}
                 style={{
                   width: '100%', padding: '10px', borderRadius: '9px', border: 'none',
-                  background: isPending ? '#A78BFA' : '#7C3AED',
+                  background: isPending ? '#609dd6' : '#063f76',
                   color: '#fff', fontSize: '13.5px', fontWeight: 600,
                   cursor: isPending ? 'not-allowed' : 'pointer',
                   transition: 'background 0.15s',
                 }}
-                onMouseEnter={e => { if (!isPending) (e.currentTarget as HTMLElement).style.background = '#6D28D9' }}
-                onMouseLeave={e => { if (!isPending) (e.currentTarget as HTMLElement).style.background = '#7C3AED' }}
+                onMouseEnter={e => { if (!isPending) (e.currentTarget as HTMLElement).style.background = '#04294f' }}
+                onMouseLeave={e => { if (!isPending) (e.currentTarget as HTMLElement).style.background = '#063f76' }}
               >
                 {isPending ? 'Unlocking…' : `Unlock ${company.name} for this month`}
               </button>
@@ -110,14 +110,14 @@ function ProGatePanel({
         <Link
           href="/signup?plan=pro"
           style={{
-            display: 'block', padding: '11px', background: hasToken ? '#09090B' : '#7C3AED',
+            display: 'block', padding: '11px', background: hasToken ? '#09090B' : '#063f76',
             color: '#fff', textDecoration: 'none', borderRadius: '10px',
             fontWeight: 600, fontSize: '14px', marginBottom: '10px',
-            boxShadow: hasToken ? '0 2px 8px rgba(0,0,0,0.15)' : '0 4px 12px rgba(124,58,237,0.3)',
+            boxShadow: hasToken ? '0 2px 8px rgba(0,0,0,0.15)' : '0 4px 12px rgba(6,63,118,0.3)',
             transition: 'background 0.15s',
           }}
-          onMouseEnter={e => (e.currentTarget as HTMLElement).style.background = hasToken ? '#18181B' : '#6D28D9'}
-          onMouseLeave={e => (e.currentTarget as HTMLElement).style.background = hasToken ? '#09090B' : '#7C3AED'}
+          onMouseEnter={e => (e.currentTarget as HTMLElement).style.background = hasToken ? '#18181B' : '#04294f'}
+          onMouseLeave={e => (e.currentTarget as HTMLElement).style.background = hasToken ? '#09090B' : '#063f76'}
         >
           Upgrade to Pro — from $4.99/mo
         </Link>
@@ -134,7 +134,7 @@ export default function CompanyFreeGated({ company, hasToken, initialSaved }: { 
   const [activeSection, setActiveSection] = useState<SectionId>('overview')
   const [animKey, setAnimKey] = useState(0)
   const [isPending, startTransition] = useTransition()
-  const color = company.logo_color ?? '#7C3AED'
+  const color = company.logo_color ?? '#063f76'
 
   function changeSection(id: SectionId) {
     setActiveSection(id)
@@ -155,7 +155,7 @@ export default function CompanyFreeGated({ company, hasToken, initialSaved }: { 
       <div style={{ background: '#fff', borderBottom: '1px solid #F4F4F5' }}>
         <div className="company-breadcrumb" style={{ maxWidth: '1200px', margin: '0 auto', height: '44px', display: 'flex', alignItems: 'center', gap: '8px', padding: '0 24px' }}>
           <Link href="/" style={{ color: '#A1A1AA', textDecoration: 'none', fontSize: '13px', transition: 'color 0.15s' }}
-            onMouseEnter={e => (e.currentTarget as HTMLElement).style.color = '#7C3AED'}
+            onMouseEnter={e => (e.currentTarget as HTMLElement).style.color = '#063f76'}
             onMouseLeave={e => (e.currentTarget as HTMLElement).style.color = '#A1A1AA'}
           >Home</Link>
           <span style={{ color: '#D4D4D8', fontSize: '13px' }}>›</span>
@@ -164,9 +164,9 @@ export default function CompanyFreeGated({ company, hasToken, initialSaved }: { 
           <span style={{ color: '#09090B', fontSize: '13px', fontWeight: 600 }}>{company.name}</span>
           <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: 8 }}>
             {hasToken && (
-              <div style={{ background: '#F5F3FF', border: '1px solid #DDD6FE', borderRadius: '8px', padding: '4px 10px', display: 'flex', alignItems: 'center', gap: '5px' }}>
+              <div style={{ background: '#eef4fb', border: '1px solid #a8cbe8', borderRadius: '8px', padding: '4px 10px', display: 'flex', alignItems: 'center', gap: '5px' }}>
                 <span style={{ fontSize: '12px' }}>🎁</span>
-                <span style={{ color: '#7C3AED', fontSize: '12px', fontWeight: 600 }}>1 free unlock</span>
+                <span style={{ color: '#063f76', fontSize: '12px', fontWeight: 600 }}>1 free unlock</span>
               </div>
             )}
             <SaveButton companyId={company.id} companyName={company.name} initialSaved={initialSaved} logoColor={color} />
@@ -191,8 +191,8 @@ export default function CompanyFreeGated({ company, hasToken, initialSaved }: { 
             onClick={() => changeSection(nav.id)}
             style={{
               flexShrink: 0, padding: '7px 12px', borderRadius: '8px', border: 'none',
-              background: activeSection === nav.id ? '#F5F3FF' : '#F4F4F5',
-              color: activeSection === nav.id ? '#7C3AED' : '#52525B',
+              background: activeSection === nav.id ? '#eef4fb' : '#F4F4F5',
+              color: activeSection === nav.id ? '#063f76' : '#52525B',
               fontSize: '12.5px', fontWeight: activeSection === nav.id ? 600 : 400,
               cursor: 'pointer', whiteSpace: 'nowrap',
               transition: 'background 0.15s, color 0.15s',
@@ -226,7 +226,7 @@ export default function CompanyFreeGated({ company, hasToken, initialSaved }: { 
               style={{
                 width: '100%', display: 'flex', alignItems: 'center', gap: '8px',
                 padding: '8px 10px', borderRadius: '8px', border: 'none',
-                background: activeSection === nav.id ? '#F5F3FF' : 'transparent',
+                background: activeSection === nav.id ? '#eef4fb' : 'transparent',
                 cursor: 'pointer', textAlign: 'left', transition: 'background 0.15s',
                 marginBottom: '1px',
               }}
@@ -234,7 +234,7 @@ export default function CompanyFreeGated({ company, hasToken, initialSaved }: { 
               onMouseLeave={e => { if (activeSection !== nav.id) (e.currentTarget as HTMLElement).style.background = 'transparent' }}
             >
               <span style={{ fontSize: '13px' }}>{nav.icon}</span>
-              <span style={{ fontSize: '12.5px', fontWeight: activeSection === nav.id ? 600 : 400, color: activeSection === nav.id ? '#7C3AED' : '#52525B', flex: 1 }}>
+              <span style={{ fontSize: '12.5px', fontWeight: activeSection === nav.id ? 600 : 400, color: activeSection === nav.id ? '#063f76' : '#52525B', flex: 1 }}>
                 {nav.label}
               </span>
               {nav.pro && (
@@ -244,16 +244,16 @@ export default function CompanyFreeGated({ company, hasToken, initialSaved }: { 
           ))}
 
           {/* Upgrade nudge */}
-          <div style={{ marginTop: '12px', padding: '12px', borderRadius: '10px', background: '#F5F3FF', border: '1px solid #DDD6FE' }}>
-            <div style={{ color: '#6D28D9', fontSize: '11.5px', fontWeight: 700, marginBottom: '6px' }}>Unlock everything</div>
-            <div style={{ color: '#7C3AED', fontSize: '11px', lineHeight: 1.5, marginBottom: '10px', opacity: 0.85 }}>
+          <div style={{ marginTop: '12px', padding: '12px', borderRadius: '10px', background: '#eef4fb', border: '1px solid #a8cbe8' }}>
+            <div style={{ color: '#04294f', fontSize: '11.5px', fontWeight: 700, marginBottom: '6px' }}>Unlock everything</div>
+            <div style={{ color: '#063f76', fontSize: '11px', lineHeight: 1.5, marginBottom: '10px', opacity: 0.85 }}>
               Get access to all 8 sections for every company.
             </div>
             <Link
               href="/signup?plan=pro"
-              style={{ display: 'block', textAlign: 'center', background: '#7C3AED', color: '#fff', textDecoration: 'none', borderRadius: '8px', padding: '8px', fontSize: '12px', fontWeight: 600, transition: 'background 0.15s' }}
-              onMouseEnter={e => (e.currentTarget as HTMLElement).style.background = '#6D28D9'}
-              onMouseLeave={e => (e.currentTarget as HTMLElement).style.background = '#7C3AED'}
+              style={{ display: 'block', textAlign: 'center', background: '#063f76', color: '#fff', textDecoration: 'none', borderRadius: '8px', padding: '8px', fontSize: '12px', fontWeight: 600, transition: 'background 0.15s' }}
+              onMouseEnter={e => (e.currentTarget as HTMLElement).style.background = '#04294f'}
+              onMouseLeave={e => (e.currentTarget as HTMLElement).style.background = '#063f76'}
             >
               Upgrade to Pro
             </Link>

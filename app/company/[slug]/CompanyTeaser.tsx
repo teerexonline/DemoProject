@@ -20,9 +20,9 @@ export default function CompanyTeaser({ company }: { company: Company }) {
       <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '48px 24px' }}>
         <div style={{ maxWidth: '480px', width: '100%', textAlign: 'center' }}>
           {/* Company pill */}
-          <div style={{ display: 'inline-flex', alignItems: 'center', gap: '10px', padding: '6px 14px 6px 6px', borderRadius: '100px', background: '#F5F3FF', border: '1px solid #DDD6FE', marginBottom: '24px' }}>
+          <div style={{ display: 'inline-flex', alignItems: 'center', gap: '10px', padding: '6px 14px 6px 6px', borderRadius: '100px', background: '#eef4fb', border: '1px solid #a8cbe8', marginBottom: '24px' }}>
             <CompanyLogo name={company.name} logoUrl={company.logo_url} logoColor={company.logo_color} size={28} />
-            <span style={{ color: '#6D28D9', fontSize: '13px', fontWeight: 600 }}>{company.name}</span>
+            <span style={{ color: '#04294f', fontSize: '13px', fontWeight: 600 }}>{company.name}</span>
           </div>
 
           <h1 style={{ fontSize: '28px', fontWeight: 800, letterSpacing: '-0.04em', color: '#09090B', margin: '0 0 12px', lineHeight: 1.2 }}>
@@ -55,9 +55,9 @@ export default function CompanyTeaser({ company }: { company: Company }) {
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
             <Link
               href={`/signup?next=/company/${company.slug}`}
-              style={{ display: 'block', padding: '13px', background: '#7C3AED', color: '#fff', textDecoration: 'none', borderRadius: '10px', fontWeight: 600, fontSize: '15px', letterSpacing: '-0.01em', boxShadow: '0 4px 12px rgba(124,58,237,0.3)', transition: 'background 0.15s' }}
-              onMouseEnter={e => (e.currentTarget as HTMLElement).style.background = '#6D28D9'}
-              onMouseLeave={e => (e.currentTarget as HTMLElement).style.background = '#7C3AED'}
+              style={{ display: 'block', padding: '13px', background: '#063f76', color: '#fff', textDecoration: 'none', borderRadius: '10px', fontWeight: 600, fontSize: '15px', letterSpacing: '-0.01em', boxShadow: '0 4px 12px rgba(6,63,118,0.3)', transition: 'background 0.15s' }}
+              onMouseEnter={e => (e.currentTarget as HTMLElement).style.background = '#04294f'}
+              onMouseLeave={e => (e.currentTarget as HTMLElement).style.background = '#063f76'}
             >
               Create free account
             </Link>

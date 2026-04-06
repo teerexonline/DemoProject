@@ -11,7 +11,7 @@ interface Props {
   logoColor?: string
 }
 
-export default function SaveButton({ companyId, companyName, initialSaved, size = 'md', logoColor = '#7C3AED' }: Props) {
+export default function SaveButton({ companyId, companyName, initialSaved, size = 'md', logoColor = '#063f76' }: Props) {
   const [saved, setSaved] = useState(initialSaved)
   const [isPending, startTransition] = useTransition()
 

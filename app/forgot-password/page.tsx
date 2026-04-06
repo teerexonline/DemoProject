@@ -49,7 +49,7 @@ export default function ForgotPasswordPage() {
           fontFamily: 'inherit', fontWeight: 800, fontSize: '17px',
           color: '#09090B', textDecoration: 'none', letterSpacing: '-0.02em', display: 'block', marginBottom: '32px',
         }}>
-          Research<span style={{ color: '#8B5CF6' }}>Org</span>
+          Research<span style={{ color: '#063f76' }}>Org</span>
         </Link>
 
         {sent ? (
@@ -62,7 +62,7 @@ export default function ForgotPasswordPage() {
             <p style={{ color: '#71717A', fontSize: '14px', lineHeight: 1.6, margin: '0 0 24px' }}>
               Check <strong style={{ color: '#A1A1AA' }}>{email}</strong> for a link to reset your password.
             </p>
-            <Link href="/login" style={{ color: '#8B5CF6', fontSize: '14px', fontWeight: 500, textDecoration: 'none' }}>
+            <Link href="/login" style={{ color: '#063f76', fontSize: '14px', fontWeight: 500, textDecoration: 'none' }}>
               ← Back to sign in
             </Link>
           </div>
@@ -88,7 +88,7 @@ export default function ForgotPasswordPage() {
                     borderRadius: '9px', color: '#fff', fontSize: '14px', outline: 'none',
                     boxSizing: 'border-box', transition: 'border-color 0.15s',
                   }}
-                  onFocus={e => (e.target as HTMLInputElement).style.borderColor = 'rgba(139,92,246,0.5)'}
+                  onFocus={e => (e.target as HTMLInputElement).style.borderColor = 'rgba(6,63,118,0.5)'}
                   onBlur={e => (e.target as HTMLInputElement).style.borderColor = '#E4E4E7'}
                 />
               </div>
@@ -105,22 +105,22 @@ export default function ForgotPasswordPage() {
                 type="submit" disabled={loading}
                 style={{
                   width: '100%', padding: '12px',
-                  background: loading ? '#4C1D95' : '#7C3AED',
-                  border: '1px solid rgba(139,92,246,0.4)', borderRadius: '9px',
+                  background: loading ? '#4C1D95' : '#063f76',
+                  border: '1px solid rgba(6,63,118,0.4)', borderRadius: '9px',
                   color: '#fff', fontSize: '14px', fontWeight: 600,
                   cursor: loading ? 'default' : 'pointer',
-                  boxShadow: '0 0 20px rgba(124,58,237,0.25)',
+                  boxShadow: '0 0 20px rgba(6,63,118,0.25)',
                   transition: 'background 0.15s', letterSpacing: '-0.01em', marginTop: '4px',
                 }}
-                onMouseEnter={e => { if (!loading) (e.currentTarget as HTMLElement).style.background = '#6D28D9' }}
-                onMouseLeave={e => { if (!loading) (e.currentTarget as HTMLElement).style.background = '#7C3AED' }}
+                onMouseEnter={e => { if (!loading) (e.currentTarget as HTMLElement).style.background = '#04294f' }}
+                onMouseLeave={e => { if (!loading) (e.currentTarget as HTMLElement).style.background = '#063f76' }}
               >
                 {loading ? 'Sending...' : 'Send Reset Link'}
               </button>
             </form>
 
             <p style={{ textAlign: 'center', color: '#52525B', fontSize: '13.5px', marginTop: '24px', marginBottom: 0 }}>
-              <Link href="/login" style={{ color: '#8B5CF6', textDecoration: 'none', fontWeight: 500 }}>← Back to sign in</Link>
+              <Link href="/login" style={{ color: '#063f76', textDecoration: 'none', fontWeight: 500 }}>← Back to sign in</Link>
             </p>
           </>
         )}

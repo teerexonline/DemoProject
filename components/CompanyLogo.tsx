@@ -28,7 +28,7 @@ export default function CompanyLogo({
   className,
   style,
 }: Props) {
-  const color       = logoColor ?? '#7C3AED'
+  const color       = logoColor ?? '#063f76'
   const initial     = name?.charAt(0)?.toUpperCase() ?? '?'
   const borderRadius = Math.round(size * 0.22)  // scales with size
 

@@ -79,8 +79,8 @@ function generateNews(company: Company): NewsItem[] {
     {
       type: 'ACQUISITION',
       typeColor: '#5B21B6',
-      typeBg: '#F5F3FF',
-      dotColor: '#7C3AED',
+      typeBg: '#eef4fb',
+      dotColor: '#063f76',
       headline: `${n} Acquires Developer Tooling Startup Stackform for $85M`,
       summary: `The 18-person Stackform team joins ${n} Engineering. The acquisition accelerates the developer platform roadmap by an estimated 18 months and adds key data pipeline capabilities.`,
       date: '5 weeks ago',
@@ -116,8 +116,8 @@ function generateMilestones(company: Company): Milestone[] {
       year: y,
       type: 'founding',
       icon: '🚀',
-      accentColor: '#7C3AED',
-      bgColor: '#F5F3FF',
+      accentColor: '#063f76',
+      bgColor: '#eef4fb',
       title: `${n} founded`,
       detail: `${n} is established with a founding team of 6. The company sets out to reimagine ${(company.category ?? 'technology').toLowerCase()} infrastructure from the ground up, with its first office in ${company.hq ?? 'San Francisco, CA'}.`,
       badge: 'Origin',
@@ -176,8 +176,8 @@ function generateMilestones(company: Company): Milestone[] {
       year: y + 8,
       type: 'milestone',
       icon: '🦄',
-      accentColor: '#7C3AED',
-      bgColor: '#F5F3FF',
+      accentColor: '#063f76',
+      bgColor: '#eef4fb',
       title: 'Achieves $1B Unicorn Valuation',
       detail: `${n} joins the global unicorn club in a $180M Series D. The round values the company at $1.2B. More than 2,000 enterprises now use the platform across 34 countries.`,
       badge: 'Milestone',
@@ -431,7 +431,7 @@ function HistoryTimeline({ milestones, color }: { milestones: Milestone[]; color
 // ─── Main component ───────────────────────────────────────────────
 
 export default function CompanyOverview({ company, showProTeaser = false, dbNews, dbMilestones }: Props) {
-  const color = company.logo_color ?? '#7C3AED'
+  const color = company.logo_color ?? '#063f76'
 
   const news: NewsItem[] = dbNews && dbNews.length > 0
     ? dbNews.map(n => ({
@@ -508,8 +508,8 @@ export default function CompanyOverview({ company, showProTeaser = false, dbNews
             {[company.category, 'B2B', 'SaaS', 'Developer-first'].filter(Boolean).map(t => (
               <span key={t} style={{
                 padding: '3px 10px', borderRadius: '5px',
-                background: '#F5F3FF', border: '1px solid #DDD6FE',
-                color: '#7C3AED', fontSize: '11.5px', fontWeight: 500,
+                background: '#eef4fb', border: '1px solid #a8cbe8',
+                color: '#063f76', fontSize: '11.5px', fontWeight: 500,
               }}>{t}</span>
             ))}
             {company.website && (
@@ -589,8 +589,8 @@ export default function CompanyOverview({ company, showProTeaser = false, dbNews
       {showProTeaser && (
         <div style={{
           padding: '20px', borderRadius: '14px',
-          background: 'linear-gradient(135deg, #F5F3FF 0%, #EFF6FF 100%)',
-          border: '1px solid #DDD6FE',
+          background: 'linear-gradient(135deg, #eef4fb 0%, #EFF6FF 100%)',
+          border: '1px solid #a8cbe8',
         }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px' }}>
             <span style={{ fontSize: '15px' }}>🔓</span>
@@ -602,8 +602,8 @@ export default function CompanyOverview({ company, showProTeaser = false, dbNews
             {NAV_LOCKED.map(label => (
               <span key={label} style={{
                 padding: '4px 10px', borderRadius: '6px',
-                background: '#fff', border: '1px solid #DDD6FE',
-                color: '#7C3AED', fontSize: '11.5px',
+                background: '#fff', border: '1px solid #a8cbe8',
+                color: '#063f76', fontSize: '11.5px',
                 display: 'inline-flex', alignItems: 'center', gap: '4px',
               }}>
                 <span style={{ fontSize: '10px', opacity: 0.6 }}>🔒</span> {label}

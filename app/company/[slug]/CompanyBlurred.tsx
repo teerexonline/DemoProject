@@ -47,7 +47,7 @@ export default function CompanyBlurred({ company }: { company: Company }) {
           {/* Overlay */}
           <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             <div style={{ background: '#fff', borderRadius: '20px', border: '1px solid #E4E4E7', boxShadow: '0 20px 60px rgba(0,0,0,0.12), 0 4px 16px rgba(0,0,0,0.06)', padding: '36px 40px', maxWidth: '380px', width: '100%', textAlign: 'center' }}>
-              <div style={{ width: '48px', height: '48px', borderRadius: '12px', background: '#F5F3FF', border: '1px solid #DDD6FE', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 16px', fontSize: '22px' }}>
+              <div style={{ width: '48px', height: '48px', borderRadius: '12px', background: '#eef4fb', border: '1px solid #a8cbe8', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 16px', fontSize: '22px' }}>
                 🔒
               </div>
               <h2 style={{ fontSize: '18px', fontWeight: 800, letterSpacing: '-0.04em', color: '#09090B', margin: '0 0 8px' }}>
@@ -58,9 +58,9 @@ export default function CompanyBlurred({ company }: { company: Company }) {
               </p>
               <Link
                 href="/signup?plan=pro"
-                style={{ display: 'block', padding: '12px', background: '#7C3AED', color: '#fff', textDecoration: 'none', borderRadius: '10px', fontWeight: 600, fontSize: '14px', marginBottom: '10px', boxShadow: '0 4px 12px rgba(124,58,237,0.3)', transition: 'background 0.15s' }}
-                onMouseEnter={e => (e.currentTarget as HTMLElement).style.background = '#6D28D9'}
-                onMouseLeave={e => (e.currentTarget as HTMLElement).style.background = '#7C3AED'}
+                style={{ display: 'block', padding: '12px', background: '#063f76', color: '#fff', textDecoration: 'none', borderRadius: '10px', fontWeight: 600, fontSize: '14px', marginBottom: '10px', boxShadow: '0 4px 12px rgba(6,63,118,0.3)', transition: 'background 0.15s' }}
+                onMouseEnter={e => (e.currentTarget as HTMLElement).style.background = '#04294f'}
+                onMouseLeave={e => (e.currentTarget as HTMLElement).style.background = '#063f76'}
               >
                 Upgrade to Pro — from $4.99/mo
               </Link>

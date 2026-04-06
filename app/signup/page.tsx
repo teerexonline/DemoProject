@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/client'
+import { LogoFull } from '@/components/Logo'
 
 export default function SignupPage() {
   const [email, setEmail] = useState('')
@@ -81,12 +82,8 @@ export default function SignupPage() {
         position: 'relative',
         boxShadow: '0 4px 24px rgba(0,0,0,0.08)',
       }}>
-        <Link href="/" style={{
-          fontFamily: '"Syne", sans-serif',
-          fontWeight: 700, fontSize: '18px', color: '#09090B',
-          textDecoration: 'none', letterSpacing: '-0.02em', display: 'block', marginBottom: '32px',
-        }}>
-          Research<span style={{ color: '#8B5CF6' }}>Org</span>
+        <Link href="/" style={{ textDecoration: 'none', display: 'block', marginBottom: '32px' }}>
+          <LogoFull height={32} />
         </Link>
 
         {sent ? (
@@ -146,14 +143,14 @@ export default function SignupPage() {
               <div>
                 <label style={{ display: 'block', color: '#A1A1AA', fontSize: '12.5px', fontWeight: 500, marginBottom: '6px' }}>Email</label>
                 <input type="email" value={email} onChange={e => setEmail(e.target.value)} required placeholder="you@company.com" style={inputStyle}
-                  onFocus={e => (e.target as HTMLInputElement).style.borderColor = 'rgba(139,92,246,0.5)'}
+                  onFocus={e => (e.target as HTMLInputElement).style.borderColor = 'rgba(6,63,118,0.5)'}
                   onBlur={e => (e.target as HTMLInputElement).style.borderColor = '#E4E4E7'}
                 />
               </div>
               <div>
                 <label style={{ display: 'block', color: '#A1A1AA', fontSize: '12.5px', fontWeight: 500, marginBottom: '6px' }}>Password</label>
                 <input type="password" value={password} onChange={e => setPassword(e.target.value)} required placeholder="Min. 8 characters" style={inputStyle}
-                  onFocus={e => (e.target as HTMLInputElement).style.borderColor = 'rgba(139,92,246,0.5)'}
+                  onFocus={e => (e.target as HTMLInputElement).style.borderColor = 'rgba(6,63,118,0.5)'}
                   onBlur={e => (e.target as HTMLInputElement).style.borderColor = '#E4E4E7'}
                 />
               </div>
@@ -170,15 +167,15 @@ export default function SignupPage() {
                 type="submit" disabled={loading}
                 style={{
                   width: '100%', padding: '12px',
-                  background: loading ? '#4C1D95' : '#7C3AED',
-                  border: '1px solid rgba(139,92,246,0.4)', borderRadius: '9px',
+                  background: loading ? '#4C1D95' : '#063f76',
+                  border: '1px solid rgba(6,63,118,0.4)', borderRadius: '9px',
                   color: '#fff', fontSize: '14px', fontWeight: 600,
                   cursor: loading ? 'default' : 'pointer',
-                  boxShadow: '0 0 20px rgba(124,58,237,0.25)',
+                  boxShadow: '0 0 20px rgba(6,63,118,0.25)',
                   transition: 'background 0.15s', letterSpacing: '-0.01em', marginTop: '4px',
                 }}
-                onMouseEnter={e => { if (!loading) (e.currentTarget as HTMLElement).style.background = '#6D28D9' }}
-                onMouseLeave={e => { if (!loading) (e.currentTarget as HTMLElement).style.background = '#7C3AED' }}
+                onMouseEnter={e => { if (!loading) (e.currentTarget as HTMLElement).style.background = '#04294f' }}
+                onMouseLeave={e => { if (!loading) (e.currentTarget as HTMLElement).style.background = '#063f76' }}
               >
                 {loading ? 'Creating account...' : 'Create Free Account'}
               </button>
@@ -186,7 +183,7 @@ export default function SignupPage() {
 
             <p style={{ textAlign: 'center', color: '#52525B', fontSize: '13.5px', marginTop: '24px', marginBottom: 0 }}>
               Already have an account?{' '}
-              <Link href="/login" style={{ color: '#8B5CF6', textDecoration: 'none', fontWeight: 500 }}>Sign in</Link>
+              <Link href="/login" style={{ color: '#063f76', textDecoration: 'none', fontWeight: 500 }}>Sign in</Link>
             </p>
           </>
         )}

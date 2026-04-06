@@ -48,7 +48,7 @@ export default function Trending() {
           {/* Left: heading */}
           <div className="trending-sticky" style={{ position: 'sticky', top: '80px' }}>
             <p style={{
-              color: '#7C3AED', fontSize: '12px', fontWeight: 700,
+              color: '#063f76', fontSize: '12px', fontWeight: 700,
               textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '12px',
             }}>TRENDING THIS WEEK</p>
             <h2 style={{
@@ -84,7 +84,7 @@ export default function Trending() {
               href="/signup"
               style={{
                 display: 'inline-flex', alignItems: 'center', gap: '6px',
-                marginTop: '28px', color: '#7C3AED', fontSize: '14px',
+                marginTop: '28px', color: '#063f76', fontSize: '14px',
                 fontWeight: 600, textDecoration: 'none',
                 transition: 'gap 0.15s',
               }}
@@ -120,7 +120,7 @@ export default function Trending() {
                   width: '24px',
                   fontSize: '13px',
                   fontWeight: 700,
-                  color: co.rank <= 3 ? '#7C3AED' : '#A1A1AA',
+                  color: co.rank <= 3 ? '#063f76' : '#A1A1AA',
                   textAlign: 'right',
                   flexShrink: 0,
                 }}>

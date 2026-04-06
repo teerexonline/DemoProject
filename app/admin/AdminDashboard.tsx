@@ -66,11 +66,11 @@ function SectionTitle({ children }: { children: React.ReactNode }) {
 
 function NavItem({ label, active, onClick, count }: { label: string; active: boolean; onClick: () => void; count?: number }) {
   return (
-    <button onClick={onClick} style={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '8px 16px', borderRadius: 8, border: 'none', background: active ? '#F5F3FF' : 'transparent', color: active ? '#7C3AED' : '#52525B', fontSize: 13, fontWeight: active ? 700 : 400, cursor: 'pointer', textAlign: 'left', transition: 'background 0.12s' }}
+    <button onClick={onClick} style={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '8px 16px', borderRadius: 8, border: 'none', background: active ? '#eef4fb' : 'transparent', color: active ? '#063f76' : '#52525B', fontSize: 13, fontWeight: active ? 700 : 400, cursor: 'pointer', textAlign: 'left', transition: 'background 0.12s' }}
       onMouseEnter={e => { if (!active) (e.currentTarget as HTMLElement).style.background = '#F7F7F8' }}
       onMouseLeave={e => { if (!active) (e.currentTarget as HTMLElement).style.background = 'transparent' }}>
       {label}
-      {count !== undefined && <span style={{ fontSize: 10.5, color: active ? '#7C3AED' : '#A1A1AA', background: active ? '#EDE9FE' : '#F4F4F5', padding: '1px 6px', borderRadius: 4 }}>{count}</span>}
+      {count !== undefined && <span style={{ fontSize: 10.5, color: active ? '#063f76' : '#A1A1AA', background: active ? '#d4e8f6' : '#F4F4F5', padding: '1px 6px', borderRadius: 4 }}>{count}</span>}
     </button>
   )
 }
@@ -121,7 +121,7 @@ function TagsField({ label, value, onChange, placeholder }: {
         placeholder={placeholder ?? 'Item 1, Item 2, Item 3'}
         onChange={e => handleChange(e.target.value)}
         style={{ width: '100%', padding: '8px 10px', borderRadius: 8, border: '1.5px solid #E4E4E7', background: '#F7F7F8', fontSize: 12.5, resize: 'vertical', outline: 'none', boxSizing: 'border-box', color: '#09090B', fontFamily: 'inherit', transition: 'border-color 0.15s', lineHeight: 1.6 }}
-        onFocus={e => (e.currentTarget as HTMLTextAreaElement).style.borderColor = '#7C3AED'}
+        onFocus={e => (e.currentTarget as HTMLTextAreaElement).style.borderColor = '#063f76'}
         onBlur={e => (e.currentTarget as HTMLTextAreaElement).style.borderColor = '#E4E4E7'}
       />
       {arr.length > 0 && (
@@ -151,7 +151,7 @@ function Input({ value, onChange, placeholder, type = 'text' }: { value: string 
   return (
     <input type={type} value={value} onChange={e => onChange(e.target.value)} placeholder={placeholder}
       style={{ width: '100%', padding: '8px 10px', borderRadius: 8, border: '1.5px solid #E4E4E7', background: '#F7F7F8', fontSize: 13, outline: 'none', boxSizing: 'border-box', color: '#09090B', transition: 'border-color 0.15s' }}
-      onFocus={e => (e.currentTarget as HTMLInputElement).style.borderColor = '#7C3AED'}
+      onFocus={e => (e.currentTarget as HTMLInputElement).style.borderColor = '#063f76'}
       onBlur={e => (e.currentTarget as HTMLInputElement).style.borderColor = '#E4E4E7'}
     />
   )
@@ -170,7 +170,7 @@ function Textarea({ value, onChange, placeholder, rows = 3 }: { value: string; o
   return (
     <textarea value={value} onChange={e => onChange(e.target.value)} placeholder={placeholder} rows={rows}
       style={{ width: '100%', padding: '8px 10px', borderRadius: 8, border: '1.5px solid #E4E4E7', background: '#F7F7F8', fontSize: 13, outline: 'none', boxSizing: 'border-box', resize: 'vertical', color: '#09090B', fontFamily: 'inherit', transition: 'border-color 0.15s' }}
-      onFocus={e => (e.currentTarget as HTMLTextAreaElement).style.borderColor = '#7C3AED'}
+      onFocus={e => (e.currentTarget as HTMLTextAreaElement).style.borderColor = '#063f76'}
       onBlur={e => (e.currentTarget as HTMLTextAreaElement).style.borderColor = '#E4E4E7'}
     />
   )
@@ -207,7 +207,7 @@ function RoleCardList({
   const [expanded, setExpanded] = useState<number | null>(null)
 
   const LEVEL_COLORS: Record<string, string> = {
-    'L3': '#71717A', 'L4': '#2563EB', 'L5': '#7C3AED',
+    'L3': '#71717A', 'L4': '#2563EB', 'L5': '#063f76',
     'L7 / Staff': '#0891B2', 'Manager': '#16A34A',
     'Director': '#CA8A04', 'VP': '#DC2626',
   }
@@ -303,7 +303,7 @@ function RoleCardList({
                     <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
                       {qs.slice(0, 3).map((q, qi) => (
                         <div key={qi} style={{ display: 'flex', gap: 7, alignItems: 'flex-start' }}>
-                          <span style={{ fontSize: 10, fontWeight: 700, color: '#7C3AED', flexShrink: 0, marginTop: 1 }}>{qi + 1}.</span>
+                          <span style={{ fontSize: 10, fontWeight: 700, color: '#063f76', flexShrink: 0, marginTop: 1 }}>{qi + 1}.</span>
                           <span style={{ color: '#374151', fontSize: 11.5, lineHeight: 1.5 }}>{q}</span>
                         </div>
                       ))}
@@ -346,7 +346,7 @@ function DataTable({ cols, rows, onEdit, onDelete, onContent }: { cols: string[]
               {(onEdit || onDelete || onContent) && (
                 <td style={{ padding: '6px 14px', whiteSpace: 'nowrap' }}>
                   <div style={{ display: 'flex', gap: 6 }}>
-                    {onContent && <button onClick={() => onContent(i)} style={{ padding: '4px 10px', borderRadius: 6, border: '1px solid #DDD6FE', background: '#F5F3FF', fontSize: 11.5, fontWeight: 600, color: '#7C3AED', cursor: 'pointer' }}>Content</button>}
+                    {onContent && <button onClick={() => onContent(i)} style={{ padding: '4px 10px', borderRadius: 6, border: '1px solid #a8cbe8', background: '#eef4fb', fontSize: 11.5, fontWeight: 600, color: '#063f76', cursor: 'pointer' }}>Content</button>}
                     {onEdit && <button onClick={() => onEdit(i)} style={{ padding: '4px 10px', borderRadius: 6, border: '1px solid #E4E4E7', background: '#fff', fontSize: 11.5, fontWeight: 600, color: '#52525B', cursor: 'pointer' }}>Edit</button>}
                     {onDelete && <button onClick={() => onDelete(i)} style={{ padding: '4px 10px', borderRadius: 6, border: '1px solid #FECACA', background: '#FEF2F2', fontSize: 11.5, fontWeight: 600, color: '#DC2626', cursor: 'pointer' }}>Del</button>}
                   </div>
@@ -362,7 +362,7 @@ function DataTable({ cols, rows, onEdit, onDelete, onContent }: { cols: string[]
 
 function SaveBtn({ onClick, pending, label = 'Save' }: { onClick: () => void; pending: boolean; label?: string }) {
   return (
-    <button onClick={onClick} disabled={pending} style={{ width: '100%', padding: '10px', borderRadius: 9, border: 'none', background: pending ? '#A78BFA' : '#7C3AED', color: '#fff', fontSize: 13, fontWeight: 600, cursor: pending ? 'default' : 'pointer', marginTop: 8 }}>
+    <button onClick={onClick} disabled={pending} style={{ width: '100%', padding: '10px', borderRadius: 9, border: 'none', background: pending ? '#609dd6' : '#063f76', color: '#fff', fontSize: 13, fontWeight: 600, cursor: pending ? 'default' : 'pointer', marginTop: 8 }}>
       {pending ? 'Saving…' : label}
     </button>
   )
@@ -449,7 +449,7 @@ function LogoField({
           cursor: 'pointer', gap: 12, position: 'relative', overflow: 'hidden',
           transition: 'border-color 0.15s',
         }}
-        onMouseEnter={e => (e.currentTarget as HTMLElement).style.borderColor = '#7C3AED'}
+        onMouseEnter={e => (e.currentTarget as HTMLElement).style.borderColor = '#063f76'}
         onMouseLeave={e => (e.currentTarget as HTMLElement).style.borderColor = '#D4D4D8'}
       >
         {logoUrl ? (
@@ -466,7 +466,7 @@ function LogoField({
           </div>
         )}
         {uploading && (
-          <div style={{ position: 'absolute', inset: 0, background: 'rgba(255,255,255,0.8)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 12, color: '#7C3AED', fontWeight: 600 }}>
+          <div style={{ position: 'absolute', inset: 0, background: 'rgba(255,255,255,0.8)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 12, color: '#063f76', fontWeight: 600 }}>
             Uploading…
           </div>
         )}
@@ -482,7 +482,7 @@ function LogoField({
         onChange={e => onLogoUrl(e.target.value)}
         placeholder="Logo URL (auto-filled by Seed or upload)"
         style={{ marginTop: 6, width: '100%', padding: '7px 10px', borderRadius: 8, border: '1.5px solid #E4E4E7', background: '#F7F7F8', fontSize: 11.5, outline: 'none', boxSizing: 'border-box', color: '#09090B' }}
-        onFocus={e => (e.currentTarget as HTMLInputElement).style.borderColor = '#7C3AED'}
+        onFocus={e => (e.currentTarget as HTMLInputElement).style.borderColor = '#063f76'}
         onBlur={e => (e.currentTarget as HTMLInputElement).style.borderColor = '#E4E4E7'}
       />
 
@@ -507,7 +507,7 @@ function CompaniesSection({ companies, onRefresh, onViewContent }: { companies: 
   const filtered = companies.filter(c => c.name.toLowerCase().includes(search.toLowerCase()) || c.category?.toLowerCase().includes(search.toLowerCase()))
 
   function openEdit(c: Company) { setForm(c); setEditing(c); setIsNew(false); setErr(''); setSeedMsg(null) }
-  function openNew() { setForm({ logo_color: '#7C3AED', logo_url: null, is_hiring: true, tags: [] }); setEditing({} as Company); setIsNew(true); setErr(''); setSeedMsg(null) }
+  function openNew() { setForm({ logo_color: '#063f76', logo_url: null, is_hiring: true, tags: [] }); setEditing({} as Company); setIsNew(true); setErr(''); setSeedMsg(null) }
   function close() { setEditing(null); setForm({}); setSeedMsg(null) }
 
   async function handleSeed() {
@@ -567,7 +567,7 @@ function CompaniesSection({ companies, onRefresh, onViewContent }: { companies: 
       const res = await adminUpsertCompany({
         ...(isNew ? {} : { id: form.id }),
         name: form.name!, slug: form.slug!, category: form.category!,
-        description: form.description ?? undefined, logo_color: form.logo_color ?? '#7C3AED',
+        description: form.description ?? undefined, logo_color: form.logo_color ?? '#063f76',
         logo_url: form.logo_url ?? undefined,
         employees: form.employees ? Number(form.employees) : null,
         founded: form.founded ? Number(form.founded) : null,
@@ -598,7 +598,7 @@ function CompaniesSection({ companies, onRefresh, onViewContent }: { companies: 
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16, gap: 12 }}>
         <input value={search} onChange={e => setSearch(e.target.value)} placeholder="Search companies…"
           style={{ flex: 1, padding: '8px 12px', borderRadius: 9, border: '1.5px solid #E4E4E7', background: '#F7F7F8', fontSize: 13, outline: 'none' }} />
-        <button onClick={openNew} style={{ padding: '8px 16px', borderRadius: 9, border: 'none', background: '#7C3AED', color: '#fff', fontSize: 13, fontWeight: 600, cursor: 'pointer', whiteSpace: 'nowrap' }}>+ Add Company</button>
+        <button onClick={openNew} style={{ padding: '8px 16px', borderRadius: 9, border: 'none', background: '#063f76', color: '#fff', fontSize: 13, fontWeight: 600, cursor: 'pointer', whiteSpace: 'nowrap' }}>+ Add Company</button>
       </div>
       <DataTable
         cols={['Company', 'Category', 'HQ', 'Employees', 'Valuation', 'Hiring']}
@@ -725,7 +725,7 @@ function UsersSection({ profiles, onPlanUpdate }: { profiles: Profile[]; onPlanU
     })
   }
 
-  const planColor = (p: string) => p === 'SuperAdmin' ? '#EF4444' : p === 'Admin' ? '#F59E0B' : p === 'Pro' ? '#7C3AED' : '#A1A1AA'
+  const planColor = (p: string) => p === 'SuperAdmin' ? '#EF4444' : p === 'Admin' ? '#F59E0B' : p === 'Pro' ? '#063f76' : '#A1A1AA'
   const fmt = (d: string | null) => d ? new Date(d).toLocaleDateString() : '—'
   const fmtFull = (d: string | null) => d ? new Date(d).toLocaleString() : '—'
 
@@ -820,7 +820,7 @@ function AnalyticsSection({ analytics }: { analytics: Props['analytics'] }) {
       <div style={{ gridColumn: '1/-1', padding: 16, borderRadius: 12, background: '#F7F7F8', border: '1px solid #E4E4E7' }}>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 16 }}>
           {[
-            { label: 'Total Views', value: analytics.views.length, color: '#7C3AED' },
+            { label: 'Total Views', value: analytics.views.length, color: '#063f76' },
             { label: 'Total Saves', value: analytics.saves.length, color: '#10B981' },
             { label: 'Unique Companies Viewed', value: Object.keys(viewCounts).length, color: '#F59E0B' },
           ].map(s => (
@@ -1046,12 +1046,12 @@ function ContentSection({ companies, initialSelectedId }: { companies: Company[]
     refresh(); closePanel()
   }
   async function saveMilestone(form: Record<string, unknown>) {
-    const res = await adminUpsertMilestone({ company_id: selectedId, year: Number(form.year ?? new Date().getFullYear()), type: String(form.type ?? 'milestone'), icon: String(form.icon ?? '⭐'), accent_color: String(form.accent_color ?? '#7C3AED'), bg_color: String(form.bg_color ?? '#F5F3FF'), title: String(form.title ?? ''), detail: String(form.detail ?? ''), badge: String(form.badge ?? ''), sort_order: Number(form.sort_order ?? 0), ...(form.id ? { id: String(form.id) } : {}) })
+    const res = await adminUpsertMilestone({ company_id: selectedId, year: Number(form.year ?? new Date().getFullYear()), type: String(form.type ?? 'milestone'), icon: String(form.icon ?? '⭐'), accent_color: String(form.accent_color ?? '#063f76'), bg_color: String(form.bg_color ?? '#eef4fb'), title: String(form.title ?? ''), detail: String(form.detail ?? ''), badge: String(form.badge ?? ''), sort_order: Number(form.sort_order ?? 0), ...(form.id ? { id: String(form.id) } : {}) })
     if (res.error) { setErr(res.error); return }
     refresh(); closePanel()
   }
   async function saveProduct(form: Record<string, unknown>) {
-    const res = await adminUpsertProduct({ company_id: selectedId, name: String(form.name ?? ''), tagline: String(form.tagline ?? ''), description: String(form.description ?? ''), category: String(form.category ?? ''), cat_color: String(form.cat_color ?? '#7C3AED'), use_cases: form.use_cases ?? [], customers: form.customers ?? [], competitors: form.competitors ?? [], image_url: form.image_url ? String(form.image_url) : undefined, sort_order: Number(form.sort_order ?? 0), ...(form.id ? { id: String(form.id) } : {}) })
+    const res = await adminUpsertProduct({ company_id: selectedId, name: String(form.name ?? ''), tagline: String(form.tagline ?? ''), description: String(form.description ?? ''), category: String(form.category ?? ''), cat_color: String(form.cat_color ?? '#063f76'), use_cases: form.use_cases ?? [], customers: form.customers ?? [], competitors: form.competitors ?? [], image_url: form.image_url ? String(form.image_url) : undefined, sort_order: Number(form.sort_order ?? 0), ...(form.id ? { id: String(form.id) } : {}) })
     if (res.error) { setErr(res.error); return }
     refresh(); closePanel()
   }
@@ -1061,12 +1061,12 @@ function ContentSection({ companies, initialSelectedId }: { companies: Company[]
     refresh(); closePanel()
   }
   async function saveStandard(form: Record<string, unknown>) {
-    const res = await adminUpsertStandard({ company_id: selectedId, code: String(form.code ?? ''), category: String(form.category ?? ''), cat_color: String(form.cat_color ?? '#7C3AED'), status: String(form.status ?? 'Compliant'), description: String(form.description ?? ''), sort_order: Number(form.sort_order ?? 0), ...(form.id ? { id: String(form.id) } : {}) })
+    const res = await adminUpsertStandard({ company_id: selectedId, code: String(form.code ?? ''), category: String(form.category ?? ''), cat_color: String(form.cat_color ?? '#063f76'), status: String(form.status ?? 'Compliant'), description: String(form.description ?? ''), sort_order: Number(form.sort_order ?? 0), ...(form.id ? { id: String(form.id) } : {}) })
     if (res.error) { setErr(res.error); return }
     refresh(); closePanel()
   }
   async function saveDepartment(form: Record<string, unknown>) {
-    const res = await adminUpsertDepartment({ company_id: selectedId, name: String(form.name ?? ''), icon: String(form.icon ?? '🏢'), color: String(form.color ?? '#7C3AED'), headcount: Number(form.headcount ?? 0), sort_order: Number(form.sort_order ?? 0), ...(form.id ? { id: String(form.id) } : {}) })
+    const res = await adminUpsertDepartment({ company_id: selectedId, name: String(form.name ?? ''), icon: String(form.icon ?? '🏢'), color: String(form.color ?? '#063f76'), headcount: Number(form.headcount ?? 0), sort_order: Number(form.sort_order ?? 0), ...(form.id ? { id: String(form.id) } : {}) })
     if (res.error) { setErr(res.error); return }
     refresh(); closePanel()
   }
@@ -1204,7 +1204,7 @@ function ContentSection({ companies, initialSelectedId }: { companies: Company[]
   function renderTabContent() {
     if (!content) return <div style={{ padding: 40, textAlign: 'center', color: '#A1A1AA', fontSize: 13 }}>Loading…</div>
     const addBtn = (type: ContentTab) => (
-      <button onClick={() => setPanel({ type, data: { company_id: selectedId } })} style={{ padding: '7px 14px', borderRadius: 8, border: 'none', background: '#7C3AED', color: '#fff', fontSize: 12.5, fontWeight: 600, cursor: 'pointer' }}>+ Add</button>
+      <button onClick={() => setPanel({ type, data: { company_id: selectedId } })} style={{ padding: '7px 14px', borderRadius: 8, border: 'none', background: '#063f76', color: '#fff', fontSize: 12.5, fontWeight: 600, cursor: 'pointer' }}>+ Add</button>
     )
 
     if (tab === 'news') return (
@@ -1238,7 +1238,7 @@ function ContentSection({ companies, initialSelectedId }: { companies: Company[]
     if (tab === 'financials') return (
       <div>
         <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: 12 }}>
-          <button onClick={() => setPanel({ type: 'financials', data: (content.financials as unknown as Record<string, unknown>) ?? { company_id: selectedId } })} style={{ padding: '7px 14px', borderRadius: 8, border: 'none', background: '#7C3AED', color: '#fff', fontSize: 12.5, fontWeight: 600, cursor: 'pointer' }}>{content.financials ? 'Edit Financials' : '+ Add Financials'}</button>
+          <button onClick={() => setPanel({ type: 'financials', data: (content.financials as unknown as Record<string, unknown>) ?? { company_id: selectedId } })} style={{ padding: '7px 14px', borderRadius: 8, border: 'none', background: '#063f76', color: '#fff', fontSize: 12.5, fontWeight: 600, cursor: 'pointer' }}>{content.financials ? 'Edit Financials' : '+ Add Financials'}</button>
         </div>
         {content.financials ? (() => {
           const fin = content.financials as Record<string, unknown>
@@ -1246,7 +1246,7 @@ function ContentSection({ companies, initialSelectedId }: { companies: Company[]
           const businessUnits  = (fin.business_units   as {name:string;description:string;revenue_contribution:string}[]|null) ?? []
           const marketShare    = (fin.market_share      as {segment:string;percentage:number;context:string;year:number}[]|null) ?? []
           const revenueGrowth  = (fin.revenue_growth    as {year:number;revenue:string;growth_rate:string|null}[]|null) ?? []
-          const streamTypeColor: Record<string,string> = { subscription:'#7C3AED', transactional:'#2563EB', advertising:'#D97706', product:'#059669', services:'#0891B2', other:'#71717A' }
+          const streamTypeColor: Record<string,string> = { subscription:'#063f76', transactional:'#2563EB', advertising:'#D97706', product:'#059669', services:'#0891B2', other:'#71717A' }
           return (
             <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
               {/* ── Scalar metrics ── */}
@@ -1297,7 +1297,7 @@ function ContentSection({ companies, initialSelectedId }: { companies: Company[]
                             <div style={{ fontSize: 11, color: '#71717A', lineHeight: 1.4 }}>{s.description}</div>
                           </div>
                           <div style={{ width: 60, height: 5, borderRadius: 3, background: '#E4E4E7', flexShrink: 0, overflow: 'hidden' }}>
-                            <div style={{ height: '100%', width: `${s.percentage}%`, background: streamTypeColor[s.type] ?? '#7C3AED', borderRadius: 3 }} />
+                            <div style={{ height: '100%', width: `${s.percentage}%`, background: streamTypeColor[s.type] ?? '#063f76', borderRadius: 3 }} />
                           </div>
                         </div>
                       ))}
@@ -1312,7 +1312,7 @@ function ContentSection({ companies, initialSelectedId }: { companies: Company[]
                         <div key={i} style={{ padding: '8px 10px', background: '#fff', borderRadius: 8, border: '1px solid #F0F0F2' }}>
                           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 2 }}>
                             <span style={{ fontSize: 12, fontWeight: 700, color: '#09090B' }}>{u.name}</span>
-                            <span style={{ fontSize: 11.5, fontWeight: 800, color: '#7C3AED' }}>{u.revenue_contribution}</span>
+                            <span style={{ fontSize: 11.5, fontWeight: 800, color: '#063f76' }}>{u.revenue_contribution}</span>
                           </div>
                           <div style={{ fontSize: 11, color: '#71717A', lineHeight: 1.4 }}>{u.description}</div>
                         </div>
@@ -1396,7 +1396,7 @@ function ContentSection({ companies, initialSelectedId }: { companies: Company[]
       {/* Sub-tabs */}
       <div style={{ display: 'flex', gap: 4, marginBottom: 16, borderBottom: '1px solid #E4E4E7', paddingBottom: 1 }}>
         {TABS.map(t => (
-          <button key={t.id} onClick={() => setTab(t.id)} style={{ padding: '7px 12px', borderRadius: '8px 8px 0 0', border: 'none', background: tab === t.id ? '#fff' : 'transparent', color: tab === t.id ? '#7C3AED' : '#71717A', fontSize: 12.5, fontWeight: tab === t.id ? 700 : 400, cursor: 'pointer', borderBottom: tab === t.id ? '2px solid #7C3AED' : '2px solid transparent', marginBottom: -1 }}>
+          <button key={t.id} onClick={() => setTab(t.id)} style={{ padding: '7px 12px', borderRadius: '8px 8px 0 0', border: 'none', background: tab === t.id ? '#fff' : 'transparent', color: tab === t.id ? '#063f76' : '#71717A', fontSize: 12.5, fontWeight: tab === t.id ? 700 : 400, cursor: 'pointer', borderBottom: tab === t.id ? '2px solid #063f76' : '2px solid transparent', marginBottom: -1 }}>
             {t.label} <span style={{ fontSize: 10.5, opacity: 0.7 }}>({t.count})</span>
           </button>
         ))}
@@ -1603,7 +1603,7 @@ function DataSection() {
   }
   const btnStyle = (running: boolean): React.CSSProperties => ({
     padding: '9px 18px', borderRadius: 8, border: 'none', cursor: running ? 'not-allowed' : 'pointer',
-    background: running ? '#E4E4E7' : '#7C3AED', color: running ? '#A1A1AA' : '#fff',
+    background: running ? '#E4E4E7' : '#063f76', color: running ? '#A1A1AA' : '#fff',
     fontSize: 13, fontWeight: 600, transition: 'background 0.15s',
   })
 
@@ -1632,7 +1632,7 @@ function DataSection() {
             {seedLog.map((l, i) => (
               <div key={i} style={{ color: l.ok ? '#A1A1AA' : '#F87171', whiteSpace: 'pre' }}>{l.text}</div>
             ))}
-            {seedRunning && <div style={{ color: '#7C3AED', animation: 'pulse 1.4s ease-in-out infinite' }}>●</div>}
+            {seedRunning && <div style={{ color: '#063f76', animation: 'pulse 1.4s ease-in-out infinite' }}>●</div>}
           </div>
         )}
       </div>
@@ -1650,9 +1650,9 @@ function DataSection() {
           onDragOver={e => e.preventDefault()}
           onDrop={e => { e.preventDefault(); const f = e.dataTransfer.files[0]; if (f) setBulkFile(f) }}
           style={{
-            border: `2px dashed ${bulkFile ? '#7C3AED' : '#E4E4E7'}`,
+            border: `2px dashed ${bulkFile ? '#063f76' : '#E4E4E7'}`,
             borderRadius: 10, padding: '20px', textAlign: 'center', cursor: 'pointer',
-            background: bulkFile ? '#F5F3FF' : '#FAFAFA', marginBottom: 14,
+            background: bulkFile ? '#eef4fb' : '#FAFAFA', marginBottom: 14,
             transition: 'border-color 0.15s, background 0.15s',
           }}
         >
@@ -1660,7 +1660,7 @@ function DataSection() {
             onChange={e => { const f = e.target.files?.[0]; if (f) setBulkFile(f); e.target.value = '' }} />
           {bulkFile ? (
             <div>
-              <div style={{ fontSize: 13, fontWeight: 600, color: '#7C3AED' }}>{bulkFile.name}</div>
+              <div style={{ fontSize: 13, fontWeight: 600, color: '#063f76' }}>{bulkFile.name}</div>
               <div style={{ fontSize: 11.5, color: '#A1A1AA', marginTop: 2 }}>{(bulkFile.size / 1024).toFixed(1)} KB — click to change</div>
             </div>
           ) : (
@@ -1679,7 +1679,7 @@ function DataSection() {
         )}
 
         <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-          <button onClick={runBulkAdd} disabled={!bulkFile || bulkRunning} style={{ ...btnStyle(bulkRunning), background: (!bulkFile || bulkRunning) ? '#E4E4E7' : '#7C3AED', color: (!bulkFile || bulkRunning) ? '#A1A1AA' : '#fff', cursor: (!bulkFile || bulkRunning) ? 'not-allowed' : 'pointer' }}>
+          <button onClick={runBulkAdd} disabled={!bulkFile || bulkRunning} style={{ ...btnStyle(bulkRunning), background: (!bulkFile || bulkRunning) ? '#E4E4E7' : '#063f76', color: (!bulkFile || bulkRunning) ? '#A1A1AA' : '#fff', cursor: (!bulkFile || bulkRunning) ? 'not-allowed' : 'pointer' }}>
             {bulkRunning ? 'Uploading & Seeding…' : 'Upload & Seed'}
           </button>
           {bulkSummary && (
@@ -1696,7 +1696,7 @@ function DataSection() {
             {bulkLog.map((l, i) => (
               <div key={i} style={{ color: l.ok ? '#A1A1AA' : '#F87171', whiteSpace: 'pre' }}>{l.text}</div>
             ))}
-            {bulkRunning && <div style={{ color: '#7C3AED' }}>●</div>}
+            {bulkRunning && <div style={{ color: '#063f76' }}>●</div>}
           </div>
         )}
       </div>
@@ -1730,7 +1730,7 @@ export default function AdminDashboard({ currentUser, initialCompanies, initialP
       <div style={{ background: '#09090B', borderBottom: '1px solid #1C1C1E', padding: '0 24px', height: 52, display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexShrink: 0 }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
           <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: 8, textDecoration: 'none' }}>
-            <div style={{ width: 26, height: 26, borderRadius: 7, background: '#7C3AED', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <div style={{ width: 26, height: 26, borderRadius: 7, background: '#063f76', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               <svg width="13" height="13" viewBox="0 0 24 24" fill="#fff"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
             </div>
             <span style={{ color: '#fff', fontSize: 13, fontWeight: 700, letterSpacing: '-0.02em' }}>ResearchOrg</span>
@@ -1739,8 +1739,8 @@ export default function AdminDashboard({ currentUser, initialCompanies, initialP
           <span style={{ color: '#A1A1AA', fontSize: 12.5 }}>Admin Dashboard</span>
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-          <div style={{ padding: '3px 10px', borderRadius: 6, background: isSuperAdmin ? '#EF444420' : '#7C3AED20', border: `1px solid ${isSuperAdmin ? '#EF444430' : '#7C3AED30'}` }}>
-            <span style={{ fontSize: 11.5, fontWeight: 700, color: isSuperAdmin ? '#EF4444' : '#A78BFA' }}>{currentUser.plan}</span>
+          <div style={{ padding: '3px 10px', borderRadius: 6, background: isSuperAdmin ? '#EF444420' : '#063f7620', border: `1px solid ${isSuperAdmin ? '#EF444430' : '#063f7630'}` }}>
+            <span style={{ fontSize: 11.5, fontWeight: 700, color: isSuperAdmin ? '#EF4444' : '#609dd6' }}>{currentUser.plan}</span>
           </div>
           <span style={{ color: '#71717A', fontSize: 12 }}>{currentUser.email}</span>
           <Link href="/logout" style={{ padding: '5px 12px', borderRadius: 7, border: '1px solid #2C2C2E', background: 'transparent', color: '#A1A1AA', fontSize: 12, textDecoration: 'none', fontWeight: 500 }}>Sign out</Link>
@@ -1766,8 +1766,8 @@ export default function AdminDashboard({ currentUser, initialCompanies, initialP
           <NavItem label="Data" active={nav === 'data'} onClick={() => setNav('data')} />
 
           <div style={{ marginTop: 20, padding: '0 8px' }}>
-            <div style={{ padding: '12px 14px', borderRadius: 10, background: '#F5F3FF', border: '1px solid #EDE9FE' }}>
-              <div style={{ fontSize: 11, fontWeight: 700, color: '#7C3AED', marginBottom: 4 }}>DB Summary</div>
+            <div style={{ padding: '12px 14px', borderRadius: 10, background: '#eef4fb', border: '1px solid #d4e8f6' }}>
+              <div style={{ fontSize: 11, fontWeight: 700, color: '#063f76', marginBottom: 4 }}>DB Summary</div>
               {[
                 { label: 'Companies', value: companies.length },
                 { label: 'Users', value: profiles.length },

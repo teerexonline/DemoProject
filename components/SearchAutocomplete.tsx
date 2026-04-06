@@ -119,8 +119,8 @@ export default function SearchAutocomplete({ placeholder = 'Search any company..
         }}
         onFocusCapture={e => {
           const el = e.currentTarget as HTMLElement
-          el.style.borderColor = '#7C3AED'
-          el.style.boxShadow = isLg ? '0 0 0 3px rgba(124,58,237,0.1)' : 'none'
+          el.style.borderColor = '#063f76'
+          el.style.boxShadow = isLg ? '0 0 0 3px rgba(6,63,118,0.1)' : 'none'
           if (!isLg) el.style.background = '#fff'
         }}
         onBlurCapture={e => {
@@ -166,12 +166,12 @@ export default function SearchAutocomplete({ placeholder = 'Search any company..
             onClick={() => query.trim() && navigate(`/company?q=${encodeURIComponent(query)}`)}
             style={{
               margin: '5px', padding: '9px 16px',
-              background: '#7C3AED', color: '#fff', border: 'none', borderRadius: '8px',
+              background: '#063f76', color: '#fff', border: 'none', borderRadius: '8px',
               fontSize: '13px', fontWeight: 600, cursor: 'pointer',
               transition: 'background 0.15s', whiteSpace: 'nowrap', flexShrink: 0,
             }}
-            onMouseEnter={e => (e.currentTarget as HTMLElement).style.background = '#6D28D9'}
-            onMouseLeave={e => (e.currentTarget as HTMLElement).style.background = '#7C3AED'}
+            onMouseEnter={e => (e.currentTarget as HTMLElement).style.background = '#04294f'}
+            onMouseLeave={e => (e.currentTarget as HTMLElement).style.background = '#063f76'}
           >Search →</button>
         )}
       </div>
@@ -201,7 +201,7 @@ export default function SearchAutocomplete({ placeholder = 'Search any company..
                 width: '100%',
                 display: 'flex', alignItems: 'center', gap: '10px',
                 padding: '10px 14px',
-                background: i === activeIdx ? '#F5F3FF' : 'transparent',
+                background: i === activeIdx ? '#eef4fb' : 'transparent',
                 border: 'none',
                 cursor: 'pointer',
                 textAlign: 'left',
@@ -227,7 +227,7 @@ export default function SearchAutocomplete({ placeholder = 'Search any company..
             <button
               onClick={() => query.trim() && navigate(`/company?q=${encodeURIComponent(query)}`)}
               style={{
-                color: '#7C3AED', fontSize: '12px', fontWeight: 600,
+                color: '#063f76', fontSize: '12px', fontWeight: 600,
                 background: 'none', border: 'none', cursor: 'pointer', padding: 0,
               }}
             >
@@ -248,7 +248,7 @@ function highlightMatch(text: string, query: string) {
   return (
     <>
       {text.slice(0, idx)}
-      <mark style={{ background: 'rgba(124,58,237,0.12)', color: '#6D28D9', padding: '0 1px', borderRadius: '2px' }}>
+      <mark style={{ background: 'rgba(6,63,118,0.12)', color: '#04294f', padding: '0 1px', borderRadius: '2px' }}>
         {text.slice(idx, idx + query.length)}
       </mark>
       {text.slice(idx + query.length)}

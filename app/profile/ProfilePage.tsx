@@ -49,7 +49,7 @@ function InputField({ label, value, onChange, placeholder }: {
         style={{
           width: '100%', padding: '10px 13px',
           background: focused ? '#fff' : '#F7F7F8',
-          border: `1.5px solid ${focused ? '#7C3AED' : '#E4E4E7'}`,
+          border: `1.5px solid ${focused ? '#063f76' : '#E4E4E7'}`,
           borderRadius: 9, color: '#09090B', fontSize: 13.5,
           outline: 'none', boxSizing: 'border-box',
           transition: 'border-color 0.15s, background 0.15s',
@@ -104,12 +104,12 @@ export default function ProfilePage({ user, profile, savedCompanies: initialSave
 
             <div style={{ background: '#fff', borderRadius: 16, border: '1px solid #E4E4E7', overflow: 'hidden', boxShadow: '0 1px 8px rgba(0,0,0,0.06)' }}>
               {/* Avatar header */}
-              <div style={{ background: 'linear-gradient(135deg, #7C3AED15, #3B82F610)', padding: '28px 24px 20px', borderBottom: '1px solid #F0F0F2', textAlign: 'center' }}>
+              <div style={{ background: 'linear-gradient(135deg, #063f7615, #3B82F610)', padding: '28px 24px 20px', borderBottom: '1px solid #F0F0F2', textAlign: 'center' }}>
                 <div style={{
-                  width: 72, height: 72, borderRadius: 20, background: '#7C3AED',
+                  width: 72, height: 72, borderRadius: 20, background: '#063f76',
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
                   margin: '0 auto 12px',
-                  boxShadow: '0 4px 20px rgba(124,58,237,0.35)',
+                  boxShadow: '0 4px 20px rgba(6,63,118,0.35)',
                   fontSize: 26, fontWeight: 800, color: '#fff', letterSpacing: '-0.02em',
                 }}>
                   {initials}
@@ -117,9 +117,9 @@ export default function ProfilePage({ user, profile, savedCompanies: initialSave
                 <div style={{ fontSize: 16, fontWeight: 800, color: '#09090B', letterSpacing: '-0.03em' }}>{displayName}</div>
                 {jobRole && <div style={{ fontSize: 12, color: '#71717A', marginTop: 2 }}>{jobRole}{jobCompany ? ` · ${jobCompany}` : ''}</div>}
                 <div style={{ fontSize: 11.5, color: '#A1A1AA', marginTop: 4 }}>{user.email}</div>
-                <div style={{ marginTop: 10, display: 'inline-flex', alignItems: 'center', gap: 5, padding: '3px 10px', borderRadius: 6, background: profile.plan === 'Pro' ? '#7C3AED' : '#F4F4F5', border: `1px solid ${profile.plan === 'Pro' ? '#6D28D9' : '#E4E4E7'}` }}>
-                  {profile.plan === 'Pro' && <svg width="9" height="9" viewBox="0 0 24 24" fill="#DDD6FE"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>}
-                  <span style={{ fontSize: 11, fontWeight: 700, color: profile.plan === 'Pro' ? '#DDD6FE' : '#52525B' }}>{profile.plan} Plan</span>
+                <div style={{ marginTop: 10, display: 'inline-flex', alignItems: 'center', gap: 5, padding: '3px 10px', borderRadius: 6, background: profile.plan === 'Pro' ? '#063f76' : '#F4F4F5', border: `1px solid ${profile.plan === 'Pro' ? '#04294f' : '#E4E4E7'}` }}>
+                  {profile.plan === 'Pro' && <svg width="9" height="9" viewBox="0 0 24 24" fill="#a8cbe8"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>}
+                  <span style={{ fontSize: 11, fontWeight: 700, color: profile.plan === 'Pro' ? '#a8cbe8' : '#52525B' }}>{profile.plan} Plan</span>
                 </div>
               </div>
 
@@ -142,7 +142,7 @@ export default function ProfilePage({ user, profile, savedCompanies: initialSave
                     <button
                       onClick={() => setEditMode(true)}
                       style={{ width: '100%', padding: '9px', borderRadius: 9, border: '1.5px solid #E4E4E7', background: '#fff', fontSize: 13, fontWeight: 600, color: '#52525B', cursor: 'pointer', transition: 'border-color 0.15s, background 0.15s' }}
-                      onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = '#7C3AED'; (e.currentTarget as HTMLElement).style.color = '#7C3AED' }}
+                      onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = '#063f76'; (e.currentTarget as HTMLElement).style.color = '#063f76' }}
                       onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = '#E4E4E7'; (e.currentTarget as HTMLElement).style.color = '#52525B' }}
                     >
                       Edit profile
@@ -160,9 +160,9 @@ export default function ProfilePage({ user, profile, savedCompanies: initialSave
                       <button
                         onClick={handleSaveProfile}
                         disabled={isPending}
-                        style={{ flex: 1, padding: '9px', borderRadius: 9, border: 'none', background: isPending ? '#A78BFA' : '#7C3AED', color: '#fff', fontSize: 13, fontWeight: 600, cursor: isPending ? 'default' : 'pointer', transition: 'background 0.15s' }}
-                        onMouseEnter={e => { if (!isPending) (e.currentTarget as HTMLElement).style.background = '#6D28D9' }}
-                        onMouseLeave={e => { if (!isPending) (e.currentTarget as HTMLElement).style.background = '#7C3AED' }}
+                        style={{ flex: 1, padding: '9px', borderRadius: 9, border: 'none', background: isPending ? '#609dd6' : '#063f76', color: '#fff', fontSize: 13, fontWeight: 600, cursor: isPending ? 'default' : 'pointer', transition: 'background 0.15s' }}
+                        onMouseEnter={e => { if (!isPending) (e.currentTarget as HTMLElement).style.background = '#04294f' }}
+                        onMouseLeave={e => { if (!isPending) (e.currentTarget as HTMLElement).style.background = '#063f76' }}
                       >
                         {isPending ? 'Saving…' : 'Save changes'}
                       </button>
@@ -206,7 +206,7 @@ export default function ProfilePage({ user, profile, savedCompanies: initialSave
                   {saved.length} {saved.length === 1 ? 'company' : 'companies'} · sorted A–Z
                 </div>
               </div>
-              <Link href="/" style={{ fontSize: 12, fontWeight: 600, color: '#7C3AED', textDecoration: 'none', opacity: 0.8 }}
+              <Link href="/" style={{ fontSize: 12, fontWeight: 600, color: '#063f76', textDecoration: 'none', opacity: 0.8 }}
                 onMouseEnter={e => (e.currentTarget as HTMLElement).style.opacity = '1'}
                 onMouseLeave={e => (e.currentTarget as HTMLElement).style.opacity = '0.8'}
               >
@@ -221,14 +221,14 @@ export default function ProfilePage({ user, profile, savedCompanies: initialSave
                 <p style={{ fontSize: 13, color: '#A1A1AA', lineHeight: 1.6, margin: '0 0 20px' }}>
                   Click the bookmark icon on any company profile to save it here.
                 </p>
-                <Link href="/" style={{ display: 'inline-flex', alignItems: 'center', gap: 6, padding: '9px 18px', borderRadius: 9, background: '#7C3AED', color: '#fff', textDecoration: 'none', fontSize: 13, fontWeight: 600 }}>
+                <Link href="/" style={{ display: 'inline-flex', alignItems: 'center', gap: 6, padding: '9px 18px', borderRadius: 9, background: '#063f76', color: '#fff', textDecoration: 'none', fontSize: 13, fontWeight: 600 }}>
                   Browse companies
                 </Link>
               </div>
             ) : (
               <div className="pp-saved-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 10 }}>
                 {saved.map(c => {
-                  const color = c.logo_color ?? '#7C3AED'
+                  const color = c.logo_color ?? '#063f76'
                   return (
                     <div key={c.id} style={{ background: '#fff', borderRadius: 12, border: '1.5px solid #E4E4E7', overflow: 'hidden', boxShadow: '0 1px 5px rgba(0,0,0,0.04)', transition: 'box-shadow 0.15s' }}
                       onMouseEnter={e => (e.currentTarget as HTMLElement).style.boxShadow = `0 4px 16px ${color}18`}

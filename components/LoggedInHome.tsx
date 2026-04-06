@@ -55,7 +55,7 @@ const FALLBACK: Company[] = [
 ]
 
 const SECTORS = [
-  { id: 'all',    label: 'All',            color: '#7C3AED', kw: [] },
+  { id: 'all',    label: 'All',            color: '#063f76', kw: [] },
   { id: 'ai',     label: 'AI Research',    color: '#10A37F', kw: ['ai', 'machine', 'ml'] },
   { id: 'fintech',label: 'Fintech',        color: '#635BFF', kw: ['fin', 'pay', 'bank', 'credit'] },
   { id: 'saas',   label: 'SaaS',          color: '#F24E1E', kw: ['saas', 'crm', 'hr', 'workforce', 'communication'] },
@@ -94,7 +94,7 @@ function inSector(c: Company, sectorId: string): boolean {
 // ─── Logo helper (thin wrapper so card code stays terse) ─────────────────────
 
 function Logo({ c, size = 36 }: { c: Company; size?: number }) {
-  const color = c.logo_color ?? '#7C3AED'
+  const color = c.logo_color ?? '#063f76'
   return (
     <CompanyLogo
       name={c.name}
@@ -138,7 +138,7 @@ const TREND_DELTAS  = ['+34%','+28%','+21%','+19%','+15%','+12%']
 const TREND_VIEWS   = ['18.4k','14.2k','11.8k','9.3k','7.6k','6.1k']
 
 function TrendCard({ c, rank, initialSaved }: { c: Company; rank: number; initialSaved: boolean }) {
-  const bg = c.logo_color ?? '#7C3AED'
+  const bg = c.logo_color ?? '#063f76'
   return (
     <div style={{ flexShrink: 0, width: 176, position: 'relative' }}>
       <Link href={`/company/${c.slug}`} style={{ textDecoration: 'none', display: 'block' }}>
@@ -191,7 +191,7 @@ function TrendCard({ c, rank, initialSaved }: { c: Company; rank: number; initia
 // ─── Featured spotlight card ─────────────────────────────────────────────────
 
 function FeaturedCard({ c, initialSaved }: { c: Company; initialSaved: boolean }) {
-  const bg = c.logo_color ?? '#7C3AED'
+  const bg = c.logo_color ?? '#063f76'
   return (
     <div style={{ position: 'relative' }}>
     <Link href={`/company/${c.slug}`} style={{ textDecoration: 'none', display: 'block' }}>
@@ -260,7 +260,7 @@ function FeaturedCard({ c, initialSaved }: { c: Company; initialSaved: boolean }
 // ─── Recently added mini card ────────────────────────────────────────────────
 
 function RecentCard({ c, daysAgo, initialSaved }: { c: Company; daysAgo: number; initialSaved: boolean }) {
-  const bg = c.logo_color ?? '#7C3AED'
+  const bg = c.logo_color ?? '#063f76'
   return (
     <div style={{ position: 'relative' }}>
     <Link href={`/company/${c.slug}`} style={{ textDecoration: 'none', display: 'block' }}>
@@ -307,7 +307,7 @@ function RecentCard({ c, daysAgo, initialSaved }: { c: Company; daysAgo: number;
 // ─── Editor pick row ─────────────────────────────────────────────────────────
 
 function PickRow({ c, note, rank, initialSaved }: { c: Company; note: string; rank: number; initialSaved: boolean }) {
-  const bg = c.logo_color ?? '#7C3AED'
+  const bg = c.logo_color ?? '#063f76'
   return (
     <div style={{ position: 'relative' }}>
     <Link href={`/company/${c.slug}`} style={{ textDecoration: 'none', display: 'block' }}>
@@ -375,12 +375,12 @@ export default function LoggedInHome({ user, plan, companies, isPro, savedIds }:
 
           <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
             {/* Avatar */}
-            <div style={{ width: 32, height: 32, borderRadius: 9, background: '#7C3AED', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 2px 10px rgba(124,58,237,0.45)', flexShrink: 0 }}>
+            <div style={{ width: 32, height: 32, borderRadius: 9, background: '#063f76', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 2px 10px rgba(6,63,118,0.45)', flexShrink: 0 }}>
               <span style={{ color: '#fff', fontSize: 13, fontWeight: 800 }}>{name.charAt(0).toUpperCase()}</span>
             </div>
             <div>
               <div style={{ color: '#fff', fontSize: 13.5, fontWeight: 700, letterSpacing: '-0.02em' }}>
-                {getGreeting()}, <span style={{ color: '#A78BFA' }}>{name}</span>
+                {getGreeting()}, <span style={{ color: '#609dd6' }}>{name}</span>
               </div>
               <div style={{ color: '#3F3F46', fontSize: 11 }}>
                 {new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })}
@@ -400,16 +400,16 @@ export default function LoggedInHome({ user, plan, companies, isPro, savedIds }:
             </div>
             {/* Plan badge / CTA */}
             {isPro ? (
-              <div style={{ display: 'flex', alignItems: 'center', gap: 5, padding: '4px 11px', borderRadius: 7, background: 'linear-gradient(135deg, #7C3AED, #5B21B6)', border: '1px solid #6D28D9', boxShadow: '0 2px 10px rgba(124,58,237,0.35)' }}>
-                <svg width="10" height="10" viewBox="0 0 24 24" fill="#DDD6FE"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                <span style={{ color: '#DDD6FE', fontSize: 11.5, fontWeight: 700 }}>Pro</span>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 5, padding: '4px 11px', borderRadius: 7, background: 'linear-gradient(135deg, #063f76, #5B21B6)', border: '1px solid #04294f', boxShadow: '0 2px 10px rgba(6,63,118,0.35)' }}>
+                <svg width="10" height="10" viewBox="0 0 24 24" fill="#a8cbe8"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                <span style={{ color: '#a8cbe8', fontSize: 11.5, fontWeight: 700 }}>Pro</span>
               </div>
             ) : (
               <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                 <span style={{ color: '#3F3F46', fontSize: 11.5 }}>Free plan</span>
-                <Link href="/signup?plan=pro" style={{ padding: '5px 13px', borderRadius: 7, background: '#7C3AED', color: '#fff', fontSize: 11.5, fontWeight: 600, textDecoration: 'none', boxShadow: '0 2px 10px rgba(124,58,237,0.4)', transition: 'background 0.15s' }}
-                  onMouseEnter={e => (e.currentTarget as HTMLElement).style.background = '#6D28D9'}
-                  onMouseLeave={e => (e.currentTarget as HTMLElement).style.background = '#7C3AED'}
+                <Link href="/signup?plan=pro" style={{ padding: '5px 13px', borderRadius: 7, background: '#063f76', color: '#fff', fontSize: 11.5, fontWeight: 600, textDecoration: 'none', boxShadow: '0 2px 10px rgba(6,63,118,0.4)', transition: 'background 0.15s' }}
+                  onMouseEnter={e => (e.currentTarget as HTMLElement).style.background = '#04294f'}
+                  onMouseLeave={e => (e.currentTarget as HTMLElement).style.background = '#063f76'}
                 >
                   Upgrade →
                 </Link>
@@ -440,7 +440,7 @@ export default function LoggedInHome({ user, plan, companies, isPro, savedIds }:
 
           {/* 1. Featured Company of the Week */}
           <section>
-            <SLabel title="Featured This Week" sub="Curated spotlight — deep-dive ready" accent="#7C3AED" />
+            <SLabel title="Featured This Week" sub="Curated spotlight — deep-dive ready" accent="#063f76" />
             <FeaturedCard c={featured} initialSaved={savedIds.includes(featured.id)} />
           </section>
 
@@ -537,10 +537,10 @@ export default function LoggedInHome({ user, plan, companies, isPro, savedIds }:
 
           {/* Plan card */}
           {!isPro ? (
-            <div style={{ borderRadius: 14, background: 'linear-gradient(145deg, #0F0A1E, #160D2E)', border: '1px solid #2D1F4E', padding: '18px 16px', boxShadow: '0 4px 20px rgba(124,58,237,0.18)' }}>
+            <div style={{ borderRadius: 14, background: 'linear-gradient(145deg, #0F0A1E, #160D2E)', border: '1px solid #2D1F4E', padding: '18px 16px', boxShadow: '0 4px 20px rgba(6,63,118,0.18)' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 9 }}>
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="#A78BFA"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                <span style={{ color: '#A78BFA', fontSize: 11.5, fontWeight: 700, letterSpacing: '0.04em' }}>UPGRADE TO PRO</span>
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="#609dd6"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                <span style={{ color: '#609dd6', fontSize: 11.5, fontWeight: 700, letterSpacing: '0.04em' }}>UPGRADE TO PRO</span>
               </div>
               <p style={{ color: '#6B5FA0', fontSize: 12, lineHeight: 1.6, margin: '0 0 12px' }}>
                 Unlock all 6 sections — org charts, financials, internal tools, and interview prep — for every company.
@@ -548,14 +548,14 @@ export default function LoggedInHome({ user, plan, companies, isPro, savedIds }:
               <div style={{ display: 'flex', flexDirection: 'column', gap: 5, marginBottom: 14 }}>
                 {['Full org chart & reporting lines', 'Financials & valuation data', 'Interview prep per role', 'Internal tools & processes'].map(f => (
                   <div key={f} style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                    <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="#7C3AED" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                    <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="#063f76" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
                     <span style={{ color: '#7C6FB5', fontSize: 11 }}>{f}</span>
                   </div>
                 ))}
               </div>
-              <Link href="/signup?plan=pro" style={{ display: 'block', textAlign: 'center', padding: '9px', borderRadius: 9, background: '#7C3AED', color: '#fff', textDecoration: 'none', fontSize: 12.5, fontWeight: 700, boxShadow: '0 4px 14px rgba(124,58,237,0.45)', transition: 'background 0.15s' }}
-                onMouseEnter={e => (e.currentTarget as HTMLElement).style.background = '#6D28D9'}
-                onMouseLeave={e => (e.currentTarget as HTMLElement).style.background = '#7C3AED'}
+              <Link href="/signup?plan=pro" style={{ display: 'block', textAlign: 'center', padding: '9px', borderRadius: 9, background: '#063f76', color: '#fff', textDecoration: 'none', fontSize: 12.5, fontWeight: 700, boxShadow: '0 4px 14px rgba(6,63,118,0.45)', transition: 'background 0.15s' }}
+                onMouseEnter={e => (e.currentTarget as HTMLElement).style.background = '#04294f'}
+                onMouseLeave={e => (e.currentTarget as HTMLElement).style.background = '#063f76'}
               >
                 From $4.99 / month →
               </Link>
@@ -578,7 +578,7 @@ export default function LoggedInHome({ user, plan, companies, isPro, savedIds }:
             <p style={{ color: '#52525B', fontSize: 12, lineHeight: 1.65, margin: '0 0 8px' }}>
               Before your interview, check the <strong style={{ color: '#09090B' }}>Org Chart</strong> to understand reporting structure, then use <strong style={{ color: '#09090B' }}>Interview Prep</strong> for role-specific questions.
             </p>
-            <div style={{ color: '#7C3AED', fontSize: 11.5, fontWeight: 600 }}>Tip from 3,200+ users ✦</div>
+            <div style={{ color: '#063f76', fontSize: 11.5, fontWeight: 600 }}>Tip from 3,200+ users ✦</div>
           </div>
 
         </div>

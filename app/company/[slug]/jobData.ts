@@ -31,11 +31,11 @@ export interface ExecGroup {
 export const LEVEL_COLORS: Record<string, string> = {
   'L3':         '#10B981',
   'L4':         '#3B82F6',
-  'L5':         '#7C3AED',
+  'L5':         '#063f76',
   'L6':         '#F59E0B',
   'L7 / Staff': '#EF4444',
   'Manager':    '#06B6D4',
-  'Director':   '#8B5CF6',
+  'Director':   '#063f76',
   'VP':         '#F97316',
 }
 
@@ -292,8 +292,8 @@ const PEOPLE_ROLES: JobRole[] = [
 export const DEPARTMENTS: Dept[] = [
   { id: 'engineering',  name: 'Engineering',        icon: '💻', color: '#3B82F6', headcount: 210, roles: ENG_ROLES },
   { id: 'infra',        name: 'Infrastructure',      icon: '🔧', color: '#6366F1', headcount: 45,  roles: INFRA_ROLES },
-  { id: 'security',     name: 'Security',            icon: '🛡️', color: '#8B5CF6', headcount: 28,  roles: SECURITY_ROLES },
-  { id: 'product',      name: 'Product',             icon: '🎯', color: '#7C3AED', headcount: 85,  roles: PRODUCT_ROLES },
+  { id: 'security',     name: 'Security',            icon: '🛡️', color: '#063f76', headcount: 28,  roles: SECURITY_ROLES },
+  { id: 'product',      name: 'Product',             icon: '🎯', color: '#063f76', headcount: 85,  roles: PRODUCT_ROLES },
   { id: 'design',       name: 'Design',              icon: '🎨', color: '#A855F7', headcount: 42,  roles: DESIGN_ROLES },
   { id: 'finance',      name: 'Finance',             icon: '📊', color: '#10B981', headcount: 38,  roles: FINANCE_ROLES },
   { id: 'accounting',   name: 'Accounting',          icon: '📝', color: '#059669', headcount: 22,  roles: ACCOUNTING_ROLES },

@@ -13,13 +13,13 @@ export default function Features() {
   return (
     <section id="features" style={{
       padding: '96px 24px',
-      background: '#FAFAFA',
-      borderTop: '1px solid #F4F4F5',
+      background: '#f8fbfe',
+      borderTop: '1px solid #e2eaf2',
     }}>
       <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
         <div style={{ textAlign: 'center', marginBottom: '56px' }}>
           <p style={{
-            color: '#7C3AED',
+            color: '#609dd6',
             fontSize: '12px',
             fontWeight: 700,
             textTransform: 'uppercase',
@@ -30,7 +30,7 @@ export default function Features() {
             fontSize: 'clamp(26px, 3.5vw, 40px)',
             fontWeight: 800,
             letterSpacing: '-0.04em',
-            color: '#09090B',
+            color: '#063f76',
             margin: '0 0 16px',
             lineHeight: 1.15,
           }}>
@@ -53,20 +53,20 @@ export default function Features() {
                 padding: '28px 24px',
                 background: '#fff',
                 borderRadius: '14px',
-                border: '1px solid #E4E4E7',
+                border: '1px solid #e2eaf2',
                 transition: 'box-shadow 0.2s, border-color 0.2s, transform 0.15s',
                 cursor: 'default',
               }}
               onMouseEnter={e => {
                 const el = e.currentTarget as HTMLElement
-                el.style.boxShadow = '0 4px 20px rgba(0,0,0,0.07)'
-                el.style.borderColor = '#DDD6FE'
+                el.style.boxShadow = '0 4px 20px rgba(6,63,118,0.08)'
+                el.style.borderColor = '#a8cbe8'
                 el.style.transform = 'translateY(-2px)'
               }}
               onMouseLeave={e => {
                 const el = e.currentTarget as HTMLElement
                 el.style.boxShadow = 'none'
-                el.style.borderColor = '#E4E4E7'
+                el.style.borderColor = '#e2eaf2'
                 el.style.transform = 'translateY(0)'
               }}
             >
@@ -74,16 +74,11 @@ export default function Features() {
               <h3 style={{
                 fontSize: '15px',
                 fontWeight: 700,
-                color: '#09090B',
+                color: '#063f76',
                 letterSpacing: '-0.02em',
                 margin: '0 0 8px',
               }}>{f.title}</h3>
-              <p style={{
-                color: '#71717A',
-                fontSize: '13.5px',
-                lineHeight: 1.65,
-                margin: 0,
-              }}>{f.desc}</p>
+              <p style={{ color: '#71717A', fontSize: '13.5px', lineHeight: 1.65, margin: 0 }}>{f.desc}</p>
             </div>
           ))}
         </div>

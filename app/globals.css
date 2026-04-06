@@ -154,8 +154,8 @@
   100% { background-position: 400px 0; }
 }
 @keyframes pulseGlow {
-  0%, 100% { box-shadow: 0 0 0 0 rgba(124,58,237,0); }
-  50%       { box-shadow: 0 0 0 6px rgba(124,58,237,0.15); }
+  0%, 100% { box-shadow: 0 0 0 0 rgba(6,63,118,0); }
+  50%       { box-shadow: 0 0 0 6px rgba(6,63,118,0.15); }
 }
 @keyframes float {
   0%, 100% { transform: translateY(0px); }

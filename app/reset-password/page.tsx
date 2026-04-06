@@ -61,7 +61,7 @@ export default function ResetPasswordPage() {
           fontFamily: 'inherit', fontWeight: 800, fontSize: '17px',
           color: '#09090B', textDecoration: 'none', letterSpacing: '-0.02em', display: 'block', marginBottom: '32px',
         }}>
-          Research<span style={{ color: '#8B5CF6' }}>Org</span>
+          Research<span style={{ color: '#063f76' }}>Org</span>
         </Link>
 
         <h1 style={{
@@ -76,14 +76,14 @@ export default function ResetPasswordPage() {
           <div>
             <label style={{ display: 'block', color: '#A1A1AA', fontSize: '12.5px', fontWeight: 500, marginBottom: '6px' }}>New Password</label>
             <input type="password" value={password} onChange={e => setPassword(e.target.value)} required placeholder="Min. 8 characters" style={inputStyle}
-              onFocus={e => (e.target as HTMLInputElement).style.borderColor = 'rgba(139,92,246,0.5)'}
+              onFocus={e => (e.target as HTMLInputElement).style.borderColor = 'rgba(6,63,118,0.5)'}
               onBlur={e => (e.target as HTMLInputElement).style.borderColor = '#E4E4E7'}
             />
           </div>
           <div>
             <label style={{ display: 'block', color: '#A1A1AA', fontSize: '12.5px', fontWeight: 500, marginBottom: '6px' }}>Confirm Password</label>
             <input type="password" value={confirm} onChange={e => setConfirm(e.target.value)} required placeholder="Repeat password" style={inputStyle}
-              onFocus={e => (e.target as HTMLInputElement).style.borderColor = 'rgba(139,92,246,0.5)'}
+              onFocus={e => (e.target as HTMLInputElement).style.borderColor = 'rgba(6,63,118,0.5)'}
               onBlur={e => (e.target as HTMLInputElement).style.borderColor = '#E4E4E7'}
             />
           </div>
@@ -100,15 +100,15 @@ export default function ResetPasswordPage() {
             type="submit" disabled={loading}
             style={{
               width: '100%', padding: '12px',
-              background: loading ? '#4C1D95' : '#7C3AED',
-              border: '1px solid rgba(139,92,246,0.4)', borderRadius: '9px',
+              background: loading ? '#4C1D95' : '#063f76',
+              border: '1px solid rgba(6,63,118,0.4)', borderRadius: '9px',
               color: '#fff', fontSize: '14px', fontWeight: 600,
               cursor: loading ? 'default' : 'pointer',
-              boxShadow: '0 0 20px rgba(124,58,237,0.25)',
+              boxShadow: '0 0 20px rgba(6,63,118,0.25)',
               transition: 'background 0.15s', letterSpacing: '-0.01em', marginTop: '4px',
             }}
-            onMouseEnter={e => { if (!loading) (e.currentTarget as HTMLElement).style.background = '#6D28D9' }}
-            onMouseLeave={e => { if (!loading) (e.currentTarget as HTMLElement).style.background = '#7C3AED' }}
+            onMouseEnter={e => { if (!loading) (e.currentTarget as HTMLElement).style.background = '#04294f' }}
+            onMouseLeave={e => { if (!loading) (e.currentTarget as HTMLElement).style.background = '#063f76' }}
           >
             {loading ? 'Updating...' : 'Update Password'}
           </button>

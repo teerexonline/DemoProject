@@ -37,7 +37,7 @@ function TextInput({ value, onChange, placeholder, type = 'text', readOnly }: {
       style={{
         width: '100%', padding: '10px 13px',
         background: readOnly ? '#F7F7F8' : focused ? '#fff' : '#F7F7F8',
-        border: `1.5px solid ${focused && !readOnly ? '#7C3AED' : '#E4E4E7'}`,
+        border: `1.5px solid ${focused && !readOnly ? '#063f76' : '#E4E4E7'}`,
         borderRadius: 9, color: readOnly ? '#71717A' : '#09090B', fontSize: 13.5,
         outline: 'none', boxSizing: 'border-box', transition: 'border-color 0.15s, background 0.15s',
         cursor: readOnly ? 'not-allowed' : 'text',
@@ -60,9 +60,9 @@ function SectionCard({ title, description, children }: { title: string; descript
 
 function SaveBtn({ onClick, pending, label = 'Save changes' }: { onClick: () => void; pending: boolean; label?: string }) {
   return (
-    <button onClick={onClick} disabled={pending} style={{ padding: '9px 20px', borderRadius: 9, border: 'none', background: pending ? '#A78BFA' : '#7C3AED', color: '#fff', fontSize: 13, fontWeight: 600, cursor: pending ? 'default' : 'pointer', transition: 'background 0.15s' }}
-      onMouseEnter={e => { if (!pending) (e.currentTarget as HTMLElement).style.background = '#6D28D9' }}
-      onMouseLeave={e => { if (!pending) (e.currentTarget as HTMLElement).style.background = '#7C3AED' }}
+    <button onClick={onClick} disabled={pending} style={{ padding: '9px 20px', borderRadius: 9, border: 'none', background: pending ? '#609dd6' : '#063f76', color: '#fff', fontSize: 13, fontWeight: 600, cursor: pending ? 'default' : 'pointer', transition: 'background 0.15s' }}
+      onMouseEnter={e => { if (!pending) (e.currentTarget as HTMLElement).style.background = '#04294f' }}
+      onMouseLeave={e => { if (!pending) (e.currentTarget as HTMLElement).style.background = '#063f76' }}
     >
       {pending ? 'Saving…' : label}
     </button>
@@ -115,7 +115,7 @@ export default function SettingsPage({ user, profile, isPro }: Props) {
         {/* Page header */}
         <div style={{ marginBottom: 28, display: 'flex', alignItems: 'center', gap: 12 }}>
           <Link href="/profile" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: 32, height: 32, borderRadius: 8, border: '1.5px solid #E4E4E7', background: '#fff', textDecoration: 'none', transition: 'border-color 0.15s' }}
-            onMouseEnter={e => (e.currentTarget as HTMLElement).style.borderColor = '#7C3AED'}
+            onMouseEnter={e => (e.currentTarget as HTMLElement).style.borderColor = '#063f76'}
             onMouseLeave={e => (e.currentTarget as HTMLElement).style.borderColor = '#E4E4E7'}
           >
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#52525B" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
@@ -132,9 +132,9 @@ export default function SettingsPage({ user, profile, isPro }: Props) {
           <SectionCard title="Subscription Plan" description="Your current plan and billing">
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 16, flexWrap: 'wrap' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
-                <div style={{ width: 44, height: 44, borderRadius: 12, background: isPro ? 'linear-gradient(135deg, #7C3AED, #5B21B6)' : '#F4F4F5', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: isPro ? '0 4px 14px rgba(124,58,237,0.3)' : 'none' }}>
+                <div style={{ width: 44, height: 44, borderRadius: 12, background: isPro ? 'linear-gradient(135deg, #063f76, #5B21B6)' : '#F4F4F5', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: isPro ? '0 4px 14px rgba(6,63,118,0.3)' : 'none' }}>
                   {isPro
-                    ? <svg width="18" height="18" viewBox="0 0 24 24" fill="#DDD6FE"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                    ? <svg width="18" height="18" viewBox="0 0 24 24" fill="#a8cbe8"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
                     : <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#A1A1AA" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
                   }
                 </div>
@@ -148,9 +148,9 @@ export default function SettingsPage({ user, profile, isPro }: Props) {
                 </div>
               </div>
               {!isPro && (
-                <Link href="/signup?plan=pro" style={{ padding: '9px 20px', borderRadius: 9, background: '#7C3AED', color: '#fff', textDecoration: 'none', fontSize: 13, fontWeight: 700, boxShadow: '0 4px 14px rgba(124,58,237,0.3)', transition: 'background 0.15s', whiteSpace: 'nowrap' }}
-                  onMouseEnter={e => (e.currentTarget as HTMLElement).style.background = '#6D28D9'}
-                  onMouseLeave={e => (e.currentTarget as HTMLElement).style.background = '#7C3AED'}
+                <Link href="/signup?plan=pro" style={{ padding: '9px 20px', borderRadius: 9, background: '#063f76', color: '#fff', textDecoration: 'none', fontSize: 13, fontWeight: 700, boxShadow: '0 4px 14px rgba(6,63,118,0.3)', transition: 'background 0.15s', whiteSpace: 'nowrap' }}
+                  onMouseEnter={e => (e.currentTarget as HTMLElement).style.background = '#04294f'}
+                  onMouseLeave={e => (e.currentTarget as HTMLElement).style.background = '#063f76'}
                 >
                   Upgrade to Pro →
                 </Link>
@@ -199,7 +199,7 @@ export default function SettingsPage({ user, profile, isPro }: Props) {
               {pwMsg && <span style={{ fontSize: 12.5, color: '#10B981', fontWeight: 600 }}>✓ {pwMsg}</span>}
               <div style={{ height: 20, width: 1, background: '#E4E4E7' }} />
               {!resetSent ? (
-                <button onClick={handleResetPassword} disabled={resetPending} style={{ fontSize: 12.5, color: '#7C3AED', background: 'none', border: 'none', cursor: 'pointer', fontWeight: 600, padding: 0 }}>
+                <button onClick={handleResetPassword} disabled={resetPending} style={{ fontSize: 12.5, color: '#063f76', background: 'none', border: 'none', cursor: 'pointer', fontWeight: 600, padding: 0 }}>
                   {resetPending ? 'Sending…' : 'Send password reset email'}
                 </button>
               ) : (

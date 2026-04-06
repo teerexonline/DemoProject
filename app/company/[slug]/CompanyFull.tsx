@@ -129,7 +129,7 @@ function InternalSection({ company, dbDepts, dbRoles, dbStandards }: { company: 
       { code: 'CCPA',            category: 'Privacy',       catColor: '#3B82F6', status: 'Compliant',    desc: 'California Consumer Privacy Act compliance for all California residents.' },
       { code: 'ISO 9001:2015',   category: 'Quality',       catColor: '#10B981', status: 'Certified',    desc: 'Quality management system ensuring consistent product and service delivery.' },
       { code: 'PCI DSS Level 1', category: 'Payments',      catColor: '#F59E0B', status: 'Compliant',    desc: 'Highest level of PCI compliance for handling cardholder data at scale.' },
-      { code: 'WCAG 2.1 AA',     category: 'Accessibility', catColor: '#8B5CF6', status: 'Compliant',    desc: 'Web Content Accessibility Guidelines met across all customer-facing products.' },
+      { code: 'WCAG 2.1 AA',     category: 'Accessibility', catColor: '#063f76', status: 'Compliant',    desc: 'Web Content Accessibility Guidelines met across all customer-facing products.' },
       { code: 'ISO 22301',       category: 'Resilience',    catColor: '#06B6D4', status: 'In Progress',  desc: 'Business continuity management standard — target certification Q3.' },
     ]
 
@@ -350,14 +350,14 @@ function PrepSection({ dbDepts, dbRoles }: { dbDepts: DbContent['departments']; 
                 <div style={{ padding: '0 16px 18px', borderTop: '1px solid #F5F5F5' }}>
 
                   {/* Interview Questions */}
-                  <div style={{ marginTop: 14, padding: '14px 16px', borderRadius: 10, background: '#F5F3FF', border: '1px solid #DDD6FE' }}>
-                    <div style={{ color: '#6D28D9', fontSize: 10, fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.09em', marginBottom: 12 }}>
+                  <div style={{ marginTop: 14, padding: '14px 16px', borderRadius: 10, background: '#eef4fb', border: '1px solid #a8cbe8' }}>
+                    <div style={{ color: '#04294f', fontSize: 10, fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.09em', marginBottom: 12 }}>
                       🎯 Likely Interview Questions
                     </div>
                     <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
                       {role.interviewQuestions.map((q, qi) => (
                         <div key={qi} style={{ display: 'flex', gap: 10, alignItems: 'flex-start' }}>
-                          <span style={{ width: 20, height: 20, borderRadius: '50%', background: '#7C3AED', color: '#fff', fontSize: 9.5, fontWeight: 800, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, marginTop: 1 }}>
+                          <span style={{ width: 20, height: 20, borderRadius: '50%', background: '#063f76', color: '#fff', fontSize: 9.5, fontWeight: 800, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, marginTop: 1 }}>
                             {qi + 1}
                           </span>
                           <span style={{ color: '#3B0764', fontSize: 12.5, lineHeight: 1.6 }}>{q}</span>
@@ -450,7 +450,7 @@ const PRODUCTS: Product[] = [
     tagline: 'Build anything on top of the platform',
     description: 'A fully-documented RESTful and GraphQL API layer with SDKs for 12 languages. Enables third-party developers and partners to embed platform capabilities into their own products with usage-based pricing.',
     category: 'API & SDK',
-    catColor: '#8B5CF6',
+    catColor: '#063f76',
     useCases: ['Third-party Integrations', 'Embedded Workflows', 'Webhook Automation', 'Custom Dashboards', 'Partner Ecosystem'],
     customers: [
       { name: 'Vercel',   abbr: 'VC', bg: '#000' },
@@ -487,7 +487,7 @@ const PRODUCTS: Product[] = [
 ]
 
 function ProductSection({ company, dbProducts }: { company: Company; dbProducts: DbContent['products'] }) {
-  const color = company.logo_color ?? '#7C3AED'
+  const color = company.logo_color ?? '#063f76'
   const products = dbProducts.length > 0
     ? dbProducts.map(p => ({
         id: p.id,
@@ -641,7 +641,7 @@ function ProductSection({ company, dbProducts }: { company: Company; dbProducts:
 // ─── SectionContent ───────────────────────────────────────────────────────────
 
 function SectionContent({ id, company, dbContent }: { id: SectionId; company: Company; dbContent: DbContent }) {
-  const color = company.logo_color ?? '#7C3AED'
+  const color = company.logo_color ?? '#063f76'
 
   switch (id) {
     case 'overview':
@@ -678,7 +678,7 @@ function SectionContent({ id, company, dbContent }: { id: SectionId; company: Co
         subscription: color, transactional: '#2563EB', advertising: '#D97706',
         product: '#059669', services: '#0891B2', other: '#A1A1AA',
       }
-      const FALLBACK_STREAM_COLORS = [color, '#06B6D4', '#F59E0B', '#10B981', '#8B5CF6', '#EC4899']
+      const FALLBACK_STREAM_COLORS = [color, '#06B6D4', '#F59E0B', '#10B981', '#063f76', '#EC4899']
       const rawStreams = (fin?.revenue_streams as StreamDb[] | null) ?? []
       const STREAMS = rawStreams.length > 0
         ? rawStreams.map((s, i) => ({
@@ -894,7 +894,7 @@ function SectionContent({ id, company, dbContent }: { id: SectionId; company: Co
 export default function CompanyFull({ company, initialSaved, dbContent }: { company: Company; initialSaved: boolean; dbContent: DbContent }) {
   const [activeSection, setActiveSection] = useState<SectionId>('overview')
   const [animKey, setAnimKey] = useState(0)
-  const color = company.logo_color ?? '#7C3AED'
+  const color = company.logo_color ?? '#063f76'
 
   function changeSection(id: SectionId) {
     setActiveSection(id)
@@ -907,7 +907,7 @@ export default function CompanyFull({ company, initialSaved, dbContent }: { comp
       <div style={{ background: '#fff', borderBottom: '1px solid #F4F4F5' }}>
         <div className="company-breadcrumb" style={{ maxWidth: '1200px', margin: '0 auto', height: '44px', display: 'flex', alignItems: 'center', gap: '8px', padding: '0 24px' }}>
           <Link href="/" style={{ color: '#A1A1AA', textDecoration: 'none', fontSize: '13px', transition: 'color 0.15s' }}
-            onMouseEnter={e => (e.currentTarget as HTMLElement).style.color = '#7C3AED'}
+            onMouseEnter={e => (e.currentTarget as HTMLElement).style.color = '#063f76'}
             onMouseLeave={e => (e.currentTarget as HTMLElement).style.color = '#A1A1AA'}
           >Home</Link>
           <span style={{ color: '#D4D4D8', fontSize: '13px' }}>›</span>
@@ -937,8 +937,8 @@ export default function CompanyFull({ company, initialSaved, dbContent }: { comp
             onClick={() => changeSection(nav.id)}
             style={{
               flexShrink: 0, padding: '7px 12px', borderRadius: '8px', border: 'none',
-              background: activeSection === nav.id ? '#F5F3FF' : '#F4F4F5',
-              color: activeSection === nav.id ? '#7C3AED' : '#52525B',
+              background: activeSection === nav.id ? '#eef4fb' : '#F4F4F5',
+              color: activeSection === nav.id ? '#063f76' : '#52525B',
               fontSize: '12.5px', fontWeight: activeSection === nav.id ? 600 : 400,
               cursor: 'pointer', whiteSpace: 'nowrap',
               transition: 'background 0.15s, color 0.15s',
@@ -970,7 +970,7 @@ export default function CompanyFull({ company, initialSaved, dbContent }: { comp
               style={{
                 width: '100%', display: 'flex', alignItems: 'center', gap: '8px',
                 padding: '8px 10px', borderRadius: '8px', border: 'none',
-                background: activeSection === nav.id ? '#F5F3FF' : 'transparent',
+                background: activeSection === nav.id ? '#eef4fb' : 'transparent',
                 cursor: 'pointer', textAlign: 'left', transition: 'background 0.15s',
                 marginBottom: '1px',
               }}
@@ -978,7 +978,7 @@ export default function CompanyFull({ company, initialSaved, dbContent }: { comp
               onMouseLeave={e => { if (activeSection !== nav.id) (e.currentTarget as HTMLElement).style.background = 'transparent' }}
             >
               <span style={{ fontSize: '13px' }}>{nav.icon}</span>
-              <span style={{ fontSize: '12.5px', fontWeight: activeSection === nav.id ? 600 : 400, color: activeSection === nav.id ? '#7C3AED' : '#52525B' }}>
+              <span style={{ fontSize: '12.5px', fontWeight: activeSection === nav.id ? 600 : 400, color: activeSection === nav.id ? '#063f76' : '#52525B' }}>
                 {nav.label}
               </span>
             </button>

@@ -28,7 +28,7 @@ function CompanyBadge({ company, color }: { company: string; color: string }) {
           <span style={{ color: '#fff', fontSize: 8, fontWeight: 800 }}>{coName[0]}</span>
         </div>
       ) : null}
-      <span style={{ color: '#7C3AED', fontWeight: 500 }}>{company}</span>
+      <span style={{ color: '#063f76', fontWeight: 500 }}>{company}</span>
     </div>
   )
 }
@@ -72,7 +72,7 @@ const testimonials = [
     role: "Career Coach",
     company: "500+ students placed",
     initials: "SO",
-    color: "#7C3AED",
+    color: "#063f76",
   },
   {
     quote: "The org chart data helped me identify who the real decision-makers were before my series of interviews. I asked the right questions to the right people.",
@@ -90,7 +90,7 @@ export default function Testimonials() {
       <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
         <div style={{ textAlign: 'center', marginBottom: '56px' }}>
           <p style={{
-            color: '#7C3AED', fontSize: '12px', fontWeight: 700,
+            color: '#063f76', fontSize: '12px', fontWeight: 700,
             textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '12px',
           }}>CUSTOMER STORIES</p>
           <h2 style={{

@@ -64,7 +64,7 @@ const NODE_GAP = 8
 const LINE_COLOR = '#D4D4D8'
 
 export default function OrgChart({ company, dbDepts, dbRoles, dbExecGroups }: Props) {
-  const color = company.logo_color ?? '#7C3AED'
+  const color = company.logo_color ?? '#063f76'
 
   const depts = buildDepts(dbDepts, dbRoles)
   const execGroups = buildExecGroups(dbExecGroups, depts)
@@ -107,7 +107,7 @@ export default function OrgChart({ company, dbDepts, dbRoles, dbExecGroups }: Pr
             {company.employees?.toLocaleString() ?? '—'} employees · Click an executive to explore their team
           </div>
         </div>
-        <div style={{ padding: '4px 10px', borderRadius: 8, background: '#F5F3FF', border: '1px solid #DDD6FE', color: '#7C3AED', fontSize: 11.5, fontWeight: 600 }}>
+        <div style={{ padding: '4px 10px', borderRadius: 8, background: '#eef4fb', border: '1px solid #a8cbe8', color: '#063f76', fontSize: 11.5, fontWeight: 600 }}>
           {allDepts.reduce((s, d) => s + d.headcount, 0).toLocaleString()} across {allDepts.length} departments
         </div>
       </div>

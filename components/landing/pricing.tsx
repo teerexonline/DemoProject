@@ -57,21 +57,21 @@ export default function Pricing() {
   ]
 
   return (
-    <section id="pricing" style={{ padding: '96px 24px', background: '#fff', borderTop: '1px solid #F4F4F5' }}>
+    <section id="pricing" style={{ padding: '96px 24px', background: '#fff', borderTop: '1px solid #e2eaf2' }}>
       <div style={{ maxWidth: '1100px', margin: '0 auto' }}>
         <div style={{ textAlign: 'center', marginBottom: '40px' }}>
-          <p style={{ color: '#7C3AED', fontSize: '12px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '12px' }}>PRICING</p>
+          <p style={{ color: '#609dd6', fontSize: '12px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '12px' }}>PRICING</p>
           <h2 style={{
             fontSize: 'clamp(26px, 3.5vw, 40px)',
             fontWeight: 800,
             letterSpacing: '-0.04em',
-            color: '#09090B',
+            color: '#063f76',
             margin: '0 0 14px',
           }}>Simple, transparent pricing.</h2>
           <p style={{ color: '#71717A', fontSize: '16px', margin: '0 0 32px' }}>Start free. Upgrade when you need more depth.</p>
 
           {/* Billing toggle */}
-          <div style={{ display: 'inline-flex', alignItems: 'center', background: '#F4F4F5', borderRadius: '10px', padding: '4px', gap: '2px' }}>
+          <div style={{ display: 'inline-flex', alignItems: 'center', background: '#eef4fb', borderRadius: '10px', padding: '4px', gap: '2px' }}>
             {toggleOptions.map(({ key, label }) => (
               <button
                 key={key}
@@ -86,8 +86,8 @@ export default function Pricing() {
                   letterSpacing: '-0.01em',
                   transition: 'background 0.15s, color 0.15s, box-shadow 0.15s',
                   background: billing === key ? '#fff' : 'transparent',
-                  color: billing === key ? '#09090B' : '#71717A',
-                  boxShadow: billing === key ? '0 1px 4px rgba(0,0,0,0.10)' : 'none',
+                  color: billing === key ? '#063f76' : '#71717A',
+                  boxShadow: billing === key ? '0 1px 4px rgba(6,63,118,0.12)' : 'none',
                 }}
               >
                 {label}
@@ -96,8 +96,8 @@ export default function Pricing() {
                     marginLeft: '6px',
                     fontSize: '10px',
                     fontWeight: 700,
-                    color: billing === key ? '#7C3AED' : '#A1A1AA',
-                    background: billing === key ? '#F5F3FF' : 'transparent',
+                    color: billing === key ? '#063f76' : '#A1A1AA',
+                    background: billing === key ? '#eef4fb' : 'transparent',
                     padding: billing === key ? '1px 5px' : '0',
                     borderRadius: '4px',
                     transition: 'all 0.15s',
@@ -117,30 +117,30 @@ export default function Pricing() {
               style={{
                 padding: '32px',
                 borderRadius: '16px',
-                background: tier.highlight ? '#7C3AED' : '#fff',
-                border: tier.highlight ? '1px solid #7C3AED' : '1px solid #E4E4E7',
+                background: tier.highlight ? '#063f76' : '#fff',
+                border: tier.highlight ? '1px solid #063f76' : '1px solid #e2eaf2',
                 position: 'relative',
-                boxShadow: tier.highlight ? '0 8px 30px rgba(124,58,237,0.25)' : '0 1px 4px rgba(0,0,0,0.04)',
+                boxShadow: tier.highlight ? '0 8px 30px rgba(6,63,118,0.25)' : '0 1px 4px rgba(0,0,0,0.04)',
                 transition: 'transform 0.2s, box-shadow 0.2s',
               }}
               onMouseEnter={e => {
                 const el = e.currentTarget as HTMLElement
                 el.style.transform = 'translateY(-4px)'
-                el.style.boxShadow = tier.highlight ? '0 16px 40px rgba(124,58,237,0.3)' : '0 8px 24px rgba(0,0,0,0.08)'
+                el.style.boxShadow = tier.highlight ? '0 16px 40px rgba(6,63,118,0.30)' : '0 8px 24px rgba(6,63,118,0.10)'
               }}
               onMouseLeave={e => {
                 const el = e.currentTarget as HTMLElement
                 el.style.transform = 'translateY(0)'
-                el.style.boxShadow = tier.highlight ? '0 8px 30px rgba(124,58,237,0.25)' : '0 1px 4px rgba(0,0,0,0.04)'
+                el.style.boxShadow = tier.highlight ? '0 8px 30px rgba(6,63,118,0.25)' : '0 1px 4px rgba(0,0,0,0.04)'
               }}
             >
               {tier.highlight && (
                 <div style={{
                   position: 'absolute', top: '-12px', left: '50%', transform: 'translateX(-50%)',
-                  background: '#fff', color: '#7C3AED',
+                  background: '#fff', color: '#063f76',
                   fontSize: '10.5px', fontWeight: 700, padding: '3px 14px',
                   borderRadius: '100px', letterSpacing: '0.06em', textTransform: 'uppercase',
-                  whiteSpace: 'nowrap', border: '1px solid #DDD6FE',
+                  whiteSpace: 'nowrap', border: '1px solid #a8cbe8',
                   boxShadow: '0 1px 4px rgba(0,0,0,0.08)',
                 }}>Most Popular</div>
               )}
@@ -155,7 +155,7 @@ export default function Pricing() {
                 <div style={{ display: 'flex', alignItems: 'baseline', gap: '6px', marginBottom: tier.savings ? '6px' : '8px' }}>
                   <span style={{
                     fontSize: '38px', fontWeight: 800,
-                    color: tier.highlight ? '#fff' : '#09090B',
+                    color: tier.highlight ? '#fff' : '#063f76',
                     letterSpacing: '-0.04em', lineHeight: 1,
                   }}>{tier.price}</span>
                   <span style={{ color: tier.highlight ? 'rgba(255,255,255,0.55)' : '#A1A1AA', fontSize: '13px' }}>/{tier.period}</span>
@@ -165,7 +165,7 @@ export default function Pricing() {
                   <div style={{ marginBottom: '8px' }}>
                     <span style={{
                       display: 'inline-block',
-                      background: 'rgba(255,255,255,0.2)',
+                      background: 'rgba(96,157,214,0.25)',
                       color: '#fff',
                       fontSize: '11px', fontWeight: 700,
                       padding: '2px 10px', borderRadius: '100px',
@@ -181,10 +181,10 @@ export default function Pricing() {
                 href={tier.href}
                 style={{
                   display: 'block', textAlign: 'center', textDecoration: 'none',
-                  color: tier.highlight ? '#7C3AED' : '#fff',
+                  color: tier.highlight ? '#063f76' : '#fff',
                   fontSize: '14px', fontWeight: 600, padding: '11px',
                   borderRadius: '9px',
-                  background: tier.highlight ? '#fff' : '#09090B',
+                  background: tier.highlight ? '#fff' : '#063f76',
                   border: 'none',
                   marginBottom: '28px',
                   transition: 'opacity 0.15s, transform 0.1s',
@@ -205,7 +205,7 @@ export default function Pricing() {
               <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '10px' }}>
                 {tier.features.map((feat) => (
                   <li key={feat} style={{ display: 'flex', alignItems: 'flex-start', gap: '10px' }}>
-                    <span style={{ color: tier.highlight ? 'rgba(255,255,255,0.6)' : '#7C3AED', fontSize: '14px', lineHeight: 1.4, flexShrink: 0 }}>✓</span>
+                    <span style={{ color: tier.highlight ? 'rgba(255,255,255,0.6)' : '#609dd6', fontSize: '14px', lineHeight: 1.4, flexShrink: 0 }}>✓</span>
                     <span style={{ color: tier.highlight ? 'rgba(255,255,255,0.8)' : '#52525B', fontSize: '13.5px', lineHeight: 1.5 }}>{feat}</span>
                   </li>
                 ))}

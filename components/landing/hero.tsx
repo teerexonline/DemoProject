@@ -92,7 +92,7 @@ function CompanyOverview() {
       {/* Tags */}
       <div style={{ display: 'flex', gap: '5px', flexWrap: 'wrap' }}>
         {['Payments API', 'SaaS', 'B2B', 'Developer-first', 'Series I'].map(t => (
-          <span key={t} style={{ padding: '3px 9px', borderRadius: '5px', background: '#F5F3FF', border: '1px solid #DDD6FE', color: '#7C3AED', fontSize: '10.5px', fontWeight: 500 }}>{t}</span>
+          <span key={t} style={{ padding: '3px 9px', borderRadius: '5px', background: '#eef4fb', border: '1px solid #a8cbe8', color: '#063f76', fontSize: '10.5px', fontWeight: 500 }}>{t}</span>
         ))}
       </div>
       {/* Recent news */}
@@ -117,19 +117,19 @@ function OrgChart() {
     <div style={{ padding: '14px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
       {/* CEO node */}
       <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0' }}>
-        <div style={{ padding: '8px 20px', borderRadius: '8px', background: '#7C3AED', color: '#fff', fontSize: '11.5px', fontWeight: 700, textAlign: 'center', boxShadow: '0 2px 8px rgba(124,58,237,0.25)', minWidth: '140px' }}>
+        <div style={{ padding: '8px 20px', borderRadius: '8px', background: '#063f76', color: '#fff', fontSize: '11.5px', fontWeight: 700, textAlign: 'center', boxShadow: '0 2px 8px rgba(6,63,118,0.25)', minWidth: '140px' }}>
           <div>Patrick Collison</div>
           <div style={{ fontWeight: 400, opacity: 0.75, fontSize: '10px', marginTop: '2px' }}>CEO & Co-founder</div>
         </div>
-        <div style={{ width: '1px', height: '12px', background: '#DDD6FE' }} />
+        <div style={{ width: '1px', height: '12px', background: '#a8cbe8' }} />
       </div>
       {/* L2 */}
       <div style={{ display: 'flex', justifyContent: 'center', gap: '6px' }}>
         {[{ name: 'John Collison', title: 'President' }, { name: 'Dhivya S.', title: 'CFO' }, { name: 'David S.', title: 'CTO' }, { name: 'Will G.', title: 'CPO' }].map(p => (
           <div key={p.title} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0' }}>
-            <div style={{ padding: '6px 10px', borderRadius: '7px', background: '#F5F3FF', border: '1px solid #DDD6FE', fontSize: '10.5px', fontWeight: 600, color: '#6D28D9', textAlign: 'center', minWidth: '72px' }}>
+            <div style={{ padding: '6px 10px', borderRadius: '7px', background: '#eef4fb', border: '1px solid #a8cbe8', fontSize: '10.5px', fontWeight: 600, color: '#04294f', textAlign: 'center', minWidth: '72px' }}>
               <div>{p.name}</div>
-              <div style={{ fontWeight: 400, color: '#7C3AED', fontSize: '9.5px', marginTop: '1px' }}>{p.title}</div>
+              <div style={{ fontWeight: 400, color: '#063f76', fontSize: '9.5px', marginTop: '1px' }}>{p.title}</div>
             </div>
           </div>
         ))}
@@ -138,7 +138,7 @@ function OrgChart() {
       {/* L3 departments */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '6px' }}>
         {[
-          { dept: 'Payments', lead: 'Jeanne DeWitt', count: '420', color: '#EDE9FE' },
+          { dept: 'Payments', lead: 'Jeanne DeWitt', count: '420', color: '#d4e8f6' },
           { dept: 'Risk & Compliance', lead: 'Bryan Duxbury', count: '280', color: '#FEF3C7' },
           { dept: 'Platform Eng', lead: 'Evan Broder', count: '350', color: '#DCFCE7' },
           { dept: 'Developer Exp', lead: 'Michelle Bu', count: '190', color: '#E0F2FE' },
@@ -187,13 +187,13 @@ function Revenue() {
         <div style={{ display: 'flex', alignItems: 'flex-end', gap: '6px', height: '80px' }}>
           {bars.map(b => (
             <div key={b.year} style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '4px', height: '100%', justifyContent: 'flex-end' }}>
-              <div style={{ fontSize: '9.5px', color: '#7C3AED', fontWeight: 700 }}>{b.rev}</div>
+              <div style={{ fontSize: '9.5px', color: '#063f76', fontWeight: 700 }}>{b.rev}</div>
               <div style={{
                 width: '100%', borderRadius: '4px 4px 0 0',
-                background: b.year === '2024E' ? 'repeating-linear-gradient(45deg, #DDD6FE, #DDD6FE 3px, #EDE9FE 3px, #EDE9FE 6px)' : '#7C3AED',
+                background: b.year === '2024E' ? 'repeating-linear-gradient(45deg, #a8cbe8, #a8cbe8 3px, #d4e8f6 3px, #d4e8f6 6px)' : '#063f76',
                 height: `${(b.value / max) * 62}px`,
                 opacity: b.year === '2024E' ? 0.9 : 1,
-                border: b.year === '2024E' ? '1px dashed #A78BFA' : 'none',
+                border: b.year === '2024E' ? '1px dashed #609dd6' : 'none',
                 transition: 'opacity 0.2s',
               }} />
               <div style={{ fontSize: '9.5px', color: '#A1A1AA', fontWeight: 500 }}>{b.year}</div>
@@ -207,11 +207,11 @@ function Revenue() {
 
 function RevenueByDept() {
   const depts = [
-    { name: 'Payments Core', pct: 68, amount: '$9.7B', color: '#7C3AED' },
-    { name: 'Stripe Treasury', pct: 15, amount: '$2.1B', color: '#A78BFA' },
-    { name: 'Radar & Risk', pct: 9, amount: '$1.3B', color: '#C4B5FD' },
-    { name: 'Billing & Revenue', pct: 5, amount: '$0.7B', color: '#DDD6FE' },
-    { name: 'Other Products', pct: 3, amount: '$0.5B', color: '#EDE9FE' },
+    { name: 'Payments Core', pct: 68, amount: '$9.7B', color: '#063f76' },
+    { name: 'Stripe Treasury', pct: 15, amount: '$2.1B', color: '#609dd6' },
+    { name: 'Radar & Risk', pct: 9, amount: '$1.3B', color: '#86bce0' },
+    { name: 'Billing & Revenue', pct: 5, amount: '$0.7B', color: '#a8cbe8' },
+    { name: 'Other Products', pct: 3, amount: '$0.5B', color: '#d4e8f6' },
   ]
   return (
     <div style={{ padding: '14px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
@@ -235,8 +235,8 @@ function RevenueByDept() {
           </div>
         ))}
       </div>
-      <div style={{ padding: '9px 12px', borderRadius: '8px', background: '#F5F3FF', border: '1px solid #DDD6FE', marginTop: '2px' }}>
-        <div style={{ color: '#6D28D9', fontSize: '11px', fontWeight: 600 }}>💡 Insight: Payments Core dominates but Treasury growing fastest at 38% YoY</div>
+      <div style={{ padding: '9px 12px', borderRadius: '8px', background: '#eef4fb', border: '1px solid #a8cbe8', marginTop: '2px' }}>
+        <div style={{ color: '#04294f', fontSize: '11px', fontWeight: 600 }}>💡 Insight: Payments Core dominates but Treasury growing fastest at 38% YoY</div>
       </div>
     </div>
   )
@@ -245,7 +245,7 @@ function RevenueByDept() {
 function MarketShare() {
   const segments = [
     { name: 'PayPal', pct: 32, color: '#003087' },
-    { name: 'Stripe', pct: 22, color: '#7C3AED' },
+    { name: 'Stripe', pct: 22, color: '#063f76' },
     { name: 'Adyen', pct: 12, color: '#0ABF53' },
     { name: 'Square', pct: 9, color: '#3E4348' },
     { name: 'Others', pct: 25, color: '#E4E4E7' },
@@ -274,7 +274,7 @@ function MarketShare() {
             background: '#fff', display: 'flex', flexDirection: 'column',
             alignItems: 'center', justifyContent: 'center',
           }}>
-            <div style={{ color: '#7C3AED', fontSize: '13px', fontWeight: 800 }}>22%</div>
+            <div style={{ color: '#063f76', fontSize: '13px', fontWeight: 800 }}>22%</div>
             <div style={{ color: '#A1A1AA', fontSize: '8.5px' }}>Stripe</div>
           </div>
         </div>
@@ -284,7 +284,7 @@ function MarketShare() {
             <div key={s.name} style={{ display: 'flex', alignItems: 'center', gap: '7px', justifyContent: 'space-between' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '7px' }}>
                 <div style={{ width: '8px', height: '8px', borderRadius: '2px', background: s.color, flexShrink: 0 }} />
-                <span style={{ color: s.name === 'Stripe' ? '#7C3AED' : '#374151', fontSize: '11.5px', fontWeight: s.name === 'Stripe' ? 700 : 400 }}>{s.name}</span>
+                <span style={{ color: s.name === 'Stripe' ? '#063f76' : '#374151', fontSize: '11.5px', fontWeight: s.name === 'Stripe' ? 700 : 400 }}>{s.name}</span>
               </div>
               <span style={{ color: '#09090B', fontSize: '11.5px', fontWeight: 700 }}>{s.pct}%</span>
             </div>
@@ -326,9 +326,9 @@ function BusinessUnits() {
               <span style={{ color: '#09090B', fontSize: '12px', fontWeight: 700 }}>{u.name}</span>
               <span style={{
                 padding: '2px 7px', borderRadius: '4px', fontSize: '10px', fontWeight: 600,
-                background: u.tag === 'Core' ? '#EDE9FE' : u.tag === 'Growing' ? '#DCFCE7' : '#FEF9C3',
-                color: u.tag === 'Core' ? '#6D28D9' : u.tag === 'Growing' ? '#15803D' : '#92400E',
-                border: u.tag === 'Core' ? '1px solid #DDD6FE' : u.tag === 'Growing' ? '1px solid #BBF7D0' : '1px solid #FDE68A',
+                background: u.tag === 'Core' ? '#d4e8f6' : u.tag === 'Growing' ? '#DCFCE7' : '#FEF9C3',
+                color: u.tag === 'Core' ? '#04294f' : u.tag === 'Growing' ? '#15803D' : '#92400E',
+                border: u.tag === 'Core' ? '1px solid #a8cbe8' : u.tag === 'Growing' ? '1px solid #BBF7D0' : '1px solid #FDE68A',
               }}>{u.tag}</span>
             </div>
             <div style={{ color: '#71717A', fontSize: '11px', lineHeight: 1.5 }}>{u.desc}</div>
@@ -405,8 +405,8 @@ function InternalProcesses() {
 function ProductUseCase() {
   return (
     <div style={{ padding: '14px', display: 'flex', flexDirection: 'column', gap: '9px' }}>
-      <div style={{ padding: '11px 13px', borderRadius: '9px', background: '#F5F3FF', border: '1px solid #DDD6FE' }}>
-        <div style={{ color: '#6D28D9', fontSize: '10.5px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '5px' }}>Core Product</div>
+      <div style={{ padding: '11px 13px', borderRadius: '9px', background: '#eef4fb', border: '1px solid #a8cbe8' }}>
+        <div style={{ color: '#04294f', fontSize: '10.5px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '5px' }}>Core Product</div>
         <div style={{ color: '#09090B', fontSize: '12.5px', fontWeight: 700, marginBottom: '4px' }}>Payments Infrastructure & Financial Stack</div>
         <div style={{ color: '#52525B', fontSize: '11px', lineHeight: 1.6 }}>Stripe processes online and in-person payments for businesses. Its API-first approach lets developers integrate payments in hours, not months.</div>
       </div>
@@ -422,7 +422,7 @@ function ProductUseCase() {
         <div style={{ color: '#71717A', fontSize: '10.5px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '6px' }}>Key Differentiators</div>
         {['Developer-first API — integrate in hours, not months', 'ML-powered fraud prevention (Radar) with 99.98% accuracy', '135+ currencies, local payment methods in 46 countries', 'Full financial stack: payments → banking → billing → taxes'].map(d => (
           <div key={d} style={{ display: 'flex', gap: '7px', alignItems: 'flex-start', marginBottom: '4px' }}>
-            <span style={{ color: '#7C3AED', fontSize: '11px', lineHeight: 1.4, flexShrink: 0, marginTop: '1px' }}>✓</span>
+            <span style={{ color: '#063f76', fontSize: '11px', lineHeight: 1.4, flexShrink: 0, marginTop: '1px' }}>✓</span>
             <span style={{ color: '#374151', fontSize: '11px', lineHeight: 1.5 }}>{d}</span>
           </div>
         ))}
@@ -472,7 +472,7 @@ export default function Hero() {
       <div style={{
         position: 'absolute', top: '-80px', right: '-60px',
         width: '480px', height: '480px', borderRadius: '50%',
-        background: 'radial-gradient(circle, rgba(139,92,246,0.05) 0%, transparent 70%)',
+        background: 'radial-gradient(circle, rgba(6,63,118,0.05) 0%, transparent 70%)',
         pointerEvents: 'none',
       }} />
 
@@ -489,10 +489,10 @@ export default function Hero() {
             <div className="animate-fadeUp delay-0" style={{
               display: 'inline-flex', alignItems: 'center', gap: '7px',
               padding: '5px 12px 5px 6px', borderRadius: '100px',
-              background: '#F5F3FF', border: '1px solid #DDD6FE', marginBottom: '24px',
+              background: '#eef4fb', border: '1px solid #a8cbe8', marginBottom: '24px',
             }}>
-              <span style={{ background: '#7C3AED', color: '#fff', fontSize: '10px', fontWeight: 700, padding: '2px 8px', borderRadius: '100px', letterSpacing: '0.04em', textTransform: 'uppercase' }}>New</span>
-              <span style={{ color: '#6D28D9', fontSize: '13px', fontWeight: 500 }}>Deep org chart data now available</span>
+              <span style={{ background: '#063f76', color: '#fff', fontSize: '10px', fontWeight: 700, padding: '2px 8px', borderRadius: '100px', letterSpacing: '0.04em', textTransform: 'uppercase' }}>New</span>
+              <span style={{ color: '#04294f', fontSize: '13px', fontWeight: 500 }}>Deep org chart data now available</span>
             </div>
 
             <h1 className="animate-fadeUp delay-75" style={{
@@ -500,7 +500,7 @@ export default function Hero() {
               lineHeight: 1.1, letterSpacing: '-0.04em', color: '#09090B', margin: '0 0 18px',
             }}>
               Turn company research<br />into your{' '}
-              <span style={{ background: 'linear-gradient(135deg, #7C3AED 0%, #A78BFA 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>
+              <span style={{ background: 'linear-gradient(135deg, #063f76 0%, #609dd6 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>
                 job search edge.
               </span>
             </h1>
@@ -523,7 +523,7 @@ export default function Hero() {
               {['Google', 'Stripe', 'Notion', 'Airbnb', 'OpenAI'].map(co => (
                 <button key={co} onClick={() => navigateCompany(co.toLowerCase())}
                   style={{ background: 'none', border: '1px solid #E4E4E7', borderRadius: '6px', padding: '3px 9px', fontSize: '12px', color: '#52525B', cursor: 'pointer', transition: 'border-color 0.15s, color 0.15s, background 0.15s' }}
-                  onMouseEnter={e => { const el = e.currentTarget as HTMLElement; el.style.borderColor = '#7C3AED'; el.style.color = '#7C3AED'; el.style.background = '#F5F3FF' }}
+                  onMouseEnter={e => { const el = e.currentTarget as HTMLElement; el.style.borderColor = '#063f76'; el.style.color = '#063f76'; el.style.background = '#eef4fb' }}
                   onMouseLeave={e => { const el = e.currentTarget as HTMLElement; el.style.borderColor = '#E4E4E7'; el.style.color = '#52525B'; el.style.background = 'none' }}
                 >{co}</button>
               ))}
@@ -531,9 +531,9 @@ export default function Hero() {
 
             <div className="animate-fadeUp delay-375" style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
               <Link href="/signup"
-                style={{ color: '#fff', textDecoration: 'none', fontSize: '14px', fontWeight: 600, padding: '11px 22px', borderRadius: '10px', background: '#7C3AED', boxShadow: '0 1px 4px rgba(124,58,237,0.3)', transition: 'background 0.15s, transform 0.1s' }}
-                onMouseEnter={e => { const el = e.currentTarget as HTMLElement; el.style.background = '#6D28D9'; el.style.transform = 'translateY(-1px)' }}
-                onMouseLeave={e => { const el = e.currentTarget as HTMLElement; el.style.background = '#7C3AED'; el.style.transform = 'translateY(0)' }}
+                style={{ color: '#fff', textDecoration: 'none', fontSize: '14px', fontWeight: 600, padding: '11px 22px', borderRadius: '10px', background: '#063f76', boxShadow: '0 1px 4px rgba(6,63,118,0.3)', transition: 'background 0.15s, transform 0.1s' }}
+                onMouseEnter={e => { const el = e.currentTarget as HTMLElement; el.style.background = '#04294f'; el.style.transform = 'translateY(-1px)' }}
+                onMouseLeave={e => { const el = e.currentTarget as HTMLElement; el.style.background = '#063f76'; el.style.transform = 'translateY(0)' }}
               >Start for free</Link>
               <span style={{ color: '#A1A1AA', fontSize: '13px' }}>No credit card required</span>
             </div>
@@ -579,8 +579,8 @@ export default function Hero() {
                     style={{
                       display: 'flex', alignItems: 'center', gap: '7px',
                       padding: '6px 8px', borderRadius: '6px', border: 'none',
-                      background: activeSection === item.id ? '#EDE9FE' : 'transparent',
-                      color: activeSection === item.id ? '#6D28D9' : '#71717A',
+                      background: activeSection === item.id ? '#d4e8f6' : 'transparent',
+                      color: activeSection === item.id ? '#04294f' : '#71717A',
                       fontSize: '11px', fontWeight: activeSection === item.id ? 600 : 400,
                       cursor: 'pointer', textAlign: 'left', width: '100%',
                       transition: 'background 0.1s, color 0.1s',
