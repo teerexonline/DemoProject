@@ -282,20 +282,6 @@ function FeaturedCarousel({ companies, savedIds }: { companies: Company[]; saved
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
     >
-      {/* Progress bar — resets on each slide change */}
-      <div style={{ height: 3, borderRadius: '3px 3px 0 0', background: '#F0F0F2', overflow: 'hidden', marginBottom: -1 }}>
-        <div
-          key={`${idx}-${paused}`}
-          style={{
-            height: '100%',
-            background: c.logo_color ?? '#063f76',
-            animation: paused ? 'none' : `featured-progress ${CAROUSEL_DURATION}ms linear forwards`,
-          }}
-        />
-      </div>
-
-      <style>{`@keyframes featured-progress { from { width: 0% } to { width: 100% } }`}</style>
-
       {/* Card */}
       <FeaturedCard c={c} initialSaved={savedIds.includes(c.id)} />
 
