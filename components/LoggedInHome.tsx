@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import Link from 'next/link'
 import type { User } from '@supabase/supabase-js'
 import SearchAutocomplete from '@/components/SearchAutocomplete'
@@ -257,6 +257,93 @@ function FeaturedCard({ c, initialSaved }: { c: Company; initialSaved: boolean }
   )
 }
 
+// ─── Featured carousel ───────────────────────────────────────────────────────
+
+const CAROUSEL_DURATION = 20000
+
+function FeaturedCarousel({ companies, savedIds }: { companies: Company[]; savedIds: string[] }) {
+  const [idx, setIdx] = useState(0)
+  const [paused, setPaused] = useState(false)
+
+  const next = useCallback(() => setIdx(i => (i + 1) % companies.length), [companies.length])
+  const prev = useCallback(() => setIdx(i => (i - 1 + companies.length) % companies.length), [companies.length])
+
+  useEffect(() => {
+    if (paused) return
+    const t = setInterval(next, CAROUSEL_DURATION)
+    return () => clearInterval(t)
+  }, [next, paused])
+
+  const c = companies[idx]
+
+  return (
+    <div
+      style={{ position: 'relative' }}
+      onMouseEnter={() => setPaused(true)}
+      onMouseLeave={() => setPaused(false)}
+    >
+      {/* Progress bar — resets on each slide change */}
+      <div style={{ height: 3, borderRadius: '3px 3px 0 0', background: '#F0F0F2', overflow: 'hidden', marginBottom: -1 }}>
+        <div
+          key={`${idx}-${paused}`}
+          style={{
+            height: '100%',
+            background: c.logo_color ?? '#063f76',
+            animation: paused ? 'none' : `featured-progress ${CAROUSEL_DURATION}ms linear forwards`,
+          }}
+        />
+      </div>
+
+      <style>{`@keyframes featured-progress { from { width: 0% } to { width: 100% } }`}</style>
+
+      {/* Card */}
+      <FeaturedCard c={c} initialSaved={savedIds.includes(c.id)} />
+
+      {/* Controls row */}
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: 12 }}>
+        {/* Prev */}
+        <button
+          onClick={prev}
+          style={{ width: 30, height: 30, borderRadius: 8, border: '1px solid #E4E4E7', background: '#fff', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#52525B', transition: 'border-color 0.15s, background 0.15s' }}
+          onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = '#063f76'; (e.currentTarget as HTMLElement).style.background = '#eef4fb' }}
+          onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = '#E4E4E7'; (e.currentTarget as HTMLElement).style.background = '#fff' }}
+          aria-label="Previous"
+        >
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+        </button>
+
+        {/* Dot indicators */}
+        <div style={{ display: 'flex', gap: 6, alignItems: 'center' }}>
+          {companies.map((co, i) => (
+            <button
+              key={co.id}
+              onClick={() => setIdx(i)}
+              aria-label={`Go to ${co.name}`}
+              style={{
+                width: i === idx ? 22 : 7, height: 7, borderRadius: 4, border: 'none',
+                background: i === idx ? (c.logo_color ?? '#063f76') : '#E4E4E7',
+                cursor: 'pointer', padding: 0,
+                transition: 'width 0.3s cubic-bezier(0.22,1,0.36,1), background 0.2s',
+              }}
+            />
+          ))}
+        </div>
+
+        {/* Next */}
+        <button
+          onClick={next}
+          style={{ width: 30, height: 30, borderRadius: 8, border: '1px solid #E4E4E7', background: '#fff', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#52525B', transition: 'border-color 0.15s, background 0.15s' }}
+          onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = '#063f76'; (e.currentTarget as HTMLElement).style.background = '#eef4fb' }}
+          onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = '#E4E4E7'; (e.currentTarget as HTMLElement).style.background = '#fff' }}
+          aria-label="Next"
+        >
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+        </button>
+      </div>
+    </div>
+  )
+}
+
 // ─── Recently added mini card ────────────────────────────────────────────────
 
 function RecentCard({ c, daysAgo, initialSaved }: { c: Company; daysAgo: number; initialSaved: boolean }) {
@@ -354,7 +441,7 @@ export default function LoggedInHome({ user, plan, companies, isPro, savedIds }:
 
   // Section slices (deterministic)
   const trending     = all.slice(0, 6)
-  const featured     = all[6] ?? all[0]
+  const featuredList  = all.length >= 11 ? all.slice(6, 11) : all.slice(0, 5)
   const recentlyAdded = all.slice(7, 13)
   const editorPicks  = EDITOR_PICKS
     .map(ep => ({ ...ep, c: all.find(x => x.slug === ep.slug) ?? null }))
@@ -441,7 +528,7 @@ export default function LoggedInHome({ user, plan, companies, isPro, savedIds }:
           {/* 1. Featured Company of the Week */}
           <section>
             <SLabel title="Featured This Week" sub="Curated spotlight — deep-dive ready" accent="#063f76" />
-            <FeaturedCard c={featured} initialSaved={savedIds.includes(featured.id)} />
+            <FeaturedCarousel companies={featuredList} savedIds={savedIds} />
           </section>
 
           {/* 2. Trending This Week */}
