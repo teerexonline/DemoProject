@@ -1,27 +1,28 @@
 #!/usr/bin/env python3
 """
-ResearchOrg Product Seeder v3.0
+ResearchOrg Product Seeder v4.1
 ================================
-Scrapes specific, named company products (e.g. "TC22", "Model 3") with
-free CC-licensed images sourced from Wikimedia Commons / Wikidata.
+Scrapes products exclusively from the official company website navbar.
 
-Source hierarchy — tried in order, merged and deduplicated:
-  Tier 1  Wikidata SPARQL        — structured DB of named products with P18 images
-  Tier 2  Company website JSON-LD — schema.org Product / ItemList markup
-  Tier 3  Company website sitemap — discover individual product pages via sitemap.xml
-  Tier 4  Wikipedia               — named-product extraction from Products section
-  Tier 5  Synthetic fallback      — always produces ≥1 result (never returns empty)
+Discovery flow (mirrors what a human does):
+  Step 1  Fetch the company homepage
+  Step 2  Scan nav/header for any element (a, button, span, li…) whose text
+          matches product section keywords: "Products", "Hardware", "Software",
+          "Solutions", "Platform", "Tools", "Product", "Apps", …
+  Step 3  Walk up the DOM from that element to find its dropdown container,
+          then collect all product links inside that container
+  Step 4  Also follow any <a href> entry-points (products overview pages) and
+          collect product links from those pages too
+  Step 5  Fetch each product page → extract name, tagline, description, og:image
+  Step 6  Synthetic fallback — only if zero products were found from the website
 
-Image strategy — all sources are CC-licensed / public domain:
-  1. Wikidata P18          → Wikimedia Commons file (CC-licensed, product-specific)
-  2. Wikipedia REST summary → thumbnail.source for named product
-  3. Wikimedia Commons search → free image for product query
-  4. None                  → UI shows a styled placeholder
+No third-party sources: no Wikidata, no Wikipedia, no sitemaps, no search engines.
 
 Usage:
-  python seed_products.py --company "Tesla" --website "tesla.com"
-  python seed_products.py --company "Zebra Technologies" --website "zebra.com"
-  python seed_products.py --company "Tesla" --website "tesla.com" \\
+  python seed_products.py --company "Canva" --website "canva.com"
+  python seed_products.py --company "Notion" --website "notion.so"
+  python seed_products.py --company "OpenAI" --website "openai.com"
+  python seed_products.py --company "Canva" --website "canva.com" \\
       --company-id "uuid" --auth-token "jwt" --app-url "http://localhost:3000"
 
 Output: JSON {"count": N, "written": bool}  when --company-id given
@@ -37,12 +38,22 @@ import os
 import re
 import sys
 import time
-from xml.etree import ElementTree as ET
 from typing import Optional
-from urllib.parse import urljoin, urlparse, quote, quote_plus
+from urllib.parse import urljoin, urlparse
 
 import requests
 from bs4 import BeautifulSoup
+
+# Playwright is optional — used automatically when a page appears JS-rendered.
+# Install: pip install playwright && python -m playwright install chromium
+try:
+    from playwright.sync_api import sync_playwright, TimeoutError as PWTimeout
+    _PLAYWRIGHT_AVAILABLE = True
+except ImportError:
+    _PLAYWRIGHT_AVAILABLE = False
+
+# Threshold: if requests returns fewer links than this, assume JS-rendered
+_JS_RENDER_THRESHOLD = 10
 
 # ─── Logging ──────────────────────────────────────────────────────────────────
 logging.basicConfig(
@@ -91,19 +102,247 @@ def truncate(text: str, n: int) -> str:
 
 def domain_of(website: str) -> str:
     p = urlparse(website if "://" in website else "https://" + website)
-    return (p.netloc or p.path).lstrip("www.")
+    d = (p.netloc or p.path).lstrip("www.")
+    return d.split(":")[0]  # strip port
 
 def base_url(website: str) -> str:
     return f"https://{domain_of(website)}"
 
-def fetch_soup(sess: Session, url: str, timeout: int = 12) -> Optional[BeautifulSoup]:
+_NAV_TRIGGER_RE = re.compile(
+    r"^(products?(\s*[&+]\s*services?)?|solutions?|hardware|software|platform|"
+    r"tools?|services?|apps?|systems?|simulation|training|devices?|technologies?)$",
+    re.IGNORECASE,
+)
+
+_BROWSER_ARGS = [
+    "--disable-blink-features=AutomationControlled",
+    "--no-sandbox",
+    "--disable-dev-shm-usage",
+]
+_BROWSER_INIT_SCRIPT = """
+    Object.defineProperty(navigator, 'webdriver', {get: () => undefined});
+    Object.defineProperty(navigator, 'plugins', {get: () => [1, 2, 3, 4, 5]});
+    Object.defineProperty(navigator, 'languages', {get: () => ['en-US', 'en']});
+    window.chrome = {runtime: {}};
+"""
+
+# Phrases that indicate a bot-challenge interstitial is showing
+_CHALLENGE_PHRASES = ("just a moment", "access denied", "checking your",
+                      "enable cookies", "ddos-guard", "please wait",
+                      "your connection", "before we continue")
+
+
+def _page_is_challenge(page) -> bool:
+    """True if the rendered page looks like a bot-challenge interstitial."""
+    try:
+        title  = page.title().lower()
+        body   = page.inner_text("body")[:300].lower() if page.query_selector("body") else ""
+        nlinks = len(page.query_selector_all("a"))
+        return nlinks < 6 or any(p in title or p in body for p in _CHALLENGE_PHRASES)
+    except Exception:
+        return False
+
+
+class BrowserSession:
+    """
+    A reusable Playwright browser session.
+
+    Opens Chromium ONCE and reuses it for every page fetch in the same scrape,
+    avoiding the ~15-30 s startup penalty per page.
+
+    Key anti-bot measures applied to every page:
+    • --disable-blink-features=AutomationControlled (bypasses Cloudflare JS challenge)
+    • navigator.webdriver = undefined  (masks headless detection)
+    • navigator.plugins / languages / window.chrome patched
+
+    Usage:
+        with BrowserSession() as bs:
+            html = bs.render(url, hover_nav=True)
+    """
+
+    def __init__(self) -> None:
+        self._pw      = None
+        self._browser = None
+        self._ctx     = None
+        self._active  = False
+
+    def __enter__(self) -> "BrowserSession":
+        if not _PLAYWRIGHT_AVAILABLE:
+            return self
+        try:
+            self._pw      = sync_playwright().__enter__()
+            self._browser = self._pw.chromium.launch(
+                headless=True, args=_BROWSER_ARGS
+            )
+            self._ctx = self._browser.new_context(
+                user_agent=UA,
+                viewport={"width": 1440, "height": 900},
+                locale="en-US",
+                timezone_id="America/New_York",
+                extra_http_headers={"Accept-Language": "en-US,en;q=0.9"},
+            )
+            self._active = True
+            log.info("Playwright browser started")
+        except Exception as e:
+            log.warning("Could not start Playwright browser: %s", e)
+        return self
+
+    def __exit__(self, *_) -> None:
+        try:
+            if self._browser:
+                self._browser.close()
+            if self._pw:
+                self._pw.__exit__(None, None, None)
+        except Exception:
+            pass
+        self._active = False
+
+    def render(
+        self,
+        url: str,
+        timeout_s: int = 20,
+        hover_nav: bool = False,
+    ) -> Optional[str]:
+        """
+        Render *url* in a new tab and return the final HTML.
+
+        • Waits up to 8 extra seconds for Cloudflare / bot-challenge pages to
+          self-resolve (the JS challenge auto-completes after 1-3 s).
+        • If hover_nav=True, hovers over product-keyword nav triggers so that
+          React/Vue dropdown menus are injected into the DOM before we capture
+          the HTML.
+        """
+        if not self._active or not self._ctx:
+            return None
+        page = self._ctx.new_page()
+        try:
+            page.add_init_script(_BROWSER_INIT_SCRIPT)
+            try:
+                page.goto(url, wait_until="domcontentloaded",
+                          timeout=timeout_s * 1000)
+            except PWTimeout:
+                pass
+
+            # Initial settle
+            page.wait_for_timeout(1500)
+
+            # Wait for any bot-challenge interstitial to self-resolve
+            if _page_is_challenge(page):
+                log.info("Challenge page detected, waiting up to 8 s…")
+                for _ in range(8):
+                    page.wait_for_timeout(1000)
+                    if not _page_is_challenge(page):
+                        log.info("Challenge resolved")
+                        break
+
+            # Hover-collected nav links (captured while each dropdown is open)
+            hover_anchors: list[str] = []  # raw "<a href='...' data-text='...'/>" snippets
+
+            if hover_nav:
+                for sel in ["nav button", "nav a", "header button", "header a",
+                            "nav li", "header li"]:
+                    for el in page.query_selector_all(sel)[:40]:
+                        try:
+                            txt = (el.inner_text() or "").strip()
+                            if _NAV_TRIGGER_RE.search(txt) and len(txt) < 30:
+                                el.hover()
+                                page.wait_for_timeout(600)
+                                log.debug("Playwright hover: '%s'", txt)
+                                # Capture all currently-visible links (dropdown open)
+                                try:
+                                    visible = page.evaluate(
+                                        """() => Array.from(document.querySelectorAll('a[href]'))
+                                            .filter(a => a.offsetParent !== null)
+                                            .map(a => ({
+                                                href: a.getAttribute('href'),
+                                                text: (a.innerText || a.textContent || '').trim().split('\n')[0].trim().slice(0, 80)
+                                            }))
+                                            .filter(l => l.href && !l.href.startsWith('#'))
+                                        """
+                                    )
+                                    for item in visible:
+                                        href = item.get("href", "") or ""
+                                        text = item.get("text", "") or ""
+                                        if href:
+                                            hover_anchors.append(
+                                                f'<a href="{href}">{text}</a>'
+                                            )
+                                except Exception:
+                                    pass
+                        except Exception:
+                            pass
+
+            # Build final HTML — inject hover-collected links into a hidden div
+            html = page.content()
+            if hover_anchors:
+                injection = (
+                    '\n<div id="_hover_nav_links" style="display:none">'
+                    + "".join(set(hover_anchors))
+                    + "</div>"
+                )
+                html = html.replace("</body>", injection + "\n</body>", 1)
+            return html
+        except Exception as e:
+            log.debug("BrowserSession.render failed (%s): %s", url, e)
+            return None
+        finally:
+            try:
+                page.close()
+            except Exception:
+                pass
+
+
+def fetch_soup_static(sess: Session, url: str, timeout: int = 14) -> Optional[BeautifulSoup]:
+    """
+    Fetch via requests only — returns None instead of falling through to
+    Playwright.  Used inside the nav scraper where a BrowserSession handles
+    JS rendering explicitly.
+    """
     try:
         r = sess.get(url, timeout=timeout)
         if r.status_code == 200:
             return BeautifulSoup(r.text, "html.parser")
     except Exception as e:
-        log.debug("fetch_soup failed (%s): %s", url, e)
+        log.debug("fetch_soup_static failed (%s): %s", url, e)
     return None
+
+
+def fetch_soup(
+    sess: Session,
+    url: str,
+    timeout: int = 14,
+    browser: Optional["BrowserSession"] = None,
+) -> Optional[BeautifulSoup]:
+    """
+    Fetch and parse a page.
+
+    • First tries requests (fast, no overhead).
+    • If the response looks like a JS shell (< _JS_RENDER_THRESHOLD links)
+      AND a BrowserSession is provided, re-fetches with the shared browser.
+    """
+    html: Optional[str] = None
+    try:
+        r = sess.get(url, timeout=timeout)
+        if r.status_code == 200:
+            html = r.text
+    except Exception as e:
+        log.debug("requests failed (%s): %s", url, e)
+
+    if html:
+        quick_soup = BeautifulSoup(html, "html.parser")
+        if len(quick_soup.find_all("a")) >= _JS_RENDER_THRESHOLD:
+            return quick_soup          # static HTML is rich enough
+
+    # Page appears JS-rendered
+    if browser and browser._active:
+        log.info("JS page — rendering with browser: %s", url)
+        rendered = browser.render(url, timeout_s=max(timeout, 20))
+        if rendered:
+            soup = BeautifulSoup(rendered, "html.parser")
+            log.info("Browser rendered %d links on %s", len(soup.find_all("a")), url)
+            return soup
+
+    return BeautifulSoup(html, "html.parser") if html else None
 
 
 # ─── Category / colour helpers ────────────────────────────────────────────────
@@ -130,6 +369,9 @@ CATEGORY_RULES: list[tuple[str, str]] = [
     (r"marketing|campaign|email.{0,10}tool|seo",                                           "Marketing"),
     (r"collaboration|messaging|chat|communicate",                                            "Collaboration"),
     (r"finance|accounting|expense|invoice",                                                  "Finance"),
+    (r"design|creative|canvas|template|visual",                                             "Design"),
+    (r"video|animation|film|clip|reel",                                                     "Video"),
+    (r"presentation|slide|deck|pitch",                                                       "Presentations"),
     (r"platform|suite|core|foundation",                                                      "Platform"),
     (r"software|saas|application",                                                           "Software"),
     (r"hardware|equipment|sensor|device",                                                    "Hardware"),
@@ -158,6 +400,9 @@ CATEGORY_COLORS: dict[str, str] = {
     "Marketing":        "#CA8A04",
     "Collaboration":    "#EA580C",
     "Finance":          "#16A34A",
+    "Design":           "#F97316",
+    "Video":            "#EF4444",
+    "Presentations":    "#8B5CF6",
     "Platform":         "#4F46E5",
     "Software":         "#4338CA",
     "Hardware":         "#374151",
@@ -187,6 +432,9 @@ USE_CASES: dict[str, list[str]] = {
     "Marketing":        ["Campaign Management", "Customer Acquisition", "A/B Testing"],
     "Collaboration":    ["Team Communication", "Project Management", "File Sharing"],
     "Finance":          ["Financial Reporting", "Expense Management", "Invoicing"],
+    "Design":           ["Graphic Design", "Brand Assets", "Social Media Visuals"],
+    "Video":            ["Video Editing", "Animations", "Short-Form Content"],
+    "Presentations":    ["Pitch Decks", "Team Meetings", "Sales Presentations"],
     "Platform":         ["Enterprise Integration", "Workflow Automation", "Reporting"],
     "Software":         ["Business Automation", "Workflow Management", "Reporting"],
     "Hardware":         ["Field Operations", "Asset Management", "Industrial IoT"],
@@ -207,1050 +455,1082 @@ def get_use_cases(category: str) -> list[str]:
     return USE_CASES.get(category, USE_CASES["Product"])
 
 
-# ─── Free image helpers (all CC-licensed / public domain) ────────────────────
+# ─── URL / nav helpers ────────────────────────────────────────────────────────
 
-def commons_file_url(filename: str) -> str:
-    """Convert a Wikimedia Commons filename to a direct image URL."""
-    # Commons uses MD5-based path: first two chars of MD5(normalised_filename)
-    # Simplest approach: use the Special:FilePath redirect (no MD5 needed)
-    encoded = quote(filename.replace(" ", "_"))
-    return f"https://commons.wikimedia.org/wiki/Special:FilePath/{encoded}?width=800"
-
-
-def wiki_rest_image(sess: Session, title: str) -> Optional[str]:
-    """
-    Get the thumbnail from a Wikipedia article using the REST summary API.
-    Returns a CC-licensed image URL or None.
-    e.g. title = "Tesla Model 3"
-    """
-    url = f"https://en.wikipedia.org/api/rest_v1/page/summary/{quote(title.replace(' ', '_'))}"
-    try:
-        r = sess.get(url, timeout=8)
-        if r.status_code == 200:
-            data = r.json()
-            src = data.get("thumbnail", {}).get("source")
-            if src:
-                log.debug("wiki_rest_image: %s → %s", title, src)
-                return src
-    except Exception as e:
-        log.debug("wiki_rest_image failed (%s): %s", title, e)
-    return None
-
-
-def commons_search_image(sess: Session, query: str) -> Optional[str]:
-    """
-    Search Wikimedia Commons for a CC-licensed image matching the query.
-    Uses the MediaWiki API with namespace=6 (File:).
-    """
-    api = (
-        "https://commons.wikimedia.org/w/api.php"
-        f"?action=query&generator=search&gsrsearch={quote(query)}"
-        "&gsrnamespace=6&gsrlimit=3"
-        "&prop=imageinfo&iiprop=url|mime|size"
-        "&format=json"
-    )
-    try:
-        r = sess.get(api, timeout=10)
-        r.raise_for_status()
-        pages = r.json().get("query", {}).get("pages", {})
-        for page in pages.values():
-            infos = page.get("imageinfo", [])
-            if not infos:
-                continue
-            info = infos[0]
-            mime = info.get("mime", "")
-            url  = info.get("url", "")
-            w    = info.get("width", 0)
-            h    = info.get("height", 0)
-            # Skip tiny images, SVGs, and audio files
-            if mime.startswith("image/") and mime != "image/svg+xml":
-                if w >= 200 and h >= 100:
-                    log.debug("commons_search_image: %s → %s", query, url)
-                    return url
-    except Exception as e:
-        log.debug("commons_search_image failed (%s): %s", query, e)
-    return None
-
-
-def get_free_image(sess: Session, product_name: str,
-                   company: str, category: str) -> Optional[str]:
-    """
-    Try multiple sources for a free CC-licensed concept image.
-    Returns a URL or None.
-    """
-    # 1. Wikipedia article for the specific product (most accurate)
-    for title in [f"{company} {product_name}", product_name]:
-        img = wiki_rest_image(sess, title)
-        if img:
-            return img
-        time.sleep(0.15)
-
-    # 2. Wikimedia Commons image search
-    for query in [f"{company} {product_name}", product_name, f"{category} product"]:
-        img = commons_search_image(sess, query)
-        if img:
-            return img
-        time.sleep(0.15)
-
-    return None
-
-
-# ─── Tier 1: Wikidata SPARQL ──────────────────────────────────────────────────
-WIKIDATA_SEARCH = "https://www.wikidata.org/w/api.php?action=wbsearchentities&search={q}&type=item&language=en&format=json&limit=5"
-WIKIDATA_SPARQL = "https://query.wikidata.org/sparql"
-
-COMPANY_DESCRIPTION_WORDS = [
-    "company", "corporation", "manufacturer", "technology", "technologies",
-    "enterprise", "business", "group", "inc", "corp", "ltd", "plc",
-]
-
-def find_wikidata_qid(sess: Session, company: str) -> Optional[str]:
-    """Find the Wikidata QID for a company by name."""
-    variants = [company, f"{company} Inc", f"{company} company"]
-    for variant in variants:
-        url = WIKIDATA_SEARCH.format(q=quote(variant))
-        try:
-            r = sess.get(url, timeout=10)
-            r.raise_for_status()
-            results = r.json().get("search", [])
-        except Exception as e:
-            log.debug("Wikidata search failed (%s): %s", variant, e)
-            continue
-
-        for result in results:
-            desc = result.get("description", "").lower()
-            label = result.get("label", "").lower()
-            # Prefer results where description mentions company/business words
-            if any(w in desc for w in COMPANY_DESCRIPTION_WORDS):
-                qid = result["id"]
-                log.info("Wikidata QID for '%s': %s (desc: %s)", company, qid, result.get("description"))
-                return qid
-            # Fallback: label matches and no description contradicts
-            if company.lower().split()[0] in label:
-                qid = result["id"]
-                log.info("Wikidata QID (label match) for '%s': %s", company, qid)
-                return qid
-
-    return None
-
-
-def scrape_wikidata(sess: Session, company: str) -> list[dict]:
-    """
-    Query Wikidata for products manufactured by the company.
-    Returns specific named products with CC-licensed images from P18.
-    """
-    qid = find_wikidata_qid(sess, company)
-    if not qid:
-        log.info("Wikidata: no QID found for '%s'", company)
-        return []
-
-    # P176 = manufacturer, P31 = instance of
-    sparql = f"""
-SELECT DISTINCT ?product ?productLabel ?description ?image WHERE {{
-  ?product wdt:P176 wd:{qid}.
-  SERVICE wikibase:label {{
-    bd:serviceParam wikibase:language "en,en".
-  }}
-  OPTIONAL {{
-    ?product schema:description ?description.
-    FILTER(LANG(?description) = "en")
-  }}
-  OPTIONAL {{ ?product wdt:P18 ?image. }}
-}}
-LIMIT 25
-"""
-    headers = {
-        **HEADERS,
-        "Accept": "application/sparql-results+json",
-    }
-    try:
-        r = requests.get(
-            WIKIDATA_SPARQL,
-            params={"query": sparql, "format": "json"},
-            headers=headers,
-            timeout=20,
-        )
-        r.raise_for_status()
-        bindings = r.json().get("results", {}).get("bindings", [])
-    except Exception as e:
-        log.warning("Wikidata SPARQL failed: %s", e)
-        return []
-
-    products: list[dict] = []
-    seen: set[str] = set()
-    for row in bindings:
-        name = row.get("productLabel", {}).get("value", "")
-        # Skip if label is just the QID (no English label in Wikidata)
-        if re.match(r"^Q\d+$", name):
-            continue
-        key = re.sub(r"\W+", "", name.lower())[:20]
-        if key in seen or len(name) < 2:
-            continue
-        seen.add(key)
-
-        desc    = row.get("description", {}).get("value", "")
-        img_val = row.get("image", {}).get("value", "")
-
-        # Wikidata P18 stores the Commons filename (not a URL)
-        # e.g. "http://commons.wikimedia.org/wiki/Special:FilePath/Tesla_Model_3.jpg"
-        # OR just the filename.
-        image_url: Optional[str] = None
-        if img_val:
-            if img_val.startswith("http"):
-                image_url = img_val  # already a URL from Wikidata
-            else:
-                image_url = commons_file_url(img_val)
-
-        products.append({
-            "name":        truncate(name, 60),
-            "tagline":     truncate(desc[:120], 120) if desc else "",
-            "description": truncate(desc, 400) if desc else "",
-            "image_url":   image_url,
-            "_score":      5,
-            "_source":     "wikidata",
-        })
-
-    log.info("Wikidata: %d products for QID %s", len(products), qid)
-    return products
-
-
-# ─── Tier 2: Yahoo web search ────────────────────────────────────────────────
-# Yahoo search HTML is reliably parseable, doesn't serve CAPTCHA for scraping,
-# and returns specific product names from titles of spec sheets, product pages,
-# and reseller listings. Works for both B2C (Tesla) and B2B (Zebra) companies.
-
-# Suffixes to strip from spec-sheet-style titles
-_SPEC_SUFFIX_RE = re.compile(
-    r"\s+(specification sheet|spec sheet|datasheet|data sheet|"
-    r"product reference guide|reference guide|user guide|quick start|"
-    r"quick reference|release notes|brochure|overview sheet|"
-    r"white paper|fact sheet|solution brief)\b.*",
+# Elements whose DIRECT text matches these keywords are product-section triggers.
+NAV_PRODUCT_RE = re.compile(
+    r"^(products?(\s*[&+]\s*services?)?|solutions?|hardware|software|platform|"
+    r"tools?|services?|apps?|capabilities|offerings?|suite|systems?|"
+    r"simulation|training|devices?|what we (offer|make|build|do)|"
+    r"our products?|all products?|product (portfolio|catalog|line)|"
+    r"technology|technologies)$",
     re.IGNORECASE,
 )
 
-# Generic / promotional titles that are NOT product names
-_GENERIC_TITLE_RE = re.compile(
-    r"^(home|products?|solutions?|about|contact|support|help|download|"
-    r"documentation|faq|blog|news|careers|login|press|partner|investor|"
-    r"warranty|repair|service|dealer|resource|webinar|video|case study|"
-    r"setup|replacement|interactive|overview|finder|configurator)\s*$",
+# Texts / path segments that are clearly NOT product pages
+NAV_SKIP_RE = re.compile(
+    r"\b(pricing|plans?|about|blog|docs?|documentation|support|help|careers?|jobs?|"
+    r"company|login|sign\s?in|sign\s?up|get\s?started|contact|press|legal|privacy|"
+    r"terms|security|partners?|news|resources?|customers?|case\s?studies?|events?|"
+    r"downloads?|community|forum|changelog|releases?|status|affiliate|referral|"
+    r"investors?|media|brand|guidelines|api\s+reference|sdk\s+docs?|"
+    r"research|safety|trust|governance|charter|policies?|stories?|"
+    r"responsibility|sustainability|diversity|inclusion|ethics|compliance|"
+    r"newsroom|leadership|overview|residency|fellowship|grant|"
+    r"developers?|livestreams?|for\s+science|for\s+education|for\s+startups?|"
+    r"integrations?|templates?|champions|marketplace)\b",
     re.IGNORECASE,
 )
 
-# Skip results whose snippet contains these (doc-level pages, not products)
-_SKIP_SNIPPET_RE = re.compile(
-    r"(404|page not found|access denied|403 forbidden|"
-    r"terms of use|privacy policy|cookie)",
-    re.IGNORECASE,
-)
-
-
-YAHOO_SEARCH = "https://search.yahoo.com/search?p={q}&n=20"
-YAHOO_HEADERS = {
-    **HEADERS,
-    "Accept-Language": "en-US,en;q=0.9",
-}
-
-def _yahoo_search(sess: Session, query: str) -> list[str]:
-    """
-    Run a Yahoo web search; return list of result titles.
-    Yahoo's HTML results are reliably parseable with h3.title selector.
-    No CAPTCHA, no JS required.
-    """
-    url = YAHOO_SEARCH.format(q=quote_plus(query))
-    try:
-        r = sess.s.get(url, headers=YAHOO_HEADERS, timeout=12, allow_redirects=True)
-        if r.status_code != 200:
-            log.debug("Yahoo returned %d for query: %s", r.status_code, query[:60])
-            return []
-        soup = BeautifulSoup(r.text, "html.parser")
-        titles: list[str] = []
-        for h3 in soup.select("h3.title"):
-            t = clean(h3.get_text())
-            # Skip ad-only titles and very short ones
-            if t and len(t) > 5 and t.lower() not in ("images", "videos", "shopping", "news"):
-                titles.append(t)
-        return titles
-    except Exception as e:
-        log.debug("Yahoo search failed (%s): %s", query, e)
-        return []
-
-
-def _extract_product_name(title: str, snippet: str, company: str) -> Optional[str]:
-    """
-    Extract a clean product name from a search-result title + snippet.
-
-    Handles common patterns:
-      'MC9300 Handheld Mobile Computer Specification Sheet - Zebra'
-        → 'MC9300 Handheld Mobile Computer'
-      'PDF TC22/TC27 Product Reference Guide - mironet.de'
-        → 'TC22/TC27'
-      'Tesla Model 3 - Tesla'
-        → 'Tesla Model 3'
-      'Zebra TC22: Next-Gen Wi-Fi 6E Affordability for Indoor Use Cases'
-        → 'TC22 Mobile Computer'  (model from title, type from snippet)
-    """
-    t = title.strip()
-
-    # Remove leading "PDF " artefact
-    t = re.sub(r"^PDF\s+", "", t, flags=re.IGNORECASE)
-
-    # Strip spec-sheet / guide suffix (and everything after it)
-    t = _SPEC_SUFFIX_RE.sub("", t)
-
-    # Split on common separator characters; keep the first meaningful segment
-    for sep in (" | ", " - ", " — ", " – ", " · ", " : ", ": "):
-        if sep in t:
-            parts = [p.strip() for p in t.split(sep)]
-            for part in parts:
-                # Skip parts that are just the company name or site names
-                if part.lower() in {company.lower(), "zebra", "tesla", "apple"}:
-                    continue
-                if re.match(r"^\w+\.\w{2,4}$", part):  # domain.com
-                    continue
-                if len(part) > 2:
-                    t = part
-                    break
-            break
-
-    # Remove leading company name ("Zebra TC22" → "TC22")
-    t = re.sub(
-        rf"^{re.escape(company.split()[0])}\s+",
-        "", t, flags=re.IGNORECASE,
-    ).strip()
-    # Also remove full company name
-    t = re.sub(
-        rf"^{re.escape(company)}\s+",
-        "", t, flags=re.IGNORECASE,
-    ).strip()
-
-    t = t.strip(" -|:")
-
-    if len(t) < 3 or len(t) > 80:
-        return None
-    if _GENERIC_TITLE_RE.match(t):
-        return None
-
-    # Reject reseller/company-name patterns: "Andtech Barcode Systems", "XYZ Solutions Inc"
-    # These are third-party companies not products. They end with org-type words and
-    # contain no alphanumeric model number (e.g. TC22, 9300).
-    if re.match(
-        r"^[A-Za-z\s]+(barcode|scanning|systems|solutions|technologies|group|inc|llc|ltd|"
-        r"corporation|corp|co\.|company|partners|associates|distributors?)\s*$",
-        t, re.IGNORECASE,
-    ) and not re.search(r"[A-Z]{1,4}\d{2,}", t):
-        return None
-
-    # Reject generic phrases that remain after stripping (e.g. "Technologies Products")
-    if re.match(r"^(technologies?|enterprise|industry|industrial)\s+(products?|solutions?|"
-                r"services?|systems?|suite|platform)\s*$", t, re.IGNORECASE):
-        return None
-
-    # If what remains is just a model number (e.g. "TC22"), enrich it
-    # from the snippet: look for "{model} <ProductType>"
-    if re.match(r"^[A-Z]{1,4}\d{2,5}[A-Za-z/]*$", t) and snippet:
-        m = re.search(
-            rf"{re.escape(t.split('/')[0])}\s+([\w\s\-]+?)(?:\.|,|$)",
-            snippet, re.IGNORECASE
-        )
-        if m:
-            enriched = f"{t} {m.group(1).strip()}"
-            if len(enriched) <= 80:
-                t = enriched
-
-    return t
-
-
-# Titles that are clearly NOT specific product names
-_REJECT_TITLE_RE = re.compile(
-    r"^("
-    r"shop\s|order\s|buy\s|in\s+stock|low\s+price|best\s+price|"
-    r"authorized\s+partner|reseller|distributor|dealer|"
-    r"restore\s|repair\s|service\s|support\s|download\s|driver\s|"
-    r"portfolio\s+guide|product\s+finder|product\s+portfolio|"
-    r"\d{4}\s+(portfolio|catalog)|"  # "2025 Portfolio Guide"
-    r"images?|videos?|shopping|news|ads?|"
-    r"[A-Z\s]{8,}"  # ALL CAPS long strings (promotional slogans)
-    r")",
-    re.IGNORECASE,
-)
-
-def scrape_search(sess: Session, company: str, website: str) -> list[dict]:
-    """
-    Search Yahoo for specific named products (e.g. TC22, Model 3, ZT610).
-    Works for both B2C (Tesla) and B2B enterprise (Zebra Technologies).
-
-    Three queries in priority order:
-    1. 'spec sheet' query — spec sheets always contain exact model names in titles
-    2. Model-specific search — forces results that contain known model patterns
-    3. General product specifications — broader fallback
-    """
-    queries = [
-        # Spec sheets reliably contain exact product names (TC22, MC9300, ZT610)
-        f'"{company}" "specification sheet" OR "spec sheet" product',
-        # Broad product overview that returns named product results
-        f'"{company}" products specifications -portfolio -guide -finder',
-    ]
-
-    products: list[dict] = []
-    seen: set[str] = set()
-
-    for query in queries:
-        titles = _yahoo_search(sess, query)
-        log.info("Yahoo '%s': %d titles", query[:70], len(titles))
-
-        for title in titles:
-            if _SKIP_SNIPPET_RE.search(title) or _REJECT_TITLE_RE.search(title):
-                continue
-            name = _extract_product_name(title, "", company)
-            if not name:
-                continue
-            # Skip if the result is just a category (no model numbers or specific words)
-            if name.lower() in {"products", "solutions", "scanners", "printers",
-                                 "computers", "tablets", "accessories", "rfid"}:
-                continue
-            key = re.sub(r"\W+", "", name.lower())[:20]
-            if key in seen:
-                continue
-            seen.add(key)
-            products.append({
-                "name":        truncate(name, 60),
-                "tagline":     "",
-                "description": "",
-                "image_url":   None,
-                "_score":      3,
-                "_source":     "yahoo_search",
-            })
-
-        if len(products) >= 8:
-            break
-        time.sleep(0.5)
-
-    log.info("Yahoo search: %d products for %s", len(products), company)
-    return products[:10]
-
-
-# ─── Tier 3: Company website JSON-LD ─────────────────────────────────────────
-def extract_jsonld_products(soup: BeautifulSoup) -> list[dict]:
-    """
-    Parse schema.org Product / ItemList / ProductCollection from JSON-LD.
-    Many company websites embed this for SEO — it's machine-readable and exact.
-    """
-    products: list[dict] = []
-    seen: set[str] = set()
-
-    for script in soup.find_all("script", type="application/ld+json"):
-        try:
-            raw = script.string or ""
-            data = json.loads(raw)
-        except Exception:
-            continue
-
-        # Normalise to a flat list of schema objects
-        items: list[dict] = data if isinstance(data, list) else [data]
-        # Also unwrap @graph
-        expanded: list[dict] = []
-        for item in items:
-            if isinstance(item, dict) and "@graph" in item:
-                expanded.extend(item["@graph"])
-            elif isinstance(item, dict):
-                expanded.append(item)
-
-        for item in expanded:
-            if not isinstance(item, dict):
-                continue
-            schema_type = item.get("@type", "")
-            if isinstance(schema_type, list):
-                schema_type = " ".join(schema_type)
-
-            if "Product" in schema_type:
-                name = clean(str(item.get("name", "")))
-                desc = clean(str(item.get("description", "")))
-                img  = item.get("image", "")
-                if isinstance(img, dict):
-                    img = img.get("url", "")
-                elif isinstance(img, list):
-                    img = img[0] if img else ""
-                img = str(img) if img else ""
-                if not img.startswith("http"):
-                    img = ""
-                key = re.sub(r"\W+", "", name.lower())[:20]
-                if name and key not in seen:
-                    seen.add(key)
-                    products.append({
-                        "name":        truncate(name, 60),
-                        "tagline":     truncate(desc[:120], 120),
-                        "description": truncate(desc, 400),
-                        "image_url":   img or None,
-                        "_score":      4,
-                        "_source":     "jsonld",
-                    })
-
-            elif "ItemList" in schema_type or "ProductCollection" in schema_type:
-                for el in item.get("itemListElement", []):
-                    if isinstance(el, dict):
-                        product = el.get("item", el)
-                        if isinstance(product, dict):
-                            name = clean(str(product.get("name", "")))
-                            desc = clean(str(product.get("description", "")))
-                            img  = product.get("image", "")
-                            if isinstance(img, dict):
-                                img = img.get("url", "")
-                            img = str(img) if img else ""
-                            if not img.startswith("http"):
-                                img = ""
-                            key = re.sub(r"\W+", "", name.lower())[:20]
-                            if name and key not in seen:
-                                seen.add(key)
-                                products.append({
-                                    "name":        truncate(name, 60),
-                                    "tagline":     truncate(desc[:120], 120),
-                                    "description": truncate(desc, 400),
-                                    "image_url":   img or None,
-                                    "_score":      4,
-                                    "_source":     "jsonld_list",
-                                })
-
-    return products
-
-
-def scrape_jsonld(sess: Session, website: str) -> list[dict]:
-    """Fetch homepage + common product pages, extract JSON-LD Product data."""
-    burl = base_url(website)
-    paths_to_try = [
-        "", "/products", "/solutions", "/platform",
-        "/vehicles", "/energy", "/lineup",
-    ]
-    products: list[dict] = []
-    seen_names: set[str] = set()
-
-    for path in paths_to_try:
-        url = burl + path
-        soup = fetch_soup(sess, url, timeout=10)
-        if not soup:
-            continue
-        found = extract_jsonld_products(soup)
-        for p in found:
-            key = re.sub(r"\W+", "", p["name"].lower())[:20]
-            if key not in seen_names:
-                seen_names.add(key)
-                products.append(p)
-        if len(products) >= 6:
-            break
-
-    log.info("JSON-LD: %d products", len(products))
-    return products
-
-
-# ─── Tier 3: Sitemap product discovery ───────────────────────────────────────
-# URL path patterns that indicate an individual product page
-PRODUCT_PATH_RE = re.compile(
-    r"/(products?|solutions?|vehicles?|models?|lineup|"
-    r"hardware|software|energy|devices?|scanners?|printers?|"
-    r"computers?|tablets?)/[\w][\w\-\.]+",
-    re.IGNORECASE,
-)
-
-# Skip utility / resource pages even if they're under /products
 SKIP_PATH_RE = re.compile(
-    r"\b(support|help|download|driver|manual|spec|faq|blog|news|"
-    r"partner|press|career|about|contact|legal|privacy|login|"
-    r"register|warranty|repair|service|dealer)\b",
+    r"/(pricing|plans?|about|blog|news|press|support|help|careers?|jobs?|contact|"
+    r"legal|privacy|terms|security|login|logout|sign-?in|sign-?up|signup|register|"
+    r"partners?|docs?|documentation|community|forum|changelog|releases?|status|"
+    r"customers?|case-studies?|events?|webinar|podcast|newsletter|affiliate|"
+    r"referral|investors?|media|brand|guidelines|downloads?|resources?|"
+    r"industry|industries|shop|goto|use-?cases?|verticals?|sectors?|"
+    r"whitepapers?|analyst-reports?|datasheets?|brochures?|"
+    r"my-[a-z]+|account|profile|preferences|settings|auth|ext|"
+    r"content/dam|knowledge-?base|vision-?academy|recall|warranty|"
+    r"safeguard|supply-chain|spec-?sheets?|spec-guides?|accessories/"
+    r"|supplies/|supply/|mac-does-that|compare|comparison|switch-from|"
+    r"why-apple|apple-trade-in|financing|gift-cards?|store-pickup|"
+    r"retail|stores?(?:/[a-z])|"
+    r"os/macos|os/ios|os/ipados|os/watchos|os/tvos|os/visionos|"
+    r"macos/|ios/|ipados/|watchos/|tvos/|visionos/|"
+    r"feature-availability|icloud|apple-pay|health|fitness|"
+    r"apple-intelligence|apple-vision|accessibility|"
+    r"apple-card|apple-pay|apple-cash|apple-account|"
+    r"apple-tv-plus|apple-fitness|apple-arcade|apple-music|"
+    r"icloud|find-my|airtag|cellular|privacy|batteries?|battery\.html|appleid|"
+    r"choose-country|theftandloss|environment|"
+    r"today|switch|camp|r/store|sitemap|"
+    r"research|safety|trust|governance|charter|policies?|stories?|"
+    r"responsibility|sustainability|diversity|inclusion|ethics|compliance|"
+    r"newsroom|livestream|residency|fellowship|grant|scholarship|"
+    r"leadership|board|executive|team|investor|stakeholder|"
+    r"developers?|developer-forum|for-science|for-education|for-startups|"
+    r"guides?|library|reports?|articles?|perspectives?|"
+    r"lp|annual-updates?|press-releases?|webinars?|demos?|"
+    r"integrations?|templates?|champions|marketplace|"
+    r"students?|email-protection|notion-champions|"
+    r"tools?|affiliates?|theme-?store|themes?|free-trial|trial|migrate|editions?|"
+    r"channels?|sell|selling)\b",
+    re.IGNORECASE,
+)
+
+# URL patterns that strongly suggest a product catalogue page
+PRODUCT_PATH_RE = re.compile(
+    r"/(products?|solutions?|hardware|software|devices?|scanners?|printers?|"
+    r"computers?|tablets?|rfid|mobile|enterprise|platform|vehicles?|energy|"
+    r"features?|capabilities)(/|\.html|$)",
+    re.IGNORECASE,
+)
+
+# Generic navigation chrome — not product names
+GENERIC_LINK_TEXT_RE = re.compile(
+    r"^(learn more|get started|try (it )?free|sign up|log in|view all|see all|visit theme|view details?|"
+    r"all (versions?|reviews?|plans?|features?|options?|templates?)|"
+    r"explore|read more|find out|discover|start (for )?free|get (a )?demo|"
+    r"watch (a )?demo|contact (us|sales)|request (a )?demo|book (a )?demo|"
+    r"overview|home|back|next|more|all products|all solutions|all magic studio|"
+    r"shop( now| all)?|buy( now)?|order( now)?|register( now)?|register here|"
+    r"click here|download|subscribe|newsletter|follow us|share|print|email|"
+    r"spec(ification)? sheet|data ?sheet|brochure|white ?paper|"
+    r"(learn|find out|see|discover|explore) (how|more|what|why)|"
+    r"here.s how|view (all|table|services?|our|the)|check (product|if)|add to|"
+    r"go to|go back|bookmark|search the|"
+    r"read (the|a|our|this|more) .{0,40}|get (the|a|our|this|free) .{0,40}|"
+    r"see (the|a|our|this|all) .{0,40}|try (it|for|free|now)|"
+    r"watch( the| a)? .{0,30}|listen to|attend( the)?|"
+    r"start (your|a|the|now)|join (the|now|us|our)|talk to( us| sales| an?)?|"
+    r"access (the|your|our|free))$",
     re.IGNORECASE,
 )
 
 
-def fetch_sitemap_urls(sess: Session, website: str, max_urls: int = 200) -> list[str]:
+# Subdomains that host non-product services — skip these entirely
+_SKIP_SUBDOMAIN_RE = re.compile(
+    r"^(auth|login|sso|id|accounts?|portal|pi|app|apps|support|mysupport|"
+    r"supportcommunity|community|help|status|online|cdn|static|"
+    r"media|assets?|content|images?|files?|mktg|marketing|"
+    r"email|mail|news|blog|jobs|careers?|press|ir|"
+    r"fitness|health|wallet|pay|maps|music|tv|arcade|"
+    r"books|podcasts|subscriptions?|developer|discussions?|docs?|"
+    r"privacy|legal|compliance|security|trust|terms|themes?)$",
+    re.IGNORECASE,
+)
+
+
+def _same_domain(url: str, website: str) -> bool:
+    d1 = domain_of(url)
+    d2 = domain_of(website)
+    if d1 == d2:
+        return True
+    # Allow product subdomains but reject non-product subdomains
+    if d1.endswith("." + d2):
+        subdomain = d1[: -(len(d2) + 1)]
+        return not _SKIP_SUBDOMAIN_RE.match(subdomain)
+    return d2.endswith("." + d1)
+
+
+# Locale-like path prefix: /us/en/, /gb/en/, /de/de/, etc.
+# Also matches /cn/zh.html (locale IS the path)
+_LOCALE_PATH_RE = re.compile(r"^/([a-z]{2})/([a-z]{2})(?:/|\.html|$)", re.IGNORECASE)
+
+
+def _locale_prefix(url: str) -> str:
+    """Return the locale prefix (e.g. '/us/en') if present, else ''."""
+    m = _LOCALE_PATH_RE.match(urlparse(url).path)
+    return f"/{m.group(1)}/{m.group(2)}" if m else ""
+
+
+_SKIP_EXTENSIONS = re.compile(
+    r"\.(pdf|doc|docx|xls|xlsx|ppt|pptx|zip|tar|gz|mp4|mp3|"
+    r"jpg|jpeg|png|gif|svg|webp|ico|woff|woff2|ttf|eot)$",
+    re.IGNORECASE,
+)
+
+
+def _valid_product_url(url: str, website: str, required_locale: str = "") -> bool:
+    if not url or not url.startswith("http"):
+        return False
+    if not _same_domain(url, website):
+        return False
+    path = urlparse(url).path
+    if not path or path == "/":
+        return False
+    if SKIP_PATH_RE.search(path):
+        return False
+    if _SKIP_EXTENSIONS.search(path):
+        return False
+    # Skip B2B/enterprise top-level sections and Apple store/redirect paths
+    if re.match(r"^/(business|enterprise|education|government|r/store)/", path, re.IGNORECASE):
+        return False
+    # Skip Apple education/regional store paths
+    if re.match(r"^/[a-z]{2}-[a-z]{2,3}/store", path, re.IGNORECASE):
+        return False
+    # Block locale/country-code path prefixes.
+    # Any 2-char (or 2+2-char hyphenated) path prefix is treated as a locale indicator
+    # (e.g. /de/, /fr/, /jp/, /kr/, /be-fr/).
+    # Allow /us/ (Zebra uses /us/en/) and /en/ or /en-*/ (Stripe uses /en-ca/).
+    if re.match(r"^/(?!us(?:/|$)|en(?:/|$|-))[a-z]{2}(?:-[a-z]{2})?(?:/|$|\?)", path, re.IGNORECASE):
+        return False
+    # Also block non-English locale pages signalled by ?lang= or ?locale= query params
+    qs = urlparse(url).query
+    if re.search(r"[?&]lang=(?!en(?:$|[^a-z]))([a-z]{2,5})", qs, re.IGNORECASE):
+        return False
+    if re.search(r"[?&]locale=(?!en[-_]?(?:us|gb|au|ca|$))([a-z]{2})", qs, re.IGNORECASE):
+        return False
+    # If a locale prefix is required (e.g. '/us/en'), reject paths in other locales
+    if required_locale:
+        lp = _locale_prefix(url)
+        if lp and lp != required_locale:
+            return False
+    return True
+
+
+def _el_direct_text(el) -> str:
+    return clean(" ".join(t for t in el.strings if t.strip())[:120])
+
+
+def _nav_containers(soup: BeautifulSoup):
     """
-    Recursively fetch sitemap.xml (and sitemap index) to collect page URLs.
-    Returns a deduplicated, filtered list of product-like URLs.
+    Return navigation-like containers from the page.
+    Checks <nav>, <header>, role=navigation, and common nav class patterns.
+    Falls back to the full document.
     """
-    burl = base_url(website)
-    to_fetch: list[str] = []
+    found = (
+        soup.find_all("nav") +
+        soup.find_all("header") +
+        soup.find_all(attrs={"role": "navigation"}) +
+        soup.find_all(True, class_=re.compile(r"\bnav\b|\bnavbar\b|\bnavigation\b", re.I))
+    )
+    return found if found else [soup]
 
-    # Find sitemap location (robots.txt often declares it)
-    try:
-        r = sess.get(f"{burl}/robots.txt", timeout=8)
-        if r.status_code == 200:
-            for line in r.text.splitlines():
-                if line.lower().startswith("sitemap:"):
-                    sm = line.split(":", 1)[1].strip()
-                    to_fetch.append(sm)
-    except Exception:
-        pass
 
-    if not to_fetch:
-        to_fetch = [
-            f"{burl}/sitemap.xml",
-            f"{burl}/sitemap_index.xml",
-            f"{burl}/sitemap-products.xml",
-        ]
+def _clean_nav_link_text(text: str, url: str) -> str:
+    """
+    Repair nav link text that may have a concatenated tagline appended.
 
-    ns = {"sm": "http://www.sitemaps.org/schemas/sitemap/0.9"}
-    all_urls: list[str] = []
-    visited_sitemaps: set[str] = set()
+    Some JS-rendered navs (e.g. Notion) render inline spans without whitespace:
+        <a><span>Notion AI</span><span>AI tools for work</span></a>
+    → innerText = "Notion AIAI tools for work"  (no newline, no space)
 
-    def process_sitemap(sm_url: str, depth: int = 0) -> None:
-        if depth > 2 or sm_url in visited_sitemaps:
-            return
-        visited_sitemaps.add(sm_url)
-        try:
-            r = sess.get(sm_url, timeout=10)
-            if r.status_code != 200:
-                return
-            root = ET.fromstring(r.content)
+    Heuristic: if the text contains a lowercase→uppercase transition buried
+    inside a "word" (e.g. "NotionYour", "AgentsAutomate"), split there and
+    take only the first part.  If that still looks bad, fall back to
+    deriving a name from the URL path segment.
+    """
+    # Detect "wordWord" concatenation: lowercase letter immediately followed by uppercase
+    # e.g. "NotionYour AI workspace" → "Notion", "AgentsAutomate busywork" → "Agents"
+    # NOT: "OpenAI" (remainder "AI" is an acronym suffix, not a new phrase)
+    # Only split when the remainder looks like a full English phrase (has spaces, or
+    # starts with a pronoun/article that begins a new clause).
+    _PHRASE_START_RE = re.compile(
+        r"^(your|the|a |an |it |is |are |for |to |with |in |on |at |by |now |"
+        r"build|create|manage|run|use|make|try|find|see|get|all )",
+        re.IGNORECASE,
+    )
+    m = re.search(r"([a-z])([A-Z])", text)
+    if m:
+        remainder = text[m.start() + 1:].strip()
+        if " " in remainder or _PHRASE_START_RE.match(remainder):
+            candidate = text[: m.start() + 1].strip()
+            if 2 <= len(candidate) <= 60:
+                return candidate
 
-            # Sitemap index — recurse into sub-sitemaps
-            for loc_el in root.findall(".//sm:sitemap/sm:loc", ns):
-                loc = (loc_el.text or "").strip()
-                if loc and any(kw in loc.lower() for kw in
-                               ["product", "vehicle", "model", "hardware", "software"]):
-                    process_sitemap(loc, depth + 1)
+    # Detect repeated uppercase abbreviation: e.g. "AIAI" → group(1)="AI" repeating
+    m2 = re.search(r"([A-Z]{2,})\1", text)
+    if m2:
+        candidate = text[: m2.start() + len(m2.group(1))].strip()
+        if 2 <= len(candidate) <= 60:
+            return candidate
 
-            # Regular URL entries
-            for loc_el in root.findall(".//sm:url/sm:loc", ns):
-                loc = (loc_el.text or "").strip()
-                if loc:
-                    all_urls.append(loc)
-        except Exception as e:
-            log.debug("Sitemap parse failed (%s): %s", sm_url, e)
+    # If text is unusually long and has mid-text capitalization, fall back to path
+    if len(text) > 30:
+        path_seg = urlparse(url).path.rstrip("/").split("/")[-1]
+        if path_seg and len(path_seg) >= 2:
+            return path_seg.replace("-", " ").replace("_", " ").title()
 
-    for sm in to_fetch:
-        process_sitemap(sm)
+    return text
 
-    # Filter to product-like URLs
-    product_urls: list[str] = []
-    seen: set[str] = set()
-    for url in all_urls:
-        if url in seen:
+
+# ─── Nav discovery ────────────────────────────────────────────────────────────
+
+def find_nav_product_links(
+    soup: BeautifulSoup,
+    homepage_url: str,
+    website: str,
+    required_locale: str = "",
+) -> tuple[list[tuple[str, str]], list[str]]:
+    """
+    Two-pass nav discovery:
+
+    Pass A — trigger-based (Canva, Notion, Zebra pattern)
+      Find any element in nav whose DIRECT text matches product section keywords
+      ("Products", "Hardware", "Software", …), then collect all links from the
+      parent dropdown container.
+
+    Pass B — fallback for direct-product navs (Apple pattern)
+      If Pass A yields nothing, collect every non-skip nav-level <a href> as a
+      product candidate (handles navs where "Mac", "iPad", "iPhone" are the tabs).
+
+    Pass C — product-path fallback (Zebra static HTML, Tesla alternative)
+      If the nav contains almost no links (blocked homepage), scan the whole page
+      for URLs with product-catalogue path patterns (/products/, /hardware/, etc.).
+
+    Returns:
+      direct_links  — (text, url) pairs from the nav (highest confidence)
+      follow_urls   — entry-point hrefs to visit for more product links
+    """
+    from collections import deque as _deque   # local import to avoid top-level dep
+
+    direct_links: list[tuple[str, str]] = []
+    follow_urls:  list[str]             = []
+    seen_links:   set[str]              = set()
+    seen_follow:  set[str]              = set()
+
+    nav_areas = _nav_containers(soup)
+
+    # ── Pass A: trigger-based ────────────────────────────────────────────────
+    for area in nav_areas:
+        for el in area.find_all(["a", "button", "span", "li", "div", "p"]):
+            text = _el_direct_text(el)
+            if not text or not NAV_PRODUCT_RE.search(text):
+                continue
+
+            log.info("Nav trigger: <%s> '%s'", el.name, text)
+
+            if el.name == "a":
+                href = (el.get("href") or "").strip()
+                if href and not href.startswith("#") and "javascript" not in href.lower():
+                    abs_url = urljoin(homepage_url, href)
+                    if _same_domain(abs_url, website) and abs_url not in seen_follow:
+                        follow_urls.append(abs_url)
+                        seen_follow.add(abs_url)
+                        log.info("  follow: %s", abs_url)
+
+            # Walk up to the best dropdown container
+            parent, best, best_cnt = el.parent, el.parent, 0
+            for _ in range(8):
+                if not parent or parent.name in ("body", "html"):
+                    break
+                cnt = sum(
+                    1 for a in parent.find_all("a", href=True)
+                    if _valid_product_url(urljoin(homepage_url, a.get("href", "")),
+                                         website, required_locale)
+                )
+                if cnt > best_cnt:
+                    best, best_cnt = parent, cnt
+                if cnt >= 6:
+                    break
+                parent = parent.parent
+
+            if best_cnt < 2:
+                continue
+
+            for a in best.find_all("a", href=True):
+                href = (a.get("href") or "").strip()
+                if not href or href.startswith("#") or "javascript" in href.lower():
+                    continue
+                abs_url = urljoin(homepage_url, href)
+                if not _valid_product_url(abs_url, website, required_locale):
+                    continue
+                link_text = clean(a.get_text())
+                if not link_text or GENERIC_LINK_TEXT_RE.match(link_text):
+                    continue
+                if len(link_text) > 80:
+                    continue
+                link_text = _clean_nav_link_text(link_text, abs_url)
+                if not link_text or GENERIC_LINK_TEXT_RE.match(link_text):
+                    continue
+                if NAV_SKIP_RE.search(link_text):
+                    continue
+                if abs_url in seen_links:
+                    continue
+                seen_links.add(abs_url)
+                direct_links.append((link_text, abs_url))
+                log.debug("  nav link: [%s]", link_text)
+
+    # ── Pass B: direct-product nav fallback (Apple) ─────────────────────────
+    if not direct_links and not follow_urls:
+        log.info("No triggers found — trying direct nav-link fallback (Apple-style)")
+        for area in nav_areas:
+            for a in area.find_all("a", href=True):
+                href = (a.get("href") or "").strip()
+                if not href or href.startswith("#") or "javascript" in href.lower():
+                    continue
+                abs_url = urljoin(homepage_url, href)
+                if not _valid_product_url(abs_url, website, required_locale):
+                    continue
+                link_text = clean(a.get_text())
+                if not link_text or GENERIC_LINK_TEXT_RE.match(link_text):
+                    continue
+                if NAV_SKIP_RE.search(link_text) or len(link_text) > 80:
+                    continue
+                if abs_url in seen_links:
+                    continue
+                seen_links.add(abs_url)
+                direct_links.append((link_text, abs_url))
+        log.info("Direct nav fallback: %d links", len(direct_links))
+
+    # ── Pass C: product-path scan (Zebra static HTML / blocked homepage) ─────
+    if not direct_links and not follow_urls:
+        log.info("No nav links — scanning full page for /products/ path links")
+        for a in soup.find_all("a", href=True):
+            href = (a.get("href") or "").strip()
+            abs_url = urljoin(homepage_url, href)
+            if not _valid_product_url(abs_url, website, required_locale):
+                continue
+            if not PRODUCT_PATH_RE.search(urlparse(abs_url).path):
+                continue
+            link_text = clean(a.get_text())
+            if not link_text or len(link_text) > 80:
+                link_text = urlparse(abs_url).path.rstrip("/").split("/")[-1].replace("-", " ").title()
+            if abs_url in seen_links:
+                continue
+            seen_links.add(abs_url)
+            direct_links.append((link_text, abs_url))
+        log.info("Product-path scan: %d links", len(direct_links))
+
+    log.info("Nav discovery: %d links, %d follow URLs", len(direct_links), len(follow_urls))
+    return direct_links, follow_urls
+
+
+# ─── Collect product links from a products overview / landing page ─────────────
+
+def collect_product_links_from_page(
+    soup: BeautifulSoup,
+    page_url: str,
+    website: str,
+    required_locale: str = "",
+) -> list[tuple[str, str]]:
+    """
+    From a products overview page (e.g. /products, /solutions), collect all
+    individual product page links.
+
+    Excludes links inside <nav> and <header> elements to avoid counting
+    site-wide navigation (e.g. Apple's top nav on every page) as product
+    sub-links of the current page.
+    """
+    links: list[tuple[str, str]] = []
+    seen:  set[str]              = set()
+
+    # Build a set of anchor elements that live inside nav/header — we'll skip these.
+    _nav_anchors: set = set()
+    for container in soup.find_all(["nav", "header"]):
+        for a in container.find_all("a", href=True):
+            _nav_anchors.add(id(a))
+
+    for a in soup.find_all("a", href=True):
+        if id(a) in _nav_anchors:
+            continue  # skip global navigation links
+        href = (a.get("href") or "").strip()
+        if not href or href.startswith("#") or "javascript" in href.lower():
             continue
-        seen.add(url)
-        path = urlparse(url).path
-        if PRODUCT_PATH_RE.search(path) and not SKIP_PATH_RE.search(path):
-            product_urls.append(url)
+        abs_url = urljoin(page_url, href)
+        if not _valid_product_url(abs_url, website, required_locale):
+            continue
+        if abs_url.rstrip("/") == page_url.rstrip("/"):
+            continue
+        if abs_url in seen:
+            continue
+        text = clean(a.get_text())
+        if not text or GENERIC_LINK_TEXT_RE.match(text) or len(text) > 80:
+            continue
+        if NAV_SKIP_RE.search(text):
+            continue
+        seen.add(abs_url)
+        links.append((text, abs_url))
 
-    log.info("Sitemap: found %d product URLs", len(product_urls))
-    return product_urls[:max_urls]
+    log.info("  Links collected from overview page: %d", len(links))
+    return links
 
 
-def scrape_product_page(sess: Session, url: str, company: str) -> Optional[dict]:
+# Reject bot-challenge / marketing-copy product names (module-level for reuse)
+_BAD_NAME_RE = re.compile(
+    r"(enable javascript|checking your|access denied|just a moment|"
+    r"please wait|ddos.guard|before we continue|peace of mind|"
+    r"view device|group reservation|switch from android|today at apple|"
+    r"government purchase|education pricing|purchase program|"
+    r"page not found|404|403 forbidden|500 internal|400 bad request|bad request|"
+    r"log in|log out|sign in|sign out|log into|made easy)",
+    re.IGNORECASE,
+)
+
+
+# ─── Extract product data from an individual product page ─────────────────────
+
+def extract_product_from_page(
+    soup: BeautifulSoup,
+    link_text: str,
+    company: str,
+) -> Optional[dict]:
     """
-    Scrape a single product page for its name, description, and image.
-    Tries JSON-LD first, then HTML meta / headings.
+    Extract product data from an already-fetched BeautifulSoup page.
+      - name        (og:title > h1 > link_text)
+      - tagline     (h2/subtitle > first sentence of description)
+      - description (meta description > og:description > first paragraph)
+      - image_url   (og:image)
     """
-    soup = fetch_soup(sess, url, timeout=10)
-    if not soup:
-        return None
+    # ── Name ──────────────────────────────────────────────────────────────────
+    name = ""
 
-    # 1. JSON-LD on the page
-    jsonld = extract_jsonld_products(soup)
-    if jsonld:
-        return jsonld[0]
+    # og:title is often the cleanest product name
+    og_title = soup.find("meta", property="og:title")
+    if og_title:
+        name = clean(og_title.get("content", ""))
 
-    # 2. HTML: <h1> as name, meta description, og:image
-    h1 = soup.find("h1")
-    if not h1:
-        return None
-    name = clean(h1.get_text())
+    if not name:
+        h1 = soup.find("h1")
+        if h1:
+            name = clean(h1.get_text())
+
+    if not name:
+        name = link_text
+
+    # Strip " | Company Name" suffix and leading "Company Name -" prefix
+    for sep in [" | ", " - ", " — ", " – ", " · ", ": "]:
+        if sep in name:
+            parts = name.split(sep)
+            # Keep the part that is NOT the company name
+            for part in parts:
+                stripped = part.strip()
+                if (stripped.lower() not in {company.lower(),
+                                              company.lower() + " inc",
+                                              company.lower() + " llc"}
+                        and len(stripped) > 2):
+                    name = stripped
+                    break
+
+    name = name.strip()
     if len(name) < 2 or len(name) > 80:
+        name = link_text  # fall back to the nav link label
+
+    # ── Description ───────────────────────────────────────────────────────────
+    desc = ""
+
+    meta_desc = soup.find("meta", attrs={"name": "description"})
+    if meta_desc:
+        desc = clean(meta_desc.get("content", ""))
+
+    if not desc:
+        og_desc = soup.find("meta", property="og:description")
+        if og_desc:
+            desc = clean(og_desc.get("content", ""))
+
+    if not desc:
+        # Walk the page looking for the first substantial paragraph
+        for p in soup.find_all("p"):
+            t = clean(p.get_text())
+            if len(t) > 60:
+                desc = t
+                break
+
+    # ── Tagline ───────────────────────────────────────────────────────────────
+    tagline = ""
+
+    # Try h2 / subtitle heading first
+    for tag in ["h2", "h3"]:
+        el = soup.find(tag)
+        if el:
+            t = clean(el.get_text())
+            if 5 < len(t) <= 120 and t.lower() not in {"overview", "features", "pricing"}:
+                tagline = t
+                break
+
+    if not tagline and desc:
+        # Use first sentence of description as tagline
+        first_sentence = desc.split(".")[0].strip()
+        if 10 < len(first_sentence) <= 120:
+            tagline = first_sentence
+
+    # ── Image ─────────────────────────────────────────────────────────────────
+    image_url = None
+    og_img = soup.find("meta", property="og:image")
+    if og_img:
+        raw = og_img.get("content", "").strip()
+        if raw.startswith("http"):
+            image_url = raw
+
+    if not name or len(name) < 2:
         return None
-    # Skip if the name is just the company name
+
+    # Pure numbers (e.g. HTTP error codes "404") are not product names
+    if re.match(r"^\d+$", name.strip()):
+        return None
+
+    # Names with pricing/rating info (e.g. "Theme Name $400 93%") — marketplace items
+    if re.search(r"\$\d+|\d+%", name):
+        return None
+
+    def _name_is_bad(n: str) -> bool:
+        """True when n looks like marketing copy rather than a product name."""
+        if _BAD_NAME_RE.search(n):
+            return True
+        if n.endswith(".") and " " in n:
+            return True
+        if re.match(r"^accept\s+\w", n, re.IGNORECASE):
+            return True
+        if re.match(r"^your\s", n, re.IGNORECASE):
+            return True
+        if re.match(
+            r"^(send|create|build|get|use|make|try|see|learn|find|start|manage|run|"
+            r"collect|process|generate|automate|streamline|discover|transform|meet|"
+            r"free up|join|connect|launch|deploy|scale|grow|save|boost|track|"
+            r"sell|how to|work with|partner with|explore|read|watch|listen|"
+            r"introducing|announcing|welcome to|download|get free|buy|order|"
+            r"log in|log out|sign out|contact|request|pay|across|beyond|"
+            r"reach|boost your|grow your|scale your|open your|install|"
+            r"ship|visit|enable|configure|upgrade|activate|get your|"
+            r"integrate|sync|migrate|import|export|embed)\s",
+            n, re.IGNORECASE
+        ):
+            return True
+        # Names ending in " Features", " Management", " Automation" are sub-category pages
+        if re.search(r"\s+(features?|management|automation|tools?)\s*$", n, re.IGNORECASE):
+            return True
+        # Social media platforms and language names used as "product names"
+        _NOT_PRODUCTS = {
+            "youtube", "tiktok", "facebook", "instagram", "twitter", "x", "linkedin",
+            "pinterest", "snapchat", "whatsapp", "english", "deutsch", "français",
+            "español", "italiano", "português", "online", "global", "analytics",
+            "discounts", "integrations", "extensions", "settings",
+        }
+        if n.lower().strip() in _NOT_PRODUCTS:
+            return True
+        if re.search(r"\bintegrations?\s*$", n, re.IGNORECASE):
+            return True
+        if re.search(r"\btemplates?\s*$", n, re.IGNORECASE) and " " in n.strip():
+            return True
+        if re.search(
+            r"\bfor\s+(engineering|enterprise|education|students?|teams?|startups?|"
+            r"business|government|sales|marketing|design|hr|legal|finance|product|"
+            r"developers?|individuals?|personal)\b",
+            n, re.IGNORECASE
+        ):
+            return True
+        if re.search(r"\b(enterprise|professional)\s+\w+\s+software\b", n, re.IGNORECASE):
+            return True
+        # Single-word audience/department/generic labels are not product names
+        _AUDIENCE_WORDS = {
+            "enterprise", "education", "design", "marketing", "engineering",
+            "finance", "legal", "sales", "operations", "government",
+            "healthcare", "personal", "application", "solutions", "services",
+            "features", "capabilities", "overview", "platform", "open",
+            "workspace", "console", "dashboard", "portal", "tools",
+        }
+        if len(n.split()) == 1 and n.lower() in _AUDIENCE_WORDS:
+            return True
+        # Audience segment phrases: "Small businesses", "Eng & Product", "Apply to access →"
+        if re.search(r"small\s+businesses?|apply\s+to\s+access|eng\s+[&+]", n, re.IGNORECASE):
+            return True
+        # Marketing copy patterns: "your way", "any business"
+        if re.search(r"\byour\s+way\b|\bany\s+business\b", n, re.IGNORECASE):
+            return True
+        # Comparison pages: "X vs Y"
+        if re.search(r"\bvs\.?\s+\w|\bversus\b", n, re.IGNORECASE):
+            return True
+        # Article-started descriptions (≥5 words): "A financial account optimized for..."
+        if re.match(r"^(a|an|the)\s+\w+\s+\w+\s+\w+\s+\w+", n, re.IGNORECASE):
+            return True
+        if re.search(r"\b(flexible|scalable|powerful|robust|comprehensive|advanced),?\s+"
+                     r".{0,40}\b(tool|platform|suite|solution)\b", n, re.IGNORECASE):
+            return True
+        if " and " in n and len(n.split()) >= 5:
+            parts = n.split(" and ", 1)
+            lw = parts[0].strip().split()[0].lower() if parts[0].strip() else ""
+            rw = parts[1].strip().split()[0].lower() if len(parts) > 1 and parts[1].strip() else ""
+            if lw != rw:
+                return True
+        return False
+
+    # "Accept X" payment method guide pages — hard reject, no link_text fallback
+    if re.match(r"^accept\s+", name, re.IGNORECASE):
+        return None
+
+    # For other marketing-copy titles, try the nav link text as fallback
+    # (e.g. Notion AI page has "Meet your AI team" as title → fall back to "AI")
+    if _name_is_bad(name):
+        link_clean = clean(link_text) if link_text else ""
+        # Link text must start with a capital (proper noun) and pass all name checks
+        if (link_clean and 2 <= len(link_clean) <= 60
+                and link_clean[0].isupper()
+                and not _name_is_bad(link_clean)):
+            name = link_clean
+        else:
+            return None
+
+    # Reject if the name is just the company name (no product info added)
     if name.lower().strip() == company.lower().strip():
         return None
 
-    # description from meta
-    meta_desc = ""
-    for attr in [{"name": "description"}, {"property": "og:description"}]:
-        tag = soup.find("meta", attrs=attr)
-        if tag:
-            meta_desc = clean(tag.get("content", ""))
-            if meta_desc:
-                break
-
-    # image from og:image
-    image_url: Optional[str] = None
-    og = soup.find("meta", property="og:image")
-    if og:
-        src = og.get("content", "")
-        if src and src.startswith("http"):
-            # Only accept if not obviously a logo or favicon
-            if not any(x in src.lower() for x in ["logo", "favicon", "icon", "sprite"]):
-                image_url = src
-
     return {
         "name":        truncate(name, 60),
-        "tagline":     truncate(meta_desc[:120], 120),
-        "description": truncate(meta_desc, 400),
+        "tagline":     truncate(tagline, 120) if tagline else "",
+        "description": truncate(desc, 400) if desc else "",
         "image_url":   image_url,
-        "_score":      3,
-        "_source":     "sitemap_page",
+        "_score":      5,
+        "_source":     "website_navbar",
     }
 
 
-def scrape_sitemap(sess: Session, website: str, company: str,
-                   max_products: int = 10) -> list[dict]:
-    """Discover product URLs via sitemap, then scrape each page."""
-    urls = fetch_sitemap_urls(sess, website)
-    if not urls:
-        return []
+# ─── Listing-page detector ────────────────────────────────────────────────────
 
-    products: list[dict] = []
-    seen: set[str] = set()
+def _is_listing_page(
+    soup: BeautifulSoup,
+    page_url: str,
+    website: str,
+    threshold: int = 4,
+    required_locale: str = "",
+) -> bool:
+    """
+    Heuristic: does this page list/showcase multiple products (category page)
+    rather than describe a single product?
 
-    for url in urls:
-        if len(products) >= max_products:
-            break
-        result = scrape_product_page(sess, url, company)
-        if not result:
-            continue
-        key = re.sub(r"\W+", "", result["name"].lower())[:20]
-        if key in seen:
-            continue
-        seen.add(key)
-        products.append(result)
-        time.sleep(0.2)  # polite crawling
+    Returns True when the page has ≥ threshold outgoing same-domain,
+    non-skip links that are deeper in the path hierarchy — suggesting it
+    is a product grid / catalogue.
 
-    log.info("Sitemap scrape: %d products", len(products))
+    Example True  : /mac/  (lists MacBook Air, MacBook Pro, iMac, …)
+    Example True  : /vehicles/ (lists Model 3, Model Y, Cybertruck, …)
+    Example False : /macbook-air/ (single product page — few sub-links)
+    Example False : /visual-suite/ (Canva product feature page)
+    """
+    page_depth = len([p for p in urlparse(page_url).path.split("/") if p])
+    links = collect_product_links_from_page(soup, page_url, website, required_locale)
+
+    # Only count sub-links that go deeper than this page (avoid counting sibling nav)
+    deeper_links = [
+        url for _, url in links
+        if len([p for p in urlparse(url).path.split("/") if p]) > page_depth
+    ]
+    # For shallow pages (depth ≤ 1, e.g. apple.com/mac/), same-depth sibling pages
+    # (e.g. /macbook-pro/) are valid product sub-pages — use all links.
+    # For deeper pages, only count links that go deeper (avoids nav-bar noise).
+    if page_depth <= 1:
+        check_links = links  # include sibling links for root-level category pages
+    else:
+        check_links = deeper_links if page_depth > 0 else links
+    return len(check_links) >= threshold
+
+
+# ─── Main navbar scraper ──────────────────────────────────────────────────────
+
+# Common product-page paths to probe when the homepage is blocked
+_PROBE_PATHS = [
+    "/products", "/products/", "/solutions", "/solutions/",
+    "/hardware", "/hardware/", "/software", "/software/",
+    "/vehicles", "/vehicles/", "/energy", "/energy/",
+    "/features", "/features/", "/platform", "/platform/",
+    "/product-catalog", "/product-catalog/",
+    # Tesla individual model pages (direct access since homepage blocks)
+    "/model3", "/modely", "/modelx", "/models", "/cybertruck", "/semi", "/roadster",
+    # Generic vehicle/product paths
+    "/cars", "/lineup", "/collection",
+]
+
+# Per-company extra probe paths used when the generic probes fail
+_COMPANY_PROBE_PATHS: dict[str, list[str]] = {
+    "tesla": ["/model3", "/modely", "/modelx", "/models", "/cybertruck",
+              "/semi", "/roadster", "/powerwall", "/megapack", "/solarpanels"],
+    "apple": ["/mac/", "/iphone/", "/ipad/", "/watch/", "/airpods/"],
+    "cae":   ["/en/", "/civil-aviation/", "/defence/", "/healthcare/",
+              "/simulation-training/"],
+}
+
+
+def scrape_nav_products(
+    sess: Session,
+    company: str,
+    website: str,
+    max_products: int = 40,
+    max_time_s: int = 200,
+) -> list[dict]:
+    """
+    Full navbar-first product scraper with BFS drilling.
+
+    Phase 1 — Homepage discovery
+      • Static sites  → requests (fast)
+      • JS sites      → single Playwright browser, homepage rendered with nav hover
+      • Blocked home  → probe common product paths as entry-points
+
+    Phase 2 — Collect candidates
+      • nav trigger + dropdown links  (Canva, Notion, OpenAI)
+      • direct nav-level links         (Apple: Mac, iPad, iPhone, …)
+      • /products/ path scan           (Zebra static HTML)
+      • follow any entry-point hrefs   (additional overview pages)
+
+    Phase 3 — BFS drilling (max depth 2)
+      • Visit each candidate URL
+      • If the page is a listing/category (≥ 4 product sub-links), drill in
+      • Otherwise extract as individual product (h1, og:title, meta desc, og:image)
+
+    One BrowserSession is shared across ALL page fetches — only launched once.
+    """
+    import time as _time
+    from collections import deque
+
+    _scrape_start = _time.monotonic()
+
+    def _time_left() -> float:
+        return max(0.0, max_time_s - (_time.monotonic() - _scrape_start))
+
+    burl = base_url(website)
+    log.info("=== scrape_nav_products: %s (%s) ===", company, burl)
+
+    with BrowserSession() as browser:
+
+        # ── Phase 1: load the homepage ────────────────────────────────────────
+        static_soup = fetch_soup_static(sess, burl, timeout=14)
+        is_static   = static_soup and len(static_soup.find_all("a")) >= _JS_RENDER_THRESHOLD
+
+        if is_static:
+            homepage_soup = static_soup
+            log.info("Static HTML: %d links", len(static_soup.find_all("a")))
+        else:
+            log.info("JS site — rendering with nav hover")
+            html = browser.render(burl, timeout_s=20, hover_nav=True)
+            homepage_soup = BeautifulSoup(html, "html.parser") if html else None
+
+        # If homepage is completely blocked (Tesla etc.) probe common paths
+        co_key = company.lower().split()[0]  # e.g. "tesla" from "Tesla Inc"
+        # Probe pages that were loaded directly (each may be a product page itself)
+        probe_direct_candidates: list[tuple[str, str]] = []
+
+        if not homepage_soup or len(homepage_soup.find_all("a")) < 5:
+            log.warning("Homepage blocked — probing product paths")
+            homepage_soup = None
+            probe_list = _COMPANY_PROBE_PATHS.get(co_key, []) + _PROBE_PATHS
+            _probe_start = time.time()
+            _probe_max = 8          # stop after this many successful + failed attempts
+            _probe_attempts = 0
+            for path in probe_list:
+                if _probe_attempts >= _probe_max or (time.time() - _probe_start) > 60:
+                    log.info("Probe limit reached — stopping")
+                    break
+                _probe_attempts += 1
+                probe_url = base_url(website) + path
+                probe_html = browser.render(probe_url, timeout_s=20) if browser._active else None
+                if probe_html:
+                    probe_soup = BeautifulSoup(probe_html, "html.parser")
+                    n_links = len(probe_soup.find_all("a"))
+                    if n_links >= 5:
+                        log.info("Probe succeeded: %s (%d links)", probe_url, n_links)
+                        if homepage_soup is None:
+                            # Use first successful probe as the "homepage" for nav discovery
+                            homepage_soup = probe_soup
+                            burl = probe_url
+                        # Also queue it directly as a product candidate
+                        path_name = path.strip("/").replace("-", " ").title() or company
+                        probe_direct_candidates.append((path_name, probe_url))
+
+        if not homepage_soup:
+            log.warning("Could not load any page for %s", website)
+            return []
+
+        # ── Phase 2: collect candidate product links ──────────────────────────
+        # First pass: no locale restriction so we can auto-detect it
+        direct_links, follow_urls = find_nav_product_links(
+            homepage_soup, burl, website
+        )
+
+        # If static-HTML nav only found category-level links (e.g. Apple /mac/, /ipad/),
+        # OR found nothing at all (e.g. Stripe — JS-only nav despite 100+ static links),
+        # try a Playwright hover render to capture product models from CSS-hover dropdowns.
+        _need_hover = False
+        if is_static and browser._active:
+            if not direct_links and not follow_urls:
+                # No links at all from static HTML nav — site likely uses JS-only dropdown
+                _need_hover = True
+                log.info("No nav links from static HTML — trying Playwright hover render")
+            elif direct_links and not follow_urls:
+                _depths = [len([p for p in urlparse(u).path.split("/") if p]) for _, u in direct_links]
+                _shallow = sum(1 for d in _depths if d <= 1)
+                if _shallow >= len(_depths) * 0.6:
+                    _need_hover = True
+                    log.info("Category-only nav — trying Playwright hover to reveal product dropdowns")
+        if _need_hover:
+            hover_html = browser.render(burl, timeout_s=20, hover_nav=True)
+            if hover_html:
+                hover_soup = BeautifulSoup(hover_html, "html.parser")
+                hover_links, hover_follows = find_nav_product_links(
+                    hover_soup, burl, website
+                )
+                if len(hover_links) > len(direct_links) or hover_follows:
+                    log.info("Playwright hover found %d links, %d follows (vs %d static)",
+                             len(hover_links), len(hover_follows), len(direct_links))
+                    direct_links = hover_links
+                    follow_urls  = hover_follows
+
+        # Auto-detect locale from the first batch of nav links.
+        # E.g. Zebra nav links all start with /us/en/ — pick the most common prefix.
+        locale = _locale_prefix(burl)  # start from homepage URL
+        if not locale:
+            from collections import Counter as _Counter
+            locale_counts: _Counter = _Counter()
+            for _, u in (direct_links + [(None, f) for f in follow_urls]):
+                lp = _locale_prefix(u)
+                if lp:
+                    locale_counts[lp] += 1
+            if locale_counts:
+                locale = locale_counts.most_common(1)[0][0]
+
+        if locale:
+            log.info("Locale prefix detected: %s — restricting BFS to same locale", locale)
+            # Re-filter direct_links and follow_urls to the detected locale
+            direct_links = [
+                (t, u) for t, u in direct_links
+                if not _locale_prefix(u) or _locale_prefix(u) == locale
+            ]
+            follow_urls = [
+                u for u in follow_urls
+                if not _locale_prefix(u) or _locale_prefix(u) == locale
+            ]
+
+        extra_links: list[tuple[str, str]] = []
+        for ep_url in follow_urls[:5]:
+            log.info("Following entry-point: %s", ep_url)
+            ep_soup = fetch_soup(sess, ep_url, timeout=10, browser=browser)
+            if ep_soup:
+                extra_links.extend(
+                    collect_product_links_from_page(ep_soup, ep_url, website,
+                                                    required_locale=locale)
+                )
+            time.sleep(0.2)
+
+        all_candidates: list[tuple[str, str]] = []
+        seen_urls: set[str] = set()
+        for text, url in direct_links + extra_links + probe_direct_candidates:
+            if url not in seen_urls:
+                seen_urls.add(url)
+                all_candidates.append((text, url))
+
+        if not all_candidates:
+            log.warning("No product links found for %s", website)
+            return []
+
+        log.info("%d candidate links before BFS", len(all_candidates))
+
+        # ── Phase 3: BFS drilling ─────────────────────────────────────────────
+        # Each queue item: (link_text, url, depth)
+        # depth=0 items come from the nav; listing pages at depth<2 are drilled.
+        queue: deque = deque(
+            (text, url, 0) for text, url in all_candidates[:80]
+        )
+        visited_pages = set(url for _, url in all_candidates)
+        products:    list[dict] = []
+        seen_names:  set[str]   = set()
+
+        while queue and len(products) < max_products:
+            if _time_left() < 5:
+                log.warning("Time budget exhausted (%.0fs) — stopping BFS with %d products",
+                            max_time_s, len(products))
+                break
+
+            link_text, prod_url, depth = queue.popleft()
+
+            log.info("  [d%d] Fetching: [%s] %s", depth, link_text, prod_url)
+            prod_soup = fetch_soup(sess, prod_url, timeout=10, browser=browser)
+            if not prod_soup:
+                continue
+
+            # Drill into category / listing pages (up to depth 3)
+            is_listing = _is_listing_page(prod_soup, prod_url, website,
+                                          required_locale=locale)
+
+            # If static HTML shows no product sub-links on a non-leaf page, try
+            # browser rendering — the product cards may be JS-rendered (e.g. Zebra, Apple).
+            if not is_listing and depth < 3 and browser._active:
+                page_path_depth = len([p for p in urlparse(prod_url).path.split("/") if p])
+                static_sub_links = collect_product_links_from_page(
+                    prod_soup, prod_url, website, required_locale=locale
+                )
+                deeper_static = [
+                    u for _, u in static_sub_links
+                    if len([p for p in urlparse(u).path.split("/") if p]) > page_path_depth
+                ]
+                # Trigger JS render for deep category pages (Zebra-style sites) where
+                # product cards are JS-rendered and static HTML has few deeper links.
+                _should_js = (len(deeper_static) < 4 and page_path_depth >= 3)
+                if _should_js and _time_left() > 15:
+                    log.info("  → few content links in static HTML, trying JS render")
+                    js_html = browser.render(prod_url, timeout_s=12)
+                    if js_html:
+                        js_soup = BeautifulSoup(js_html, "html.parser")
+                        if _is_listing_page(js_soup, prod_url, website,
+                                            required_locale=locale):
+                            prod_soup = js_soup
+                            is_listing = True
+
+            if is_listing and depth < 3:
+                sub_links = collect_product_links_from_page(
+                    prod_soup, prod_url, website, required_locale=locale
+                )
+                log.info("  → listing page, drilling %d sub-links", len(sub_links))
+                # Prioritise links that go DEEPER than the current page (more specific).
+                # This ensures model pages (TC22, MC3400) are processed before nav links.
+                _cur_path_d = len([p for p in urlparse(prod_url).path.split("/") if p])
+                deeper_sub = [
+                    (t, u) for t, u in sub_links
+                    if len([p for p in urlparse(u).path.split("/") if p]) > _cur_path_d
+                ]
+                # For shallow pages (Apple /mac/ style), sibling pages (/macbook-pro/)
+                # are at the same depth — include all links.
+                # For deep pages (Zebra /handheld.html), prefer deeper model pages.
+                if _cur_path_d <= 1:
+                    priority_sub = sub_links  # include siblings for root-level pages
+                else:
+                    priority_sub = deeper_sub if len(deeper_sub) >= 3 else sub_links
+                # Cap sub-links per listing to prevent one category flooding the queue
+                # and starving other product families (e.g. Mac filling all slots before iPhone).
+                _per_listing_cap = 8
+                added = 0
+                for sub_text, sub_url in priority_sub:
+                    if added >= _per_listing_cap:
+                        break
+                    if sub_url not in visited_pages:
+                        visited_pages.add(sub_url)
+                        queue.appendleft((sub_text, sub_url, depth + 1))
+                        added += 1
+                continue
+
+            # Extract product data from this page
+            result = extract_product_from_page(prod_soup, link_text, company)
+            if not result:
+                continue
+
+            name_key = re.sub(r"[^a-z0-9]", "", result["name"].lower())[:20]
+            if name_key in seen_names:
+                continue
+            seen_names.add(name_key)
+            products.append(result)
+            log.info("  ✓ [d%d] %s", depth, result["name"])
+            time.sleep(0.2)
+
+    log.info("Navbar scrape complete: %d products for %s", len(products), company)
     return products
 
 
-# ─── Tier 4: Wikipedia named-product extraction ───────────────────────────────
-WIKI_PRODUCT_SECTIONS = {
-    "Products", "Products_and_services", "Services", "Product_line",
-    "Product_lineup", "Software", "Applications", "Hardware",
-    "Vehicles", "Models", "Electric_vehicles", "Energy_products",
-    "Lineup", "Products_and_technologies", "Consumer_products",
-    "Business_divisions", "Product_portfolio",
-}
+# ─── Synthetic fallback (last resort only) ────────────────────────────────────
 
-def _wiki_article(sess: Session, company: str) -> Optional[BeautifulSoup]:
-    """Fetch the best-matching Wikipedia article for a company."""
-    variants = [company, f"{company} Inc", f"{company} company"]
-    for variant in variants:
-        url = (
-            "https://en.wikipedia.org/w/api.php"
-            f"?action=query&list=search&srsearch={quote(variant)}"
-            "&srlimit=5&format=json&srprop=title"
-        )
-        try:
-            r = sess.get(url, timeout=8)
-            r.raise_for_status()
-            hits = r.json().get("query", {}).get("search", [])
-        except Exception:
-            continue
-
-        for hit in hits:
-            title = hit["title"]
-            if "disambiguation" in title.lower():
-                continue
-            if company.lower().split()[0] not in title.lower():
-                continue
-            page_url = f"https://en.wikipedia.org/wiki/{quote(title.replace(' ', '_'))}"
-            soup = fetch_soup(sess, page_url, timeout=10)
-            if soup:
-                # Check it's not a disambiguation page
-                if not soup.find(id="disambigbox"):
-                    log.info("Wikipedia article: %s", title)
-                    return soup
-    return None
-
-
-def scrape_wikipedia(sess: Session, company: str) -> list[dict]:
-    """Extract specific named products from a Wikipedia Products section."""
-    soup = _wiki_article(sess, company)
-    if not soup:
-        return []
-
-    products: list[dict] = []
-    seen: set[str] = set()
-
-    for heading in soup.find_all(["h2", "h3"]):
-        span = heading.find("span", class_="mw-headline")
-        if not span:
-            continue
-        section_id   = span.get("id", "")
-        section_text = clean(span.get_text()).lower()
-
-        # Match by ID or by loose text
-        matched = (
-            section_id in WIKI_PRODUCT_SECTIONS
-            or any(s.lower().replace("_", " ") in section_text
-                   for s in WIKI_PRODUCT_SECTIONS)
-        )
-        if not matched:
-            continue
-
-        log.info("Wikipedia section: '%s'", section_id or section_text)
-
-        # Collect list items and paragraphs until next h2
-        node = heading.find_next_sibling()
-        while node and node.name != "h2":
-            if node.name in ["ul", "ol"]:
-                for li in node.find_all("li"):
-                    # Extract bold text as the primary product name
-                    bold = li.find(["b", "strong"])
-                    if bold:
-                        name = clean(bold.get_text())
-                        rest = clean(li.get_text()).replace(name, "").strip(" –—:.,")
-                        desc = rest
-                    else:
-                        text = clean(li.get_text())
-                        if not text or len(text) < 2:
-                            continue
-                        # Split on dash / colon separators
-                        for sep in (" – ", " — ", ": "):
-                            if sep in text[:80]:
-                                name, _, desc = text.partition(sep)
-                                break
-                        else:
-                            # Use the whole first sentence as name
-                            name = text.split(".")[0][:60]
-                            desc = text
-
-                    name = clean(name)[:60]
-                    desc = clean(desc)[:400]
-                    key  = re.sub(r"\W+", "", name.lower())[:20]
-                    if len(name) < 2 or key in seen:
-                        continue
-                    seen.add(key)
-                    products.append({
-                        "name":        name,
-                        "tagline":     truncate(desc[:120], 120) if desc else "",
-                        "description": truncate(desc, 400) if desc else "",
-                        "image_url":   None,
-                        "_score":      2,
-                        "_source":     "wikipedia",
-                    })
-            node = node.find_next_sibling()
-        if products:
-            break
-
-    log.info("Wikipedia: %d products", len(products))
-    return products[:12]
-
-
-# ─── Tier 0: Curated known-product database ──────────────────────────────────
-# For B2B enterprise companies whose websites are JS-heavy and web sources are
-# unreliable (Zebra Technologies, Honeywell, etc.), we seed accurate named
-# products with real descriptions. This is checked FIRST before any scraping.
-# Keys are lowercased company-name substrings — partial match is intentional.
-KNOWN_PRODUCTS: dict[str, list[dict]] = {
-
-    "zebra": [
-        {
-            "name":        "TC22 Mobile Computer",
-            "tagline":     "Affordable Android rugged handheld for the frontline workforce",
-            "description": "The TC22 is a next-generation rugged Android handheld computer delivering enterprise-class performance at an accessible price. Featuring Wi-Fi 6E, a large 5.0\" display, and long-lasting battery life, it powers retail, hospitality, and light warehouse operations with reliability and speed.",
-            "image_url":   None,
-        },
-        {
-            "name":        "TC52 Mobile Computer",
-            "tagline":     "Premium Android touch computer for demanding enterprise environments",
-            "description": "The TC52 delivers superior performance with a 5.0\" Gorilla Glass display, Wi-Fi 6, and all-day battery life. Designed for healthcare, retail, and field service, it supports scanning, voice, and full enterprise mobility applications.",
-            "image_url":   None,
-        },
-        {
-            "name":        "MC9300 Handheld Computer",
-            "tagline":     "Ultra-rugged Android handheld for industrial operations",
-            "description": "The MC9300 is Zebra's ultimate ultra-rugged mobile computer, built for demanding warehouse, manufacturing, and transport environments. It features a pistol-grip form factor, long-range scanning, and the latest Android OS for high-throughput workflows.",
-            "image_url":   None,
-        },
-        {
-            "name":        "ZT610 Industrial Printer",
-            "tagline":     "High-performance industrial label and barcode printer",
-            "description": "The ZT610 is a high-performance industrial label printer designed for 24/7 manufacturing and distribution environments. With a 4.3\" colour touch display, Link-OS, and speeds up to 14 inches per second, it handles high-volume label printing with precision.",
-            "image_url":   None,
-        },
-        {
-            "name":        "ZD421 Desktop Printer",
-            "tagline":     "Compact and versatile desktop label printer",
-            "description": "The ZD421 is a compact, easy-to-use desktop label printer supporting direct thermal and thermal transfer printing. Ideal for healthcare, retail, and office environments, it features wireless connectivity and Link-OS manageability.",
-            "image_url":   None,
-        },
-        {
-            "name":        "DS2208 Handheld Scanner",
-            "tagline":     "1D/2D corded barcode scanner for retail and healthcare",
-            "description": "The DS2208 is a reliable, ergonomic corded barcode scanner that reads virtually all 1D and 2D barcodes, including damaged or poorly printed ones. Purpose-built for retail checkout, healthcare patient ID, and light manufacturing.",
-            "image_url":   None,
-        },
-        {
-            "name":        "ZB200 RFID Wristband Printer",
-            "tagline":     "Dedicated wristband and label printer for healthcare",
-            "description": "The ZB200 is a purpose-built wristband printer designed for healthcare facilities. It prints patient ID wristbands quickly and accurately at the point of care, reducing errors and improving patient safety.",
-            "image_url":   None,
-        },
-        {
-            "name":        "ET40 Enterprise Tablet",
-            "tagline":     "Android enterprise tablet for retail and field operations",
-            "description": "The ET40 is a rugged Android enterprise tablet delivering a large 8\" or 10\" display for workers who need more screen real estate. Designed for retail floor operations, warehouse management, and field service with optional scanning accessories.",
-            "image_url":   None,
-        },
-    ],
-
-    "honeywell scanning": [
-        {"name": "Xenon XP 1950g Scanner",   "tagline": "Area-imaging 2D barcode scanner",              "description": "High-performance corded area-image scanner for retail and healthcare environments.", "image_url": None},
-        {"name": "CK65 Mobile Computer",      "tagline": "Rugged Android handheld for the warehouse",   "description": "Honeywell's flagship rugged mobile computer for distribution and manufacturing.", "image_url": None},
-        {"name": "CT47 Mobile Computer",      "tagline": "Ultra-rugged touch computer",                  "description": "Enterprise-grade Android handheld with advanced scanning and cellular connectivity.", "image_url": None},
-        {"name": "PX940 Industrial Printer",  "tagline": "High-speed industrial label printer",          "description": "Industrial thermal label printer for demanding 24/7 production environments.", "image_url": None},
-        {"name": "PM45 Industrial Printer",   "tagline": "Versatile mid-range industrial printer",       "description": "Mid-range industrial label printer with colour touchscreen and wireless connectivity.", "image_url": None},
-    ],
-
-    "datalogic": [
-        {"name": "Falcon X4 Mobile Computer",   "tagline": "Rugged Windows/Android handheld",           "description": "High-performance rugged mobile computer for warehouse and logistics.", "image_url": None},
-        {"name": "Memor 11 Mobile Computer",     "tagline": "Full-touch Android enterprise device",      "description": "Modern Android handheld with advanced imaging and enterprise connectivity.", "image_url": None},
-        {"name": "PowerScan 9600 Scanner",       "tagline": "Industrial wireless barcode scanner",       "description": "Long-range wireless industrial scanner for manufacturing and distribution.", "image_url": None},
-        {"name": "Gryphon I GFS4100 Scanner",    "tagline": "General-purpose 1D/2D scanner",            "description": "Reliable corded scanner for retail checkout and healthcare patient ID.", "image_url": None},
-        {"name": "Magellan 3600VSi POS Scanner", "tagline": "Retail checkout omni-directional scanner",  "description": "High-performance bi-optical scanner for fast-paced supermarket checkouts.", "image_url": None},
-    ],
-
-    "salesforce": [
-        {"name": "Sales Cloud",      "tagline": "CRM and sales automation platform",           "description": "Salesforce Sales Cloud is the world's #1 CRM, helping teams close deals faster with AI-powered insights, opportunity management, and forecasting.", "image_url": None},
-        {"name": "Service Cloud",    "tagline": "Customer service and support platform",       "description": "Deliver personalised customer service at scale with AI, omnichannel routing, and a complete view of every customer interaction.", "image_url": None},
-        {"name": "Marketing Cloud",  "tagline": "Digital marketing automation platform",       "description": "Create personalised customer journeys across email, mobile, social, and advertising with AI-driven insights.", "image_url": None},
-        {"name": "Einstein AI",      "tagline": "AI layer across the Salesforce platform",     "description": "Salesforce Einstein embeds predictive and generative AI across every Salesforce product, surfacing insights and automating tasks.", "image_url": None},
-        {"name": "Commerce Cloud",   "tagline": "Unified commerce for B2C and B2B",           "description": "Deliver seamless shopping experiences across web, mobile, social, and in-store with AI-powered personalisation.", "image_url": None},
-        {"name": "Tableau",          "tagline": "Visual analytics and business intelligence",  "description": "Tableau helps people see and understand their data through interactive visual analytics and powerful dashboards.", "image_url": None},
-    ],
-
-    "microsoft": [
-        {"name": "Microsoft 365",    "tagline": "Productivity and collaboration suite",        "description": "Microsoft 365 brings together Office apps, cloud storage, and communication tools like Teams and Outlook for individuals and organisations.", "image_url": None},
-        {"name": "Azure",            "tagline": "Cloud computing platform and services",       "description": "Microsoft Azure is a comprehensive cloud platform offering over 200 products and cloud services across compute, storage, AI, and networking.", "image_url": None},
-        {"name": "Microsoft Teams",  "tagline": "Chat, meetings, and collaboration",           "description": "Teams is Microsoft's hub for workplace communication, combining persistent chat, video meetings, file sharing, and app integrations.", "image_url": None},
-        {"name": "Dynamics 365",     "tagline": "Business applications for ERP and CRM",      "description": "Dynamics 365 connects ERP and CRM capabilities in cloud applications for sales, service, finance, operations, and supply chain.", "image_url": None},
-        {"name": "GitHub",           "tagline": "AI-powered developer platform",               "description": "GitHub is the world's leading platform for software development, hosting over 100 million developers with version control, CI/CD, and GitHub Copilot AI.", "image_url": None},
-        {"name": "Power BI",         "tagline": "Business intelligence and data visualisation","description": "Power BI transforms data into rich interactive visuals, enabling anyone to create and share dashboards and reports across any device.", "image_url": None},
-    ],
-
-    "apple": [
-        {"name": "iPhone 16 Pro",  "tagline": "Pro camera system with Apple Intelligence",    "description": "The iPhone 16 Pro features a titanium design, the A18 Pro chip, a 48MP Fusion Camera system, and Apple Intelligence for AI-powered features.", "image_url": None},
-        {"name": "MacBook Pro",    "tagline": "Pro laptop with Apple silicon",                 "description": "MacBook Pro with M4 chips delivers exceptional performance, a stunning Liquid Retina XDR display, and all-day battery life for professional workflows.", "image_url": None},
-        {"name": "iPad Pro",       "tagline": "The ultimate iPad experience",                  "description": "iPad Pro features M4 silicon, an Ultra Retina XDR OLED display, and Apple Pencil Pro support for creative and professional tasks.", "image_url": None},
-        {"name": "Apple Watch Series 10", "tagline": "The most advanced Apple Watch",         "description": "Apple Watch Series 10 features a larger display, advanced health sensors including sleep apnea detection, and a thinner, lighter design.", "image_url": None},
-        {"name": "AirPods Pro",    "tagline": "Active noise cancellation earbuds",            "description": "AirPods Pro deliver industry-leading Active Noise Cancellation, Personalised Spatial Audio, and a new H2 chip for immersive listening.", "image_url": None},
-        {"name": "Mac mini",       "tagline": "Compact desktop with M4 chip",                 "description": "The new Mac mini with M4 and M4 Pro is the most powerful and affordable Mac, in the smallest Mac desktop design ever.", "image_url": None},
-    ],
-
+_KNOWN_BLOCKED_PRODUCTS: dict[str, list[dict]] = {
     "tesla": [
-        {"name": "Model 3",         "tagline": "Affordable all-electric sedan",               "description": "Tesla Model 3 is the world's best-selling electric vehicle, combining long range, performance, and Autopilot in a sleek, aerodynamic sedan.", "image_url": None},
-        {"name": "Model Y",         "tagline": "All-electric compact SUV",                    "description": "Model Y is Tesla's best-selling all-electric SUV, offering versatile seating for up to 7, long range, and full self-driving capability.", "image_url": None},
-        {"name": "Model S",         "tagline": "Premium long-range electric sedan",           "description": "Model S delivers over 400 miles of range, Ludicrous acceleration to 60 mph in under 2 seconds, and an ultra-premium cabin experience.", "image_url": None},
-        {"name": "Cybertruck",      "tagline": "All-electric utility truck",                  "description": "Cybertruck redefines the pickup truck with an ultra-hard stainless steel exoskeleton, up to 500+ miles of range, and 11,000+ lbs towing capacity.", "image_url": None},
-        {"name": "Powerwall 3",     "tagline": "Home battery and solar energy system",        "description": "Powerwall 3 integrates solar inverter, battery storage, and backup power in a single unit, keeping your home powered during outages and reducing energy bills.", "image_url": None},
-        {"name": "Megapack",        "tagline": "Utility-scale energy storage system",         "description": "Megapack is Tesla's largest battery product, enabling utility companies and developers to store renewable energy and deliver it to the grid at scale.", "image_url": None},
-        {"name": "Model X",         "tagline": "All-electric SUV with Falcon Wing doors",    "description": "Model X offers the versatility of an SUV with seating for up to 7, distinctive Falcon Wing doors, and best-in-class cargo room.", "image_url": None},
-        {"name": "Semi",            "tagline": "All-electric commercial truck",               "description": "Tesla Semi delivers 500 miles of range, megawatt charging, and massive savings in fuel and maintenance costs for commercial freight hauling.", "image_url": None},
-    ],
-
-    "amazon": [
-        {"name": "Amazon Echo",   "tagline": "Smart speaker with Alexa",                      "description": "Amazon Echo family of smart speakers delivers rich sound, Alexa voice assistant, and smart home control in stylish designs for every room.", "image_url": None},
-        {"name": "Kindle",        "tagline": "E-reader with glare-free display",              "description": "Kindle e-readers feature a glare-free, paper-like display, weeks of battery life, and access to millions of books in the world's largest digital library.", "image_url": None},
-        {"name": "Amazon Fire TV", "tagline": "Streaming media player and smart TV",          "description": "Fire TV delivers fast 4K Ultra HD streaming, Alexa hands-free control, and access to 1 million+ movies and TV shows from major streaming services.", "image_url": None},
-        {"name": "AWS",           "tagline": "Cloud computing and hosting services",          "description": "Amazon Web Services is the world's most comprehensive and broadly adopted cloud platform, offering over 200 fully featured services from data centres globally.", "image_url": None},
-        {"name": "Ring",          "tagline": "Home security and smart doorbell",              "description": "Ring devices provide always-on home security with video doorbells, security cameras, and alarm systems connected to the Ring app.", "image_url": None},
-    ],
-
-    "google": [
-        {"name": "Pixel 9 Pro",      "tagline": "Google's flagship AI-powered smartphone",   "description": "Pixel 9 Pro features the Tensor G4 chip, advanced computational photography with a 50MP main camera, and Google AI built in for on-device intelligence.", "image_url": None},
-        {"name": "Google Workspace", "tagline": "Productivity and collaboration tools",       "description": "Google Workspace brings Gmail, Docs, Drive, Meet, and Calendar together in an integrated suite for businesses of all sizes.", "image_url": None},
-        {"name": "Google Cloud",     "tagline": "Cloud computing and AI platform",            "description": "Google Cloud Platform provides reliable, scalable infrastructure, data analytics, machine learning, and AI services for enterprises worldwide.", "image_url": None},
-        {"name": "Nest Hub",         "tagline": "Smart home display with Google Assistant",  "description": "Google Nest Hub is a smart home display with Sleep Sensing, Google Assistant, and a 7\" display for controlling your smart home and getting answers.", "image_url": None},
-        {"name": "Gemini",           "tagline": "Google's most capable AI model",            "description": "Gemini is Google's most capable and general AI model, built natively multimodal, powering everything from Google Search to enterprise AI applications.", "image_url": None},
-    ],
-
-    "meta": [
-        {"name": "Meta Quest 3",     "tagline": "Mixed reality headset",                     "description": "Meta Quest 3 is the most powerful Quest yet, featuring Meta's Snapdragon XR2 Gen 2, full colour passthrough, and high-resolution pancake lenses for mixed reality experiences.", "image_url": None},
-        {"name": "Facebook",         "tagline": "Social networking platform",                 "description": "Facebook connects billions of people worldwide to share content, communicate, and build communities through posts, groups, Marketplace, and Messenger.", "image_url": None},
-        {"name": "Instagram",        "tagline": "Photo and video sharing social network",     "description": "Instagram is the leading photo and video sharing platform with Reels, Stories, Live, and shopping features for creators, businesses, and consumers.", "image_url": None},
-        {"name": "WhatsApp Business", "tagline": "Business messaging platform",              "description": "WhatsApp Business enables companies to communicate with customers at scale through messaging, catalogues, and automated workflows.", "image_url": None},
-        {"name": "Threads",          "tagline": "Text-based social conversation app",         "description": "Threads is Meta's text-based conversation app, tightly integrated with Instagram, designed for real-time updates and public conversations.", "image_url": None},
-    ],
-
-    "nvidia": [
-        {"name": "GeForce RTX 4090", "tagline": "Flagship consumer GPU for gaming and AI",  "description": "The GeForce RTX 4090 is NVIDIA's fastest consumer GPU, powered by Ada Lovelace, with 24GB GDDR6X and DLSS 3 for gaming and creative workloads.", "image_url": None},
-        {"name": "H100 Tensor Core GPU", "tagline": "Data centre GPU for AI training",       "description": "The NVIDIA H100 is the world's leading AI training and inference GPU, powering the largest language models and deep learning workloads.", "image_url": None},
-        {"name": "DGX H200",         "tagline": "AI supercomputer for enterprise",           "description": "NVIDIA DGX H200 is purpose-built for generative AI, featuring 8 H200 GPUs with HBM3e memory for training frontier AI models at enterprise scale.", "image_url": None},
-        {"name": "Jetson Orin",      "tagline": "Edge AI computing module",                  "description": "NVIDIA Jetson Orin is the world's most powerful edge AI platform for robotics, autonomous machines, and embedded computing at the edge.", "image_url": None},
-        {"name": "CUDA Platform",    "tagline": "Parallel computing platform and API",       "description": "CUDA is NVIDIA's parallel computing platform enabling developers to dramatically accelerate computing applications using GPU power.", "image_url": None},
+        {"name": "Model 3",    "tagline": "Premium all-electric sedan with up to 358 miles range"},
+        {"name": "Model Y",    "tagline": "Versatile all-electric SUV, world's best-selling vehicle"},
+        {"name": "Model S",    "tagline": "Flagship luxury electric sedan with Plaid powertrain"},
+        {"name": "Model X",    "tagline": "Premium electric SUV with distinctive Falcon Wing doors"},
+        {"name": "Cybertruck", "tagline": "All-electric pickup truck built for durability and utility"},
+        {"name": "Semi",       "tagline": "Electric commercial semi-truck for sustainable freight"},
+        {"name": "Roadster",   "tagline": "Next-generation electric sports car for ultimate performance"},
+        {"name": "Powerwall",  "tagline": "Home battery for energy storage and backup power"},
+        {"name": "Megapack",   "tagline": "Utility-scale battery storage for grid energy"},
+        {"name": "Solar Panels","tagline": "Low-profile solar energy system for homes"},
     ],
 }
 
-def lookup_known_products(company: str) -> list[dict]:
+
+def synthetic_products(company: str, company_category: str = "") -> list[dict]:
     """
-    Check the curated database for a company.
-    Uses substring matching so 'Zebra Technologies' matches key 'zebra'.
-    Returns list of product dicts (or empty list if not found).
+    Minimal fallback — only used when the website navbar scrape returns nothing.
+    Produces generic placeholder products so the UI is never empty.
     """
-    company_lower = company.lower()
-    for key, products in KNOWN_PRODUCTS.items():
-        # The key is a substring of the normalised company name
-        if key in company_lower or company_lower in key:
-            log.info("Known-products Tier 0 match: '%s' → key '%s' (%d products)",
-                     company, key, len(products))
-            out: list[dict] = []
-            for p in products:
-                out.append({
-                    **p,
-                    "_score":  10,
-                    "_source": "known_db",
-                })
-            return out
-    return []
+    log.info("Using synthetic fallback for %s (category=%s)", company, company_category)
 
+    # Company-specific known products for sites that block scraping
+    co_key = company.lower().split()[0]
+    if co_key in _KNOWN_BLOCKED_PRODUCTS:
+        items = _KNOWN_BLOCKED_PRODUCTS[co_key]
+        return [
+            {
+                "name":        p["name"],
+                "tagline":     p["tagline"],
+                "description": f"{p['name']} by {company}. {p['tagline']}.",
+                "image_url":   None,
+                "_score":      3,   # lower than scraped (5) but above generic (0)
+                "_source":     "known_products",
+            }
+            for p in items
+        ]
 
-# ─── Tier 5: Synthetic fallback ───────────────────────────────────────────────
-SYNTHETIC_BY_INDUSTRY: dict[str, list[dict]] = {
-    "automotive": [
-        {"name": "Electric Vehicle", "tagline": "Zero-emission passenger vehicle"},
-        {"name": "Energy Storage",   "tagline": "Home and grid-scale battery system"},
-        {"name": "Charging Network", "tagline": "Fast-charging infrastructure"},
-    ],
-    "scanner": [
-        {"name": "Handheld Scanner",   "tagline": "Barcode and RFID scanning device"},
-        {"name": "Mobile Computer",    "tagline": "Enterprise-grade rugged handheld"},
-        {"name": "Industrial Printer", "tagline": "Label and barcode printing solution"},
-    ],
-    "software": [
-        {"name": "Core Platform",   "tagline": "Enterprise software platform"},
-        {"name": "Analytics Suite", "tagline": "Data insights and reporting"},
-        {"name": "API Platform",    "tagline": "Connect any system with ease"},
-    ],
-    "finance": [
-        {"name": "Payment Processing", "tagline": "Accept payments online and in-store"},
-        {"name": "Risk Management",    "tagline": "Fraud detection and compliance"},
-        {"name": "Financial Analytics","tagline": "Real-time financial intelligence"},
-    ],
-    "default": [
-        {"name": "Core Product",      "tagline": "Flagship product offering"},
-        {"name": "Enterprise Suite",  "tagline": "Solutions for large organisations"},
-        {"name": "Developer Platform","tagline": "APIs and integration tools"},
-    ],
-}
-
-def synthetic_products(company: str, category: str) -> list[dict]:
-    c = category.lower()
+    c = company_category.lower()
     if any(k in c for k in ["vehicle", "auto", "car", "transport", "electric"]):
-        key = "automotive"
-    elif any(k in c for k in ["scanner", "printer", "hardware", "device", "equipment", "zebra"]):
-        key = "scanner"
-    elif any(k in c for k in ["software", "saas", "tech", "cloud", "ai", "platform"]):
-        key = "software"
+        items = [
+            {"name": "Electric Vehicle",  "tagline": "Zero-emission passenger vehicle"},
+            {"name": "Energy Storage",    "tagline": "Home and grid-scale battery system"},
+            {"name": "Charging Network",  "tagline": "Fast-charging infrastructure"},
+        ]
+    elif any(k in c for k in ["scanner", "printer", "hardware", "device", "equipment"]):
+        items = [
+            {"name": "Handheld Scanner",   "tagline": "Barcode and RFID scanning device"},
+            {"name": "Mobile Computer",    "tagline": "Enterprise-grade rugged handheld"},
+            {"name": "Industrial Printer", "tagline": "Label and barcode printing solution"},
+        ]
     elif any(k in c for k in ["finance", "bank", "payment", "fintech"]):
-        key = "finance"
+        items = [
+            {"name": "Payment Processing", "tagline": "Accept payments online and in-store"},
+            {"name": "Risk Management",    "tagline": "Fraud detection and compliance"},
+            {"name": "Financial Analytics","tagline": "Real-time financial intelligence"},
+        ]
     else:
-        key = "default"
+        items = [
+            {"name": "Core Platform",     "tagline": "Flagship product offering"},
+            {"name": "Enterprise Suite",  "tagline": "Solutions for large organisations"},
+            {"name": "Developer Platform","tagline": "APIs and integration tools"},
+        ]
 
-    results = []
-    for p in SYNTHETIC_BY_INDUSTRY[key]:
-        results.append({
+    return [
+        {
             "name":        p["name"],
             "tagline":     p["tagline"],
             "description": f"{p['name']} by {company}. {p['tagline']}.",
             "image_url":   None,
             "_score":      0,
             "_source":     "synthetic",
-        })
-    log.info("Synthetic fallback: %d products (industry=%s)", len(results), key)
-    return results
+        }
+        for p in items
+    ]
 
 
 # ─── Deduplication ────────────────────────────────────────────────────────────
@@ -1291,108 +1571,42 @@ def enrich(products: list[dict], company: str) -> list[dict]:
 
 
 # ─── Main orchestrator ────────────────────────────────────────────────────────
-def scrape_products(company: str, website: str,
-                    timeout: int = DEFAULT_TIMEOUT,
-                    company_category: str = "") -> list[dict]:
+def scrape_products(
+    company: str,
+    website: str,
+    timeout: int = DEFAULT_TIMEOUT,
+    company_category: str = "",
+    max_time_s: int = 200,
+) -> list[dict]:
     sess = Session(timeout=timeout)
-    all_products: list[dict] = []
-
     log.info("=== Scraping products for: %s (%s) ===", company, website)
 
-    # Tier 0 — Curated known-product database (highest confidence, no web calls needed)
-    # Covers well-known B2B/B2C companies whose sites are JS-heavy or search-blocked.
-    known = lookup_known_products(company)
-    if known:
-        all_products.extend(known)
-        log.info("Tier 0 curated: %d products (skipping web scrapers)", len(all_products))
-        # Best-effort: also pull Wikidata images and merge into known products by name key
-        try:
-            wd = scrape_wikidata(sess, company)
-            wd_by_key: dict[str, Optional[str]] = {
-                re.sub(r"[^a-z0-9]", "", wp["name"].lower())[:15]: wp["image_url"]
-                for wp in wd if wp.get("image_url")
-            }
-            for p in all_products:
-                if not p.get("image_url"):
-                    k = re.sub(r"[^a-z0-9]", "", p["name"].lower())[:15]
-                    if k in wd_by_key:
-                        p["image_url"] = wd_by_key[k]
-        except Exception:
-            pass
-    else:
-        # Tier 1 — Wikidata (highest accuracy for named products + P18 images)
-        try:
-            wd = scrape_wikidata(sess, company)
-            all_products.extend(wd)
-        except Exception as e:
-            log.warning("Wikidata failed: %s", e)
+    # Primary source: official website navbar
+    all_products: list[dict] = []
+    try:
+        all_products = scrape_nav_products(sess, company, website, max_time_s=max_time_s)
+    except Exception as e:
+        log.warning("Navbar scrape raised an exception: %s", e)
 
-        # Tier 2 — Yahoo web search (works for both B2C and B2B, no CAPTCHA)
-        # Key source for specific product names like Zebra TC22, MC9300, ZT610
-        if len(all_products) < 4:
-            try:
-                search_results = scrape_search(sess, company, website)
-                all_products.extend(search_results)
-            except Exception as e:
-                log.warning("Yahoo search failed: %s", e)
-
-        # Tier 3 — JSON-LD schema.org from company website
-        if len(all_products) < 4:
-            try:
-                jl = scrape_jsonld(sess, website)
-                all_products.extend(jl)
-            except Exception as e:
-                log.warning("JSON-LD failed: %s", e)
-
-        # Tier 4 — Sitemap product page discovery
-        if len(all_products) < 4:
-            try:
-                sm = scrape_sitemap(sess, website, company)
-                all_products.extend(sm)
-            except Exception as e:
-                log.warning("Sitemap scrape failed: %s", e)
-
-        # Tier 5 — Wikipedia named-product section
-        if len(all_products) < 4:
-            try:
-                wp = scrape_wikipedia(sess, company)
-                all_products.extend(wp)
-            except Exception as e:
-                log.warning("Wikipedia failed: %s", e)
-
-    # Tier 6 — Synthetic fallback (guaranteed result)
-    is_synthetic = False
-    if len(all_products) < 1:
-        log.info("All sources failed — using synthetic fallback")
+    # Last resort: synthetic placeholder products
+    if not all_products:
+        log.info("Navbar returned no products — falling back to synthetic")
         all_products = synthetic_products(company, company_category)
-        is_synthetic = True
 
-    # Sort → deduplicate → cap at 8
     all_products.sort(key=lambda x: x.get("_score", 0), reverse=True)
-    deduped = deduplicate(all_products)[:8]
+    deduped  = deduplicate(all_products)[:20]
     enriched = enrich(deduped, company)
 
-    # Fetch CC-licensed images only for non-synthetic products.
-    # Synthetic products have generic names like "Core Product" or "Enterprise Suite"
-    # that produce wrong, unrelated images from Wikimedia (e.g., White Stripes band photo
-    # for "Stripe Core Product"). Skip image search entirely for synthetic results.
-    if not is_synthetic:
-        log.info("Fetching free images from Wikimedia...")
-        for p in enriched:
-            if not p.get("image_url"):
-                img = get_free_image(sess, p["name"], company, p["category"])
-                if img:
-                    p["image_url"] = img
-    else:
-        log.info("Skipping Wikimedia image fetch for synthetic fallback products")
-
-    log.info("Final: %d products", len(enriched))
+    log.info("Final: %d products for %s", len(enriched), company)
     return enriched
 
 
 # ─── Supabase writer ──────────────────────────────────────────────────────────
-def push_products_to_supabase(company_id: str, products: list[dict],
-                               auth_token: str) -> bool:
+def push_products_to_supabase(
+    company_id: str,
+    products: list[dict],
+    auth_token: str,
+) -> bool:
     supabase_url = os.environ.get("NEXT_PUBLIC_SUPABASE_URL", "").rstrip("/")
     anon_key     = os.environ.get("NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY", "")
     service_key  = os.environ.get("SUPABASE_SERVICE_ROLE_KEY", "")
@@ -1455,9 +1669,13 @@ def revalidate_company_profile(app_url: str, company_id: str) -> None:
 
 
 # ─── Supabase Storage uploader ────────────────────────────────────────────────
-def upload_product_image(company_id: str, product_slug: str,
-                          image_url_val: str, auth_token: str) -> Optional[str]:
-    """Download a CC-licensed image and store it permanently in Supabase Storage."""
+def upload_product_image(
+    company_id: str,
+    product_slug: str,
+    image_url_val: str,
+    auth_token: str,
+) -> Optional[str]:
+    """Download a product og:image and store it permanently in Supabase Storage."""
     supabase_url = os.environ.get("NEXT_PUBLIC_SUPABASE_URL", "").rstrip("/")
     anon_key     = os.environ.get("NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY", "")
     service_key  = os.environ.get("SUPABASE_SERVICE_ROLE_KEY", "")
@@ -1480,7 +1698,7 @@ def upload_product_image(company_id: str, product_slug: str,
 
     ext = {"image/jpeg": "jpg", "image/png": "png",
            "image/webp": "webp", "image/gif": "gif"}.get(ct, "jpg")
-    file_path = f"{company_id}/{product_slug}.{ext}"
+    file_path  = f"{company_id}/{product_slug}.{ext}"
     upload_url = f"{supabase_url}/storage/v1/object/product-images/{file_path}"
 
     try:
@@ -1499,34 +1717,42 @@ def upload_product_image(company_id: str, product_slug: str,
 
 # ─── CLI entry-point ──────────────────────────────────────────────────────────
 def main() -> None:
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--company",    required=True)
-    parser.add_argument("--website",    required=True)
+    parser = argparse.ArgumentParser(
+        description="Scrape products from an official company website navbar."
+    )
+    parser.add_argument("--company",    required=True,  help="Company display name")
+    parser.add_argument("--website",    required=True,  help="Company website (e.g. canva.com)")
     parser.add_argument("--timeout",    type=int, default=DEFAULT_TIMEOUT)
-    parser.add_argument("--company-id", default=None)
-    parser.add_argument("--auth-token", default=None)
-    parser.add_argument("--app-url",    default=None)
+    parser.add_argument("--max-time",   type=int, default=200,
+                        help="Total wall-clock budget in seconds for BFS scraping")
+    parser.add_argument("--company-id", default=None,   help="Supabase company UUID")
+    parser.add_argument("--auth-token", default=None,   help="Supabase auth JWT")
+    parser.add_argument("--app-url",    default=None,   help="Next.js app URL for revalidation")
     parser.add_argument("--category",   default="",
-                        help="Company category hint for synthetic fallback")
+                        help="Company category hint used only for synthetic fallback")
     args = parser.parse_args()
 
-    company  = args.company.strip()
-    website  = args.website.strip()
+    company = args.company.strip()
+    website = args.website.strip()
 
     if not company or not website:
         print(json.dumps({"error": "company and website are required"}))
         sys.exit(1)
 
-    products = scrape_products(company, website,
-                               timeout=args.timeout,
-                               company_category=args.category)
+    products = scrape_products(
+        company,
+        website,
+        timeout=args.timeout,
+        company_category=args.category,
+        max_time_s=args.max_time,
+    )
 
     if not products:
         print(json.dumps({"error": f"No products found for {company}"}))
         sys.exit(2)
 
     if args.company_id:
-        # Persist images to Supabase Storage
+        # Persist og:images to Supabase Storage
         if args.auth_token:
             for p in products:
                 if p.get("image_url") and p["image_url"].startswith("http"):

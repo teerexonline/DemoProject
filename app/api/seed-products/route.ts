@@ -19,7 +19,7 @@ async function getAdminClient() {
 
 function runScraper(
   args: string[],
-  timeoutMs: number = 90_000,
+  timeoutMs: number = 240_000,
 ): Promise<{ stdout: string; stderr: string }> {
   return new Promise((resolve, reject) => {
     const scriptPath = path.join(process.cwd(), 'scripts', 'seed_products.py')
@@ -36,7 +36,7 @@ function runScraper(
 
     const timer = setTimeout(() => {
       child.kill('SIGTERM')
-      reject(new Error('Product scraper timed out after 90 seconds'))
+      reject(new Error('Product scraper timed out after 4 minutes'))
     }, timeoutMs)
 
     child.on('close', (code) => {
@@ -94,14 +94,15 @@ export async function POST(req: NextRequest) {
     const scriptArgs = [
       '--company',    name!,
       '--website',    website!,
-      '--timeout',    '14',
+      '--timeout',    '10',
+      '--max-time',   '210',
       '--company-id', companyId!,
       '--auth-token', authToken,
       '--app-url',    appUrl,
       '--category',   company?.category ?? '',
     ]
 
-    const { stdout, stderr } = await runScraper(scriptArgs, 90_000)
+    const { stdout, stderr } = await runScraper(scriptArgs, 240_000)
 
     if (process.env.NODE_ENV === 'development' && stderr) {
       console.log('[seed-products] scraper log:\n', stderr)
