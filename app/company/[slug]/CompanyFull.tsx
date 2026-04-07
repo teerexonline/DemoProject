@@ -7,6 +7,8 @@ import OrgChart from './OrgChart'
 import { DEPARTMENTS, LEVEL_COLORS, type Dept } from './jobData'
 import SaveButton from '@/components/SaveButton'
 import CompanyLogo from '@/components/CompanyLogo'
+import { Building2, Network, TrendingUp, Settings, Target, Package } from 'lucide-react'
+import type { LucideIcon } from 'lucide-react'
 
 // ─── DB → component data converters ──────────────────────────────────────────
 
@@ -62,15 +64,15 @@ export interface DbContent {
   execGroups:  { title: string; short_title: string | null; department_ids: unknown }[]
 }
 
-const NAV = [
-  { id: 'overview',   label: 'Company Overview',          icon: '🏢' },
-  { id: 'org',        label: 'Org Chart',                  icon: '🗂️' },
-  { id: 'financials', label: 'Financials',                  icon: '💹' },
-  { id: 'internal',   label: 'Internal Tools & Processes',  icon: '🔧' },
-  { id: 'prep',       label: 'Interview Prep',              icon: '🎯' },
-  { id: 'product',    label: 'Product Use Case',            icon: '📦' },
-] as const
-type SectionId = typeof NAV[number]['id']
+const NAV: { id: string; label: string; color: string; icon: LucideIcon }[] = [
+  { id: 'overview',   label: 'Company Overview',          color: '#2563EB', icon: Building2  },
+  { id: 'org',        label: 'Org Chart',                  color: '#7C3AED', icon: Network    },
+  { id: 'financials', label: 'Financials',                  color: '#16A34A', icon: TrendingUp },
+  { id: 'internal',   label: 'Internal Tools & Processes',  color: '#EA580C', icon: Settings   },
+  { id: 'prep',       label: 'Interview Prep',              color: '#DC2626', icon: Target     },
+  { id: 'product',    label: 'Product Use Case',            color: '#CA8A04', icon: Package    },
+]
+type SectionId = 'overview' | 'org' | 'financials' | 'internal' | 'prep' | 'product'
 
 // ─── Shared dept selector UI ─────────────────────────────────────────────────
 
@@ -934,7 +936,7 @@ export default function CompanyFull({ company, initialSaved, dbContent }: { comp
         {NAV.map(nav => (
           <button
             key={nav.id}
-            onClick={() => changeSection(nav.id)}
+            onClick={() => changeSection(nav.id as SectionId)}
             style={{
               flexShrink: 0, padding: '7px 12px', borderRadius: '8px', border: 'none',
               background: activeSection === nav.id ? '#eef4fb' : '#F4F4F5',
@@ -942,9 +944,11 @@ export default function CompanyFull({ company, initialSaved, dbContent }: { comp
               fontSize: '12.5px', fontWeight: activeSection === nav.id ? 600 : 400,
               cursor: 'pointer', whiteSpace: 'nowrap',
               transition: 'background 0.15s, color 0.15s',
+              display: 'inline-flex', alignItems: 'center', gap: '6px',
             }}
           >
-            {nav.icon} {nav.label}
+            <nav.icon size={13} color={activeSection === nav.id ? nav.color : '#A1A1AA'} strokeWidth={1.75} style={{ flexShrink: 0 }} />
+            {nav.label}
           </button>
         ))}
       </div>
@@ -966,7 +970,7 @@ export default function CompanyFull({ company, initialSaved, dbContent }: { comp
           {NAV.map(nav => (
             <button
               key={nav.id}
-              onClick={() => changeSection(nav.id)}
+              onClick={() => changeSection(nav.id as SectionId)}
               style={{
                 width: '100%', display: 'flex', alignItems: 'center', gap: '8px',
                 padding: '8px 10px', borderRadius: '8px', border: 'none',
@@ -977,7 +981,7 @@ export default function CompanyFull({ company, initialSaved, dbContent }: { comp
               onMouseEnter={e => { if (activeSection !== nav.id) (e.currentTarget as HTMLElement).style.background = '#F7F7F8' }}
               onMouseLeave={e => { if (activeSection !== nav.id) (e.currentTarget as HTMLElement).style.background = 'transparent' }}
             >
-              <span style={{ fontSize: '13px' }}>{nav.icon}</span>
+              <nav.icon size={14} color={activeSection === nav.id ? nav.color : '#A1A1AA'} strokeWidth={1.75} style={{ flexShrink: 0 }} />
               <span style={{ fontSize: '12.5px', fontWeight: activeSection === nav.id ? 600 : 400, color: activeSection === nav.id ? '#063f76' : '#52525B' }}>
                 {nav.label}
               </span>

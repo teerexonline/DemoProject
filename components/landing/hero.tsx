@@ -7,6 +7,8 @@ import { useRouter } from 'next/navigation'
 import SearchAutocomplete from '@/components/SearchAutocomplete'
 import { createClient } from '@/lib/supabase/client'
 import type { User } from '@supabase/supabase-js'
+import { Building2, Network, TrendingUp, BarChart2, PieChart, Layers, Wrench, Settings, Package } from 'lucide-react'
+import type { LucideIcon } from 'lucide-react'
 
 // ─── Logo helper ──────────────────────────────────────────────────────────────
 const LOGOS: Record<string, { url: string; color: string }> = {
@@ -49,18 +51,18 @@ function LogoImg({ name, size = 24, radius = 6 }: { name: string; size?: number;
 }
 
 // ─── Sidebar nav items ────────────────────────────────────────────
-const NAV = [
-  { id: 'overview',   label: 'Company Overview',  icon: '🏢' },
-  { id: 'org',        label: 'Org Chart',          icon: '🗂️' },
-  { id: 'revenue',    label: 'Revenue',             icon: '💰' },
-  { id: 'revdept',    label: 'Revenue by Dept',     icon: '📊' },
-  { id: 'market',     label: 'Market Share',        icon: '🥧' },
-  { id: 'units',      label: 'Business Units',      icon: '🔷' },
-  { id: 'tools',      label: 'Internal Tools',      icon: '🔧' },
-  { id: 'processes',  label: 'Internal Processes',  icon: '⚙️' },
-  { id: 'product',    label: 'Product Use Case',    icon: '🎯' },
-] as const
-type SectionId = typeof NAV[number]['id']
+const NAV: { id: string; label: string; color: string; icon: LucideIcon }[] = [
+  { id: 'overview',   label: 'Company Overview',  color: '#2563EB', icon: Building2  },
+  { id: 'org',        label: 'Org Chart',          color: '#7C3AED', icon: Network    },
+  { id: 'revenue',    label: 'Revenue',             color: '#16A34A', icon: TrendingUp },
+  { id: 'revdept',    label: 'Revenue by Dept',     color: '#059669', icon: BarChart2  },
+  { id: 'market',     label: 'Market Share',        color: '#EA580C', icon: PieChart   },
+  { id: 'units',      label: 'Business Units',      color: '#F59E0B', icon: Layers     },
+  { id: 'tools',      label: 'Internal Tools',      color: '#DC2626', icon: Wrench     },
+  { id: 'processes',  label: 'Internal Processes',  color: '#06B6D4', icon: Settings   },
+  { id: 'product',    label: 'Product Use Case',    color: '#CA8A04', icon: Package    },
+]
+type SectionId = 'overview' | 'org' | 'revenue' | 'revdept' | 'market' | 'units' | 'tools' | 'processes' | 'product'
 
 // ─── Section renderers ────────────────────────────────────────────
 
@@ -579,7 +581,7 @@ export default function Hero() {
                 {NAV.map(item => (
                   <button
                     key={item.id}
-                    onClick={() => setActiveSection(item.id)}
+                    onClick={() => setActiveSection(item.id as SectionId)}
                     style={{
                       display: 'flex', alignItems: 'center', gap: '7px',
                       padding: '6px 8px', borderRadius: '6px', border: 'none',
@@ -592,7 +594,7 @@ export default function Hero() {
                     onMouseEnter={e => { if (activeSection !== item.id) { (e.currentTarget as HTMLElement).style.background = '#F4F4F5'; (e.currentTarget as HTMLElement).style.color = '#09090B' } }}
                     onMouseLeave={e => { if (activeSection !== item.id) { (e.currentTarget as HTMLElement).style.background = 'transparent'; (e.currentTarget as HTMLElement).style.color = '#71717A' } }}
                   >
-                    <span style={{ fontSize: '12px', flexShrink: 0 }}>{item.icon}</span>
+                    <item.icon size={12} color={activeSection === item.id ? item.color : '#A1A1AA'} strokeWidth={1.75} style={{ flexShrink: 0 }} />
                     <span style={{ lineHeight: 1.3 }}>{item.label}</span>
                   </button>
                 ))}

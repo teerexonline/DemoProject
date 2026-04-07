@@ -1,13 +1,16 @@
 'use client'
 
+import { Building2, Network, Target, Scale, Wrench, TrendingUp } from 'lucide-react'
+import type { LucideIcon } from 'lucide-react'
+
 export default function Features() {
-  const features = [
-    { icon: '🏢', title: 'Company Profiles', desc: 'Comprehensive snapshots of company culture, mission, recent news, leadership team, and growth trajectory.' },
-    { icon: '🗂️', title: 'Org Charts', desc: 'Visual org structure by department, reporting lines, team headcount, and key decision-makers.' },
-    { icon: '🎯', title: 'Interview Prep', desc: 'Role-specific insights: what the team works on, tech stack, culture signals, and common interview themes.' },
-    { icon: '⚔️', title: 'Competitor Intel', desc: 'Compare companies side-by-side — funding rounds, growth, product strategy, and market positioning.' },
-    { icon: '🔧', title: 'Internal Tools', desc: 'Discover the exact tools and platforms a company uses internally — from Jira to Notion to Datadog.' },
-    { icon: '📈', title: 'Revenue & Growth', desc: 'Revenue estimates, funding history, headcount trends, and growth signals to size up any company.' },
+  const features: { color: string; icon: LucideIcon; title: string; desc: string }[] = [
+    { color: '#2563EB', icon: Building2,  title: 'Company Profiles', desc: 'Comprehensive snapshots of company culture, mission, recent news, leadership team, and growth trajectory.' },
+    { color: '#7C3AED', icon: Network,    title: 'Org Charts', desc: 'Visual org structure by department, reporting lines, team headcount, and key decision-makers.' },
+    { color: '#DC2626', icon: Target,     title: 'Interview Prep', desc: 'Role-specific insights: what the team works on, tech stack, culture signals, and common interview themes.' },
+    { color: '#EA580C', icon: Scale,      title: 'Competitor Intel', desc: 'Compare companies side-by-side — funding rounds, growth, product strategy, and market positioning.' },
+    { color: '#CA8A04', icon: Wrench,     title: 'Internal Tools', desc: 'Discover the exact tools and platforms a company uses internally — from Jira to Notion to Datadog.' },
+    { color: '#16A34A', icon: TrendingUp, title: 'Revenue & Growth', desc: 'Revenue estimates, funding history, headcount trends, and growth signals to size up any company.' },
   ]
 
   return (
@@ -70,7 +73,9 @@ export default function Features() {
                 el.style.transform = 'translateY(0)'
               }}
             >
-              <div style={{ fontSize: '24px', marginBottom: '14px', lineHeight: 1 }}>{f.icon}</div>
+              <div style={{ marginBottom: '14px', lineHeight: 1 }}>
+                <f.icon size={20} color={f.color} strokeWidth={1.75} />
+              </div>
               <h3 style={{
                 fontSize: '15px',
                 fontWeight: 700,
