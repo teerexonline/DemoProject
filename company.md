@@ -105,3 +105,13 @@ Prevents re-researching companies that are already done.
 
 ---
 
+
+## Microsoft
+- **Seeded:** 2026-04-08
+- **Sources:** Wikipedia (overview), SEC EDGAR (valuation/revenue), Microsoft Investor Relations (news/financials), Microsoft careers (departments/roles), LinkedIn (exec names)
+- **CEO:** Satya Nadella
+- **Departments:** Azure & Cloud Engineering, Microsoft 365 & Productivity, GitHub & Developer Division, AI & Research, Security, Xbox & Gaming, Sales & Commercial, Marketing, Finance, Legal & Corporate Affairs, People & Culture (HR), Customer Success & Support
+- **Products count:** 9 (Azure, Microsoft 365, GitHub, Teams, Windows 11, Copilot, Dynamics 365, Xbox, LinkedIn)
+- **Notes:** logo_color patched to #0078D4 (Microsoft Fluent blue). Revenue $245B used (FY2024 reported); script returned $281.7B (FY2025 annualized). Tags updated from generic to ["Enterprise","Cloud","AI","Software","Developer Tools"].
+
+---

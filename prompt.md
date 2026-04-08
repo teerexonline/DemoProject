@@ -1,15 +1,67 @@
+━━━ PRE-FLIGHT: READ REFERENCE DATA ━━━
+Before starting any section, always:
+1. Read referenceData.md to load the gold standard structure into context.
+2. Pick ONE company at random from the "Companies with complete, verified data"
+   table in referenceData.md and run a quick spot-check query on it:
+     SELECT title, short_title, name, level FROM company_exec_groups
+     WHERE company_id = (SELECT id FROM companies WHERE slug = '[random-slug]')
+     ORDER BY sort_order LIMIT 5;
+   Use this single query result as your live quality reference for the session.
+   Do not check multiple companies — one random pick is enough.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
 Claude, research [COMPANY NAME] using the official website and reliable sources.
-Populate ALL fields below into Supabase. First run:
-  SELECT id FROM companies WHERE name ILIKE '[COMPANY NAME]'
-to get the company_id. Update ALL fields even if data already exists — always overwrite with the most accurate, up-to-date information.
+Populate ALL fields below into Supabase.
+
+━━━ 0. SEED COMPANY ROW (run script → INSERT into companies) ━━━
+First check if the company already exists:
+  SELECT id, name, slug, logo_url FROM companies WHERE name ILIKE '[COMPANY NAME]';
+
+If it does NOT exist, run the seed script to scrape logo + basic data:
+  python scripts/seed_company.py --name "[COMPANY NAME]" --website "[website]"
+
+The script outputs JSON to stdout. Use the returned fields to INSERT the company row:
+  INSERT INTO companies (name, slug, description, founded, hq, employees, revenue,
+    valuation, tags, is_hiring, logo_url, logo_color, website)
+  VALUES (
+    '[name]', '[slug]', '[description]', [founded], '[hq]', [employees],
+    '[revenue]', '[valuation]', ARRAY[...tags], [is_hiring],
+    '[logo_url]',   -- from script output
+    '[logo_color]', -- from script output (brand hex)
+    '[website]'
+  ) RETURNING id;
+
+Capture the returned id as company_id for all subsequent inserts.
+
+If the company already EXISTS, just run:
+  SELECT id FROM companies WHERE name ILIKE '[COMPANY NAME]';
+and use that id — then continue to section 1 to overwrite all content fields.
+
+IMPORTANT — same quality rules apply to seed_company.py output as all other sections:
+- logo_url: the script scrapes from the company's official website. If it returns null
+  or a broken URL, inspect the output and re-run. Never manually guess or invent a URL.
+- logo_color: the script extracts the brand hex from the site's meta/CSS. If it returns
+  the default (#7C3AED), verify whether the company has a distinct brand color and patch:
+    UPDATE companies SET logo_color = '#hexcolor' WHERE slug = '[slug]';
+- description: the script pulls the first Wikipedia sentence. Always review it — if it's
+  truncated, generic, or about the wrong entity, replace it with a clean 2-3 sentence
+  summary sourced from the official website or reliable news.
+- employees / revenue / founded / hq: the script sources from SEC EDGAR + Wikipedia.
+  Cross-check against LinkedIn headcount and recent earnings reports. Patch if stale.
+- tags: the script may return generic tags. Replace with 3–5 tags that accurately
+  reflect this company's market (e.g. ["Enterprise", "Cloud", "AI", "SaaS", "DevTools"]).
+After inserting, verify:
+  SELECT id, logo_url, logo_color, description FROM companies WHERE slug = '[slug]';
 
 ━━━ 1. COMPANY OVERVIEW (UPDATE companies SET ... WHERE id = company_id) ━━━
+GOLD STANDARD: See referenceData.md Section 1 for field depth requirements.
 - description: 2-3 sentence company summary
 - founded: year (integer)
-- hq: "City, Country"
-- employees: headcount (integer)
+- hq: "City, State/Country"
+- employees: headcount (integer) — cross-check LinkedIn
 - revenue: e.g. "$4.2B"
-- valuation: e.g. "$18B" (use market cap if public)
+- valuation: market cap if public, last funding round if private e.g. "$18B"
 - tags: string array e.g. ["Enterprise", "SaaS", "B2B"]
 - is_hiring: true/false (check careers page)
 
@@ -35,70 +87,103 @@ IMPORTANT — use the scraper first, then patch only what it cannot produce:
     UPDATE company_products SET customers = '[...]'::jsonb, competitors = '[...]'::jsonb
     WHERE company_id = '[company_id]' AND name = '[product name]';
 
-  STEP 3 — Only fall back to full manual SQL inserts if:
+  STEP 3 — Always inspect scraper output before inserting. Fix these scraper weaknesses:
+  - category: scraper often misclassifies (e.g. Bitbucket→CRM, Trello→Design,
+    MacBook→Analytics). Always correct to the right category before inserting.
+  - use_cases: scraper generates generic fallbacks ("Product Integration", "Business
+    Automation", "Workflow Optimization"). Always replace with 3 domain-specific use cases
+    written as real-world scenarios (e.g. "Agile Sprint Planning & Backlog Management").
+  - description: scraper auto-generates "{name} by {company}. {tagline}." Always replace
+    with 2 proper sentences explaining what the product does and who uses it.
+  - tagline: scraper sometimes grabs page meta text ("Get the highlights.", "We're
+    currently checking your connection"). Always replace with a real product tagline.
+  - image_url: use the scraped og:image if the scraper found one. For abstract/SaaS
+    products with no scraped image, use logo_url. For physical hardware with no scraped
+    image, use NULL.
+
+  STEP 4 — Only fall back to full manual SQL inserts (no scraper run) if:
   - The scraper returns 0 products (site is JS-rendered and Playwright is unavailable)
   - The site actively blocks scraping (Cloudflare, login-gated product pages)
-  In that case, set image_url to NULL — do not manually hunt for product-specific image
-  URLs via WebFetch, as this is expensive and inconsistent.
+  In that case, use the company override in _COMPANY_OVERRIDES in seed_products.py,
+  or insert manually. Same quality standards from STEP 3 apply.
 
 Fields reference (for manual fallback only):
-- name, tagline, description (2 sentences)
+- name, tagline, description (2 real sentences — not "{name} by {company}. {tagline}.")
 - category: one of [Mobile Computer, Scanner, Printer, Software, Platform, Hardware,
-  Analytics, Security, AI, Cloud, Payments, CRM, Data, Developer Tools, Product]
+  Analytics, Security, AI, Cloud, Payments, CRM, Data, Developer Tools, Product,
+  Collaboration, Aircraft, Simulation]
 - cat_color: hex matching the category
-- image_url: NULL
-- use_cases: ["Use Case 1", "Use Case 2", "Use Case 3"]
+- image_url: scraped og:image if available; logo_url for abstract/SaaS; NULL for hardware
+- use_cases: 3 domain-specific real-world scenarios — never generic placeholders
 - customers: [{"name":"...", "abbr":"XX", "bg":"#hexcolor"}, ...] (3 entries)
 - competitors: [{"name":"...", "edge":"one-line advantage over this competitor"},
   ...] (3 entries)
 
 ━━━ 3. NEWS (INSERT into company_news) ━━━
-5 most recent press releases or announcements. For each:
-- headline, summary (1 sentence), published_date ("MMM DD, YYYY"), source_url
-- type: one of [Press Release, Partnership, Product Launch, Award, Funding]
-- type_color / type_bg / dot_color: matching tinted hex pair for the type
+GOLD STANDARD: See referenceData.md Section 3 for type→color mapping and depth.
+5 most recent press releases or announcements — real, dated, sourced events only.
+For each:
+- headline: exact headline from the press release or news article
+- summary: 1 sentence — specific, not generic. Mention numbers/outcomes where available.
+- published_date: "MMM DD, YYYY" (e.g. "Feb 12, 2026")
+- source_url: direct URL to the press release or article
+- type: one of [Press Release, Partnership, Product Launch, Award, Funding, Acquisition]
+- type_color / type_bg / dot_color: use the color mapping in referenceData.md Section 3
 
 ━━━ 4. MILESTONES (INSERT into company_milestones) ━━━
-8-10 key company history moments (founding, funding, IPO, acquisitions, major
-launches). For each:
-- year (integer), title, detail (1 sentence)
+GOLD STANDARD: See referenceData.md Section 4 for type→icon mapping and badge style.
+8-10 key moments spanning founding → present. Each must be a real, verifiable event.
+For each:
+- year (integer), title, detail (1 sentence — include dollar amounts, deal names, real facts)
 - type: one of [founding, funding, acquisition, ipo, product, award, expansion]
-- icon: lucide icon name matching the type (e.g. "rocket", "dollar-sign", "trophy")
+- icon: lucide icon name — use the type→icon table in referenceData.md Section 4
 - accent_color, bg_color: tinted hex pair matching the type
-- badge: short label e.g. "Series A", "Acquired", "IPO"
+- badge: short label e.g. "Series A", "Acquired", "IPO", "$3.45B Deal"
 
 ━━━ 5. FINANCIALS (INSERT into company_financials) ━━━
-Single row:
+GOLD STANDARD: See referenceData.md Section 5 for the exact JSON structure.
+Single row per company:
 - tam, sam, som: market size strings e.g. "$180B"
-- arr: annual recurring revenue if SaaS, else annual revenue
+- arr: annual recurring revenue if SaaS, else total annual revenue
 - yoy_growth: e.g. "+18%"
 - revenue_per_employee: e.g. "$420K"
-- revenue_streams: [{"name":"Subscription","percentage":60,"type":"subscription","description":"one sentence"},{"name":"Hardware","percentage":40,"type":"product","description":"one sentence"}]
-  type must be one of: subscription, transactional, advertising, product, services, other
-- business_units: [{"name":"Unit Name","revenue_contribution":"60%","description":"one sentence"}, ...]
-- market_share: [{"segment":"Market Name","percentage":34,"context":"one sentence describing the market","year":2025}]
-  (single entry describing this company's share and the market segment)
-- revenue_growth: [{"year":2021,"revenue":"$1.2B","growth_rate":"+18%"}, ...] last 5 years, revenue as string with unit
-- competitors: [{"name":"Competitor","pct":28,"clr":"#hexcolor"}, ...]
-  (used for market share donut — include this company first, then top 4 competitors, pct must sum to 100)
+- revenue_streams: percentages must sum to 100; descriptions must be company-specific
+  [{"name":"...","type":"subscription|transactional|advertising|product|services|other",
+    "percentage":60,"description":"company-specific 1 sentence"}]
+- business_units: [{"name":"...","revenue_contribution":"60%","description":"1 sentence"}, ...]
+- market_share: single entry — this company's share of its primary market segment
+  [{"segment":"...","percentage":34,"context":"1 sentence with competitor context","year":2025}]
+- revenue_growth: last 5 years ending in current year (2025 or 2026)
+  [{"year":2021,"revenue":"$1.2B","growth_rate":"+18%"}, ...]
+- competitors: pct must sum to exactly 100; this company listed first
+  [{"name":"...","pct":34,"clr":"#hexcolor"}, ...]
 
 ━━━ 6. STANDARDS (INSERT into company_standards) ━━━
-Compliance certifications and regulatory approvals held by this company. For each:
-- code: e.g. "ISO 27001", "SOC 2 Type II", "FedRAMP"
-- category: e.g. "Security", "Quality", "Privacy", "Regulatory"
-- cat_color: hex for the category
-- status: one of [Certified, Compliant, In Progress]
-- description: one sentence explaining relevance to this specific company
+GOLD STANDARD: See referenceData.md Section 6 for category→color mapping and depth.
+Compliance certifications and regulatory approvals held by this company. Aim for 8–10.
+For each:
+- code: e.g. "ISO 27001", "SOC 2 Type II", "FedRAMP High"
+- category: Security | Quality | Privacy | Environmental | Safety | Regulatory | Accessibility
+- cat_color: use the category→color table in referenceData.md Section 6
+- status: Certified | Compliant | In Progress
+- description: 1 sentence — must mention the company by name and explain WHY this cert
+  matters for their specific business. Never write generic descriptions.
 
 ━━━ 7. DEPARTMENTS (INSERT into company_departments) ━━━
+GOLD STANDARD: Zebra Technologies. See referenceData.md for the exact structure.
 Search LinkedIn and Indeed job postings for [COMPANY NAME]. Extract the exact
 department and business unit names mentioned in job descriptions
 (e.g. "you will join the Handheld Business Unit" → department name: "Handheld").
 Use those exact names — do not invent generic names. For each:
 - name: exact department/BU name as it appears in job postings
-- headcount: estimate from LinkedIn or web
-- icon: lucide icon name matching the department function
-- color: hex color for the department badge
+- headcount: realistic estimate from LinkedIn headcount data or web sources
+- icon: lucide icon name ONLY — e.g. "cpu", "code", "users", "dollar-sign"
+  NEVER use emoji (❌ "⚙️", "🧩", "📋"). Always use a valid lucide-react icon name.
+- color: distinct hex color per department — no two departments should share the
+  same color. Use the Zebra palette as reference (see referenceData.md).
+
+USE RETURNING to capture dept UUIDs for linking roles and VPs:
+  INSERT INTO company_departments (...) VALUES (...) RETURNING id, name;
 
 IMPORTANT — do not rely solely on the careers page category filters. Those
 filters aggregate roles into broad buckets and routinely omit real departments.
@@ -117,42 +202,62 @@ If job postings exist for roles that clearly belong to a department not on your
 list, add that department — do not drop roles into an ill-fitting catch-all.
 
 ━━━ 8. ROLES (INSERT into company_roles, linked to department_id) ━━━
-Source from Glassdoor historical job titles, LinkedIn job postings, and the
-company's own careers page for [COMPANY NAME]. For each department seeded
-above, find 3-5 real role titles. For each role:
-- title: exact historical job title as it appears at this company
+GOLD STANDARD: See referenceData.md Section 8 for the exact depth required per field.
+Source from Glassdoor, LinkedIn job postings, and the company's careers page.
+3–5 roles per department. For each role:
+- title: exact job title as it appears at this company (not invented)
 - level: one of [Entry, Mid, Senior, Lead, Director, VP, C-Suite]
-- tools: ["Tool1", ...] (5 tools — MUST match the actual tech stack for this
-  specific role type. A Firmware Engineer uses JTAG debuggers and RTOS toolchains,
-  NOT Docker/Kubernetes. A Hardware Engineer uses Altium and oscilloscopes, NOT
-  AWS. A Field Sales rep uses Salesforce and Gong, NOT GitHub. Never copy tools
-  from one role type to another. Source tools from the actual JD or Glassdoor
-  reviews for this exact role at this company.)
-- skills: ["Skill1", ...] (5 skills specific to this role AND company — not
-  generic. A Solutions Architect at a hardware company needs different skills than
-  one at a SaaS startup. Reference what the company's JDs emphasize.)
-- processes: ["Process1", ...] (5 day-to-day processes — written as actions the
-  person actually does at work, not abstract skills. e.g. "Configuring DataWedge
-  profiles for warehouse scanning workflows" not "Data management".)
-- interview_questions: ["Question?", ...] (5 realistic questions grounded in this
-  company's products, tech stack, and domain — not generic. e.g. for Zebra FAE:
-  "How would you design a warehouse RFID solution using Zebra fixed readers?" not
-  "Tell me about yourself.")
-- keywords: ["keyword1", ...] (5 resume keywords a recruiter at this company
-  would search for when hiring for this exact role)
+- tools: 5 items — MUST match the actual tech stack for this specific role type.
+  A Firmware Engineer uses JTAG/RTOS tools, NOT Docker. A Field Sales rep uses
+  Salesforce/Gong, NOT GitHub. Source from the actual JD or Glassdoor reviews.
+- skills: 5 items — role AND company specific. Not generic buzzwords.
+- processes: 5 items — written as actions the person actually does at this company.
+  Must reference the company's real products/platform where applicable.
+  BAD: "Data management"
+  GOOD: "Configuring DataWedge profiles for warehouse scanning workflows"
+- interview_questions: 5 items — grounded in THIS company's products, tech stack,
+  and domain. Must name the company's actual tools/products in the question.
+  BAD: "Tell me about yourself."
+  GOOD: "How would you design a warehouse RFID solution using Zebra fixed readers?"
+- keywords: 5–7 resume keywords a recruiter at this company would search for
 Link each role to its department using the department_id from step 7.
 
 ━━━ 9. EXEC GROUPS (INSERT into company_exec_groups) ━━━
-Two types of entries:
-1. CEO only — find the actual current CEO name from the official website or
-   reliable source:
-   - title: "Chief Executive Officer — [Full Name]"
-   - short_title: "CEO"
-2. One entry per department/BU seeded in step 7 — these represent leadership
-   layers, not individual people:
-   - title: "[Department Name] Leadership"
-   - short_title: abbreviated BU/dept name (max 4 chars)
-- department_ids: [] for all entries (leave empty, linked separately)
+GOLD STANDARD: Zebra Technologies. See referenceData.md for the exact structure.
+Three tiers — always use real names sourced from the company's official Leadership
+page, LinkedIn, or reliable news. Never leave name as null.
+
+Tier 1 — CEO (1 row):
+  - title: full title e.g. "Chief Executive Officer"
+  - short_title: "CEO"
+  - name: real current CEO full name
+  - level: "ceo"
+  - department_ids: []
+  - sort_order: 0
+
+Tier 2 — C-Suite (one row per C-level officer, typically 6–10):
+  Include: CFO, CTO, COO, CMO, CPO, CRO, CLO, CIO, CHRO (and others present).
+  - title: full title e.g. "Chief Technology Officer"
+  - short_title: abbreviation e.g. "CTO"
+  - name: real current person's full name
+  - level: "c_suite"
+  - department_ids: [] (leave empty for c-suite)
+  - sort_order: 1, 2, 3 ...
+
+Tier 3 — VPs (one row per major VP, typically 4–8):
+  Source VP names from LinkedIn or press releases for this company.
+  - title: full VP title e.g. "VP, Engineering"
+  - short_title: abbreviated e.g. "VP Eng"
+  - name: real current VP full name
+  - level: "vp"
+  - department_ids: [uuid, uuid] — link to 1–3 relevant dept UUIDs from step 7
+    Use the UUIDs returned by the RETURNING clause in step 7's INSERT.
+  - sort_order: continuing after c-suite
+
+IMPORTANT:
+- All three tiers must be present. Do not skip VPs.
+- department_ids for VPs must use the actual UUIDs inserted in step 7.
+- Never use emoji in any field. name must never be null.
 
 ━━━ LOGGING ━━━
 After completing all sections, append the following block to company.md

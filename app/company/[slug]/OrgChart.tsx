@@ -302,8 +302,11 @@ function ExecGroupOrgChart({ company, depts, dbExecGroups, color }: { company: C
 
   // Split by level — if no level field, treat everything as c_suite
   const hasLevels = dbExecGroups.some(eg => eg.level && eg.level !== 'c_suite')
-  const ceo        = hasLevels ? dbExecGroups.find(eg => eg.level === 'ceo') : null
-  const csuiteList = hasLevels ? dbExecGroups.filter(eg => eg.level === 'c_suite') : dbExecGroups
+  const ceo = dbExecGroups.find(eg => eg.level === 'ceo')
+    ?? dbExecGroups.find(eg => eg.short_title === 'CEO' || (eg.title ?? '').toLowerCase().includes('chief executive officer'))
+  const csuiteList = hasLevels
+    ? dbExecGroups.filter(eg => eg.level === 'c_suite')
+    : dbExecGroups.filter(eg => eg !== ceo)
   const vpList     = hasLevels ? dbExecGroups.filter(eg => eg.level === 'vp') : []
 
   const [selectedCsuiteIdx, setSelectedCsuiteIdx] = useState<number | null>(0)
@@ -356,7 +359,7 @@ function ExecGroupOrgChart({ company, depts, dbExecGroups, color }: { company: C
           {ceo ? (
             <div style={{ padding: '12px 28px', borderRadius: 14, background: color, color: '#fff', textAlign: 'center', boxShadow: `0 4px 16px ${color}40`, minWidth: 180 }}>
               <div style={{ fontSize: 10, opacity: 0.7, textTransform: 'uppercase', letterSpacing: '0.09em', marginBottom: 3 }}>Chief Executive Officer</div>
-              <div style={{ fontSize: 14, fontWeight: 800, letterSpacing: '-0.03em' }}>{ceo.name ?? ceo.title}</div>
+              <div style={{ fontSize: 14, fontWeight: 800, letterSpacing: '-0.03em' }}>{ceo.name ?? ceo.short_title ?? ceo.title}</div>
             </div>
           ) : (
             <div style={{ padding: '10px 28px', borderRadius: 12, background: color, color: '#fff', textAlign: 'center', boxShadow: `0 4px 16px ${color}40` }}>
