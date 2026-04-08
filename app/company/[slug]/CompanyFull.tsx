@@ -61,7 +61,8 @@ export interface DbContent {
   standards:   { code: string; category: string | null; cat_color: string; status: string; description: string | null }[]
   departments: { id: string; name: string; icon: string; color: string; headcount: number }[]
   roles:       { department_id: string; title: string; level: string; tools: unknown; skills: unknown; processes: unknown; interview_questions: unknown; keywords: unknown }[]
-  execGroups:  { title: string; short_title: string | null; department_ids: unknown }[]
+  execGroups:  { id?: string; title: string; short_title: string | null; department_ids: unknown; level?: string; name?: string | null }[]
+  leaders:     { id: string; name: string; title: string; level: string; parent_id: string | null; department_ids: unknown; sort_order: number }[]
 }
 
 const NAV: { id: string; label: string; color: string; icon: LucideIcon }[] = [
@@ -106,7 +107,7 @@ function DeptSelector({ depts, activeDeptId, onSelect }: { depts: Dept[]; active
 
 // ─── Internal Tools & Processes section ──────────────────────────────────────
 
-function InternalSection({ company, dbDepts, dbRoles, dbStandards }: { company: Company; dbDepts: DbContent['departments']; dbRoles: DbContent['roles']; dbStandards: DbContent['standards'] }) {
+function InternalSection({ company: _company, dbDepts, dbRoles, dbStandards }: { company: Company; dbDepts: DbContent['departments']; dbRoles: DbContent['roles']; dbStandards: DbContent['standards'] }) {
   const depts = buildDepts(dbDepts, dbRoles)
   const [activeDept, setActiveDept] = useState(depts[0]?.id ?? '')
   const [expandedRole, setExpandedRole] = useState<string | null>(null)
@@ -498,7 +499,7 @@ function ProductSection({ company, dbProducts }: { company: Company; dbProducts:
         description: p.description ?? '',
         category: p.category ?? '',
         catColor: p.cat_color,
-        useCases:    (p.use_cases as string[]) ?? [],
+        useCases:    (Array.isArray(p.use_cases) ? (p.use_cases as string[]) : (typeof p.use_cases === 'string' ? (() => { try { return JSON.parse(p.use_cases as string) as string[] } catch { return [] as string[] } })() : [])),
         customers:   (p.customers as { name: string; abbr: string; bg: string }[]) ?? [],
         competitors: (p.competitors as { name: string; edge: string }[]) ?? [],
         imageUrl:    p.image_url ?? null,
@@ -557,82 +558,73 @@ function ProductSection({ company, dbProducts }: { company: Company; dbProducts:
       {/* Detail card */}
       <div style={{ borderRadius: 14, border: '1px solid #E4E4E7', overflow: 'hidden', background: '#fff', boxShadow: '0 2px 12px rgba(0,0,0,0.05)' }}>
 
-        {/* Product screenshot */}
-        <div style={{ position: 'relative', background: '#F4F4F5', borderBottom: '1px solid #E4E4E7', overflow: 'hidden', height: 200 }}>
-          {p.imageUrl && !imgError ? (
-            <img
-              src={p.imageUrl}
-              alt={p.name}
-              onError={() => setImgErrors(prev => ({ ...prev, [p.id]: true }))}
-              style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
-            />
-          ) : (
-            <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', background: `${color}08` }}>
-              <span style={{ color, fontSize: 18, fontWeight: 700, opacity: 0.25, letterSpacing: '-0.03em' }}>{p.name}</span>
-            </div>
-          )}
-          {/* Category pill overlay */}
-          <div style={{ position: 'absolute', top: 12, left: 14, padding: '3px 10px', borderRadius: 6, background: p.catColor, color: '#fff', fontSize: 10.5, fontWeight: 700, letterSpacing: '0.04em' }}>
+        {/* ── Full-width: header + description ── */}
+        <div style={{ padding: '18px 20px 16px', borderBottom: '1px solid #F0F0F2' }}>
+          <span style={{ display: 'inline-block', padding: '3px 9px', borderRadius: 5, background: p.catColor, color: '#fff', fontSize: 10, fontWeight: 700, letterSpacing: '0.05em', marginBottom: 8 }}>
             {p.category}
+          </span>
+          <div style={{ color: '#09090B', fontSize: 16, fontWeight: 800, letterSpacing: '-0.04em', marginBottom: 2 }}>{p.name}</div>
+          <div style={{ color: '#71717A', fontSize: 12.5, fontStyle: 'italic', marginBottom: 12 }}>{p.tagline}</div>
+          <p style={{ color: '#3F3F46', fontSize: 13, lineHeight: 1.75, margin: 0 }}>{p.description}</p>
+        </div>
+
+        {/* ── Use cases: full width ── */}
+        <div style={{ padding: '14px 20px', borderBottom: '1px solid #F0F0F2' }}>
+          <div style={{ color: '#A1A1AA', fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.07em', marginBottom: 8 }}>Use Cases</div>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
+            {p.useCases.map(uc => (
+              <span key={uc} style={{ padding: '4px 10px', borderRadius: 6, background: `${color}0D`, color, fontSize: 12, fontWeight: 600, border: `1px solid ${color}22` }}>
+                {uc}
+              </span>
+            ))}
           </div>
         </div>
 
-        {/* Content body */}
-        <div style={{ padding: '20px 22px' }}>
-          {/* Name + tagline */}
-          <div style={{ marginBottom: 14 }}>
-            <div style={{ color: '#09090B', fontSize: 16, fontWeight: 800, letterSpacing: '-0.04em', marginBottom: 3 }}>{p.name}</div>
-            <div style={{ color: '#71717A', fontSize: 12.5, fontStyle: 'italic' }}>{p.tagline}</div>
-          </div>
-
-          {/* Description */}
-          <p style={{ color: '#3F3F46', fontSize: 13, lineHeight: 1.7, margin: '0 0 18px' }}>{p.description}</p>
-
-          {/* Use cases */}
-          <div style={{ marginBottom: 20 }}>
-            <div style={{ color: '#A1A1AA', fontSize: 10.5, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.07em', marginBottom: 8 }}>Use Cases</div>
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
-              {p.useCases.map(uc => (
-                <span key={uc} style={{ padding: '4px 10px', borderRadius: 6, background: `${color}0D`, color, fontSize: 12, fontWeight: 600, border: `1px solid ${color}25` }}>
-                  {uc}
-                </span>
+        {/* ── 3 equal columns: customers | competitors | image ── */}
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr' }}>
+          <div style={{ padding: '14px 18px', borderRight: '1px solid #F0F0F2' }}>
+            <div style={{ color: '#A1A1AA', fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.07em', marginBottom: 10 }}>Key Customers</div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+              {p.customers.map(c => (
+                <div key={c.name} style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                  <div style={{ width: 24, height: 24, borderRadius: 6, background: c.bg, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                    <span style={{ color: '#fff', fontSize: 9, fontWeight: 800 }}>{c.abbr}</span>
+                  </div>
+                  <span style={{ color: '#3F3F46', fontSize: 12.5, fontWeight: 500 }}>{c.name}</span>
+                </div>
               ))}
             </div>
           </div>
-
-          {/* Customers + Competitors row */}
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
-
-            {/* Key Customers */}
-            <div style={{ padding: '14px 16px', borderRadius: 10, background: '#FAFAFA', border: '1px solid #F0F0F2' }}>
-              <div style={{ color: '#A1A1AA', fontSize: 10.5, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.07em', marginBottom: 12 }}>Key Customers</div>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-                {p.customers.map(c => (
-                  <div key={c.name} style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                    <div style={{ width: 24, height: 24, borderRadius: 6, background: c.bg, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                      <span style={{ color: '#fff', fontSize: 9, fontWeight: 800, letterSpacing: '0.03em' }}>{c.abbr}</span>
-                    </div>
-                    <span style={{ color: '#3F3F46', fontSize: 12.5, fontWeight: 500 }}>{c.name}</span>
+          <div style={{ padding: '14px 18px', borderRight: '1px solid #F0F0F2' }}>
+            <div style={{ color: '#A1A1AA', fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.07em', marginBottom: 10 }}>vs. Competitors</div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+              {p.competitors.map(c => (
+                <div key={c.name}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 5, marginBottom: 2 }}>
+                    <span style={{ fontSize: 9, color: '#EF4444', fontWeight: 700, background: '#FEF2F2', border: '1px solid #FECACA', borderRadius: 3, padding: '1px 4px', flexShrink: 0 }}>vs</span>
+                    <span style={{ color: '#09090B', fontSize: 12.5, fontWeight: 700 }}>{c.name}</span>
                   </div>
-                ))}
-              </div>
+                  <div style={{ color: '#71717A', fontSize: 11.5, lineHeight: 1.4, paddingLeft: 22 }}>{c.edge}</div>
+                </div>
+              ))}
             </div>
-
-            {/* Competitors */}
-            <div style={{ padding: '14px 16px', borderRadius: 10, background: '#FAFAFA', border: '1px solid #F0F0F2' }}>
-              <div style={{ color: '#A1A1AA', fontSize: 10.5, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.07em', marginBottom: 12 }}>vs. Competitors</div>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-                {p.competitors.map(c => (
-                  <div key={c.name}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 2 }}>
-                      <span style={{ fontSize: 10, color: '#EF4444', fontWeight: 700, background: '#FEF2F2', border: '1px solid #FECACA', borderRadius: 4, padding: '1px 5px', flexShrink: 0 }}>vs</span>
-                      <span style={{ color: '#09090B', fontSize: 12.5, fontWeight: 700 }}>{c.name}</span>
-                    </div>
-                    <div style={{ color: '#71717A', fontSize: 11.5, lineHeight: 1.4, paddingLeft: 26 }}>{c.edge}</div>
-                  </div>
-                ))}
+          </div>
+          <div style={{ background: `${color}06`, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 16 }}>
+            {p.imageUrl && !imgError ? (
+              <img
+                src={p.imageUrl}
+                alt={p.name}
+                onError={() => setImgErrors(prev => ({ ...prev, [p.id]: true }))}
+                style={{ width: '100%', objectFit: 'contain', display: 'block' }}
+              />
+            ) : (
+              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8 }}>
+                <div style={{ width: 44, height: 44, borderRadius: 12, background: `${color}15`, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" style={{ opacity: 0.45 }}><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+                </div>
+                <span style={{ color, fontSize: 10.5, fontWeight: 600, opacity: 0.35 }}>No image</span>
               </div>
-            </div>
+            )}
           </div>
         </div>
       </div>
@@ -650,7 +642,7 @@ function SectionContent({ id, company, dbContent }: { id: SectionId; company: Co
       return <CompanyOverview company={company} dbNews={dbContent.news} dbMilestones={dbContent.milestones} />
 
     case 'org':
-      return <OrgChart company={company} dbDepts={dbContent.departments} dbRoles={dbContent.roles} dbExecGroups={dbContent.execGroups} />
+      return <OrgChart company={company} dbDepts={dbContent.departments} dbRoles={dbContent.roles} dbExecGroups={dbContent.execGroups} dbLeaders={dbContent.leaders} />
 
     case 'financials': {
       const fin = dbContent.financials

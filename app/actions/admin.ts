@@ -103,7 +103,7 @@ export async function adminGetAnalytics() {
 
 export async function adminGetCompanyContent(companyId: string) {
   const { supabase } = await requireAdmin()
-  const [news, milestones, products, financials, standards, departments, roles, execGroups] = await Promise.all([
+  const [news, milestones, products, financials, standards, departments, roles, execGroups, leaders] = await Promise.all([
     supabase.from('company_news').select('*').eq('company_id', companyId).order('sort_order'),
     supabase.from('company_milestones').select('*').eq('company_id', companyId).order('sort_order'),
     supabase.from('company_products').select('*').eq('company_id', companyId).order('sort_order'),
@@ -112,6 +112,7 @@ export async function adminGetCompanyContent(companyId: string) {
     supabase.from('company_departments').select('*').eq('company_id', companyId).order('sort_order'),
     supabase.from('company_roles').select('*').eq('company_id', companyId).order('sort_order'),
     supabase.from('company_exec_groups').select('*').eq('company_id', companyId).order('sort_order'),
+    supabase.from('company_leaders').select('*').eq('company_id', companyId).order('sort_order'),
   ])
   return {
     news: news.data ?? [],
@@ -122,6 +123,7 @@ export async function adminGetCompanyContent(companyId: string) {
     departments: departments.data ?? [],
     roles: roles.data ?? [],
     execGroups: execGroups.data ?? [],
+    leaders: leaders.data ?? [],
   }
 }
 

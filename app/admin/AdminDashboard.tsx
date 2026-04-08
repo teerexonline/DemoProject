@@ -920,24 +920,14 @@ function ContentSection({ companies, initialSelectedId }: { companies: Company[]
 
   function handleSeedProducts() {
     setSeedMsg('')
-    const name    = (company?.name    ?? '').trim()
-    const website = (company?.website ?? '').trim()
-    if (!name || !website) { setSeedMsg('Error: Company name and website are required.'); return }
-    startSeed(async () => {
-      try {
-        const resp = await fetch('/api/seed-products', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ companyId: selectedId, name, website }),
-        })
-        const json = await resp.json()
-        if (!resp.ok || json.error) { setSeedMsg(`Error: ${json.error ?? 'Unknown error'}`); return }
-        setSeedMsg(`✓ ${json.count} products scraped and saved.`)
-        adminGetCompanyContent(selectedId).then(setContent)
-      } catch (e) {
-        setSeedMsg(`Error: ${e instanceof Error ? e.message : 'Network error'}`)
-      }
-    })
+    const name = (company?.name ?? '').trim()
+    if (!name) { setSeedMsg('Error: Company name is required.'); return }
+    fetch('/api/write-execution', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ text: `Claude, just directly get the product list for the ${name} reference the official website. Get the lowest product name not high level product group. also, use reliable sources for: use cases for each product, images for each, key customer for each, and competitors for each. Once done update the company data. Speed and accuracy are very high priority. Log what you have done in company.md knowledge so we dont have to spend time next time we rerun` }),
+    }).then(() => setSeedMsg('✓ Ready — run commexec.md in Claude to execute.'))
+      .catch(() => setSeedMsg('Error: Could not write to Execution.md'))
   }
 
   function handleSeedExecGroups() {
@@ -1149,7 +1139,7 @@ function ContentSection({ companies, initialSelectedId }: { companies: Company[]
       <PanelField key2="description" label="Description" type="textarea" />
       <PanelField key2="category" label="Category" />
       <PanelField key2="cat_color" label="Category Color" />
-      <PanelField key2="use_cases" label='Use Cases (JSON: ["Case1","Case2"])' isJson />
+      <PanelField key2="use_cases" label="Use Cases" isTags placeholder="e.g. API Integration, Workflow Automation" />
       <PanelField key2="customers" label='Customers (JSON: [{"name":"X","abbr":"X","bg":"#hex"}])' isJson />
       <PanelField key2="competitors" label='Competitors (JSON: [{"name":"X","edge":"..."}])' isJson />
       <PanelField key2="sort_order" label="Sort Order" type="number" />

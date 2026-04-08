@@ -9,6 +9,10 @@ Build a marketing landing page with full Supabase email/password authentication 
 ---
 ## Inspiration
 use this website as inspiration
+website name: framer.io
+screenshot: 
+Style: "<style>:root {--window-width: 551px !important;--vh: 8.61px;--top-bottom-mask-md: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%"><rect width="100%" height="100%" rx="20px" ry="20px" fill="black" /></svg>');--top-mask-md: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%"><rect width="100%" height="100%" rx="20px" ry="20px" fill="black" /><rect width="100%" height="100%" y="20px" fill="black" /></svg>');--bottom-mask-md: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%"><rect width="100%" height="100%" rx="20px" ry="20px" fill="black" /><rect width="100%" height="calc(100% - 20px)" y="0" fill="black" /></svg>');--top-bottom-mask-sm: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%"><rect width="100%" height="100%" rx="20px" ry="20px" fill="black" /></svg>');--top-mask-sm: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%"><rect width="100%" height="100%" rx="20px" ry="20px" fill="black" /><rect width="100%" height="100%" y="20px" fill="black" /></svg>');--bottom-mask-sm: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%"><rect width="100%" height="100%" rx="20px" ry="20px" fill="black" /><rect width="100%" height="calc(100% - 20px)" y="0" fill="black" /></svg>');--top-mask-12px: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%"><rect width="100%" height="100%" rx="12px" ry="12px" fill="black" /><rect width="100%" height="100%" y="12px" fill="black" /></svg>');--top-mask-8px: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%"><rect width="100%" height="100%" rx="8px" ry="8px" fill="black" /><rect width="100%" height="100%" y="8px" fill="black" /></svg>');--top-bottom-mask-20px: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%"><rect width="100%" height="100%" rx="20px" ry="20px" fill="black" /></svg>');--top-bottom-mask-12px: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%"><rect width="100%" height="100%" rx="10px" ry="10px" fill="black" /></svg>');--top-bottom-mask-10px: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%"><rect width="100%" height="100%" rx="10px" ry="10px" fill="black" /></svg>');--top-bottom-mask-8px: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%"><rect width="100%" height="100%" rx="8px" ry="8px" fill="black" /></svg>');--top-bottom-mask-5px: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%"><rect width="100%" height="100%" rx="5px" ry="5px" fill="black" /></svg>');--top-bottom-mask-3px: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%"><rect width="100%" height="100%" rx="3px" ry="3px" fill="black" /></svg>');--scroll-padding-top: 126px}</style>"
+
 ## Task 1: Landing Page Components
 
 Create these sections in `components/landing/`:
@@ -156,4 +160,215 @@ Create `.env.local` and use Supabase MCP to extract the Supabase project URL and
 NEXT_PUBLIC_SUPABASE_URL=your_project_url
 NEXT_PUBLIC_SUPABASE_ANON_KEY=your_anon_key
 ```
-
+## Python code 1st run
+Four independent scrapers run concurrently via ThreadPoolExecutor:                                                    
+                                                                                                                        
+  ┌─────────────────┬─────────────┬─────────────────────────────────────────────────────────────────────┐               
+  │     Source      │    Tier     │                            Data provided                            │               
+  ├─────────────────┼─────────────┼─────────────────────────────────────────────────────────────────────┤               
+  │ SEC EDGAR       │ 1 (highest) │ Revenue, employees, HQ, industry/SIC code, public float/valuation   │             
+  ├─────────────────┼─────────────┼─────────────────────────────────────────────────────────────────────┤             
+  │ Wikidata        │ 1           │ Founded year, HQ, employee count, revenue, description, industry    │               
+  ├─────────────────┼─────────────┼─────────────────────────────────────────────────────────────────────┤               
+  │ Yahoo Finance   │ 2           │ Market cap, TTM revenue, sector, industry, description              │               
+  ├─────────────────┼─────────────┼─────────────────────────────────────────────────────────────────────┤               
+  │ Company website │ 3           │ Schema.org/Organization, OpenGraph description, hiring status, tags │             
+  └─────────────────┴─────────────┴─────────────────────────────────────────────────────────────────────┘               
+                                                                                                                  
+  Key engineering decisions:                                                                                            
+  - Priority-ranked field merging — Tier 1 data never gets overwritten by Tier 3                                      
+  - RobustSession — Retries, rate-limit respect (Retry-After header), timeout handling                                  
+  - Graceful degradation — works for private companies (no SEC data) by falling back to Wikidata/website
+  - Clean output contract — JSON to stdout, all logs to stderr                                                          
+                                                                                                                        
+  app/api/seed-company/route.ts — Auth-gated Next.js route that spawns the Python process, handles                      
+  timeout/crash/missing-Python errors with actionable messages.                                                         
+                                                                                                                        
+  Admin dashboard — "Seed from Web" button (amber, below Save):                                                         
+  - Validates Name + Website are filled — shows inline error if not                                                   
+  - Shows spinner + "Scraping web sources…" while running                                                               
+  - On success: merges scraped data into form without overwriting existing values                                     
+  - Shows "✓ Seeded N fields from M sources" or a specific error message
+
+## PYTHON Prompt
+You are a senior Python engineer. Build a production-quality Python script that collects structured company data with the following priority order and logic.
+
+## 🎯 Goal
+Create a data pipeline that retrieves the following fields for a given company name or ticker:
+
+- name  
+- slug  
+- category (industry)  
+- headquarters (city, country)  
+- website  
+- employees  
+- founded year  
+- revenue  
+- valuation  
+- description  
+- is_hiring (if possible)  
+- data_source (track origin of each field)  
+- confidence_score (high / medium / low)
+
+---
+
+## 🔥 Priority Data Source (MANDATORY FIRST STEP)
+
+### 1. SEC EDGAR (PRIMARY SOURCE)
+Use the SEC EDGAR system as the FIRST attempt for data retrieval.
+
+Requirements:
+- Use the SEC submissions API: https://data.sec.gov/submissions/
+- Identify the company via ticker or CIK
+- Automatically detect and download the latest 10-K (Q4 annual report)
+- Parse the filing (HTML or text)
+
+Extract:
+- revenue
+- net income (optional)
+- company description (business section)
+- headquarters (if available)
+
+Implementation details:
+- Use requests
+- Parse HTML using BeautifulSoup or lxml
+- Handle rate limits (add headers with User-Agent)
+- Build a function:
+  get_edgar_data(company_name_or_ticker) -> dict
+
+---
+
+## ⚠️ If EDGAR fails (PRIVATE COMPANY OR NO DATA)
+
+Implement FALLBACK SYSTEM:
+
+---
+
+## 2. Wikipedia Scraper
+Scrape https://en.wikipedia.org/wiki/{company}
+
+Extract from infobox + page:
+- name
+- founded
+- headquarters
+- industry (category)
+- employees (if available)
+- revenue (if available)
+- website
+- description (first paragraph)
+
+---
+
+## 3. News Scraper (for valuation)
+Scrape recent articles from:
+- TechCrunch
+- Forbes
+
+Goal:
+- Extract valuation using regex patterns like:
+  "$X valuation"
+  "valued at $X"
+
+---
+
+## 4. OpenCorporates API
+Use:
+https://api.opencorporates.com/
+
+Extract:
+- incorporation date
+- registered address
+
+---
+
+## 5. Company Website Scraper
+If website is known:
+- Scrape "About" page
+- Extract description and possible HQ
+
+---
+
+## 6. Revenue Estimation (LAST RESORT)
+If revenue is missing:
+- Estimate using:
+
+revenue = employees * multiplier
+
+Multipliers:
+- software: 200000
+- fintech: 250000
+- ecommerce: 300000
+- default: 150000
+
+---
+
+## 🧠 Data Merging Logic
+
+- Prioritize EDGAR over all sources
+- Then Wikipedia
+- Then others
+
+Example:
+if edgar["revenue"]:
+    use it
+else if wikipedia["revenue"]:
+    use it
+else:
+    estimate
+
+---
+
+## 📊 Confidence Scoring
+
+Assign:
+- HIGH → EDGAR
+- MEDIUM → Wikipedia / OpenCorporates
+- LOW → estimates / scraping
+
+---
+
+## 🧱 Code Requirements
+
+- Use Python
+- Use:
+  - requests
+  - BeautifulSoup
+  - re (regex)
+- Modular structure:
+  - edgar.py
+  - wikipedia.py
+  - news_scraper.py
+  - aggregator.py
+
+- Include:
+  - error handling
+  - retry logic
+  - clean JSON output
+
+---
+
+## 📦 Output Format
+
+Return structured JSON like:
+
+{
+  "name": "...",
+  "revenue": {
+    "value": 500000000,
+    "source": "EDGAR",
+    "confidence": "high"
+  },
+  ...
+}
+
+---
+
+## 🚀 Extra (if possible)
+
+- Auto-detect if company is public or private
+- If ticker not provided, attempt lookup
+- Add caching to avoid repeated requests
+
+---
+
+Write full working Python code with clear comments.

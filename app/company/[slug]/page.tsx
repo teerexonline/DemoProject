@@ -34,7 +34,7 @@ export default async function CompanyPage({ params }: Props) {
   }
 
   // Fetch plan + saved state + all company content in parallel
-  const [profileResult, savedResult, newsRes, milestonesRes, productsRes, financialsRes, standardsRes, deptsRes, rolesRes, execRes] = await Promise.all([
+  const [profileResult, savedResult, newsRes, milestonesRes, productsRes, financialsRes, standardsRes, deptsRes, rolesRes, execRes, leadersRes] = await Promise.all([
     supabase.from('profiles').select('plan').eq('id', user.id).single(),
     supabase.from('saved_companies').select('id').eq('user_id', user.id).eq('company_id', company.id).maybeSingle(),
     supabase.from('company_news').select('*').eq('company_id', company.id).order('sort_order'),
@@ -45,6 +45,7 @@ export default async function CompanyPage({ params }: Props) {
     supabase.from('company_departments').select('*').eq('company_id', company.id).order('sort_order'),
     supabase.from('company_roles').select('*').eq('company_id', company.id).order('sort_order'),
     supabase.from('company_exec_groups').select('*').eq('company_id', company.id).order('sort_order'),
+    supabase.from('company_leaders').select('*').eq('company_id', company.id).order('sort_order'),
   ])
 
   const tier = getUserTier(user, profileResult.data?.plan)
@@ -60,6 +61,7 @@ export default async function CompanyPage({ params }: Props) {
     departments: deptsRes.data ?? [],
     roles:       rolesRes.data ?? [],
     execGroups:  execRes.data ?? [],
+    leaders:     leadersRes.data ?? [],
   }
 
   if (tier === 'anonymous') {

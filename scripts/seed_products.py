@@ -52,6 +52,15 @@ try:
 except ImportError:
     _PLAYWRIGHT_AVAILABLE = False
 
+# Pillow is optional — used for image dimension validation.
+# Install: pip install Pillow
+try:
+    from PIL import Image as _PILImage
+    import io as _io
+    _PIL_AVAILABLE = True
+except ImportError:
+    _PIL_AVAILABLE = False
+
 # Threshold: if requests returns fewer links than this, assume JS-rendered
 _JS_RENDER_THRESHOLD = 10
 
@@ -320,10 +329,21 @@ def fetch_soup(
     • If the response looks like a JS shell (< _JS_RENDER_THRESHOLD links)
       AND a BrowserSession is provided, re-fetches with the shared browser.
     """
+    _AUTH_REDIRECT_RE = re.compile(
+        r"/(login|sign[-_]?in|signin|auth|sso)"
+        r"|account\.[a-z]+\.(com|us|io)"
+        r"|[?&](redirect|next|return_to|continue)=",
+        re.IGNORECASE,
+    )
+
     html: Optional[str] = None
     try:
         r = sess.get(url, timeout=timeout)
         if r.status_code == 200:
+            # If redirected to a sign-in/auth page, treat as failed fetch
+            if _AUTH_REDIRECT_RE.search(r.url) and not _AUTH_REDIRECT_RE.search(url):
+                log.info("Auth redirect detected: %s → %s — skipping", url, r.url)
+                return None
             html = r.text
     except Exception as e:
         log.debug("requests failed (%s): %s", url, e)
@@ -351,14 +371,21 @@ CATEGORY_RULES: list[tuple[str, str]] = [
     (r"powerwall|megapack|powerpack|home battery|energy storage",                            "Energy Storage"),
     (r"solar roof|solar panel|photovoltaic",                                                 "Solar"),
     (r"supercharger|charging station|ev charge",                                             "EV Charging"),
+    (r"business.jet|private.jet|ultra.long.range|long.range.jet|cabin.jet|"
+     r"global \d{4}|challenger \d{3,4}|learjet|aircraft|aerospace|aviation.{0,15}product|"
+     r"special.mission|defence.aircraft|government.aircraft",                                "Aircraft"),
+    (r"simulator|simulation|full.flight|flight.training.device|full.mission|patient.simulator|"
+     r"ultrasound.sim|obstetric.sim|synthetic.training|training.environment|mission.rehearsal|"
+     r"type.rating|recurrent.training|crew.training|pilot.training|clinical.training", "Simulation"),
     (r"tc\d{2}|mc\d{2}|wt\d{4}|mobile.{0,8}computer|handheld",                            "Mobile Computer"),
     (r"scanner|barcode|rfid|imager|ds\d{4}",                                                "Scanner"),
     (r"printer|zt\d{3}|zd\d{3}|zc\d{3}|label print",                                       "Printer"),
     (r"tablet|device|rugged",                                                                "Rugged Device"),
+    (r"crypto|bitcoin|ethereum|blockchain|defi|nft|web3|staking|wallet.{0,15}crypto|on.chain|l2.network|layer.2|exchange.{0,10}crypto|crypto.{0,10}exchange|digital.asset|token|coin\b", "Crypto"),
     (r"payment|checkout|billing|pos |point.of.sale",                                        "Payments"),
     (r"analytics|insight|dashboard|report|bi |intelligence",                                "Analytics"),
     (r"security|fraud|identity|auth|sso|zero.trust",                                        "Security"),
-    (r"cloud|infrastructure|storage|compute|server",                                        "Cloud"),
+    (r"\bcloud\b|infrastructure|storage|\bcompute\b|server",                               "Cloud"),
     (r"\bai\b|machine.learning|ml |gpt|llm|neural",                                        "AI"),
     (r"crm|salesforce|pipeline|lead.{0,10}manage",                                         "CRM"),
     (r"mobile|ios|android|\bapp\b",                                                         "Mobile"),
@@ -382,10 +409,13 @@ CATEGORY_COLORS: dict[str, str] = {
     "Energy Storage":   "#F59E0B",
     "Solar":            "#EAB308",
     "EV Charging":      "#22C55E",
+    "Aircraft":         "#1E3A5F",
+    "Simulation":       "#0F766E",
     "Mobile Computer":  "#2563EB",
     "Scanner":          "#7C3AED",
     "Printer":          "#52525B",
     "Rugged Device":    "#374151",
+    "Crypto":           "#F7931A",
     "Payments":         "#059669",
     "Analytics":        "#D97706",
     "Security":         "#B91C1C",
@@ -410,36 +440,223 @@ CATEGORY_COLORS: dict[str, str] = {
 }
 
 USE_CASES: dict[str, list[str]] = {
-    "Electric Vehicle": ["Personal Transport", "Commercial Fleet", "Zero Emissions"],
-    "Energy Storage":   ["Home Energy Backup", "Grid Stabilization", "Solar Storage"],
-    "Solar":            ["Residential Solar", "Commercial Installations", "Energy Independence"],
-    "EV Charging":      ["Fast Charging", "Fleet Charging", "Network Access"],
-    "Mobile Computer":  ["Warehouse Operations", "Field Service", "Retail Checkout"],
-    "Scanner":          ["Inventory Management", "Point-of-Sale", "Asset Tracking"],
-    "Printer":          ["Label Printing", "Receipt Printing", "Industrial Labelling"],
-    "Rugged Device":    ["Field Operations", "Manufacturing", "Logistics"],
-    "Payments":         ["Online Checkout", "In-Person Payments", "Subscription Billing"],
-    "Analytics":        ["Business Intelligence", "Performance Tracking", "Data Visualization"],
-    "Security":         ["Fraud Prevention", "Access Control", "Compliance"],
-    "Cloud":            ["Scalable Infrastructure", "Global Deployment", "Cost Optimization"],
-    "AI":               ["Predictive Models", "Automation", "Natural Language Processing"],
-    "CRM":              ["Sales Pipeline", "Customer Management", "Lead Tracking"],
-    "Mobile":           ["iOS Apps", "Android Apps", "Cross-Platform Development"],
-    "Developer Tools":  ["API Integration", "App Development", "CI/CD"],
-    "Data":             ["Data Storage", "Real-Time Analytics", "ETL Pipelines"],
-    "E-Commerce":       ["Online Store", "Inventory Management", "Order Fulfillment"],
-    "HR":               ["Talent Management", "Payroll", "Employee Engagement"],
-    "Marketing":        ["Campaign Management", "Customer Acquisition", "A/B Testing"],
-    "Collaboration":    ["Team Communication", "Project Management", "File Sharing"],
-    "Finance":          ["Financial Reporting", "Expense Management", "Invoicing"],
-    "Design":           ["Graphic Design", "Brand Assets", "Social Media Visuals"],
-    "Video":            ["Video Editing", "Animations", "Short-Form Content"],
-    "Presentations":    ["Pitch Decks", "Team Meetings", "Sales Presentations"],
-    "Platform":         ["Enterprise Integration", "Workflow Automation", "Reporting"],
-    "Software":         ["Business Automation", "Workflow Management", "Reporting"],
-    "Hardware":         ["Field Operations", "Asset Management", "Industrial IoT"],
-    "Product":          ["Product Integration", "Business Automation", "Workflow Optimization"],
+    "Electric Vehicle": ["Personal Transport", "Commercial Fleet", "Zero Emissions", "Long-Range Driving", "Autonomous Driving"],
+    "Energy Storage":   ["Home Energy Backup", "Grid Stabilization", "Solar Storage", "Backup Power", "Peak Shaving"],
+    "Solar":            ["Residential Solar", "Commercial Installations", "Energy Independence", "Rooftop Solar", "Off-Grid Power"],
+    "EV Charging":      ["Fast Charging", "Fleet Charging", "Network Access", "Home Charging", "Workplace Charging"],
+    "Simulation":       ["Pilot Training", "Mission Rehearsal", "Clinical Training", "Crew Certification", "Tactical Skills Development"],
+    "Mobile Computer":  ["Warehouse Operations", "Field Service", "Retail Checkout", "Inventory Scanning", "Route Management"],
+    "Scanner":          ["Inventory Management", "Point-of-Sale", "Asset Tracking", "Barcode Scanning", "RFID Tracking"],
+    "Printer":          ["Label Printing", "Receipt Printing", "Industrial Labelling", "Barcode Printing", "On-Demand Printing"],
+    "Rugged Device":    ["Field Operations", "Manufacturing", "Logistics", "Asset Management", "Remote Work"],
+    "Crypto":           ["Crypto Trading", "Self-Custody", "DeFi & Staking", "Institutional Custody", "On-Chain Development"],
+    "Payments":         ["Online Checkout", "In-Person Payments", "Subscription Billing", "Fraud Prevention", "Global Payments"],
+    "Analytics":        ["Business Intelligence", "Performance Tracking", "Data Visualization", "Customer Insights", "Real-Time Reporting"],
+    "Security":         ["Fraud Prevention", "Access Control", "Compliance", "Identity Management", "Threat Detection"],
+    "Cloud":            ["Scalable Infrastructure", "Global Deployment", "Cost Optimization", "DevOps", "Serverless Computing"],
+    "AI":               ["Predictive Models", "Automation", "Natural Language Processing", "Computer Vision", "AI Agents"],
+    "CRM":              ["Sales Pipeline", "Customer Management", "Lead Tracking", "Deal Forecasting", "Contact Management"],
+    "Mobile":           ["iOS Apps", "Android Apps", "Cross-Platform Development", "Push Notifications", "Mobile Analytics"],
+    "Developer Tools":  ["API Integration", "App Development", "CI/CD", "Testing", "Monitoring"],
+    "Data":             ["Data Storage", "Real-Time Analytics", "ETL Pipelines", "Data Warehousing", "Stream Processing"],
+    "E-Commerce":       ["Online Store", "Inventory Management", "Order Fulfillment", "Product Catalog", "Shopping Cart"],
+    "HR":               ["Talent Management", "Payroll", "Employee Engagement", "Onboarding", "Performance Reviews"],
+    "Marketing":        ["Campaign Management", "Customer Acquisition", "A/B Testing", "Email Marketing", "SEO Optimization"],
+    "Collaboration":    ["Team Communication", "Project Management", "File Sharing", "Video Conferencing", "Knowledge Base"],
+    "Finance":          ["Financial Reporting", "Expense Management", "Invoicing", "Budgeting", "Accounts Payable"],
+    "Design":           ["Graphic Design", "Brand Assets", "Social Media Visuals", "UI/UX Design", "Print Design"],
+    "Video":            ["Video Editing", "Animations", "Short-Form Content", "Live Streaming", "Video Hosting"],
+    "Presentations":    ["Pitch Decks", "Team Meetings", "Sales Presentations", "Webinars", "Investor Decks"],
+    "Platform":         ["Enterprise Integration", "Workflow Automation", "Reporting", "Custom Apps", "API Management"],
+    "Software":         ["Business Automation", "Workflow Management", "Reporting", "Process Optimization", "SaaS Delivery"],
+    "Aircraft":         ["Ultra-Long-Range Private Travel", "Corporate Executive Transport", "Government & Special Missions"],
+    "Hardware":         ["Field Operations", "Asset Management", "Industrial IoT", "Remote Monitoring", "Manufacturing"],
+    "Product":          ["Product Integration", "Business Automation", "Workflow Optimization", "Team Collaboration", "Data Analytics"],
 }
+
+# Keyword patterns that validate whether a use case label applies to a given product.
+# Used by get_use_cases() to rank candidates against the actual product text.
+USE_CASE_PATTERNS: dict[str, str] = {
+    # Simulation
+    "Pilot Training":               r"pilot|aircrew|airline|aviation|flight.crew|type.rating|recurrent",
+    "Mission Rehearsal":            r"mission.rehearsal|rehearsal|battlespace|multi.domain|operational|tactical.scenario",
+    "Clinical Training":            r"clinical|patient|nursing|medical|healthcare|obstetric|echocardiograph|ultrasound",
+    "Crew Certification":           r"certif|type.rating|recurrent|qualification|attestation|licence",
+    "Tactical Skills Development":  r"tactical|combat|military|defence|defense|ground.vehicle|naval|armoured|rotary.wing",
+    # Electric Vehicle
+    "Personal Transport":          r"personal|consumer|individual|commut|everyday|family|sedan|suv|hatchback",
+    "Commercial Fleet":            r"fleet|commercial|logistics|freight|delivery|cargo|semi|truck",
+    "Zero Emissions":              r"zero.emiss|emission.free|carbon.neutral|sustainable|clean.energy|all.electric",
+    "Long-Range Driving":          r"range|\d+\s*miles|\d+\s*km|long.range|distance|mileage",
+    "Autonomous Driving":          r"autopilot|autonomous|self.driv|full self|fsd|driver.assist",
+    # Energy Storage
+    "Home Energy Backup":          r"home|residential|household|backup.power|outage|power.outage",
+    "Grid Stabilization":          r"grid|utility|megapack|stabiliz|utility.scale|peak.demand",
+    "Solar Storage":               r"solar|photovoltaic|panel|renewable|store.solar",
+    "Backup Power":                r"backup|emergency|outage|uninterrupt|\bups\b",
+    "Peak Shaving":                r"peak.shav|demand.charg|time.of.use|off.peak",
+    # Solar
+    "Residential Solar":           r"residential|home|roof|household|homeowner",
+    "Commercial Installations":    r"commercial|business|enterprise|building|campus|facility",
+    "Energy Independence":         r"independen|self.sufficient|off.grid|autonomy|energy.independen",
+    "Rooftop Solar":               r"rooftop|roof.solar|solar.roof|tile",
+    "Off-Grid Power":              r"off.grid|remote|standalone|island.mode",
+    # EV Charging
+    "Fast Charging":               r"fast.charg|rapid.charg|dc.fast|supercharg|level.3|quick.charg",
+    "Fleet Charging":              r"fleet|depot|commercial.charg|fleet.manag",
+    "Network Access":              r"network|open.charg|interoper|roaming|charging.network",
+    "Home Charging":               r"home.charg|residential.charg|level.2|wall.connect|home.install",
+    "Workplace Charging":          r"workplace|office|destination.charg|employee|parking",
+    # Mobile Computer / Rugged Device
+    "Warehouse Operations":        r"warehouse|distribution|fulfillment|picking|packing",
+    "Field Service":               r"field.service|technician|on.site|remote.service|maintenance",
+    "Retail Checkout":             r"retail|checkout|point.of.sale|\bpos\b|cashier|storefront",
+    "Inventory Scanning":          r"inventory|stock.count|cycle.count|stock.tak",
+    "Route Management":            r"route|delivery.route|dispatch|navigation|routing",
+    "Remote Work":                 r"remote|mobile.work|work.anywhere|distributed|deskless",
+    # Scanner
+    "Inventory Management":        r"inventory|stock|warehouse|supply|asset.track",
+    "Point-of-Sale":               r"point.of.sale|\bpos\b|checkout|cashier|retail",
+    "Asset Tracking":              r"asset.track|asset.manag|location.track|rfid|iot.track",
+    "Barcode Scanning":            r"barcode|qr.code|scanner|scan|\bean\b|\bupc\b",
+    "RFID Tracking":               r"rfid|radio.frequen|\bnfc\b|tag.track",
+    # Printer
+    "Label Printing":              r"label|tag.print|sticker|thermal.print",
+    "Receipt Printing":            r"receipt|pos.print|transaction.print|customer.receipt",
+    "Industrial Labelling":        r"industrial|manufactur|compliance.label|shipping.label",
+    "Barcode Printing":            r"barcode.print|label.print|print.barcode",
+    "On-Demand Printing":          r"on.demand|print.on.demand|just.in.time",
+    # Rugged Device
+    "Field Operations":            r"field|outdoor|rugged|remote|on.site|mobile.work",
+    "Manufacturing":               r"manufactur|production|assembly|plant|factory",
+    "Logistics":                   r"logistic|supply.chain|shipping|freight|transport",
+    "Asset Management":            r"asset.manag|asset.track|maintenance|lifecycle",
+    # Payments
+    # Crypto
+    "Crypto Trading":              r"trading|exchange|buy.{0,10}sell|order.type|charting|market|spot|futures",
+    "Self-Custody":                r"self.custody|non.custodial|private.key|seed.phrase|own.key|wallet",
+    "DeFi & Staking":              r"defi|staking|yield|liquidity|pool|protocol|earn.reward|validator",
+    "Institutional Custody":       r"institutional|prime.brokerage|custody|qualified.custodian|cold.storage|enterprise.grade",
+    "On-Chain Development":        r"on.chain|layer.2|l2|developer|node|api.{0,10}chain|blockchain.app|smart.contract|dapp",
+    # Payments
+    "Online Checkout":             r"online.checkout|e.?commerce|web.pay|digital.pay|checkout.page",
+    "In-Person Payments":          r"in.person|point.of.sale|\bpos\b|card.present|contactless|tap.to.pay|terminal",
+    "Subscription Billing":        r"subscri|recurring|billing.cycle|monthly.bill|annual.bill",
+    "Global Payments":             r"global|international|cross.border|multi.currenc|foreign.exchange",
+    "Fraud Prevention":            r"fraud|risk.detect|chargeback|dispute|suspicious.transact",
+    # Analytics
+    "Business Intelligence":       r"business.intelligence|\bbi\b|dashboard|insight|\bkpi\b|\bmetric\b",
+    "Performance Tracking":        r"performance|\bkpi\b|goal.track|benchmark|measure",
+    "Data Visualization":          r"visualiz|chart|graph|report|dashboard",
+    "Customer Insights":           r"customer.insight|user.behavior|segment|cohort|audience",
+    "Real-Time Reporting":         r"real.time|live.data|streaming.analytic|instant.report",
+    # Security
+    "Access Control":              r"access.control|permission|role.based|\brbac\b|authorization",
+    "Compliance":                  r"complian|gdpr|hipaa|\bsoc2?\b|iso.270|regulatory",
+    "Identity Management":         r"identity|\bsso\b|single.sign|\bmfa\b|multi.factor|auth",
+    "Threat Detection":            r"threat.detect|intrusion|anomaly|\bsiem\b|\bedr\b|incident.response",
+    # Cloud
+    "Scalable Infrastructure":     r"scalable|elastic|auto.scal|resize|infrastructure",
+    "Global Deployment":           r"global|multi.region|world.wide|geographic|latency",
+    "Cost Optimization":           r"cost.optim|cost.saving|budget|efficiency|reduce.spend",
+    "DevOps":                      r"devops|ci.?cd|pipeline|deploy|docker|kubernetes|container",
+    "Serverless Computing":        r"serverless|function.as|\blambda\b|cloud.run|\bfaas\b",
+    # AI
+    "Predictive Models":           r"predict|forecast|machine.learn|\bml\b|model.train",
+    "Automation":                  r"automat|workflow.automat|no.code|\brpa\b|\bbot\b",
+    "Natural Language Processing": r"nlp|natural.language|text.analyt|sentiment|language.model|\bllm\b|\bgpt\b",
+    "Computer Vision":             r"computer.vision|image.recognit|object.detect|visual.ai|\bocr\b",
+    "AI Agents":                   r"ai.agent|autonomous.agent|agentic|copilot|assistant",
+    # CRM
+    "Sales Pipeline":              r"sales.pipeline|deal.stage|opportunity|pipeline.manag",
+    "Customer Management":         r"customer.manag|account.manag|contact.manag|\bcrm\b",
+    "Lead Tracking":               r"lead.track|lead.manag|prospect|lead.gen|inbound.lead",
+    "Deal Forecasting":            r"forecast|deal.predict|revenue.predict|quota",
+    "Contact Management":          r"contact|address.book|account.record|customer.record",
+    # Mobile
+    "iOS Apps":                    r"ios|iphone|ipad|apple.app|swift|xcode",
+    "Android Apps":                r"android|google.play|kotlin|java.mobile",
+    "Cross-Platform Development":  r"cross.platform|react.native|flutter|xamarin|hybrid.app",
+    "Push Notifications":          r"push.notif|mobile.notif|app.notif",
+    "Mobile Analytics":            r"mobile.analytic|app.analytic|in.app",
+    # Developer Tools
+    "API Integration":             r"api.integrat|rest.api|webhook|\bsdk\b|third.party.integrat",
+    "App Development":             r"app.develop|build.app|application.develop|platform.develop",
+    "CI/CD":                       r"ci.?cd|continuous.integrat|continuous.deploy|pipeline|devops",
+    "Testing":                     r"test|\bqa\b|quality.assur|unit.test|automated.test",
+    "Monitoring":                  r"monitor|observ|alert|uptime|\bapm\b|log.manag",
+    # Data
+    "Data Storage":                r"data.storage|store.data|database|data.lake|object.storage",
+    "Real-Time Analytics":         r"real.time.analyt|streaming|live.analyt|event.stream",
+    "ETL Pipelines":               r"\betl\b|extract.transform|data.pipeline|ingestion|data.integrat",
+    "Data Warehousing":            r"data.warehouse|warehouse|\bolap\b|analytical.query|big.data",
+    "Stream Processing":           r"stream.process|kafka|kinesis|event.stream|real.time.event",
+    # E-Commerce
+    "Online Store":                r"online.store|e.?commerce|web.shop|digital.store",
+    "Order Fulfillment":           r"fulfillment|order.process|shipping|dispatch|order.manag",
+    "Product Catalog":             r"product.catalog|catalog.manag|product.list|\bsku\b",
+    "Shopping Cart":               r"shopping.cart|\bcart\b|checkout.flow|basket",
+    # HR
+    "Talent Management":           r"talent|recruit|hire|applicant|job.post",
+    "Payroll":                     r"payroll|salary|compensation|wage|pay.stub",
+    "Employee Engagement":         r"engagement|culture|satisfaction|survey|feedback",
+    "Onboarding":                  r"onboard|new.hire|orientation|first.day",
+    "Performance Reviews":         r"performance.review|appraisal|review.cycle|goal.setting",
+    # Marketing
+    "Campaign Management":         r"campaign|marketing.campaign|multi.channel|campaign.manag",
+    "Customer Acquisition":        r"acquisition|new.customer|lead.gen|conversion|funnel",
+    "A/B Testing":                 r"a.?b.test|experiment|variant|split.test|multivariate",
+    "Email Marketing":             r"email.market|newsletter|email.campaign|drip.campaign",
+    "SEO Optimization":            r"seo|search.engine.optim|organic.search|keyword.rank",
+    # Collaboration
+    "Team Communication":          r"team.communicat|messaging|chat|channel|instant.messag",
+    "Project Management":          r"project.manag|task.manag|milestone|kanban|sprint",
+    "File Sharing":                r"file.shar|document.shar|storage.shar|cloud.file",
+    "Video Conferencing":          r"video.conf|video.call|meeting|video.chat|webinar",
+    "Knowledge Base":              r"knowledge.base|wiki|documentation|internal.docs|knowledge.manag",
+    # Finance
+    "Financial Reporting":         r"financial.report|income.statement|balance.sheet|p.?l\b|profit.loss",
+    "Expense Management":          r"expense|spend.manag|reimburs|receipt.capture",
+    "Invoicing":                   r"invoic|invoice.manag|billing|accounts.receivable",
+    "Budgeting":                   r"budget|forecast|financial.plan|spend.plan",
+    "Accounts Payable":            r"accounts.payable|vendor.payment|bill.pay|\bap\b",
+    # Design
+    "Graphic Design":              r"graphic.design|visual.design|illustration|artwork",
+    "Brand Assets":                r"brand|logo|brand.guideline|style.guide|brand.asset",
+    "Social Media Visuals":        r"social.media|instagram|facebook|twitter|post.design|social.visual",
+    "UI/UX Design":                r"ui.?ux|interface.design|wireframe|prototype|user.experience",
+    "Print Design":                r"print|brochure|flyer|poster|print.ready",
+    # Video
+    "Video Editing":               r"video.edit|cut|timeline|footage|post.production",
+    "Animations":                  r"animation|motion.graphic|animate|\bgif\b|render",
+    "Short-Form Content":          r"short.form|reel|tiktok|story|\bclip\b|short.video",
+    "Live Streaming":              r"live.stream|broadcast|live.video|webcast",
+    "Video Hosting":               r"video.host|\bvod\b|video.on.demand|embed.video",
+    # Presentations
+    "Pitch Decks":                 r"pitch.deck|investor.present|startup.pitch|fundrais",
+    "Team Meetings":               r"team.meeting|meeting.present|internal.present",
+    "Sales Presentations":         r"sales.present|demo|prospect.present|client.present",
+    "Webinars":                    r"webinar|online.event|virtual.event|live.present",
+    "Investor Decks":              r"investor|fundrais|vc.present|capital.raise",
+    # Platform
+    "Enterprise Integration":      r"enterprise.integrat|legacy.integrat|erp.integrat|system.integrat",
+    "Workflow Automation":         r"workflow.automat|process.automat|no.code|low.code",
+    "Reporting":                   r"report|dashboard|analytics.report|executive.report",
+    "Custom Apps":                 r"custom.app|build.app|low.code.app|citizen.developer",
+    "API Management":              r"api.manag|api.gateway|api.lifecycle|developer.portal",
+    # Software / Hardware / Product (generic)
+    "Business Automation":         r"business.automat|process.automat|workflow|efficiency",
+    "Workflow Management":         r"workflow|process.manag|\bbpm\b|task.flow",
+    "Process Optimization":        r"optim|improve.process|streamline|efficiency",
+    "SaaS Delivery":               r"saas|cloud.software|software.as.a.service|cloud.deliver",
+    "Remote Monitoring":           r"remote.monitor|iot.monitor|sensor|telemetry|remote.access",
+    "Industrial IoT":              r"industrial.iot|\biiot\b|edge.device|sensor.network|connected.device",
+    "Team Collaboration":          r"team.collab|collaborate|shared.workspace",
+    "Data Analytics":              r"analytic|data.driven|insight|metric|report",
+    "Product Integration":         r"integrat|connect|plugin|extension|embed",
+    "Workflow Optimization":       r"workflow.optim|process.optim|improve.workflow|streamline",
+}
+
 
 def infer_category(name: str, desc: str = "", tagline: str = "") -> str:
     text = f"{name} {tagline} {desc}".lower()
@@ -451,8 +668,38 @@ def infer_category(name: str, desc: str = "", tagline: str = "") -> str:
 def get_color(category: str) -> str:
     return CATEGORY_COLORS.get(category, "#52525B")
 
-def get_use_cases(category: str) -> list[str]:
-    return USE_CASES.get(category, USE_CASES["Product"])
+def get_use_cases(
+    category: str,
+    name: str = "",
+    tagline: str = "",
+    desc: str = "",
+) -> list[str]:
+    """
+    Return 3 use cases for a product.
+
+    When product content (name/tagline/desc) is provided, each candidate use
+    case is validated against the product text using USE_CASE_PATTERNS.
+    Validated use cases are ranked first; unvalidated ones fill remaining slots.
+    Falls back to the first 3 category defaults when no content is given.
+    """
+    candidates = USE_CASES.get(category, USE_CASES["Product"])
+
+    if not (name or tagline or desc):
+        return candidates[:3]
+
+    text = f"{name} {tagline} {desc}"
+
+    validated: list[str] = []
+    unvalidated: list[str] = []
+    for uc in candidates:
+        pattern = USE_CASE_PATTERNS.get(uc)
+        if pattern and re.search(pattern, text, re.IGNORECASE):
+            validated.append(uc)
+        else:
+            unvalidated.append(uc)
+
+    # Return up to 3: validated ones first, then fill with unvalidated defaults
+    return (validated + unvalidated)[:3]
 
 
 # ─── URL / nav helpers ────────────────────────────────────────────────────────
@@ -515,7 +762,8 @@ SKIP_PATH_RE = re.compile(
     r"integrations?|templates?|champions|marketplace|"
     r"students?|email-protection|notion-champions|"
     r"tools?|affiliates?|theme-?store|themes?|free-trial|trial|migrate|editions?|"
-    r"channels?|sell|selling)\b",
+    r"channels?|sell|selling|"
+    r"now|quality|method|culture|handbook|manifesto|essay|series|episode)\b",
     re.IGNORECASE,
 )
 
@@ -557,7 +805,10 @@ _SKIP_SUBDOMAIN_RE = re.compile(
     r"email|mail|news|blog|jobs|careers?|press|ir|"
     r"fitness|health|wallet|pay|maps|music|tv|arcade|"
     r"books|podcasts|subscriptions?|developer|discussions?|docs?|"
-    r"privacy|legal|compliance|security|trust|terms|themes?)$",
+    r"privacy|legal|compliance|security|trust|terms|themes?|"
+    r"learn|live|kb|academy|university|certification|training|"
+    r"answers|forums?|ideaexchange|trailhead|success|"
+    r"knowledge|insights?|resources?|events?)$",
     re.IGNORECASE,
 )
 
@@ -900,6 +1151,101 @@ _BAD_NAME_RE = re.compile(
 )
 
 
+# ─── Image validation ────────────────────────────────────────────────────────
+
+# SVG and icon paths are not uploadable as product images
+_BAD_IMAGE_PATH_RE = re.compile(
+    r"\.svg(\?|$)"                          # SVG files
+    r"|favicon"                             # favicons
+    r"|apple-touch-icon"                    # iOS home-screen icons
+    r"|/icons?/"                            # /icon/ or /icons/ directory
+    r"|/icon\."                             # /icon.png, /icon.jpg
+    r"|\bsprite\b"                          # CSS sprite sheets
+    r"|/logo\."                             # /logo.png — generic company logo, not product image
+    r"|placeholder"                         # placeholder images
+    r"|default[-_]image"                    # default-image.jpg etc.
+    r"|/og[-_]default"                      # og-default.jpg
+    r"|no[-_]image"                         # no-image.png
+    r"|missing[-_]image",                   # missing-image.png
+    re.IGNORECASE,
+)
+
+# Accepted MIME types for product images
+_VALID_IMAGE_CONTENT_TYPES = {"image/jpeg", "image/png", "image/webp", "image/gif"}
+
+# File-size bounds: reject < 5 KB (icons) or > 10 MB (oversized banners)
+_IMAGE_MIN_BYTES = 5_000
+_IMAGE_MAX_BYTES = 10_000_000
+
+# Minimum pixel dimension to be a useful product image (not a favicon/icon)
+_IMAGE_MIN_DIM = 200
+
+
+def _validate_image_url(url: str) -> bool:
+    """
+    Fast, zero-network check on an og:image URL.
+    Returns False for obvious non-product images (SVG, icons, favicons, data URLs).
+    """
+    if not url or not url.startswith("http"):
+        return False
+    if _BAD_IMAGE_PATH_RE.search(urlparse(url).path):
+        log.debug("Image rejected by URL pattern: %s", url)
+        return False
+    return True
+
+
+def _validate_image_response(url: str, sess: Optional["Session"] = None) -> bool:
+    """
+    HEAD-request check: confirms the URL returns an accepted image content-type
+    and a file size within bounds.  Falls back to a plain requests.head() when
+    no Session is provided.
+    """
+    try:
+        r = (sess.s if sess else requests).head(
+            url, headers=HEADERS, timeout=8, allow_redirects=True
+        )
+        if r.status_code != 200:
+            log.debug("Image HEAD %d: %s", r.status_code, url)
+            return False
+        ct = r.headers.get("content-type", "").split(";")[0].strip().lower()
+        if ct not in _VALID_IMAGE_CONTENT_TYPES:
+            log.debug("Image bad content-type '%s': %s", ct, url)
+            return False
+        cl_str = r.headers.get("content-length")
+        if cl_str:
+            cl = int(cl_str)
+            if cl < _IMAGE_MIN_BYTES:
+                log.debug("Image too small (%d B): %s", cl, url)
+                return False
+            if cl > _IMAGE_MAX_BYTES:
+                log.debug("Image too large (%d B): %s", cl, url)
+                return False
+        return True
+    except Exception as e:
+        log.debug("Image HEAD failed (%s): %s", url, e)
+        return False
+
+
+def _validate_image_dimensions(data: bytes) -> bool:
+    """
+    Pillow-based dimension check on already-downloaded image bytes.
+    Always returns True when Pillow is not installed.
+    Rejects images smaller than _IMAGE_MIN_DIM × _IMAGE_MIN_DIM (icons/favicons).
+    """
+    if not _PIL_AVAILABLE:
+        return True
+    try:
+        img = _PILImage.open(_io.BytesIO(data))
+        w, h = img.size
+        if w < _IMAGE_MIN_DIM or h < _IMAGE_MIN_DIM:
+            log.debug("Image too small (%dx%d px) — rejected", w, h)
+            return False
+        return True
+    except Exception as e:
+        log.debug("Pillow dimension check failed: %s", e)
+        return True  # can't parse — don't reject, let upload decide
+
+
 # ─── Extract product data from an individual product page ─────────────────────
 
 def extract_product_from_page(
@@ -976,7 +1322,11 @@ def extract_product_from_page(
         el = soup.find(tag)
         if el:
             t = clean(el.get_text())
-            if 5 < len(t) <= 120 and t.lower() not in {"overview", "features", "pricing"}:
+            if 5 < len(t) <= 120 and t.lower() not in {
+                "overview", "features", "pricing", "models", "in the box",
+                "end of sale", "specifications", "accessories", "videos",
+                "resources", "downloads", "support", "related products",
+            }:
                 tagline = t
                 break
 
@@ -991,7 +1341,7 @@ def extract_product_from_page(
     og_img = soup.find("meta", property="og:image")
     if og_img:
         raw = og_img.get("content", "").strip()
-        if raw.startswith("http"):
+        if _validate_image_url(raw):
             image_url = raw
 
     if not name or len(name) < 2:
@@ -1075,8 +1425,14 @@ def extract_product_from_page(
         # Article-started descriptions (≥5 words): "A financial account optimized for..."
         if re.match(r"^(a|an|the)\s+\w+\s+\w+\s+\w+\s+\w+", n, re.IGNORECASE):
             return True
+        # Names longer than 45 chars are almost certainly page titles / marketing copy
+        if len(n) > 45:
+            return True
         if re.search(r"\b(flexible|scalable|powerful|robust|comprehensive|advanced),?\s+"
-                     r".{0,40}\b(tool|platform|suite|solution)\b", n, re.IGNORECASE):
+                     r".{0,40}\b(tools?|platform|suite|solutions?|software)\b", n, re.IGNORECASE):
+            return True
+        # Generic "<category> Software/Solutions/Platform" multi-word catch-all
+        if re.search(r"\b\w+\s+(management|tracking|automation)\s+software\b", n, re.IGNORECASE):
             return True
         if " and " in n and len(n.split()) >= 5:
             parts = n.split(" and ", 1)
@@ -1455,20 +1811,748 @@ def scrape_nav_products(
 
 # ─── Synthetic fallback (last resort only) ────────────────────────────────────
 
-_KNOWN_BLOCKED_PRODUCTS: dict[str, list[dict]] = {
+# Companies whose scraper output is known-bad regardless of what the nav returns.
+# These are checked FIRST in scrape_products() — scraping is skipped entirely.
+#
+# Use cases:
+#   - Consumer marketplaces with no Products nav (Airbnb)
+#   - Sites whose nav links resolve to wrong subdomains/redirects (Anthropic)
+#   - Fully Cloudflare-blocked homepages (Tesla)
+#
+# Key: first word of company name, lowercased (matches co_key logic elsewhere).
+_COMPANY_OVERRIDES: dict[str, list[dict]] = {
+    # Tesla: fully blocked by Cloudflare, homepage returns bot-challenge page.
     "tesla": [
-        {"name": "Model 3",    "tagline": "Premium all-electric sedan with up to 358 miles range"},
-        {"name": "Model Y",    "tagline": "Versatile all-electric SUV, world's best-selling vehicle"},
-        {"name": "Model S",    "tagline": "Flagship luxury electric sedan with Plaid powertrain"},
-        {"name": "Model X",    "tagline": "Premium electric SUV with distinctive Falcon Wing doors"},
-        {"name": "Cybertruck", "tagline": "All-electric pickup truck built for durability and utility"},
-        {"name": "Semi",       "tagline": "Electric commercial semi-truck for sustainable freight"},
-        {"name": "Roadster",   "tagline": "Next-generation electric sports car for ultimate performance"},
-        {"name": "Powerwall",  "tagline": "Home battery for energy storage and backup power"},
-        {"name": "Megapack",   "tagline": "Utility-scale battery storage for grid energy"},
+        {"name": "Model 3",     "tagline": "Premium all-electric sedan with up to 358 miles range"},
+        {"name": "Model Y",     "tagline": "Versatile all-electric SUV, world's best-selling vehicle"},
+        {"name": "Model S",     "tagline": "Flagship luxury electric sedan with Plaid powertrain"},
+        {"name": "Model X",     "tagline": "Premium electric SUV with distinctive Falcon Wing doors"},
+        {"name": "Cybertruck",  "tagline": "All-electric pickup truck built for durability and utility"},
+        {"name": "Semi",        "tagline": "Electric commercial semi-truck for sustainable freight"},
+        {"name": "Roadster",    "tagline": "Next-generation electric sports car for ultimate performance"},
+        {"name": "Powerwall",   "tagline": "Home battery for energy storage and backup power"},
+        {"name": "Megapack",    "tagline": "Utility-scale battery storage for grid energy"},
         {"name": "Solar Panels","tagline": "Low-profile solar energy system for homes"},
     ],
+
+    # Anthropic: nav has a Products link but it resolves to claude.ai (external
+    # subdomain) and API docs pages. Scraper finds wrong/generic pages from the
+    # redirect chain even though scraping doesn't error out.
+    "anthropic": [
+        {"name": "Claude",                "tagline": "Anthropic's frontier AI assistant for complex reasoning and analysis"},
+        {"name": "Claude API",            "tagline": "API access to Claude models for developers and enterprises"},
+        {"name": "Claude.ai",             "tagline": "Consumer and Teams chat interface powered by Claude"},
+        {"name": "Claude for Enterprise", "tagline": "Secure, compliant Claude deployment for large organisations"},
+        {"name": "Claude Haiku",          "tagline": "Fast, compact model optimised for near-instant responsiveness"},
+        {"name": "Claude Sonnet",         "tagline": "Balanced intelligence and speed for a wide range of tasks"},
+        {"name": "Claude Opus",           "tagline": "Most capable Claude model for highly complex workloads"},
+    ],
+
+    # Microsoft: nav crawls into learn.microsoft.com driver/API docs instead of
+    # product pages — override with canonical product suite.
+    "microsoft": [
+        {"name": "Azure",            "tagline": "Cloud computing platform for building, deploying, and managing services"},
+        {"name": "Microsoft 365",    "tagline": "Productivity apps including Word, Excel, PowerPoint, Teams, and Outlook"},
+        {"name": "Windows",          "tagline": "Operating system powering PCs and enterprise devices worldwide"},
+        {"name": "GitHub",           "tagline": "AI-powered developer platform for code hosting, review, and CI/CD"},
+        {"name": "Teams",            "tagline": "Chat, meetings, and collaboration hub for modern workplaces"},
+        {"name": "Dynamics 365",     "tagline": "Business applications for CRM, ERP, finance, and operations"},
+        {"name": "Xbox",             "tagline": "Gaming platform spanning console, PC, and cloud gaming"},
+        {"name": "Surface",          "tagline": "Premium laptops, tablets, and 2-in-1 devices designed for productivity"},
+        {"name": "Copilot",          "tagline": "AI assistant embedded across Microsoft products and the web"},
+        {"name": "Power Platform",   "tagline": "Low-code tools for building apps, automating workflows, and analysing data"},
+    ],
+
+    # Adobe: homepage is likely Cloudflare-protected — scraper hits synthetic fallback.
+    "adobe": [
+        {"name": "Photoshop",        "tagline": "Industry-standard image editing and graphic design software"},
+        {"name": "Illustrator",      "tagline": "Vector graphics editor for logos, icons, and illustrations"},
+        {"name": "Premiere Pro",     "tagline": "Professional video editing software for film and broadcast"},
+        {"name": "After Effects",    "tagline": "Motion graphics and visual effects for video and film"},
+        {"name": "Acrobat",          "tagline": "PDF creation, editing, and e-signature platform"},
+        {"name": "Creative Cloud",   "tagline": "All-in-one subscription for 20+ creative desktop and mobile apps"},
+        {"name": "Experience Cloud", "tagline": "Digital marketing platform for analytics, personalisation, and commerce"},
+        {"name": "Lightroom",        "tagline": "Photo editing and organisation tool for photographers"},
+        {"name": "Firefly",          "tagline": "Generative AI for image creation and creative workflows"},
+        {"name": "Adobe Express",    "tagline": "Quick content creation for social media, flyers, and presentations"},
+    ],
+
+    # Uber: consumer marketplace — scraper finds locale city pages (Toronto, Montreal)
+    # instead of product offerings.
+    "uber": [
+        {"name": "Uber",             "tagline": "On-demand ridesharing for everyday trips"},
+        {"name": "Uber Eats",        "tagline": "Food and grocery delivery from local restaurants and stores"},
+        {"name": "Uber for Business","tagline": "Corporate travel and meal programs for companies"},
+        {"name": "Uber Freight",     "tagline": "Digital freight brokerage connecting shippers and carriers"},
+        {"name": "Uber Health",      "tagline": "Non-emergency medical transportation for patients and healthcare"},
+        {"name": "Uber Connect",     "tagline": "Same-day package and courier delivery service"},
+    ],
+
+    # Spotify: scraper hits a 404 error page ("This page is out of tune").
+    "spotify": [
+        {"name": "Spotify Free",         "tagline": "Stream music and podcasts with ads on any device"},
+        {"name": "Spotify Premium",      "tagline": "Ad-free listening with offline downloads and higher audio quality"},
+        {"name": "Spotify for Artists",  "tagline": "Tools for musicians to distribute, promote, and analyse their music"},
+        {"name": "Spotify for Podcasters","tagline": "Creation, hosting, and monetisation platform for podcast creators"},
+        {"name": "Spotify Advertising",  "tagline": "Audio and video ad platform reaching Spotify's global audience"},
+        {"name": "Spotify for Business", "tagline": "Licensed music streaming for commercial venues and businesses"},
+    ],
+
+    # Samsung: complex JS nav with hardware categories — scraper hits synthetic fallback.
+    "samsung": [
+        {"name": "Galaxy S Series",    "tagline": "Flagship Android smartphones with advanced cameras and AI features"},
+        {"name": "Galaxy Z Series",    "tagline": "Foldable smartphones redefining mobile form factor"},
+        {"name": "Galaxy Tab",         "tagline": "Android tablets for productivity and entertainment"},
+        {"name": "Galaxy Watch",       "tagline": "Smartwatches with health tracking and fitness features"},
+        {"name": "Samsung TV",         "tagline": "QLED, OLED, and 8K televisions for home entertainment"},
+        {"name": "Samsung Monitors",   "tagline": "Gaming, professional, and lifestyle displays"},
+        {"name": "Samsung Refrigerators","tagline": "Smart refrigerators with Family Hub and connected home features"},
+        {"name": "Samsung Washer & Dryer","tagline": "AI-powered laundry appliances with smart care technology"},
+        {"name": "Galaxy Buds",        "tagline": "True wireless earbuds with noise cancellation and spatial audio"},
+    ],
+
+    # Boeing: scraper finds real aircraft but mixes in non-product pages
+    # (Market Outlook reports, Government Services, docs). Override with clean list.
+    "boeing": [
+        {"name": "737 MAX",           "tagline": "Next-generation single-aisle aircraft for short to medium-range routes"},
+        {"name": "787 Dreamliner",    "tagline": "Fuel-efficient widebody jet with exceptional passenger comfort"},
+        {"name": "777X",              "tagline": "Next-generation twin-engine widebody with folding wingtips"},
+        {"name": "747-8",             "tagline": "Iconic double-deck widebody freighter and passenger aircraft"},
+        {"name": "F/A-18 Super Hornet","tagline": "Combat-proven multirole carrier fighter for naval aviation"},
+        {"name": "F-15EX",            "tagline": "Advanced air dominance fighter with unmatched payload capacity"},
+        {"name": "T-7A Red Hawk",     "tagline": "Next-generation advanced pilot training system for the US Air Force"},
+        {"name": "MQ-25 Stingray",    "tagline": "First operational carrier-based unmanned aerial refuelling aircraft"},
+        {"name": "B-52 Stratofortress","tagline": "Long-range strategic bomber serving US nuclear deterrence"},
+        {"name": "Satellites",        "tagline": "Commercial and government satellites from LEO to GEO orbits"},
+    ],
+
+    # Bombardier: aviation manufacturer — website nav is marketing-focused with no
+    # standard Products dropdown; individual jet pages are JS-rendered and scraper
+    # picks up generic campaign/lifestyle content instead of aircraft names.
+    "bombardier": [
+        {"name": "Global 8000",    "tagline": "The world's longest-range business jet, flying farther than any other", "use_cases": ["Ultra-long-range nonstop travel", "C-suite global executive transport", "Private charter for 19 passengers"]},
+        {"name": "Global 7500",    "tagline": "Ultra-long-range business jet with the longest range in its class",       "use_cases": ["Transatlantic nonstop private travel", "Corporate fleet flagship", "Government VIP transport"]},
+        {"name": "Global 6500",    "tagline": "Long-range business jet combining performance and cabin comfort",          "use_cases": ["Intercontinental nonstop missions", "Large-group executive travel", "Charter operations"]},
+        {"name": "Global 5500",    "tagline": "Large-cabin business jet with exceptional range and efficiency",           "use_cases": ["Transcontinental business travel", "Medium-group executive missions", "Owner-operated jets"]},
+        {"name": "Challenger 3500","tagline": "Super mid-size jet delivering best-in-class cabin and performance",        "use_cases": ["Short-to-medium range corporate travel", "Owner-operated business aviation", "Regional charter services"]},
+        {"name": "Challenger 650", "tagline": "Large-cabin business jet renowned for reliability and range",              "use_cases": ["High-frequency corporate shuttle", "Mixed passenger and cargo missions", "Fleet operator large-cabin routes"]},
+        {"name": "Challenger 350", "tagline": "Super mid-size business jet with best-in-class operating costs",          "use_cases": ["Cost-efficient corporate travel", "Regional business aviation", "Entry-level large-cabin ownership"]},
+        {"name": "Special Mission", "tagline": "Military and government aircraft for surveillance, patrol, and transport", "use_cases": ["Maritime patrol and surveillance", "Government VIP and head-of-state transport", "Intelligence and reconnaissance missions"]},
+    ],
+
+    # Atlassian: nav has Products but the dropdown is JS-rendered and links resolve
+    # to per-product subdomains (jira.atlassian.com, confluence.atlassian.com etc.)
+    # — scraper picks up wrong/generic pages from the redirect chain.
+    "atlassian": [
+        {"name": "Jira",                  "tagline": "Issue and project tracking for agile software teams"},
+        {"name": "Confluence",            "tagline": "Team workspace for docs, wikis, and knowledge sharing"},
+        {"name": "Jira Service Management","tagline": "IT service management and helpdesk for modern teams"},
+        {"name": "Bitbucket",             "tagline": "Git code hosting with built-in CI/CD pipelines"},
+        {"name": "Trello",                "tagline": "Visual project boards for flexible team workflows"},
+        {"name": "Loom",                  "tagline": "Async video messaging for faster team communication"},
+        {"name": "Compass",               "tagline": "Developer experience platform for tracking software components"},
+        {"name": "Statuspage",            "tagline": "Incident communication and status page for customers"},
+        {"name": "Opsgenie",              "tagline": "On-call alerting and incident management for ops teams"},
+        {"name": "Jira Product Discovery","tagline": "Prioritisation and roadmap tool for product managers"},
+    ],
+
+    # Zendesk: scraper finds generic feature labels ("Live chat software", "Live chat",
+    # "AI Agents", "Copilot") rather than Zendesk's named product suite.
+    "zendesk": [
+        {"name": "Zendesk Support",     "tagline": "Ticketing system for managing customer requests across channels"},
+        {"name": "Zendesk Chat",        "tagline": "Live chat and messaging for real-time customer conversations"},
+        {"name": "Zendesk Sell",        "tagline": "CRM for sales teams with pipeline management and reporting"},
+        {"name": "Zendesk AI",          "tagline": "AI-powered automation, bots, and intelligent triage for support"},
+        {"name": "Zendesk Suite",       "tagline": "All-in-one customer service platform combining support, chat, and voice"},
+        {"name": "Zendesk Workforce Mgmt","tagline": "Scheduling and capacity planning for support teams"},
+        {"name": "Zendesk QA",          "tagline": "Automated quality assurance and conversation review for agents"},
+    ],
+
+    # MongoDB: scraper finds real product names mixed with generic labels
+    # ("Multi-cloud") and feature article titles.
+    "mongodb": [
+        {"name": "MongoDB Atlas",                "tagline": "Fully managed cloud database available on AWS, Azure, and GCP"},
+        {"name": "Atlas Vector Search",           "tagline": "Native vector search for AI and semantic search applications"},
+        {"name": "Atlas Data Federation",         "tagline": "Query data across Atlas, S3, and HTTP stores with a unified API"},
+        {"name": "Atlas Stream Processing",       "tagline": "Real-time data processing pipelines built into MongoDB Atlas"},
+        {"name": "MongoDB Community Edition",     "tagline": "Free, open-source version of the MongoDB database"},
+        {"name": "MongoDB Enterprise Advanced",   "tagline": "Enterprise-grade database with security, ops tools, and support"},
+        {"name": "Queryable Encryption",          "tagline": "Encrypt sensitive fields while keeping them queryable"},
+        {"name": "Relational Migrator",           "tagline": "Tool to migrate relational database schemas and data to MongoDB"},
+    ],
+
+    # Okta: scraper finds "Training", "Single Sign-On", "MFA Solutions" — generic feature
+    # category labels and support pages rather than named Okta products.
+    "okta": [
+        {"name": "Okta Workforce Identity",     "tagline": "Identity and access management for employees and contractors"},
+        {"name": "Okta Customer Identity Cloud","tagline": "Auth0-powered identity platform for customer-facing apps"},
+        {"name": "Single Sign-On",              "tagline": "One login for all apps with SAML and OIDC support"},
+        {"name": "Adaptive Multi-Factor Auth",  "tagline": "Risk-based MFA with 15+ factors and policy engine"},
+        {"name": "Okta Device Access",          "tagline": "Passwordless desktop and device login powered by Okta"},
+        {"name": "Okta Identity Governance",    "tagline": "Access certification, lifecycle management, and entitlement control"},
+        {"name": "Okta Privileged Access",      "tagline": "Secure privileged account and infrastructure access management"},
+        {"name": "Okta for AI Agents",          "tagline": "Identity and access control layer for AI agent workflows"},
+    ],
+
+    # Asana: scraper finds "Goals and reporting", long page title "Asana AI for Work
+    # & Project Management • Asana", plus real products like Asana AI Studio buried in noise.
+    "asana": [
+        {"name": "Asana Work Management",  "tagline": "Task and project management to connect work to company goals"},
+        {"name": "Asana AI Studio",        "tagline": "No-code AI workflow builder for automating complex business processes"},
+        {"name": "Asana AI Teammates",     "tagline": "AI agents that collaborate on work inside Asana projects"},
+        {"name": "Asana Goals",            "tagline": "OKR and goal tracking connected to day-to-day work"},
+        {"name": "Asana Portfolio",        "tagline": "Executive view of progress across all projects and initiatives"},
+        {"name": "Asana Reporting",        "tagline": "Dashboards and charts for tracking team and project performance"},
+        {"name": "Asana Enterprise",       "tagline": "Enterprise-grade security, SSO, and admin controls for large teams"},
+    ],
+
+    # Snowflake: scraper finds real products ("Snowflake Intelligence", "Horizon Catalog")
+    # mixed with article/feature titles ("End-to-end ML Workflows", "Native Support for
+    # Apache Iceberg Tables").
+    "snowflake": [
+        {"name": "Snowflake Data Cloud",       "tagline": "Cloud data platform for data warehousing, sharing, and collaboration"},
+        {"name": "Snowflake Intelligence",     "tagline": "AI-powered analytics and insights layer on Snowflake data"},
+        {"name": "Snowflake Cortex AI",        "tagline": "Fully managed AI and ML services running directly on Snowflake"},
+        {"name": "Snowflake Horizon Catalog",  "tagline": "Unified governance, discovery, and compliance for all data assets"},
+        {"name": "Snowflake Marketplace",      "tagline": "Data and app marketplace for sharing and monetising data products"},
+        {"name": "Snowflake Data Engineering", "tagline": "ETL, transformation, and pipeline orchestration on Snowflake"},
+        {"name": "Snowflake Dynamic Tables",   "tagline": "Declarative data pipelines for continuous transformation in Snowflake"},
+        {"name": "Snowflake Arctic",           "tagline": "Open-source enterprise-focused LLM built by Snowflake"},
+    ],
+
+    # Dropbox: scraper finds feature taglines ("Electronic signatures", "Edit PDFs in a
+    # few clicks", "Cloud backup") rather than Dropbox product names.
+    "dropbox": [
+        {"name": "Dropbox",               "tagline": "Cloud storage and file sync for individuals and teams"},
+        {"name": "Dropbox Business",      "tagline": "Team collaboration with shared storage, admin controls, and SSO"},
+        {"name": "Dropbox Sign",          "tagline": "eSignature platform for collecting legally binding signatures"},
+        {"name": "Dropbox DocSend",       "tagline": "Secure document sharing with tracking, analytics, and NDA requests"},
+        {"name": "Dropbox Dash",          "tagline": "AI-powered universal search across all apps and files"},
+        {"name": "Dropbox Backup",        "tagline": "Automatic cloud backup for computers and external drives"},
+        {"name": "Dropbox Paper",         "tagline": "Collaborative docs and meeting notes integrated with Dropbox"},
+    ],
+
+    # Elastic: scraper returns 3 use-case description titles and nothing more.
+    # Root cause: elastic.co uses a complex JS nav; scraper cannot enumerate product links.
+    "elastic": [
+        {"name": "Elasticsearch",             "tagline": "Distributed search and analytics engine at the core of the Elastic Stack"},
+        {"name": "Elastic Observability",     "tagline": "Unified logs, metrics, and APM for infrastructure and application monitoring"},
+        {"name": "Elastic Security",          "tagline": "SIEM, endpoint security, and threat hunting on the Elastic Stack"},
+        {"name": "Elastic Search AI Platform","tagline": "AI-powered search for enterprise applications and vector search"},
+        {"name": "Kibana",                    "tagline": "Visualisation and dashboarding interface for Elasticsearch data"},
+        {"name": "Elastic Cloud",             "tagline": "Fully managed Elasticsearch Service on AWS, Azure, and GCP"},
+        {"name": "Logstash",                  "tagline": "Server-side data processing pipeline for ingesting and transforming data"},
+    ],
+
+    # CrowdStrike: scraper finds headlines ("Orchestrate the agentic security workforce"),
+    # CTAs ("Experienced a breach?"), and "Latest Innovations" — not product names.
+    "crowdstrike": [
+        {"name": "Falcon Platform",          "tagline": "AI-native cybersecurity platform unifying all CrowdStrike modules"},
+        {"name": "Falcon Endpoint Security", "tagline": "Next-gen antivirus and EDR for workstations, servers, and cloud"},
+        {"name": "Falcon Identity Protection","tagline": "Identity threat detection and Zero Trust enforcement"},
+        {"name": "Falcon Cloud Security",    "tagline": "Cloud workload protection and CNAPP across AWS, Azure, and GCP"},
+        {"name": "Falcon Next-Gen SIEM",     "tagline": "AI-powered SIEM ingesting all data at petabyte scale"},
+        {"name": "Falcon Adversary Intelligence","tagline": "Threat intelligence on adversary TTPs and campaigns"},
+        {"name": "Falcon LogScale",          "tagline": "High-performance log management and search at any scale"},
+        {"name": "Charlotte AI",             "tagline": "Generative AI security analyst built into the Falcon platform"},
+    ],
+
+    # Palo Alto Networks: scraper hits a community/knowledge-base page and returns
+    # page-management UI strings ("Deploybravely", "Who rated this article",
+    # "Important Update") — completely off target.
+    "palo": [
+        {"name": "Prisma Cloud",            "tagline": "CNAPP for securing cloud infrastructure, workloads, and code"},
+        {"name": "Cortex XSIAM",            "tagline": "AI-driven security operations platform replacing traditional SIEM/SOAR"},
+        {"name": "Cortex XDR",              "tagline": "Extended detection and response across endpoint, network, and cloud"},
+        {"name": "Prisma Access",           "tagline": "SASE platform delivering network security as a cloud service"},
+        {"name": "Prisma SD-WAN",           "tagline": "AI-powered SD-WAN for branch office and remote connectivity"},
+        {"name": "Strata Identity",         "tagline": "Identity security for hybrid and multicloud environments"},
+        {"name": "Advanced Threat Prevention","tagline": "Inline protection blocking zero-day threats and evasion techniques"},
+        {"name": "AI-Powered NGFW",         "tagline": "Next-generation firewall with machine learning threat prevention"},
+    ],
+
+    # Monday.com: scraper finds blog/academy titles and long sentence descriptions
+    # ("Work Management Software For Connecting Work to Shared Goals", "CRM Academy").
+    "monday": [
+        {"name": "monday Work Management", "tagline": "Project and task management platform for teams of all sizes"},
+        {"name": "monday CRM",             "tagline": "Customisable CRM for managing sales pipeline and customer data"},
+        {"name": "monday Dev",             "tagline": "Agile development planning with sprints, backlogs, and roadmaps"},
+        {"name": "monday Service",         "tagline": "IT and business service management with ticketing and SLAs"},
+        {"name": "monday AI",              "tagline": "AI automations and no-code AI blocks across all monday products"},
+    ],
+
+    # DocuSign: scraper finds "Contract Lifecycle Management Software" (generic category)
+    # and "Agreement Preparation" alongside real products (Docusign AI, Docusign Iris).
+    "docusign": [
+        {"name": "Docusign eSignature",        "tagline": "Electronic signature platform used by 1.5M+ customers worldwide"},
+        {"name": "Docusign AI",                "tagline": "AI that reads, analyses, and extracts data from agreements"},
+        {"name": "Docusign Iris",              "tagline": "AI engine powering contract analysis and risk identification"},
+        {"name": "Docusign CLM",               "tagline": "Contract lifecycle management from creation to renewal"},
+        {"name": "Docusign IAM",               "tagline": "Intelligent Agreement Management for enterprise contract workflows"},
+        {"name": "Docusign Notary",            "tagline": "Remote online notarisation integrated with eSignature"},
+        {"name": "Docusign Identify",          "tagline": "Identity verification for signers using ID checks and biometrics"},
+    ],
+
+    # AMD: scraper finds individual CPU model SKUs ("EPYC 4004", "EPYC 4005") plus a
+    # marketing headline — override with product line names instead of individual SKUs.
+    "amd": [
+        {"name": "AMD EPYC",          "tagline": "Server CPUs for data centres, cloud, and HPC workloads"},
+        {"name": "AMD Ryzen",         "tagline": "Consumer and prosumer CPUs for desktops and laptops"},
+        {"name": "AMD Radeon",        "tagline": "Consumer graphics cards for gaming and content creation"},
+        {"name": "AMD Instinct",      "tagline": "Data centre GPUs for AI training and HPC accelerated computing"},
+        {"name": "AMD ROCm",          "tagline": "Open-source software stack for GPU compute and AI development"},
+        {"name": "AMD Versal",        "tagline": "Adaptive compute acceleration platforms for embedded and edge AI"},
+        {"name": "AMD FPGAs",         "tagline": "Field-programmable gate arrays for networking, aerospace, and defence"},
+    ],
+
+    # Autodesk: scraper finds "Autodesk Fusion Plans & Pricing" (pricing page) and
+    # "Stay informed" (CTA) alongside real product names. Override for clean list.
+    "autodesk": [
+        {"name": "Autodesk Fusion",      "tagline": "Integrated CAD, CAM, CAE, and PCB design platform"},
+        {"name": "AutoCAD",              "tagline": "2D and 3D CAD software for drafting and design professionals"},
+        {"name": "Revit",                "tagline": "BIM software for architects, structural engineers, and MEP teams"},
+        {"name": "3ds Max",              "tagline": "3D modelling, animation, and rendering for games and film"},
+        {"name": "Maya",                 "tagline": "3D animation, modelling, and VFX for film and TV production"},
+        {"name": "Inventor",             "tagline": "Mechanical design, product simulation, and documentation tool"},
+        {"name": "Civil 3D",             "tagline": "Civil engineering design, analysis, and documentation software"},
+        {"name": "Navisworks",           "tagline": "Project review and coordination software for construction teams"},
+        {"name": "BIM 360",              "tagline": "Construction management platform for connected project delivery"},
+        {"name": "Forma",                "tagline": "Cloud-based architectural concept design and analysis tool"},
+    ],
+
+    # Box: scraper returns only "Secure collaboration" and "www.box.com" — completely
+    # fails to enumerate any product pages from box.com's JS nav.
+    "box": [
+        {"name": "Box",                  "tagline": "Cloud content management and file sharing for enterprises"},
+        {"name": "Box AI",               "tagline": "AI-powered document analysis and content intelligence on Box"},
+        {"name": "Box Sign",             "tagline": "Native eSignature embedded in the Box content workflow"},
+        {"name": "Box Relay",            "tagline": "No-code workflow automation for content-driven business processes"},
+        {"name": "Box Shield",           "tagline": "Intelligent threat detection and access controls for Box content"},
+        {"name": "Box Hubs",             "tagline": "Centralised knowledge portals for teams and external stakeholders"},
+        {"name": "Box Platform",         "tagline": "APIs and SDKs for embedding Box content management in any app"},
+    ],
+
+    # NVIDIA: scraper returns architecture names ("NVIDIA Hopper GPU Architecture"),
+    # certification programs ("NVIDIA Certified Systems"), and solution category labels.
+    # Override with actual product names.
+    "nvidia": [
+        {"name": "GeForce RTX",         "tagline": "Consumer gaming GPUs with ray tracing and DLSS AI acceleration"},
+        {"name": "NVIDIA H100",         "tagline": "Data centre GPU for large-scale AI training and inference"},
+        {"name": "NVIDIA B200",         "tagline": "Blackwell-architecture GPU for next-generation AI workloads"},
+        {"name": "NVIDIA DGX",          "tagline": "AI supercomputing systems for enterprise AI development"},
+        {"name": "NVIDIA Jetson",       "tagline": "Edge AI computing platform for robotics and autonomous machines"},
+        {"name": "NVIDIA DRIVE",        "tagline": "End-to-end platform for autonomous vehicle development"},
+        {"name": "NVIDIA Omniverse",    "tagline": "Platform for building and running industrial digital twins"},
+        {"name": "NVIDIA NIM",          "tagline": "Microservices for deploying optimised AI models in production"},
+        {"name": "CUDA",                "tagline": "Parallel computing platform and API for GPU-accelerated computing"},
+        {"name": "NVIDIA Networking",   "tagline": "InfiniBand and Ethernet networking for AI and HPC clusters"},
+    ],
+
+    # Palantir: scraper finds "Ontology" (concept, not product), sub-features of
+    # Foundry ("Foundry Rules & Real-Time Alerting") alongside real top-level products.
+    "palantir": [
+        {"name": "Palantir Foundry",    "tagline": "Data integration and operations platform for enterprise analytics"},
+        {"name": "Palantir Gotham",     "tagline": "Intelligence and operations platform for defence and government"},
+        {"name": "Palantir Apollo",     "tagline": "Continuous delivery and deployment system for software operations"},
+        {"name": "Palantir AIP",        "tagline": "AI platform for deploying and orchestrating LLMs on enterprise data"},
+        {"name": "Palantir TITAN",      "tagline": "AI-enabled targeting and decision-support for US Army"},
+    ],
+
+    # Splunk: consistently times out during scraping — likely JS-heavy nav or rate limiting.
+    "splunk": [
+        {"name": "Splunk Enterprise",       "tagline": "On-premises platform for searching, monitoring, and analysing machine data"},
+        {"name": "Splunk Cloud Platform",   "tagline": "Cloud-managed Splunk for data analytics and operations at scale"},
+        {"name": "Splunk Observability Cloud","tagline": "Full-stack observability for infrastructure, APM, and real user monitoring"},
+        {"name": "Splunk SOAR",             "tagline": "Security orchestration, automation, and response platform"},
+        {"name": "Splunk Enterprise Security","tagline": "SIEM for threat detection, investigation, and incident response"},
+        {"name": "Splunk IT Service Intelligence","tagline": "AI-driven ITSI for monitoring services and predicting outages"},
+    ],
+
+    # Freshworks: scraper finds "People-First AI for Customer & Employee Experience"
+    # (49-char tagline, just under the 50-char filter) alongside real products.
+    "freshworks": [
+        {"name": "Freshdesk",          "tagline": "Customer support and helpdesk software for teams of all sizes"},
+        {"name": "Freshservice",       "tagline": "IT service management and ITSM platform for modern IT teams"},
+        {"name": "Freshsales",         "tagline": "AI-powered CRM for sales teams with pipeline and contact management"},
+        {"name": "Freshmarketer",      "tagline": "Marketing automation and customer journey platform"},
+        {"name": "Freshchat",          "tagline": "Messaging and live chat for customer and employee support"},
+        {"name": "Freddy AI",          "tagline": "AI engine powering automation, insights, and agents across Freshworks"},
+        {"name": "Freshworks Neo",     "tagline": "Unified platform integrating all Freshworks products and data"},
+    ],
+
+    # HashiCorp: times out during scraping.
+    "hashicorp": [
+        {"name": "Terraform",          "tagline": "Infrastructure as code tool for provisioning cloud and on-prem resources"},
+        {"name": "Vault",              "tagline": "Secrets management and data encryption for dynamic infrastructure"},
+        {"name": "Consul",             "tagline": "Service mesh and network infrastructure automation platform"},
+        {"name": "Nomad",              "tagline": "Flexible workload orchestrator for containers, VMs, and binaries"},
+        {"name": "Packer",             "tagline": "Automated machine image creation for any platform or cloud"},
+        {"name": "Vagrant",            "tagline": "Development environment management tool for reproducible builds"},
+        {"name": "Boundary",           "tagline": "Identity-based access management for infrastructure and services"},
+        {"name": "Waypoint",           "tagline": "Unified workflow for build, deploy, and release of any application"},
+    ],
+
+    # Cloudflare: scraper finds newsletter "theNET", "What is SD-WAN?" (blog article),
+    # and category labels rather than Cloudflare's named product suite.
+    "cloudflare": [
+        {"name": "Cloudflare CDN",         "tagline": "Global content delivery network with DDoS protection and caching"},
+        {"name": "Cloudflare Workers",     "tagline": "Serverless edge computing platform running at 300+ locations"},
+        {"name": "Cloudflare Zero Trust",  "tagline": "SASE and Zero Trust security replacing traditional VPN and firewalls"},
+        {"name": "Cloudflare R2",          "tagline": "Object storage with zero egress fees, compatible with S3 API"},
+        {"name": "Cloudflare Pages",       "tagline": "JAMstack platform for deploying front-end applications at the edge"},
+        {"name": "Cloudflare Stream",      "tagline": "Video storage, encoding, and delivery built on the Cloudflare network"},
+        {"name": "Cloudflare AI Gateway",  "tagline": "Proxy and observability layer for AI model API traffic"},
+        {"name": "Magic Transit",          "tagline": "BGP-based DDoS protection and network performance for enterprise infrastructure"},
+        {"name": "Cloudflare Gateway",     "tagline": "DNS-layer and HTTP security filtering for enterprise networks"},
+    ],
+
+    # Twitch: scraper finds trending game categories ("World of Warcraft", "Just Chatting",
+    # "Super Mario World") from the Browse page instead of Twitch's product/platform offerings.
+    "twitch": [
+        {"name": "Twitch Live Streaming", "tagline": "Live video broadcasting platform for gaming, creative, and IRL content"},
+        {"name": "Twitch Subscriptions",  "tagline": "Paid subscriptions supporting streamers with badges and emotes"},
+        {"name": "Twitch Bits",           "tagline": "Virtual currency for tipping and cheering streamers in chat"},
+        {"name": "Twitch Clips",          "tagline": "Short shareable video clips captured from live broadcasts"},
+        {"name": "Twitch Extensions",     "tagline": "Interactive overlays and panels built by developers for streams"},
+        {"name": "Twitch for Advertisers","tagline": "Brand advertising platform reaching Twitch's gaming audience"},
+    ],
+
+    # Box already handled above. Coupa: scraper returns only "www.coupa.com" as a
+    # product name — completely blocked or unnavigable JS site.
+    "coupa": [
+        {"name": "Coupa BSM Platform",   "tagline": "Business spend management platform for procurement, invoicing, and payments"},
+        {"name": "Coupa Procurement",    "tagline": "Source-to-pay procurement for strategic sourcing and purchasing"},
+        {"name": "Coupa Invoicing",      "tagline": "Automated invoice capture, approval, and payment workflows"},
+        {"name": "Coupa Expenses",       "tagline": "Employee expense management with policy enforcement and ERP integration"},
+        {"name": "Coupa Pay",            "tagline": "Global payments and working capital solutions for businesses"},
+        {"name": "Coupa Supply Chain",   "tagline": "Supply chain design, risk, and inventory optimisation platform"},
+        {"name": "Coupa Treasury",       "tagline": "Cash and liquidity management for finance teams"},
+    ],
+
+    # Intercom: scraper finds real products (Inbox, Copilot, Tickets, Omnichannel) but
+    # "View demo" CTA slips through — not a clean pass. Override for guaranteed accuracy.
+    "intercom": [
+        {"name": "Intercom Inbox",       "tagline": "Shared inbox for managing customer conversations across all channels"},
+        {"name": "Intercom Copilot",     "tagline": "AI agent that resolves customer issues autonomously"},
+        {"name": "Intercom Tickets",     "tagline": "Ticket system for tracking and resolving complex customer issues"},
+        {"name": "Intercom Messenger",   "tagline": "Customisable in-app and web chat widget for customer engagement"},
+        {"name": "Intercom Fin AI",      "tagline": "AI customer service agent that handles support queries end-to-end"},
+        {"name": "Intercom Outbound",    "tagline": "Proactive messaging via email, push, and in-app to drive engagement"},
+        {"name": "Intercom Help Centre", "tagline": "Self-serve knowledge base and customer portal integrated with Messenger"},
+    ],
+
+    # Brex: scraper finds Corporate cards, Travel, Bill pay (real products) but also
+    # "Startups" (audience segment) and generic labels. Override for clean list.
+    "brex": [
+        {"name": "Brex Corporate Card",  "tagline": "Corporate credit card with high limits and real-time spend controls"},
+        {"name": "Brex Travel",          "tagline": "Business travel booking and management integrated with Brex spend"},
+        {"name": "Brex Bill Pay",        "tagline": "Accounts payable and invoice payment automation platform"},
+        {"name": "Brex Expense",         "tagline": "Expense management with AI receipt capture and policy enforcement"},
+        {"name": "Brex Business Account","tagline": "High-yield business banking account with no account fees"},
+        {"name": "Brex Equity",          "tagline": "Equity management and cap table tool for startups"},
+        {"name": "Brex Empower",         "tagline": "Unified spend platform combining cards, expenses, and reimbursements"},
+    ],
+
+    # Airtable: finds HyperDB, Airtable Omni, Portals (real) but also "AI agent software"
+    # (generic description). Override for clean list.
+    "airtable": [
+        {"name": "Airtable",             "tagline": "Low-code platform for building apps and workflows on structured data"},
+        {"name": "Airtable Omni",        "tagline": "AI-native work platform connecting data, workflows, and agents"},
+        {"name": "Airtable HyperDB",     "tagline": "High-performance database layer for large-scale Airtable deployments"},
+        {"name": "Airtable AI",          "tagline": "AI features for automating data entry, summaries, and workflows"},
+        {"name": "Airtable Automations", "tagline": "No-code automation for triggering actions across apps and data"},
+        {"name": "Airtable Portals",     "tagline": "External-facing portals for sharing Airtable data with stakeholders"},
+        {"name": "Airtable Interface Designer","tagline": "Drag-and-drop UI builder for creating apps on top of Airtable bases"},
+    ],
+
+    # Amplitude: scraper returns marketing description strings
+    # ("Product Analytics for Mobile, Web, & More") — no clean product names found.
+    "amplitude": [
+        {"name": "Amplitude Analytics",  "tagline": "Product analytics platform for understanding user behaviour and growth"},
+        {"name": "Amplitude Experiment",  "tagline": "Feature flagging and A/B experimentation platform"},
+        {"name": "Amplitude CDP",         "tagline": "Customer data platform for collecting and activating behavioural data"},
+        {"name": "Amplitude Session Replay","tagline": "Visual session playback to understand how users interact with products"},
+        {"name": "Amplitude Metrics",     "tagline": "Metric framework for defining and tracking north-star business metrics"},
+    ],
+
+    # Mixpanel: scraper hits community/resources pages returning "Agent Prompt Library",
+    # "Case Study", "Amp Champs", "Acceptable Use Policy" instead of product pages.
+    "mixpanel": [
+        {"name": "Mixpanel Analytics",   "tagline": "Self-serve product analytics for tracking user actions and funnels"},
+        {"name": "Mixpanel Engage",      "tagline": "User segmentation and cohort analysis for product and growth teams"},
+        {"name": "Mixpanel Experiments", "tagline": "A/B testing and feature flag management integrated with Mixpanel data"},
+        {"name": "Mixpanel Warehouse Connectors","tagline": "Sync Mixpanel data with Snowflake, BigQuery, and Redshift"},
+        {"name": "Mixpanel Session Replay","tagline": "Visual session recordings tied directly to Mixpanel event data"},
+    ],
+
+    # Rippling: consistently times out during scraping.
+    "rippling": [
+        {"name": "Rippling HR",           "tagline": "Global HR platform for onboarding, payroll, and HR management"},
+        {"name": "Rippling IT",           "tagline": "IT management for device provisioning, apps, and security policies"},
+        {"name": "Rippling Finance",      "tagline": "Corporate cards, expense management, and bill pay for businesses"},
+        {"name": "Rippling PEO",          "tagline": "Professional employer organisation for benefits and compliance"},
+        {"name": "Rippling Payroll",      "tagline": "Automated global payroll synced with HR and time tracking"},
+        {"name": "Rippling Benefits",     "tagline": "Health insurance and benefits administration for distributed teams"},
+        {"name": "Rippling EOR",          "tagline": "Employer of record service for hiring internationally without an entity"},
+    ],
+
+    # Google: scraper drills into support/help pages ("Search history", "Detecting Spam",
+    # "Search Engine Testing & Evaluation") rather than Google's product portfolio.
+    "google": [
+        {"name": "Google Search",        "tagline": "World's most-used search engine powering billions of queries daily"},
+        {"name": "Google Ads",           "tagline": "Online advertising platform for search, display, video, and shopping"},
+        {"name": "Google Workspace",     "tagline": "Productivity suite with Gmail, Docs, Drive, Meet, and Calendar"},
+        {"name": "Google Cloud",         "tagline": "Cloud computing platform for data, AI, and infrastructure"},
+        {"name": "YouTube",              "tagline": "Video sharing and streaming platform with 2B+ monthly users"},
+        {"name": "Google Maps",          "tagline": "Mapping, navigation, and local business discovery platform"},
+        {"name": "Android",              "tagline": "World's most popular mobile operating system"},
+        {"name": "Chrome",               "tagline": "Fast, secure web browser built on open-source Chromium"},
+        {"name": "Google Gemini",        "tagline": "Frontier multimodal AI model family powering Google products"},
+        {"name": "Google Pixel",         "tagline": "Google-designed smartphones showcasing Android and AI features"},
+    ],
+
+    # Meta: scraper hits meta.com and finds blog/newsroom article titles
+    # ("Importance of Mental Resilience", "Digital Detox") — completely wrong content.
+    # Root cause: meta.com redirects to a page with blog-style content, not a products nav.
+    "meta": [
+        {"name": "Facebook",             "tagline": "Social network connecting billions of people worldwide"},
+        {"name": "Instagram",            "tagline": "Photo and video sharing platform with Reels, Stories, and Shopping"},
+        {"name": "WhatsApp",             "tagline": "End-to-end encrypted messaging app for personal and business use"},
+        {"name": "Messenger",            "tagline": "Cross-platform messaging with calls, video, and Marketplace"},
+        {"name": "Meta Quest",           "tagline": "Mixed-reality headsets for VR gaming and productivity"},
+        {"name": "Threads",              "tagline": "Text-based conversation app built on the Instagram network"},
+        {"name": "Meta AI",              "tagline": "AI assistant and model family powering Meta's products"},
+        {"name": "Meta Business Suite",  "tagline": "Unified tool for managing Facebook and Instagram business presence"},
+        {"name": "Meta Ads",             "tagline": "Cross-platform advertising across Facebook, Instagram, and the Audience Network"},
+    ],
+
+    # Twilio: finds some real product names (ConversationRelay) but also blog articles
+    # ("SMS Marketing to Drive ROI") and vague category labels ("Data engineering solutions").
+    "twilio": [
+        {"name": "Twilio Messaging",        "tagline": "Programmable SMS, MMS, and WhatsApp API for global messaging"},
+        {"name": "Twilio Voice",            "tagline": "Programmable voice calling and IVR for any application"},
+        {"name": "Twilio Verify",           "tagline": "Phone number verification and two-factor authentication API"},
+        {"name": "Twilio Flex",             "tagline": "Fully programmable cloud contact centre platform"},
+        {"name": "Twilio Segment",          "tagline": "Customer data platform for collecting, unifying, and activating data"},
+        {"name": "Twilio SendGrid",         "tagline": "Email delivery API for transactional and marketing emails"},
+        {"name": "Twilio Video",            "tagline": "Programmable video API for embedded video experiences"},
+        {"name": "ConversationRelay",       "tagline": "Real-time AI conversation infrastructure for voice and messaging"},
+    ],
+
+    # Slack: nav DFS finds a few real names (Slack Connect, Slack Builder) then
+    # descends into locale-duplicated legal pages (Main Services Agreement in IT/FR/ES/DE/PT)
+    # and feature-description pages — locale filter doesn't catch slack.com sub-paths.
+    "slack": [
+        {"name": "Slack",              "tagline": "Messaging and collaboration platform for teams and organisations"},
+        {"name": "Slack Connect",      "tagline": "Secure channel-based messaging with external partners and customers"},
+        {"name": "Slack AI",           "tagline": "AI search, summaries, and highlights across all Slack conversations"},
+        {"name": "Slack Huddles",      "tagline": "Lightweight live audio and video for quick team conversations"},
+        {"name": "Slack Canvas",       "tagline": "Persistent, rich-text docs embedded directly into Slack channels"},
+        {"name": "Slack Workflow Builder","tagline": "No-code automation for routing messages, approvals, and notifications"},
+        {"name": "Slack Lists",        "tagline": "Project tracking and task management inside Slack channels"},
+        {"name": "Slack for Enterprise","tagline": "Enterprise Key Management, DLP, and compliance controls for large orgs"},
+    ],
+
+    # Oracle: scraper finds "Oracle LiveLabs", "Oracle Database Insider" (a blog),
+    # and "AI Vector Search" — mix of real product names and marketing/lab content.
+    "oracle": [
+        {"name": "Oracle Database",       "tagline": "World's leading relational database for enterprise workloads"},
+        {"name": "Oracle Cloud Infrastructure","tagline": "High-performance public cloud with bare metal, VMs, and Kubernetes"},
+        {"name": "Oracle Fusion Cloud ERP","tagline": "Cloud ERP for financial management, supply chain, and procurement"},
+        {"name": "Oracle HCM Cloud",      "tagline": "HR, talent, and payroll suite for global enterprises"},
+        {"name": "Oracle CX Cloud",       "tagline": "CRM and customer experience suite for sales, service, and marketing"},
+        {"name": "Oracle Analytics Cloud","tagline": "Business intelligence and data visualisation on OCI"},
+        {"name": "Oracle Autonomous Database","tagline": "Self-driving database with automatic provisioning, tuning, and patching"},
+        {"name": "Oracle NetSuite",       "tagline": "Cloud ERP for mid-market companies covering finance, inventory, and CRM"},
+        {"name": "Oracle MySQL HeatWave", "tagline": "Integrated MySQL database with in-database ML and analytics"},
+        {"name": "Java",                  "tagline": "Widely-used programming language and platform maintained by Oracle"},
+    ],
+
+    # Zoom: homepage redirects to account.zoom.us sign-in page — scraper picks up
+    # "Host a meeting" / "Add Account" from the auth UI instead of product pages.
+    "zoom": [
+        {"name": "Zoom Meetings",     "tagline": "HD video and audio conferencing for teams of any size"},
+        {"name": "Zoom Phone",        "tagline": "Cloud phone system with calling, SMS, and voicemail"},
+        {"name": "Zoom Webinars",     "tagline": "Large-scale virtual events and broadcast-style webinars"},
+        {"name": "Zoom Rooms",        "tagline": "Software-defined conference room system for hybrid work"},
+        {"name": "Zoom Events",       "tagline": "End-to-end platform for virtual, hybrid, and in-person events"},
+        {"name": "Zoom Contact Center","tagline": "AI-powered omnichannel contact centre on the Zoom platform"},
+        {"name": "Zoom AI Companion", "tagline": "AI assistant for meeting summaries, chat drafts, and task management"},
+        {"name": "Zoom Docs",         "tagline": "AI-first collaborative docs built into the Zoom workspace"},
+    ],
+
+    # SAP: scraper finds some real product names but mixes in blog posts, tour pages,
+    # font exploration pages, and support docs ("Subscribe now", "Packaged services").
+    # Override with canonical SAP product line for clean results.
+    "sap": [
+        {"name": "SAP S/4HANA",               "tagline": "Intelligent ERP suite for finance, supply chain, and manufacturing"},
+        {"name": "SAP Business Technology Platform","tagline": "Integration, extension, and analytics platform for SAP and third-party apps"},
+        {"name": "SAP Analytics Cloud",        "tagline": "Cloud BI and planning platform for data-driven decisions"},
+        {"name": "SAP SuccessFactors",         "tagline": "Cloud HCM suite for HR, payroll, talent, and workforce planning"},
+        {"name": "SAP Ariba",                  "tagline": "Procurement and supply chain collaboration network"},
+        {"name": "SAP Concur",                 "tagline": "Travel, expense, and invoice management for enterprises"},
+        {"name": "SAP Customer Experience",    "tagline": "CX suite covering sales, service, marketing, and commerce"},
+        {"name": "SAP Datasphere",             "tagline": "Business data fabric for connecting and harmonising enterprise data"},
+        {"name": "SAP Business Network",       "tagline": "Trading partner network for procurement, logistics, and asset management"},
+        {"name": "Joule",                      "tagline": "AI copilot embedded across SAP applications and workflows"},
+    ],
+
+    # Figma: scraper drills into /use-cases/* paths and returns font pages, color
+    # guides, and template names instead of the actual product suite.
+    "figma": [
+        {"name": "Figma Design",    "tagline": "Collaborative interface design tool for web and mobile products"},
+        {"name": "FigJam",          "tagline": "Online whiteboard for brainstorming, diagrams, and team workshops"},
+        {"name": "Figma Slides",    "tagline": "Presentation tool built natively in Figma for design-driven decks"},
+        {"name": "Dev Mode",        "tagline": "Developer handoff with code snippets, specs, and design token inspection"},
+        {"name": "Figma AI",        "tagline": "AI features for generating designs, layers, and prototypes faster"},
+        {"name": "Figma Enterprise","tagline": "Org-wide design platform with SSO, governance, and advanced permissions"},
+    ],
+
+    # Salesforce: nav triggers JS mega-menu; scraper hits synthetic fallback.
+    "salesforce": [
+        {"name": "Sales Cloud",         "tagline": "CRM platform for managing leads, opportunities, and forecasts"},
+        {"name": "Service Cloud",        "tagline": "Customer service and support platform with AI-powered case routing"},
+        {"name": "Marketing Cloud",      "tagline": "Digital marketing automation for email, social, and journeys"},
+        {"name": "Commerce Cloud",       "tagline": "B2C and B2B ecommerce platform built on Salesforce"},
+        {"name": "Tableau",              "tagline": "Business intelligence and visual analytics platform"},
+        {"name": "Slack",                "tagline": "Team messaging and collaboration hub (acquired by Salesforce)"},
+        {"name": "MuleSoft",             "tagline": "Integration platform for connecting apps, data, and APIs"},
+        {"name": "Einstein AI",          "tagline": "AI and machine learning layer across all Salesforce products"},
+        {"name": "Salesforce Platform",  "tagline": "Low-code app development and automation platform"},
+        {"name": "Data Cloud",           "tagline": "Unified customer data platform for real-time activation"},
+    ],
+
+    # Netflix: consumer streaming service — scraper finds no products section.
+    "netflix": [
+        {"name": "Netflix Standard with Ads", "tagline": "Ad-supported streaming plan with HD video quality"},
+        {"name": "Netflix Standard",           "tagline": "Ad-free HD streaming on two devices simultaneously"},
+        {"name": "Netflix Premium",            "tagline": "4K Ultra HD streaming on four devices with spatial audio"},
+        {"name": "Netflix Games",              "tagline": "Mobile gaming catalogue included with membership"},
+    ],
+
+    # HubSpot: JS-rendered nav with product dropdown — scraper hits synthetic fallback.
+    "hubspot": [
+        {"name": "Marketing Hub",   "tagline": "Inbound marketing software for attracting and converting leads"},
+        {"name": "Sales Hub",       "tagline": "CRM and sales automation tools for closing deals faster"},
+        {"name": "Service Hub",     "tagline": "Customer service platform for support, feedback, and retention"},
+        {"name": "CMS Hub",         "tagline": "Content management system built on the HubSpot CRM"},
+        {"name": "Operations Hub",  "tagline": "Data sync, automation, and quality tools for RevOps teams"},
+        {"name": "Commerce Hub",    "tagline": "Payments, invoicing, and B2B commerce tools for growing businesses"},
+        {"name": "HubSpot CRM",     "tagline": "Free CRM platform at the core of all HubSpot products"},
+    ],
+
+    # ServiceNow: enterprise IT platform — scraper hits synthetic fallback.
+    "servicenow": [
+        {"name": "IT Service Management",   "tagline": "ITSM platform for incident, problem, and change management"},
+        {"name": "IT Operations Management","tagline": "AIOps and infrastructure visibility for IT ops teams"},
+        {"name": "Strategic Portfolio Mgmt","tagline": "Demand, resource, and portfolio planning for enterprises"},
+        {"name": "Customer Service Mgmt",   "tagline": "Connected customer service to resolve issues end-to-end"},
+        {"name": "HR Service Delivery",     "tagline": "Employee experience and HR case management platform"},
+        {"name": "Field Service Management","tagline": "Scheduling, dispatch, and asset management for field teams"},
+        {"name": "Security Operations",     "tagline": "Incident response and vulnerability risk management"},
+        {"name": "Now Platform",            "tagline": "Low-code application development platform for enterprise workflows"},
+    ],
+
+    # Workday: enterprise HCM/finance — complex JS nav, scraper hits synthetic fallback.
+    "workday": [
+        {"name": "Workday HCM",                 "tagline": "Unified human capital management for HR, payroll, and talent"},
+        {"name": "Workday Financial Management","tagline": "Cloud finance platform for accounting, planning, and analytics"},
+        {"name": "Workday Payroll",             "tagline": "Global payroll processing integrated with HCM"},
+        {"name": "Workday Recruiting",          "tagline": "Talent acquisition and applicant tracking built into Workday"},
+        {"name": "Workday Learning",            "tagline": "Learning management system for employee development"},
+        {"name": "Workday Planning",            "tagline": "Collaborative planning, budgeting, and forecasting platform"},
+        {"name": "Workday Prism Analytics",     "tagline": "Data analytics and business intelligence for Workday data"},
+        {"name": "Workday Extend",              "tagline": "Low-code platform for building custom apps on Workday"},
+    ],
+
+    # Linear: "Product" nav link leads to /homepage (blog/changelog) and /now (articles),
+    # /quality (podcast series) — DFS drills into episode pages and article titles.
+    # Path filter now blocks /now and /quality, but override ensures clean product list.
+    "linear": [
+        {"name": "Linear Issues",     "tagline": "Issue tracking with keyboard-first design built for speed"},
+        {"name": "Linear Cycles",     "tagline": "Sprint planning and iteration management for engineering teams"},
+        {"name": "Linear Projects",   "tagline": "Cross-team project tracking with milestones and progress views"},
+        {"name": "Linear Roadmaps",   "tagline": "Visual product roadmap tied directly to issues and projects"},
+        {"name": "Linear Triage",     "tagline": "Structured inbox to prioritise and route incoming bug reports"},
+        {"name": "Linear Insights",   "tagline": "Analytics and velocity reporting for engineering teams"},
+        {"name": "Linear AI",         "tagline": "AI that auto-fills issues, suggests fixes, and writes changelogs"},
+    ],
+
+    # Coinbase: nav links to /en-ca/explore (crypto price listing pages like TRX, BTC)
+    # and /en-ca/learn/ (educational articles like "What is a stablecoin?").
+    # DFS drills into price pages and learn articles instead of actual product pages.
+    "coinbase": [
+        {"name": "Coinbase Exchange",  "tagline": "Leading crypto exchange for buying, selling, and trading digital assets"},
+        {"name": "Coinbase Wallet",    "tagline": "Self-custody crypto wallet for DeFi and NFTs"},
+        {"name": "Coinbase Advanced",  "tagline": "Professional trading platform with advanced charting and order types"},
+        {"name": "Coinbase Prime",     "tagline": "Institutional-grade crypto prime brokerage and custody"},
+        {"name": "Coinbase One",       "tagline": "Subscription for zero trading fees and boosted staking rewards"},
+        {"name": "Coinbase Commerce",  "tagline": "Accept cryptocurrency payments as a merchant"},
+        {"name": "Coinbase Cloud",     "tagline": "Developer platform for building on-chain apps with staking and node APIs"},
+        {"name": "Base",               "tagline": "Coinbase's Ethereum L2 network for fast, low-cost on-chain apps"},
+    ],
+
+    # CAE: nav drills into defence consulting sub-pages (Analysis, Design, Human Factors),
+    # geographic office pages (CAE Australia, CAE in India, CAE in the UK), and
+    # training-methodology pages instead of actual simulator products.
+    "cae": [
+        {"name": "CAE 7000XR Full Flight Simulator",  "tagline": "World's highest-fidelity Level D full flight simulator for airline pilot training"},
+        {"name": "CAE 500XR Flight Training Device",  "tagline": "Fixed-based flight training device for procedural and instrument proficiency"},
+        {"name": "CAE Rise",                          "tagline": "Digital crew training platform combining data, AI, and simulation for airlines"},
+        {"name": "CAE Type Rating",                   "tagline": "Airline type rating and recurrent training delivered at CAE training centres worldwide"},
+        {"name": "CAE Military Flight Simulators",    "tagline": "High-fidelity full-mission simulators for fixed-wing and rotary-wing military aircraft"},
+        {"name": "CAE Ground Vehicle Simulators",     "tagline": "Simulation-based training systems for armoured vehicles and ground combat platforms"},
+        {"name": "CAE Naval Simulators",              "tagline": "Integrated bridge, combat management, and ship-handling simulators for naval forces"},
+        {"name": "CAE Synthetic Training Environment","tagline": "Networked, immersive training environments for multi-domain mission rehearsal"},
+        {"name": "CAE Aria",                          "tagline": "Advanced patient simulator for emergency and acute care clinical training"},
+        {"name": "CAE Juno",                          "tagline": "Mid-fidelity patient simulator for foundational nursing and clinical skills training"},
+        {"name": "CAE Lucina",                        "tagline": "Maternal and neonatal simulator for high-acuity obstetric emergency training"},
+        {"name": "CAE VimedixAR",                     "tagline": "Augmented-reality ultrasound simulator for point-of-care and echocardiography training"},
+    ],
+
+    # Airbnb: consumer marketplace — nav contains Host, Help, Log in only.
+    # Scraper finds some links but they are wrong (host sign-up pages etc.).
+    "airbnb": [
+        {"name": "Stays",            "tagline": "Book unique homes, apartments, and rooms around the world"},
+        {"name": "Experiences",      "tagline": "Activities and tours hosted by local experts"},
+        {"name": "Rooms",            "tagline": "Affordable private rooms in a host's home"},
+        {"name": "Airbnb for Work",  "tagline": "Business travel and team accommodation management"},
+        {"name": "Airbnb Your Home", "tagline": "Platform for hosts to list and manage their properties"},
+    ],
+
+    # Zebra: scraper only retrieves mobile computers (TC/MC/HC series) because
+    # the [:20] product cap fills before printers, scanners, RFID, and software
+    # sections are visited. Tab labels ("Models", "In the Box") also pollute
+    # taglines. Override with a curated model-level list across all categories.
+    # Taglines are crafted to avoid category rule false-positives:
+    #   - avoid "computer" (triggers Cloud via "compute")
+    #   - avoid "handheld" before scanner products (Mobile Computer fires first)
+    #   - avoid "rfid" in printer taglines (Scanner fires before Printer)
+    #   - avoid "cloud" in software taglines (Cloud fires before Software)
+    #   - avoid "device" in software taglines (Rugged Device fires before Software)
+    "zebra": [
+        {"name": "TC73 Ultra-Rugged Mobile Computer",   "tagline": "Wi-Fi 6E rugged mobile handheld with extended-range scan engine for indoor warehouse use"},
+        {"name": "TC701 Mobile Computer",               "tagline": "AI-ready rugged mobile handheld with UHF RFID, 50MP camera, and 5G connectivity"},
+        {"name": "MC9400 Ultra-Rugged Mobile Computer", "tagline": "Gun-style warehouse mobile handheld with 100ft+ SE58 scan range and 5G"},
+        {"name": "HC55 Healthcare Mobile Computer",     "tagline": "5G/Wi-Fi 6E rugged mobile handheld purpose-built for clinical workflows"},
+        {"name": "WS50 Wearable Computer",              "tagline": "Wrist-worn ring barcode scanner for scan-intensive picking and fulfilment tasks"},
+        {"name": "ET45 Enterprise Tablet",              "tagline": "10-inch rugged tablet with 5G for retail associates and field operations"},
+        {"name": "DS8178 Digital Scanner",              "tagline": "Cordless 1D/2D barcode scanner with omnidirectional scan pattern for retail and healthcare"},
+        {"name": "DS9300 Series Presentation Scanner",  "tagline": "Hands-free multi-plane barcode scanner for high-volume retail checkout"},
+        {"name": "FXR90 Fixed RFID Reader",             "tagline": "5G-enabled fixed RAIN RFID reader with 1000+ tags per second read rate"},
+        {"name": "ZT610 Industrial Printer",            "tagline": "High-speed ZT-series industrial label printer rated for 24/7 production lines"},
+        {"name": "ZD620 Desktop Printer",               "tagline": "Compact ZD-series desktop label printer for healthcare wristbands and retail shelf-edge"},
+        {"name": "ZQ620 Plus Mobile Printer",           "tagline": "Rugged Bluetooth label and receipt printer with IP54 sealing for delivery workers"},
+        {"name": "Zebra Workcloud",                     "tagline": "Four-module frontline software platform for workforce scheduling and inventory management"},
+        {"name": "MotionWorks Enterprise",              "tagline": "RTLS software platform for real-time tracking of assets and personnel across large facilities"},
+        {"name": "Zebra Symmetry Fulfillment",          "tagline": "AMR-assisted order picking software combining autonomous robots, wearables, and AI"},
+        {"name": "Aurora Vision Studio",                "tagline": "No-code machine vision software for quality inspection, OCR, and parcel automation"},
+        {"name": "Zebra DNA",                           "tagline": "Enterprise suite for OTA updates, lifecycle management, and compliance across the Zebra product fleet"},
+    ],
 }
+
+# Keep old name as alias so any other call sites still work
+_KNOWN_BLOCKED_PRODUCTS = _COMPANY_OVERRIDES
 
 
 def synthetic_products(company: str, company_category: str = "") -> list[dict]:
@@ -1486,8 +2570,9 @@ def synthetic_products(company: str, company_category: str = "") -> list[dict]:
             {
                 "name":        p["name"],
                 "tagline":     p["tagline"],
-                "description": f"{p['name']} by {company}. {p['tagline']}.",
-                "image_url":   None,
+                "description": p.get("description") or f"{p['name']} by {company}. {p['tagline']}.",
+                "use_cases":   p.get("use_cases") or [],
+                "image_url":   p.get("image_url"),
                 "_score":      3,   # lower than scraped (5) but above generic (0)
                 "_source":     "known_products",
             }
@@ -1546,12 +2631,29 @@ def deduplicate(products: list[dict]) -> list[dict]:
 
 
 # ─── Final enrichment ─────────────────────────────────────────────────────────
-def enrich(products: list[dict], company: str) -> list[dict]:
+def enrich(products: list[dict], company: str, logo_url: str = "") -> list[dict]:
     enriched = []
     for i, p in enumerate(products):
         category = infer_category(p["name"], p.get("description", ""), p.get("tagline", ""))
         tagline  = p.get("tagline") or f"{company} {p['name']}"
         desc     = p.get("description") or f"{p['name']} is a product by {company}."
+
+        # Image fallback logic:
+        # - Scraped og:image always wins
+        # - Abstract/software products fall back to company logo (no physical appearance to show)
+        # - Physical/hardware products stay null (real image must be found separately)
+        _ABSTRACT_CATEGORIES = {
+            "Software", "AI", "Cloud", "Platform", "Developer Tools",
+            "Collaboration", "Analytics", "Security", "CRM", "Data",
+            "Marketing", "Finance", "HR", "Payments", "Presentations", "Video",
+        }
+        scraped_image = p.get("image_url")
+        if scraped_image:
+            image_url = scraped_image
+        elif category in _ABSTRACT_CATEGORIES and logo_url:
+            image_url = logo_url
+        else:
+            image_url = None
 
         enriched.append({
             "name":        p["name"],
@@ -1559,10 +2661,10 @@ def enrich(products: list[dict], company: str) -> list[dict]:
             "description": truncate(desc, 400),
             "category":    category,
             "cat_color":   get_color(category),
-            "use_cases":   get_use_cases(category),
+            "use_cases":   p["use_cases"] if p.get("use_cases") else get_use_cases(category, p["name"], p.get("tagline", ""), p.get("description", "")),
             "customers":   [],
             "competitors": [],
-            "image_url":   p.get("image_url"),
+            "image_url":   image_url,
             "sort_order":  i,
             "_score":      p.get("_score", 1),
             "_source":     p.get("_source", "unknown"),
@@ -1577,9 +2679,32 @@ def scrape_products(
     timeout: int = DEFAULT_TIMEOUT,
     company_category: str = "",
     max_time_s: int = 200,
+    logo_url: str = "",
 ) -> list[dict]:
     sess = Session(timeout=timeout)
     log.info("=== Scraping products for: %s (%s) ===", company, website)
+
+    # Check company override FIRST — skips scraping entirely for known-bad sites
+    co_key = company.lower().split()[0]
+    if co_key in _COMPANY_OVERRIDES:
+        log.info("Using company override for %s (skipping nav scrape)", company)
+        all_products = [
+            {
+                "name":        p["name"],
+                "tagline":     p["tagline"],
+                "description": p.get("description") or f"{p['name']} by {company}. {p['tagline']}.",
+                "use_cases":   p.get("use_cases") or [],
+                "image_url":   p.get("image_url"),
+                "_score":      5,
+                "_source":     "company_override",
+            }
+            for p in _COMPANY_OVERRIDES[co_key]
+        ]
+        all_products.sort(key=lambda x: x.get("_score", 0), reverse=True)
+        deduped  = deduplicate(all_products)[:20]
+        enriched = enrich(deduped, company, logo_url=logo_url)
+        log.info("Final: %d products for %s (override)", len(enriched), company)
+        return enriched
 
     # Primary source: official website navbar
     all_products: list[dict] = []
@@ -1595,7 +2720,7 @@ def scrape_products(
 
     all_products.sort(key=lambda x: x.get("_score", 0), reverse=True)
     deduped  = deduplicate(all_products)[:20]
-    enriched = enrich(deduped, company)
+    enriched = enrich(deduped, company, logo_url=logo_url)
 
     log.info("Final: %d products for %s", len(enriched), company)
     return enriched
@@ -1685,19 +2810,37 @@ def upload_product_image(
     if not supabase_url or not bearer:
         return None
 
+    # Pre-flight: URL pattern + HTTP header check before committing to a full download
+    if not _validate_image_url(image_url_val):
+        log.info("Image skipped (bad URL pattern): %s", image_url_val)
+        return None
+    if not _validate_image_response(image_url_val):
+        log.info("Image skipped (failed header validation): %s", image_url_val)
+        return None
+
     try:
         r = requests.get(image_url_val, headers=HEADERS, timeout=20, allow_redirects=True)
         r.raise_for_status()
-        ct = r.headers.get("content-type", "image/jpeg").split(";")[0].strip()
-        if ct not in {"image/jpeg", "image/png", "image/webp", "image/gif"}:
-            ct = "image/jpeg"
+        ct = r.headers.get("content-type", "").split(";")[0].strip().lower()
+        if ct not in _VALID_IMAGE_CONTENT_TYPES:
+            log.info("Image skipped (bad content-type '%s'): %s", ct, image_url_val)
+            return None
         data = r.content
+        if len(data) < _IMAGE_MIN_BYTES:
+            log.info("Image skipped (too small, %d B): %s", len(data), image_url_val)
+            return None
+        if len(data) > _IMAGE_MAX_BYTES:
+            log.info("Image skipped (too large, %d B): %s", len(data), image_url_val)
+            return None
+        if not _validate_image_dimensions(data):
+            log.info("Image skipped (dimensions too small): %s", image_url_val)
+            return None
     except Exception as e:
         log.warning("Image download failed (%s): %s", image_url_val, e)
         return None
 
     ext = {"image/jpeg": "jpg", "image/png": "png",
-           "image/webp": "webp", "image/gif": "gif"}.get(ct, "jpg")
+           "image/webp": "webp", "image/gif": "gif"}.get(ct, "jpg")  # ct already validated above
     file_path  = f"{company_id}/{product_slug}.{ext}"
     upload_url = f"{supabase_url}/storage/v1/object/product-images/{file_path}"
 
@@ -1730,6 +2873,8 @@ def main() -> None:
     parser.add_argument("--app-url",    default=None,   help="Next.js app URL for revalidation")
     parser.add_argument("--category",   default="",
                         help="Company category hint used only for synthetic fallback")
+    parser.add_argument("--logo-url",   default="",
+                        help="Company logo URL — used as image fallback for products with no og:image")
     args = parser.parse_args()
 
     company = args.company.strip()
@@ -1745,6 +2890,7 @@ def main() -> None:
         timeout=args.timeout,
         company_category=args.category,
         max_time_s=args.max_time,
+        logo_url=args.logo_url.strip(),
     )
 
     if not products:
@@ -1755,7 +2901,7 @@ def main() -> None:
         # Persist og:images to Supabase Storage
         if args.auth_token:
             for p in products:
-                if p.get("image_url") and p["image_url"].startswith("http"):
+                if p.get("image_url") and _validate_image_url(p["image_url"]):
                     slug = re.sub(r"[^a-z0-9]+", "-", p["name"].lower()).strip("-")
                     stored = upload_product_image(
                         args.company_id, slug, p["image_url"], args.auth_token
