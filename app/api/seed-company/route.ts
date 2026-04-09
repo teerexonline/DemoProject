@@ -173,14 +173,20 @@ export async function POST(req: NextRequest) {
     const { _sources, ...data } = json
     void _sources
 
-    // Upload scraped logo to Supabase Storage and swap in the permanent URL
+    // Upload scraped logo to Supabase Storage and swap in the permanent URL.
+    // If the scraper found no logo, fall back to icon.horse (then Google S2).
+    if (!data.logo_url && data.slug) {
+      const domain = (() => { try { return new URL(website.startsWith('http') ? website : `https://${website}`).hostname.replace(/^www\./, '') } catch { return '' } })()
+      if (domain) data.logo_url = `https://icon.horse/icon/${domain}`
+    }
+
     if (data.logo_url && data.slug) {
       const storedUrl = await uploadLogoToStorage(data.logo_url, data.slug)
       if (storedUrl) {
         data.logo_url = storedUrl
       } else {
         // Keep the original remote URL as fallback if upload failed
-        console.warn('[seed-company] logo upload failed; returning remote URL as fallback')
+        console.warn('[seed-company] logo upload failed; returning remote URL as fallback:', data.logo_url)
       }
     }
 

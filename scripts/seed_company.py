@@ -1086,9 +1086,9 @@ class LogoScraper:
     def __init__(self, session: Session) -> None:
         self.s = session
 
-    # ── Source 1: Clearbit ────────────────────────────────────────────────────
-    def _clearbit(self, domain: str) -> Optional[str]:
-        url = f"https://logo.clearbit.com/{domain}"
+    # ── Source 1: icon.horse (Clearbit is dead — DNS no longer resolves) ──────
+    def _icon_horse(self, domain: str) -> Optional[str]:
+        url = f"https://icon.horse/icon/{domain}"
         try:
             resp = self.s.get(
                 url,
@@ -1096,11 +1096,12 @@ class LogoScraper:
                 timeout=self.s._timeout,
                 allow_redirects=True,
             )
-            if resp.status_code == 200 and int(resp.headers.get("Content-Length", "1000")) > 500:
-                log.info("[Logo] Clearbit: %s", url)
+            ct = resp.headers.get("Content-Type", "")
+            if resp.status_code == 200 and "image" in ct and len(resp.content) > 500:
+                log.info("[Logo] icon.horse: %s", url)
                 return url
         except Exception as e:
-            log.debug("[Logo] Clearbit failed: %s", e)
+            log.debug("[Logo] icon.horse failed: %s", e)
         return None
 
     # ── Source 2 & 3: website icons ───────────────────────────────────────────
@@ -1251,11 +1252,15 @@ class LogoScraper:
                 thumb = page.get("thumbnail", {}).get("source")
                 if thumb:
                     # Sanity-check: reject obvious non-logo images
-                    # (plant/food/band photos that sneak in for ambiguous names)
+                    # (plant/food/band/building photos that sneak in for ambiguous names)
                     thumb_l = thumb.lower()
                     reject_patterns = [
                         "pink_lady", "apple_fruit", "fruit", "plant",
                         "food", "band_", "musician", "singer", "album",
+                        # Reject store/building/street exterior photos
+                        "building", "store", "exterior", "street", "headquarters",
+                        "campus", "office", "facade", "retail", "supermarket",
+                        "warehouse", "factory", "aerial",
                     ]
                     if any(p in thumb_l for p in reject_patterns):
                         log.info(
@@ -1302,7 +1307,7 @@ class LogoScraper:
         base   = normalise_url(website).rstrip("/")
 
         sources = [
-            ("clearbit",    lambda: self._clearbit(domain)),
+            ("icon_horse",  lambda: self._icon_horse(domain)),
             ("website",     lambda: self._website_icons(base)),
             ("wikipedia",   lambda: self._wikipedia(company_name)),
             ("google",      lambda: self._google_favicon(domain)),

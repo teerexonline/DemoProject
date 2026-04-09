@@ -6,7 +6,7 @@ import Link from 'next/link'
 import CompanyLogo from '@/components/CompanyLogo'
 import {
   adminUpsertCompany, adminDeleteCompany,
-  adminUpdateUserPlan, adminUpdateUserProfile,
+  adminUpdateUserPlan, adminUpdateUserProfile, adminResetUserToken,
   adminGetCompanyContent,
   adminUpsertNews, adminDeleteNews,
   adminUpsertMilestone, adminDeleteMilestone,
@@ -29,6 +29,7 @@ interface Profile {
   job_role: string | null
   job_company: string | null
   plan: string
+  free_token_reset_at: string | null
   created_at: string
   updated_at: string | null
   last_sign_in_at: string | null
@@ -787,6 +788,36 @@ function UsersSection({ profiles, onPlanUpdate }: { profiles: Profile[]; onPlanU
 
           {msg && <div style={{ fontSize: 12.5, color: msg.startsWith('✓') ? '#10B981' : '#EF4444', marginBottom: 8 }}>{msg}</div>}
           <SaveBtn onClick={save} pending={pending} label="Save Changes" />
+
+          {form.plan === 'Free' && (
+            <div style={{ marginTop: 16, paddingTop: 16, borderTop: '1px solid #F4F4F5' }}>
+              <div style={{ fontSize: 12, fontWeight: 700, color: '#52525B', marginBottom: 6 }}>Monthly Token</div>
+              {editing.free_token_reset_at && (
+                <div style={{ fontSize: 11.5, color: '#A1A1AA', marginBottom: 8 }}>
+                  Last reset: {new Date(editing.free_token_reset_at).toLocaleString()}
+                </div>
+              )}
+              <button
+                onClick={() => {
+                  startTx(async () => {
+                    const res = await adminResetUserToken(editing!.id)
+                    if (res.error) { setMsg(res.error); return }
+                    setMsg('✓ Token reset — user can unlock 1 company now')
+                  })
+                }}
+                disabled={pending}
+                style={{
+                  width: '100%', padding: '8px 12px', borderRadius: 8, border: '1px solid #a8cbe8',
+                  background: '#eef4fb', color: '#063f76', fontSize: 12.5, fontWeight: 600,
+                  cursor: pending ? 'not-allowed' : 'pointer', transition: 'background 0.15s',
+                }}
+                onMouseEnter={e => { if (!pending) (e.currentTarget as HTMLElement).style.background = '#dbeafa' }}
+                onMouseLeave={e => { if (!pending) (e.currentTarget as HTMLElement).style.background = '#eef4fb' }}
+              >
+                🔄 Reset Monthly Token
+              </button>
+            </div>
+          )}
         </SlideOver>
       )}
     </div>

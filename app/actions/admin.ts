@@ -85,6 +85,16 @@ export async function adminUpdateUserProfile(userId: string, fields: {
   return error ? { error: error.message } : { error: null }
 }
 
+export async function adminResetUserToken(userId: string) {
+  const { supabase } = await requireAdmin()
+  const { error } = await supabase
+    .from('profiles')
+    .update({ free_token_reset_at: new Date().toISOString() })
+    .eq('id', userId)
+  revalidatePath('/admin')
+  return error ? { error: error.message } : { error: null }
+}
+
 // ─── Analytics ────────────────────────────────────────────────────────────────
 
 export async function adminGetAnalytics() {

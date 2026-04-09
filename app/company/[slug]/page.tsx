@@ -1,7 +1,7 @@
 import { notFound } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import { getUserTier, isPaidTier } from '@/lib/access'
-import { getMonthlyViewCount, hasViewedThisMonth } from '@/lib/quota'
+import { getMonthlyViewCount, hasViewedThisMonth, getNextResetAt } from '@/lib/quota'
 import CompanyFull from './CompanyFull'
 import CompanyFreeGated from './CompanyFreeGated'
 
@@ -45,7 +45,7 @@ export default async function CompanyPage({ params }: Props) {
 
   // Fetch plan + saved state + all company content in parallel
   const [profileResult, savedResult, newsRes, milestonesRes, productsRes, financialsRes, standardsRes, deptsRes, rolesRes, execRes, leadersRes] = await Promise.all([
-    supabase.from('profiles').select('plan').eq('id', user.id).single(),
+    supabase.from('profiles').select('plan, free_token_reset_at').eq('id', user.id).single(),
     supabase.from('saved_companies').select('id').eq('user_id', user.id).eq('company_id', company.id).maybeSingle(),
     supabase.from('company_news').select('*').eq('company_id', company.id).order('sort_order'),
     supabase.from('company_milestones').select('*').eq('company_id', company.id).order('sort_order'),
@@ -87,6 +87,7 @@ export default async function CompanyPage({ params }: Props) {
 
   const monthlyCount = await getMonthlyViewCount(user.id)
   const hasToken = monthlyCount === 0
+  const nextResetAt = getNextResetAt()
 
-  return <CompanyFreeGated company={company} hasToken={hasToken} initialSaved={initialSaved} relatedCompanies={related} />
+  return <CompanyFreeGated company={company} hasToken={hasToken} initialSaved={initialSaved} relatedCompanies={related} nextResetAt={nextResetAt} />
 }

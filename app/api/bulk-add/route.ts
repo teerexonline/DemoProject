@@ -104,6 +104,7 @@ async function uploadLogo(logoUrl: string, slug: string): Promise<string | null>
     const extMap: Record<string, string> = {
       'image/svg+xml': 'svg', 'image/png': 'png', 'image/jpeg': 'jpg',
       'image/webp': 'webp',   'image/gif': 'gif', 'image/x-icon': 'ico',
+      'image/vnd.microsoft.icon': 'ico',
     }
     const ext      = extMap[contentType.split(';')[0].trim()] ?? 'png'
     const filePath = `${slug}.${ext}`
@@ -208,6 +209,12 @@ export async function POST(req: NextRequest) {
 
           const { _sources, ...data } = json
           void _sources
+
+          // Guarantee a logo — fall back to icon.horse if scraper found nothing
+          if (!data.logo_url && data.slug) {
+            const domain = (() => { try { return new URL(website.startsWith('http') ? website : `https://${website}`).hostname.replace(/^www\./, '') } catch { return '' } })()
+            if (domain) data.logo_url = `https://icon.horse/icon/${domain}`
+          }
 
           // Upload logo to storage
           if (data.logo_url && data.slug) {

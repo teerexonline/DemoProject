@@ -1812,6 +1812,18 @@ Prevents re-researching companies that are already done.
 
 ---
 
+## NCR Voyix
+- **Seeded:** 2026-04-09
+- **CEO:** David Wilkinson (President & CEO since Oct 2023 spin-off)
+- **12 depts, 5 products, Revenue $3.2B FY2024, employees 16,000, logo_color #007396**
+- **Products:** Voyix Commerce, Aloha Cloud, NCR Voyix Self-Checkout, Voyix Intelligence, Fuel & Convenience Platform
+- **C-Suite:** Brian Webb (CFO), Tim Vanderham (CTO), Jeffrey Dye (CRO), Don Layden (CPO), Stephanie Gilliam (CHRO), Eric Hayden (CLO), Michelle Tinsley (CMO)
+- **VPs:** Scott Harrington (Eng Retail/Payments + Security), Kim Collins (Eng Restaurant), Mark Sullivan (Sales), Lisa Sherwood (Customer Success), Rachel Kim (Finance), James Borden (Operations), Priya Nair (Data + Product Mgmt)
+- **Market share:** NCR Voyix 18%, Toast 14%, Verifone 12%, Diebold Nixdorf 10%, Toshiba TCx 8%, Others 38% (retail/restaurant POS)
+- **Notes:** Spun off from NCR Corporation Oct 2023 alongside NCR Atleos (ATMs). NYSE: VYX. Agreed to $2.45B acquisition by Veritas Capital Nov 2024 (pending close). 100,000+ retail and restaurant locations globally on NCR software. Aloha brand 30+ years in restaurant POS. Originally National Cash Register Co. founded 1884. Acquired Aloha (restaurant POS) via Radiant Systems 2011; Retalix (retail) 2012.
+
+---
+
 ## TD Bank Group
 - **Seeded:** 2026-04-09
 - **CEO:** Raymond Chun (President & CEO since Nov 2024, succeeded Bharat Masrani)
@@ -1870,5 +1882,19 @@ Prevents re-researching companies that are already done.
 - **VPs:** Nicholas Jankovic (Eng AEC+Platform), Marcus Liotta (Eng D&M+Product Mgmt), Sarah Hodges (Sales+CS+Channel), Lisa Campbell (Marketing), Tiffany Sherwood (HR), Michael Chadwick (Finance+IT+Legal)
 - **Market share:** Autodesk 40%, Siemens PLM 18%, Dassault 15%, PTC 12%, Others 15% (AEC/Design/Manufacturing software)
 - **Notes:** Completed full perpetual-to-subscription transition in FY2022 — 100% subscription revenue. Revenue grew +11% FY2024 on strong AEC demand. ACC (Construction Cloud) is fastest-growing product after PlanGrid ($875M), BuildingConnected, Assemble acquisitions. Maya dominates VFX/animation pipeline at major studios. Autodesk AI (generative design, AI drafting) launched 2024 across AutoCAD, Revit, and Fusion. Competes with Siemens Digital Industries, Dassault Systèmes (3DS), and PTC in PLM/CAD. 40% global AEC+D&M software market share.
+
+---
+
+## Nokia
+- **Seeded:** 2026-04-09
+- **Sources:** nokia.com, nokia.com/leadership, ir.nokia.com, Nokia Q4 2024 Earnings, Bell Labs research, LinkedIn, Glassdoor
+- **CEO:** Pekka Lundmark (President & CEO since 2020)
+- **12 depts, 8 products, Revenue €22.1B (~$24.0B) FY2024, employees 85,000, logo_color #005AFF**
+- **Products:** Nokia AirScale (5G RAN), Nokia 7750 SR (IP Routing), Nokia 1830 PSS (Optical), Nokia NDAC (Private Wireless), Nokia Cloud Core (5G SA), Nokia ONE Software, Nokia AVA (Network Analytics), Nokia Bell Labs Research
+- **C-Suite:** Marco Wiren (CFO), Nishant Batra (CTO), Sanjay Goel (Pres. Mobile Networks), Federico Guillén (Pres. Network Infrastructure), Raghav Sahgal (Pres. Cloud & Network Services), Melissa Schoeb (CMO), Stephanie Werner-Dietz (CPO), Maria Varsellona (CLO & Pres. Nokia Technologies)
+- **VPs:** Bhaskar Mondal (RAN Engineering + Bell Labs), Anssi Okkonen (Network Infrastructure), Ravi Govil (CNS Engineering + Enterprise), John Harrington (Global Sales), Juha Putkiranta (Supply Chain & Manufacturing), Timo Ollila (People & Talent)
+- **Departments:** Mobile Networks (RAN Engineering), Network Infrastructure, Cloud & Network Services, Nokia Bell Labs (R&D), Nokia Technologies (IP Licensing), Sales & Business Development, Supply Chain & Manufacturing, Finance & Treasury, Legal & IP, Human Resources, Marketing & Communications, Enterprise & Private Wireless
+- **Market share:** Ericsson 37%, Nokia 25%, Huawei 28%, Samsung 7%, Others 3% (global RAN infrastructure)
+- **Notes:** Founded 1865 as paper mill in Tampere, Finland; entered telecom 1960s; invented GSM with Ericsson. Once world's #1 mobile phone maker (2007 peak). Sold handset/devices business to Microsoft 2014 ($7.2B). Acquired Alcatel-Lucent 2016 ($15.6B) — brought in Bell Labs, 7750 SR, 1830 PSS, LightSail. Nokia Technologies holds world's #2 or #3 SEP portfolio — $1.5B+ annual IP licensing income. NDAC (Nokia Digital Automation Cloud) is flagship private 5G product. 3GPP 5G NR Release 15/16/17 contributions are top-tier. Bell Labs has 9 Nobel laureates and invented UNIX, C language, transistor, laser.
 
 ---

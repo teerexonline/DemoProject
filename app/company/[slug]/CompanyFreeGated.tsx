@@ -103,12 +103,14 @@ function ProGatePanel({
   hasToken,
   isPending,
   onUseToken,
+  nextResetAt,
 }: {
   section: typeof NAV[number]
   company: Company
   hasToken: boolean
   isPending: boolean
   onUseToken: () => void
+  nextResetAt?: string
 }) {
   const Icon = section.icon
   return (
@@ -191,6 +193,21 @@ function ProGatePanel({
         <Link href="/pricing" style={{ display: 'block', color: '#A1A1AA', fontSize: '12px', textDecoration: 'none' }}>
           View all plans →
         </Link>
+
+        {!hasToken && nextResetAt && (() => {
+          const daysLeft = Math.ceil((new Date(nextResetAt).getTime() - Date.now()) / 86_400_000)
+          return (
+            <div style={{ marginTop: '14px', padding: '10px 12px', borderRadius: '9px', background: '#F7F7F8', border: '1px solid #E4E4E7', display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <div style={{ width: 28, height: 28, borderRadius: 8, background: '#fff', border: '1px solid #E4E4E7', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                <span style={{ fontSize: '13px' }}>🔄</span>
+              </div>
+              <div style={{ textAlign: 'left' }}>
+                <div style={{ fontSize: '11.5px', fontWeight: 700, color: '#52525B' }}>Free token resets in {daysLeft} day{daysLeft !== 1 ? 's' : ''}</div>
+                <div style={{ fontSize: '11px', color: '#A1A1AA', marginTop: '1px' }}>On {new Date(nextResetAt).toLocaleDateString('en-US', { month: 'long', day: 'numeric' })}</div>
+              </div>
+            </div>
+          )
+        })()}
       </div>
     </div>
   )
@@ -203,7 +220,7 @@ interface RelatedCompany {
   description: string | null; logo_color: string | null; logo_url: string | null
 }
 
-export default function CompanyFreeGated({ company, hasToken, initialSaved, isGuest = false, relatedCompanies = [] }: { company: Company; hasToken: boolean; initialSaved: boolean; isGuest?: boolean; relatedCompanies?: RelatedCompany[] }) {
+export default function CompanyFreeGated({ company, hasToken, initialSaved, isGuest = false, relatedCompanies = [], nextResetAt }: { company: Company; hasToken: boolean; initialSaved: boolean; isGuest?: boolean; relatedCompanies?: RelatedCompany[]; nextResetAt?: string }) {
   const [activeSection, setActiveSection] = useState<SectionId>('overview')
   const [animKey, setAnimKey] = useState(0)
   const [isPending, startTransition] = useTransition()
@@ -368,6 +385,7 @@ export default function CompanyFreeGated({ company, hasToken, initialSaved, isGu
               hasToken={hasToken}
               isPending={isPending}
               onUseToken={handleUseToken}
+              nextResetAt={nextResetAt}
             />
           )}
         </div>
