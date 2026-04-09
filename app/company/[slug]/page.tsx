@@ -26,11 +26,21 @@ export default async function CompanyPage({ params }: Props) {
 
   if (!company) notFound()
 
+  // Fetch related companies (same category, exclude current)
+  const { data: relatedCompanies } = company.category
+    ? await supabase
+        .from('companies')
+        .select('id, name, slug, category, description, logo_color, logo_url')
+        .eq('category', company.category)
+        .neq('id', company.id)
+        .limit(6)
+    : { data: [] }
+
   // Auth
   const { data: { user } } = await supabase.auth.getUser()
 
   if (!user) {
-    return <CompanyTeaser company={company} />
+    return <CompanyTeaser company={company} relatedCompanies={relatedCompanies ?? []} />
   }
 
   // Fetch plan + saved state + all company content in parallel
@@ -64,21 +74,23 @@ export default async function CompanyPage({ params }: Props) {
     leaders:     leadersRes.data ?? [],
   }
 
+  const related = relatedCompanies ?? []
+
   if (tier === 'anonymous') {
-    return <CompanyTeaser company={company} />
+    return <CompanyTeaser company={company} relatedCompanies={related} />
   }
 
   if (isPaidTier(tier)) {
-    return <CompanyFull company={company} initialSaved={initialSaved} dbContent={dbContent} />
+    return <CompanyFull company={company} initialSaved={initialSaved} dbContent={dbContent} relatedCompanies={related} />
   }
 
   const alreadyViewed = await hasViewedThisMonth(user.id, company.id)
   if (alreadyViewed) {
-    return <CompanyFull company={company} initialSaved={initialSaved} dbContent={dbContent} />
+    return <CompanyFull company={company} initialSaved={initialSaved} dbContent={dbContent} relatedCompanies={related} />
   }
 
   const monthlyCount = await getMonthlyViewCount(user.id)
   const hasToken = monthlyCount === 0
 
-  return <CompanyFreeGated company={company} hasToken={hasToken} initialSaved={initialSaved} />
+  return <CompanyFreeGated company={company} hasToken={hasToken} initialSaved={initialSaved} relatedCompanies={related} />
 }

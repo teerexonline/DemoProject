@@ -6,6 +6,7 @@ import { useMonthlyToken } from './actions'
 import CompanyOverview from './CompanyOverview'
 import SaveButton from '@/components/SaveButton'
 import CompanyLogo from '@/components/CompanyLogo'
+import RelatedCompanies from '@/components/RelatedCompanies'
 
 interface Company {
   id: string
@@ -130,7 +131,12 @@ function ProGatePanel({
   )
 }
 
-export default function CompanyFreeGated({ company, hasToken, initialSaved }: { company: Company; hasToken: boolean; initialSaved: boolean }) {
+interface RelatedCompany {
+  id: string; name: string; slug: string; category: string | null
+  description: string | null; logo_color: string | null; logo_url: string | null
+}
+
+export default function CompanyFreeGated({ company, hasToken, initialSaved, relatedCompanies = [] }: { company: Company; hasToken: boolean; initialSaved: boolean; relatedCompanies?: RelatedCompany[] }) {
   const [activeSection, setActiveSection] = useState<SectionId>('overview')
   const [animKey, setAnimKey] = useState(0)
   const [isPending, startTransition] = useTransition()
@@ -278,6 +284,11 @@ export default function CompanyFreeGated({ company, hasToken, initialSaved }: { 
             />
           )}
         </div>
+      </div>
+
+      {/* Related companies */}
+      <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 24px 40px' }}>
+        <RelatedCompanies companies={relatedCompanies} />
       </div>
     </div>
   )

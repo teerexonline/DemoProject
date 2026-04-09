@@ -2,6 +2,7 @@
 
 import Link from 'next/link'
 import CompanyLogo from '@/components/CompanyLogo'
+import RelatedCompanies from '@/components/RelatedCompanies'
 
 interface Company {
   id: string
@@ -14,7 +15,12 @@ interface Company {
   hq: string | null
 }
 
-export default function CompanyTeaser({ company }: { company: Company }) {
+interface RelatedCompany {
+  id: string; name: string; slug: string; category: string | null
+  description: string | null; logo_color: string | null; logo_url: string | null
+}
+
+export default function CompanyTeaser({ company, relatedCompanies = [] }: { company: Company; relatedCompanies?: RelatedCompany[] }) {
   return (
     <div style={{ minHeight: '100vh', background: '#FAFAFA', display: 'flex', flexDirection: 'column' }}>
       <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '48px 24px' }}>
@@ -73,6 +79,11 @@ export default function CompanyTeaser({ company }: { company: Company }) {
           <p style={{ color: '#A1A1AA', fontSize: '12px', marginTop: '16px' }}>Free plan includes 1 full company view per month.</p>
         </div>
       </div>
+      {relatedCompanies.length > 0 && (
+        <div style={{ maxWidth: '960px', margin: '0 auto', padding: '0 24px 48px', width: '100%' }}>
+          <RelatedCompanies companies={relatedCompanies} />
+        </div>
+      )}
     </div>
   )
 }

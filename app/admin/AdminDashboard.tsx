@@ -182,7 +182,7 @@ function SlideOver({ title, onClose, children }: { title: string; onClose: () =>
   return (
     <>
       <div onClick={onClose} style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.3)', zIndex: 40, backdropFilter: 'blur(2px)' }} />
-      <div style={{ position: 'fixed', top: 0, right: 0, bottom: 0, width: 480, background: '#fff', zIndex: 50, boxShadow: '-8px 0 40px rgba(0,0,0,0.12)', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
+      <div className="admin-slideover-panel" style={{ position: 'fixed', top: 0, right: 0, bottom: 0, width: 480, background: '#fff', zIndex: 50, boxShadow: '-8px 0 40px rgba(0,0,0,0.12)', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
         <div style={{ padding: '18px 22px', borderBottom: '1px solid #F4F4F5', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexShrink: 0 }}>
           <div style={{ fontSize: 15, fontWeight: 800, color: '#09090B', letterSpacing: '-0.03em' }}>{title}</div>
           <button onClick={onClose} style={{ width: 28, height: 28, borderRadius: 7, border: '1px solid #E4E4E7', background: '#fff', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#71717A', fontSize: 16 }}>×</button>
@@ -261,7 +261,7 @@ function RoleCardList({
             {/* Expanded content */}
             {isOpen && (
               <div style={{ padding: '0 14px 14px', borderTop: '1px solid #F5F5F5', background: '#FAFAFA' }}>
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 10, marginTop: 12 }}>
+                <div className="admin-form-grid-3" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 10, marginTop: 12 }}>
                   {/* Tools */}
                   <div style={{ padding: 10, borderRadius: 8, background: '#fff', border: '1px solid #E4E4E7' }}>
                     <div style={{ fontSize: 9.5, fontWeight: 800, color: '#71717A', textTransform: 'uppercase', letterSpacing: '0.09em', marginBottom: 7 }}>🔧 Tools</div>
@@ -325,8 +325,8 @@ function RoleCardList({
 
 function DataTable({ cols, rows, onEdit, onDelete, onContent }: { cols: string[]; rows: (string | React.ReactNode)[][]; onEdit?: (i: number) => void; onDelete?: (i: number) => void; onContent?: (i: number) => void }) {
   return (
-    <div style={{ borderRadius: 12, border: '1px solid #E4E4E7', overflow: 'hidden' }}>
-      <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 12.5 }}>
+    <div style={{ borderRadius: 12, border: '1px solid #E4E4E7', overflowX: 'auto' }}>
+      <table style={{ width: '100%', minWidth: 540, borderCollapse: 'collapse', fontSize: 12.5 }}>
         <thead>
           <tr style={{ background: '#F7F7F8', borderBottom: '1px solid #E4E4E7' }}>
             {cols.map(c => <th key={c} style={{ padding: '9px 14px', textAlign: 'left', fontWeight: 700, color: '#71717A', fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.07em', whiteSpace: 'nowrap' }}>{c}</th>)}
@@ -585,6 +585,7 @@ function CompaniesSection({ companies, onRefresh, onViewContent }: { companies: 
 
   function del() {
     if (!form.id) return
+    if (!window.confirm(`Delete "${form.name}"? This cannot be undone.`)) return
     startTx(async () => {
       const res = await adminDeleteCompany(form.id!)
       if (res.error) { setErr(res.error); return }
@@ -603,15 +604,15 @@ function CompaniesSection({ companies, onRefresh, onViewContent }: { companies: 
       <DataTable
         cols={['Company', 'Category', 'HQ', 'Employees', 'Valuation', 'Hiring']}
         rows={filtered.map(c => [
-          <span key="n" style={{ display: 'flex', alignItems: 'center', gap: 9 }}>
+          <Link key="n" href={`/company/${c.slug}`} target="_blank" rel="noopener noreferrer" style={{ display: 'flex', alignItems: 'center', gap: 9, textDecoration: 'none' }}>
             <CompanyLogo name={c.name} logoUrl={c.logo_url} logoColor={c.logo_color} size={28} />
             <span style={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
-              <span style={{ fontWeight: 700, color: '#09090B', fontSize: 13 }}>{c.name}</span>
+              <span style={{ fontWeight: 700, color: '#063f76', fontSize: 13, textDecoration: 'underline', textUnderlineOffset: 2 }}>{c.name}</span>
               {!c.logo_url && (
                 <span style={{ fontSize: 10, color: '#F59E0B', fontWeight: 600 }}>No logo</span>
               )}
             </span>
-          </span>,
+          </Link>,
           c.category,
           c.hq ?? '—',
           c.employees?.toLocaleString() ?? '—',
@@ -620,7 +621,7 @@ function CompaniesSection({ companies, onRefresh, onViewContent }: { companies: 
         ])}
         onContent={i => onViewContent(filtered[i].id)}
         onEdit={i => openEdit(filtered[i])}
-        onDelete={i => { setForm(filtered[i]); setEditing(filtered[i]); startTx(async () => { await adminDeleteCompany(filtered[i].id); onRefresh(companies.filter(c => c.id !== filtered[i].id)) }) }}
+        onDelete={i => { if (!window.confirm(`Delete "${filtered[i].name}"? This cannot be undone.`)) return; setForm(filtered[i]); setEditing(filtered[i]); startTx(async () => { await adminDeleteCompany(filtered[i].id); onRefresh(companies.filter(c => c.id !== filtered[i].id)) }) }}
       />
 
       {editing !== null && (
@@ -632,7 +633,7 @@ function CompaniesSection({ companies, onRefresh, onViewContent }: { companies: 
             onLogoUrl={url => setForm(p => ({ ...p, logo_url: url }))}
           />
 
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0 12px' }}>
+          <div className="admin-form-grid-2" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0 12px' }}>
             <Field label="Name"><Input value={form.name ?? ''} onChange={v => setForm(p => ({ ...p, name: v }))} /></Field>
             <Field label="Slug"><Input value={form.slug ?? ''} onChange={v => setForm(p => ({ ...p, slug: v }))} /></Field>
             <Field label="Category"><Input value={form.category ?? ''} onChange={v => setForm(p => ({ ...p, category: v }))} /></Field>
@@ -754,7 +755,7 @@ function UsersSection({ profiles, onPlanUpdate }: { profiles: Profile[]; onPlanU
           <div style={{ marginBottom: 16, padding: 14, borderRadius: 10, background: '#F7F7F8', border: '1px solid #E4E4E7', fontSize: 12 }}>
             <div style={{ fontWeight: 700, color: '#09090B', marginBottom: 4, fontSize: 13 }}>{editing.email ?? 'No email'}</div>
             <div style={{ color: '#A1A1AA', fontFamily: 'monospace', marginBottom: 6 }}>{editing.id}</div>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 4, color: '#71717A' }}>
+            <div className="admin-form-grid-2" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 4, color: '#71717A' }}>
               <div><span style={{ fontWeight: 600 }}>Joined:</span> {fmtFull(editing.created_at)}</div>
               <div><span style={{ fontWeight: 600 }}>Last sign in:</span> {fmtFull(editing.last_sign_in_at)}</div>
               <div><span style={{ fontWeight: 600 }}>Updated:</span> {fmtFull(editing.updated_at)}</div>
@@ -808,7 +809,7 @@ function AnalyticsSection({ analytics }: { analytics: Props['analytics'] }) {
   const topSaves = Object.values(saveCounts).sort((a, b) => b.count - a.count)
 
   return (
-    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20 }}>
+    <div className="admin-form-grid-2" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20 }}>
       <div>
         <div style={{ fontSize: 13, fontWeight: 700, color: '#09090B', marginBottom: 10 }}>Company Views <span style={{ color: '#A1A1AA', fontWeight: 400, fontSize: 12 }}>({analytics.views.length} total)</span></div>
         <DataTable cols={['Company', 'Views']} rows={topViews.map(r => [r.name, String(r.count)])} />
@@ -818,7 +819,7 @@ function AnalyticsSection({ analytics }: { analytics: Props['analytics'] }) {
         <DataTable cols={['Company', 'Saves']} rows={topSaves.map(r => [r.name, String(r.count)])} />
       </div>
       <div style={{ gridColumn: '1/-1', padding: 16, borderRadius: 12, background: '#F7F7F8', border: '1px solid #E4E4E7' }}>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 16 }}>
+        <div className="admin-form-grid-3" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 16 }}>
           {[
             { label: 'Total Views', value: analytics.views.length, color: '#063f76' },
             { label: 'Total Saves', value: analytics.saves.length, color: '#10B981' },
@@ -1145,7 +1146,7 @@ function ContentSection({ companies, initialSelectedId }: { companies: Company[]
       <PanelField key2="sort_order" label="Sort Order" type="number" />
     </>)
     if (t === 'financials') return (<>
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0 12px' }}>
+      <div className="admin-form-grid-2" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0 12px' }}>
         <PanelField key2="tam" label="TAM" /><PanelField key2="sam" label="SAM" />
         <PanelField key2="som" label="SOM" /><PanelField key2="arr" label="ARR" />
         <PanelField key2="yoy_growth" label="YoY Growth" /><PanelField key2="revenue_per_employee" label="Rev/Employee" />
@@ -1202,14 +1203,14 @@ function ContentSection({ companies, initialSelectedId }: { companies: Company[]
         <DataTable cols={['Type', 'Headline', 'Date', 'Sort']}
           rows={content.news.map(n => [<Badge key="t" label={n.type} color={n.type_color} />, n.headline, n.published_date ?? '—', String(n.sort_order)])}
           onEdit={i => setPanel({ type: 'news', data: content.news[i] as unknown as Record<string, unknown> })}
-          onDelete={i => handleDelete('news', content.news[i].id)} /></div>
+          onDelete={i => { if (window.confirm(`Delete this news entry? This cannot be undone.`)) handleDelete('news', content.news[i].id) }} /></div>
     )
     if (tab === 'milestones') return (
       <div><div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: 12 }}>{addBtn('milestones')}</div>
         <DataTable cols={['Year', 'Type', 'Title', 'Badge']}
           rows={content.milestones.map(m => [String(m.year), m.type, m.title, m.badge ?? '—'])}
           onEdit={i => setPanel({ type: 'milestones', data: content.milestones[i] as unknown as Record<string, unknown> })}
-          onDelete={i => handleDelete('milestones', content.milestones[i].id)} /></div>
+          onDelete={i => { if (window.confirm(`Delete milestone "${content.milestones[i].title}"? This cannot be undone.`)) handleDelete('milestones', content.milestones[i].id) }} /></div>
     )
     if (tab === 'products') return (
       <div><div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: 12 }}>{addBtn('products')}</div>
@@ -1223,7 +1224,7 @@ function ContentSection({ companies, initialSelectedId }: { companies: Company[]
             String((p.use_cases as unknown[])?.length ?? 0),
           ])}
           onEdit={i => setPanel({ type: 'products', data: content.products[i] as unknown as Record<string, unknown> })}
-          onDelete={i => handleDelete('products', content.products[i].id)} /></div>
+          onDelete={i => { if (window.confirm(`Delete product "${content.products[i].name}"? This cannot be undone.`)) handleDelete('products', content.products[i].id) }} /></div>
     )
     if (tab === 'financials') return (
       <div>
@@ -1240,7 +1241,7 @@ function ContentSection({ companies, initialSelectedId }: { companies: Company[]
           return (
             <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
               {/* ── Scalar metrics ── */}
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 10 }}>
+              <div className="admin-form-grid-3" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 10 }}>
                 {(['tam','sam','som','arr','yoy_growth','revenue_per_employee'] as const).map(k => (
                   <div key={k} style={{ padding: '12px 14px', borderRadius: 10, background: '#F7F7F8', border: '1px solid #E4E4E7' }}>
                     <div style={{ fontSize: 10, color: '#A1A1AA', textTransform: 'uppercase', letterSpacing: '0.07em', marginBottom: 4 }}>{k.replace(/_/g,' ')}</div>
@@ -1271,7 +1272,7 @@ function ContentSection({ companies, initialSelectedId }: { companies: Company[]
               )}
 
               {/* ── Revenue Streams + Business Units (side by side) ── */}
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+              <div className="admin-form-grid-2" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
                 {revenueStreams.length > 0 && (
                   <div style={{ background: '#F7F7F8', border: '1px solid #E4E4E7', borderRadius: 10, padding: '14px 16px' }}>
                     <div style={{ fontSize: 11, fontWeight: 700, color: '#71717A', textTransform: 'uppercase', letterSpacing: '0.07em', marginBottom: 10 }}>Revenue Streams</div>
@@ -1341,14 +1342,14 @@ function ContentSection({ companies, initialSelectedId }: { companies: Company[]
         <DataTable cols={['Code', 'Category', 'Status']}
           rows={content.standards.map(s => [<span key="c" style={{ fontWeight: 700 }}>{s.code}</span>, s.category ?? '—', <Badge key="st" label={s.status} color={s.status === 'Certified' || s.status === 'Compliant' ? '#10B981' : '#F59E0B'} />])}
           onEdit={i => setPanel({ type: 'standards', data: content.standards[i] as unknown as Record<string, unknown> })}
-          onDelete={i => handleDelete('standards', content.standards[i].id)} /></div>
+          onDelete={i => { if (window.confirm(`Delete standard "${content.standards[i].code}"? This cannot be undone.`)) handleDelete('standards', content.standards[i].id) }} /></div>
     )
     if (tab === 'departments') return (
       <div><div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: 12 }}>{addBtn('departments')}</div>
         <DataTable cols={['Icon', 'Name', 'Color', 'Headcount', 'ID']}
           rows={content.departments.map(d => [d.icon ?? '🏢', d.name, <Pill key="c" label={d.color} />, String(d.headcount), <span key="id" style={{ fontFamily: 'monospace', fontSize: 10.5, color: '#A1A1AA' }}>{d.id.slice(0,8)}…</span>])}
           onEdit={i => setPanel({ type: 'departments', data: content.departments[i] as unknown as Record<string, unknown> })}
-          onDelete={i => handleDelete('departments', content.departments[i].id)} /></div>
+          onDelete={i => { if (window.confirm(`Delete department "${content.departments[i].name}"? This cannot be undone.`)) handleDelete('departments', content.departments[i].id) }} /></div>
     )
     if (tab === 'roles') return (
       <div>
@@ -1356,7 +1357,7 @@ function ContentSection({ companies, initialSelectedId }: { companies: Company[]
         <RoleCardList
           roles={content.roles}
           onEdit={i => setPanel({ type: 'roles', data: content.roles[i] as unknown as Record<string, unknown> })}
-          onDelete={i => handleDelete('roles', content.roles[i].id)}
+          onDelete={i => { if (window.confirm(`Delete role "${content.roles[i].title}"? This cannot be undone.`)) handleDelete('roles', content.roles[i].id) }}
         />
       </div>
     )
@@ -1365,7 +1366,7 @@ function ContentSection({ companies, initialSelectedId }: { companies: Company[]
         <DataTable cols={['Title', 'Short Title', 'Dept Count']}
           rows={content.execGroups.map(g => [g.title, g.short_title ?? '—', String((g.department_ids as unknown[])?.length ?? 0)])}
           onEdit={i => setPanel({ type: 'exec_groups', data: content.execGroups[i] as unknown as Record<string, unknown> })}
-          onDelete={i => handleDelete('exec_groups', content.execGroups[i].id)} /></div>
+          onDelete={i => { if (window.confirm(`Delete exec group "${content.execGroups[i].title}"? This cannot be undone.`)) handleDelete('exec_groups', content.execGroups[i].id) }} /></div>
     )
     return null
   }
@@ -1384,9 +1385,9 @@ function ContentSection({ companies, initialSelectedId }: { companies: Company[]
       </div>
 
       {/* Sub-tabs */}
-      <div style={{ display: 'flex', gap: 4, marginBottom: 16, borderBottom: '1px solid #E4E4E7', paddingBottom: 1 }}>
+      <div className="admin-tab-strip" style={{ display: 'flex', gap: 4, marginBottom: 16, borderBottom: '1px solid #E4E4E7', paddingBottom: 1 }}>
         {TABS.map(t => (
-          <button key={t.id} onClick={() => setTab(t.id)} style={{ padding: '7px 12px', borderRadius: '8px 8px 0 0', border: 'none', background: tab === t.id ? '#fff' : 'transparent', color: tab === t.id ? '#063f76' : '#71717A', fontSize: 12.5, fontWeight: tab === t.id ? 700 : 400, cursor: 'pointer', borderBottom: tab === t.id ? '2px solid #063f76' : '2px solid transparent', marginBottom: -1 }}>
+          <button key={t.id} onClick={() => setTab(t.id)} style={{ padding: '7px 12px', borderRadius: '8px 8px 0 0', border: 'none', background: tab === t.id ? '#fff' : 'transparent', color: tab === t.id ? '#063f76' : '#71717A', fontSize: 12.5, fontWeight: tab === t.id ? 700 : 400, cursor: 'pointer', borderBottom: tab === t.id ? '2px solid #063f76' : '2px solid transparent', marginBottom: -1, flexShrink: 0, whiteSpace: 'nowrap' }}>
             {t.label} <span style={{ fontSize: 10.5, opacity: 0.7 }}>({t.count})</span>
           </button>
         ))}
@@ -1446,7 +1447,7 @@ function ContentSection({ companies, initialSelectedId }: { companies: Company[]
           {err && <div style={{ padding: '8px 12px', borderRadius: 8, background: '#FEF2F2', border: '1px solid #FECACA', color: '#DC2626', fontSize: 12.5, marginBottom: 8 }}>{err}</div>}
           <SaveBtn onClick={handleSave} pending={pending} />
           {!!panel.data?.id && (
-            <DeleteBtn onClick={() => startTx(async () => { await handleDelete(panel.type, String(panel.data!.id)); closePanel() })} pending={pending} />
+            <DeleteBtn onClick={() => { if (!window.confirm(`Delete this ${panel.type.replace('_', ' ')} entry? This cannot be undone.`)) return; startTx(async () => { await handleDelete(panel.type, String(panel.data!.id)); closePanel() }) }} pending={pending} />
           )}
         </SlideOver>
       )}
@@ -1778,7 +1779,7 @@ export default function AdminDashboard({ currentUser, initialCompanies, initialP
         </div>
 
         {/* Main content */}
-        <div style={{ overflowY: 'auto', padding: '24px' }}>
+        <div className="admin-main-content" style={{ overflowY: 'auto', padding: '24px' }}>
           {/* Page title */}
           <div style={{ marginBottom: 20 }}>
             <div style={{ fontSize: 20, fontWeight: 800, color: '#09090B', letterSpacing: '-0.04em' }}>
@@ -1811,7 +1812,8 @@ export default function AdminDashboard({ currentUser, initialCompanies, initialP
           .admin-sidebar-toggle { display: flex !important; }
           .admin-topbar-divider, .admin-topbar-label { display: none !important; }
           .admin-plan-badge, .admin-email { display: none !important; }
-          .admin-body { grid-template-columns: 1fr !important; }
+          /* Let the page scroll naturally on mobile — remove overflow constraint */
+          .admin-body { grid-template-columns: 1fr !important; overflow: visible !important; }
           .admin-sidebar {
             position: fixed !important;
             top: 52px; left: 0; bottom: 0;
@@ -1823,6 +1825,13 @@ export default function AdminDashboard({ currentUser, initialCompanies, initialP
           }
           .admin-sidebar--open { transform: translateX(0) !important; }
           .admin-backdrop { display: block !important; }
+          .admin-main-content { padding: 16px !important; overflow: visible !important; }
+          .admin-slideover-panel { width: 100vw !important; }
+          .admin-form-grid-2 { grid-template-columns: 1fr !important; }
+          .admin-form-grid-3 { grid-template-columns: repeat(2, 1fr) !important; }
+          /* Content section tabs — horizontal scroll */
+          .admin-tab-strip { overflow-x: auto !important; flex-wrap: nowrap !important; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
+          .admin-tab-strip::-webkit-scrollbar { display: none; }
         }
       `}</style>
     </div>

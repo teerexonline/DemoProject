@@ -118,7 +118,7 @@ export default function Header() {
         {/* Right side */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginLeft: 'auto', flexShrink: 0 }}>
           {user ? (
-            <div ref={dropdownRef} style={{ position: 'relative' }}>
+            <div ref={dropdownRef} className="header-user-desktop" style={{ position: 'relative' }}>
               {/* Avatar button */}
               <button
                 onClick={() => setDropdownOpen(v => !v)}
@@ -244,16 +244,43 @@ export default function Header() {
           )}
         </div>
 
-        {/* Mobile hamburger */}
-        <button className="header-hamburger" onClick={() => setMobileMenuOpen(v => !v)}
-          style={{ display: 'none', background: 'none', border: '1px solid #e2eaf2', borderRadius: '7px', padding: '6px 8px', cursor: 'pointer', color: '#52525B', flexShrink: 0 }}
-          aria-label="Toggle menu"
-        >
-          {mobileMenuOpen
-            ? <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
-            : <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><line x1="4" y1="8" x2="20" y2="8"/><line x1="4" y1="16" x2="20" y2="16"/></svg>
-          }
-        </button>
+        {/* Mobile avatar (logged-in only) — replaces hamburger */}
+        {user && (
+          <button
+            className="header-mobile-avatar"
+            onClick={() => setMobileMenuOpen(v => !v)}
+            style={{
+              display: 'none', alignItems: 'center', gap: '6px',
+              padding: '4px 8px 4px 4px', borderRadius: '10px',
+              border: `1.5px solid ${mobileMenuOpen ? '#a8cbe8' : '#e2eaf2'}`,
+              background: mobileMenuOpen ? '#eef4fb' : '#fff',
+              cursor: 'pointer', flexShrink: 0,
+            }}
+            aria-label="Toggle menu"
+          >
+            <div style={{ width: 28, height: 28, borderRadius: 7, background: '#063f76', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+              <span style={{ color: '#fff', fontSize: 11, fontWeight: 800 }}>{initials}</span>
+            </div>
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#A1A1AA" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"
+              style={{ transform: mobileMenuOpen ? 'rotate(180deg)' : 'rotate(0deg)', transition: 'transform 0.18s' }}
+            >
+              <polyline points="6 9 12 15 18 9"/>
+            </svg>
+          </button>
+        )}
+
+        {/* Mobile hamburger (logged-out only) */}
+        {!user && (
+          <button className="header-hamburger" onClick={() => setMobileMenuOpen(v => !v)}
+            style={{ display: 'none', background: 'none', border: '1px solid #e2eaf2', borderRadius: '7px', padding: '6px 8px', cursor: 'pointer', color: '#52525B', flexShrink: 0 }}
+            aria-label="Toggle menu"
+          >
+            {mobileMenuOpen
+              ? <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+              : <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><line x1="4" y1="8" x2="20" y2="8"/><line x1="4" y1="16" x2="20" y2="16"/></svg>
+            }
+          </button>
+        )}
       </div>
 
       {/* Mobile dropdown */}
@@ -292,6 +319,9 @@ export default function Header() {
         }
         @media (max-width: 768px) {
           .header-hamburger { display: flex !important; align-items: center; }
+          .header-mobile-avatar { display: flex !important; align-items: center; }
+          .header-user-desktop { display: none !important; }
+          .header-signin-link, .header-cta-link { display: none !important; }
           .header-nav, .header-search { display: none !important; }
           .header-logo-full { display: none !important; }
           .header-logo-icon { display: block !important; }

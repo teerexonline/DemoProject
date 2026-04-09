@@ -9,6 +9,7 @@ import SaveButton from '@/components/SaveButton'
 import CompanyLogo from '@/components/CompanyLogo'
 import { Building2, Network, TrendingUp, Settings, Target, Package } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
+import RelatedCompanies from '@/components/RelatedCompanies'
 
 // ─── DB → component data converters ──────────────────────────────────────────
 
@@ -892,7 +893,12 @@ function SectionContent({ id, company, dbContent }: { id: SectionId; company: Co
   }
 }
 
-export default function CompanyFull({ company, initialSaved, dbContent }: { company: Company; initialSaved: boolean; dbContent: DbContent }) {
+interface RelatedCompany {
+  id: string; name: string; slug: string; category: string | null
+  description: string | null; logo_color: string | null; logo_url: string | null
+}
+
+export default function CompanyFull({ company, initialSaved, dbContent, relatedCompanies = [] }: { company: Company; initialSaved: boolean; dbContent: DbContent; relatedCompanies?: RelatedCompany[] }) {
   const [activeSection, setActiveSection] = useState<SectionId>('overview')
   const [animKey, setAnimKey] = useState(0)
   const color = company.logo_color ?? '#063f76'
@@ -996,6 +1002,11 @@ export default function CompanyFull({ company, initialSaved, dbContent }: { comp
         >
           <SectionContent id={activeSection} company={company} dbContent={dbContent} />
         </div>
+      </div>
+
+      {/* Related companies */}
+      <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 24px 40px' }}>
+        <RelatedCompanies companies={relatedCompanies} />
       </div>
     </div>
   )
