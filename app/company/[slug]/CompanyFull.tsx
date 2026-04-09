@@ -402,7 +402,7 @@ interface Product {
   catColor: string
   useCases: string[]
   customers: { name: string; abbr: string; bg: string }[]
-  competitors: { name: string; edge: string }[]
+  competitors: { name: string; description?: string; edge: string }[]
   imageUrl?: string | null
 }
 
@@ -502,7 +502,7 @@ function ProductSection({ company, dbProducts }: { company: Company; dbProducts:
         catColor: p.cat_color,
         useCases:    (Array.isArray(p.use_cases) ? (p.use_cases as string[]) : (typeof p.use_cases === 'string' ? (() => { try { return JSON.parse(p.use_cases as string) as string[] } catch { return [] as string[] } })() : [])),
         customers:   (p.customers as { name: string; abbr: string; bg: string }[]) ?? [],
-        competitors: (p.competitors as { name: string; edge: string }[]) ?? [],
+        competitors: (p.competitors as { name: string; description?: string; edge: string }[]) ?? [],
         imageUrl:    p.image_url ?? null,
       }))
     : PRODUCTS
@@ -605,6 +605,9 @@ function ProductSection({ company, dbProducts }: { company: Company; dbProducts:
                     <span style={{ fontSize: 9, color: '#EF4444', fontWeight: 700, background: '#FEF2F2', border: '1px solid #FECACA', borderRadius: 3, padding: '1px 4px', flexShrink: 0 }}>vs</span>
                     <span style={{ color: '#09090B', fontSize: 12.5, fontWeight: 700 }}>{c.name}</span>
                   </div>
+                  {c.description && (
+                    <div style={{ color: '#52525B', fontSize: 11, lineHeight: 1.5, paddingLeft: 22, marginBottom: 2 }}>{c.description}</div>
+                  )}
                   <div style={{ color: '#71717A', fontSize: 11.5, lineHeight: 1.4, paddingLeft: 22 }}>{c.edge}</div>
                 </div>
               ))}

@@ -106,12 +106,12 @@ export default function Header() {
 
         {/* Nav links */}
         <nav className="header-nav" style={{ display: 'flex', gap: '2px', marginLeft: '4px' }}>
-          {['Features', 'Enterprise', 'Pricing'].map(item => (
-            <Link key={item} href={`#${item.toLowerCase()}`}
+          {([{ label: 'Features', href: '#features' }, { label: 'Enterprise', href: '#enterprise' }, { label: 'Pricing', href: '/pricing' }] as { label: string; href: string }[]).map(item => (
+            <Link key={item.label} href={item.href}
               style={{ color: '#52525B', textDecoration: 'none', fontSize: '13.5px', fontWeight: 500, padding: '6px 11px', borderRadius: '7px', transition: 'color 0.15s, background 0.15s' }}
               onMouseEnter={e => { (e.currentTarget as HTMLElement).style.color = '#063f76'; (e.currentTarget as HTMLElement).style.background = '#eef4fb' }}
               onMouseLeave={e => { (e.currentTarget as HTMLElement).style.color = '#52525B'; (e.currentTarget as HTMLElement).style.background = 'transparent' }}
-            >{item}</Link>
+            >{item.label}</Link>
           ))}
         </nav>
 
@@ -289,10 +289,10 @@ export default function Header() {
           <div style={{ marginBottom: '8px' }}>
             <SearchAutocomplete placeholder="Search any company..." size="sm" onSelect={() => setMobileMenuOpen(false)} />
           </div>
-          {['Features', 'Enterprise', 'Pricing'].map(item => (
-            <Link key={item} href={`#${item.toLowerCase()}`} onClick={() => setMobileMenuOpen(false)}
+          {([{ label: 'Features', href: '#features' }, { label: 'Enterprise', href: '#enterprise' }, { label: 'Pricing', href: '/pricing' }] as { label: string; href: string }[]).map(item => (
+            <Link key={item.label} href={item.href} onClick={() => setMobileMenuOpen(false)}
               style={{ color: '#52525B', textDecoration: 'none', fontSize: '14px', fontWeight: 500, padding: '10px 12px', borderRadius: '8px', background: '#f8fbfe' }}
-            >{item}</Link>
+            >{item.label}</Link>
           ))}
           {user ? (
             <>

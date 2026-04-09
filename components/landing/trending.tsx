@@ -98,8 +98,9 @@ export default function Trending() {
           {/* Right: company list */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
             {companies.map((co) => (
-              <div
+              <Link
                 key={co.name}
+                href={`/company/${co.name.toLowerCase()}`}
                 style={{
                   display: 'flex',
                   alignItems: 'center',
@@ -110,6 +111,7 @@ export default function Trending() {
                   border: hovered === co.rank ? '1px solid #E4E4E7' : '1px solid transparent',
                   boxShadow: hovered === co.rank ? '0 2px 8px rgba(0,0,0,0.05)' : 'none',
                   cursor: 'pointer',
+                  textDecoration: 'none',
                   transition: 'background 0.15s, border-color 0.15s, box-shadow 0.15s',
                 }}
                 onMouseEnter={() => setHovered(co.rank)}
@@ -154,7 +156,7 @@ export default function Trending() {
                     marginTop: '1px',
                   }}>{co.delta}</div>
                 </div>
-              </div>
+              </Link>
             ))}
           </div>
         </div>

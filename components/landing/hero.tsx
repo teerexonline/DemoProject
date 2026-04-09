@@ -1,12 +1,9 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
-import { useRouter } from 'next/navigation'
 import SearchAutocomplete from '@/components/SearchAutocomplete'
-import { createClient } from '@/lib/supabase/client'
-import type { User } from '@supabase/supabase-js'
 import { Building2, Network, TrendingUp, BarChart2, PieChart, Layers, Wrench, Settings, Package } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
 
@@ -439,23 +436,7 @@ function ProductUseCase() {
 
 // ─── Main Component ────────────────────────────────────────────────
 export default function Hero() {
-  const router = useRouter()
   const [activeSection, setActiveSection] = useState<SectionId>('overview')
-  const [user, setUser] = useState<User | null>(null)
-
-  useEffect(() => {
-    const supabase = createClient()
-    supabase.auth.getUser().then(({ data }) => setUser(data.user))
-    const { data: listener } = supabase.auth.onAuthStateChange((_e, session) => {
-      setUser(session?.user ?? null)
-    })
-    return () => listener.subscription.unsubscribe()
-  }, [])
-
-  function navigateCompany(slug: string) {
-    if (!user) { router.push('/signup'); return }
-    router.push(`/company/${slug}`)
-  }
 
   const sectionContent: Record<SectionId, React.ReactNode> = {
     overview:   <CompanyOverview />,
@@ -527,11 +508,11 @@ export default function Hero() {
             <div className="animate-fadeUp delay-300 hero-chips" style={{ display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap', marginBottom: '24px' }}>
               <span style={{ color: '#A1A1AA', fontSize: '12px' }}>Popular:</span>
               {['Google', 'Stripe', 'Notion', 'Airbnb', 'OpenAI'].map(co => (
-                <button key={co} onClick={() => navigateCompany(co.toLowerCase())}
-                  style={{ background: 'none', border: '1px solid #E4E4E7', borderRadius: '6px', padding: '3px 9px', fontSize: '12px', color: '#52525B', cursor: 'pointer', transition: 'border-color 0.15s, color 0.15s, background 0.15s' }}
+                <Link key={co} href={`/company/${co.toLowerCase()}`}
+                  style={{ background: 'none', border: '1px solid #E4E4E7', borderRadius: '6px', padding: '3px 9px', fontSize: '12px', color: '#52525B', textDecoration: 'none', cursor: 'pointer', transition: 'border-color 0.15s, color 0.15s, background 0.15s' }}
                   onMouseEnter={e => { const el = e.currentTarget as HTMLElement; el.style.borderColor = '#063f76'; el.style.color = '#063f76'; el.style.background = '#eef4fb' }}
                   onMouseLeave={e => { const el = e.currentTarget as HTMLElement; el.style.borderColor = '#E4E4E7'; el.style.color = '#52525B'; el.style.background = 'none' }}
-                >{co}</button>
+                >{co}</Link>
               ))}
             </div>
 
@@ -615,7 +596,7 @@ export default function Hero() {
           </p>
           <div className="hero-logo-strip-inner" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '36px', flexWrap: 'wrap' }}>
             {['Google', 'Meta', 'Stripe', 'Airbnb', 'Notion', 'OpenAI'].map(name => (
-              <div key={name} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '6px', opacity: 0.55, transition: 'opacity 0.15s' }}
+              <Link key={name} href={`/company/${name.toLowerCase()}`} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '6px', opacity: 0.55, transition: 'opacity 0.15s', textDecoration: 'none' }}
                 onMouseEnter={e => (e.currentTarget as HTMLElement).style.opacity = '1'}
                 onMouseLeave={e => (e.currentTarget as HTMLElement).style.opacity = '0.55'}
               >
@@ -623,7 +604,7 @@ export default function Hero() {
                   <LogoImg name={name} size={36} radius={10} />
                 </div>
                 <span style={{ fontSize: '11px', fontWeight: 600, color: '#A1A1AA', letterSpacing: '-0.01em' }}>{name}</span>
-              </div>
+              </Link>
             ))}
           </div>
         </div>

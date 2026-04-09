@@ -43,8 +43,9 @@ Quality bar (from Zebra):
   NOT generic: `"Product Integration"`, `"Business Automation"`
 - `customers`: 3 real named customers from official case studies
   `[{"name":"Boeing","abbr":"BA","bg":"#1a6396"}, ...]`
-- `competitors`: 3 real competitors with a one-line edge
-  `[{"name":"Honeywell","edge":"Wider Android device portfolio with deeper AOSP customization"}, ...]`
+- `competitors`: 3 real competitors with a description of the competitor product and a one-line edge
+  `[{"name":"Honeywell CN80","description":"Honeywell's CN80 is a rugged Android mobile computer designed for warehouse and distribution center scanning, offering extended battery life and a built-in physical keyboard for high-volume data entry.","edge":"Wider Android device portfolio with deeper AOSP customization"}, ...]`
+  RULE: "description" must describe the COMPETITOR product — neutral and factual, not about this company.
 - `image_url`: scraped og:image → logo_url for SaaS → NULL for hardware with no image
 
 ---

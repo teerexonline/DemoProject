@@ -75,6 +75,10 @@ IMPORTANT — same quality rules apply to seed_company.py output as all other se
 - revenue: MUST be the most recent COMPLETED full fiscal year only. Never use partial-year
   figures, TTM (trailing twelve months), or forward projections. If the latest completed
   full fiscal year is FY2024, use that — do not use a partial FY2025 figure.
+  STALENESS RULE: Revenue data must not be more than 1 year old relative to today's date.
+  If the most recent completed FY ended more than 12 months ago and a newer completed FY
+  is now available, use the newer year. Only use older data when absolutely no current
+  data exists (e.g. private company with no public filings).
 - tags: the script may return generic tags. Replace with 3–5 tags that accurately
   reflect this company's market (e.g. ["Enterprise", "Cloud", "AI", "SaaS", "DevTools"]).
 After inserting, verify:
@@ -106,9 +110,12 @@ IMPORTANT — use the scraper first, then patch only what it cannot produce:
   - customers: [{"name":"...", "abbr":"XX", "bg":"#hexcolor"}, ...] (3 entries)
     Source from the company's official customer success/case study pages.
     Use real named customers — never generic placeholders.
-  - competitors: [{"name":"...", "edge":"one-line advantage over this competitor"},
+  - competitors: [{"name":"...", "description":"1–2 sentences describing what the competitor product does and who it serves", "edge":"one-line advantage over this competitor"},
     ...] (3 entries)
     Source from industry analyst reports and the company's own positioning pages.
+    RULE: "description" must be about the COMPETITOR product — not about this company's product.
+    It should read as a neutral summary of what the competitor product is and does (as if
+    writing about it independently). Do not mention this company's product in the description field.
 
   Run this SQL to patch all products at once after researching:
     UPDATE company_products SET customers = '[...]'::jsonb, competitors = '[...]'::jsonb
@@ -143,8 +150,9 @@ Fields reference (for manual fallback only):
 - image_url: scraped og:image if available; logo_url for abstract/SaaS; NULL for hardware
 - use_cases: 3 domain-specific real-world scenarios — never generic placeholders
 - customers: [{"name":"...", "abbr":"XX", "bg":"#hexcolor"}, ...] (3 entries)
-- competitors: [{"name":"...", "edge":"one-line advantage over this competitor"},
+- competitors: [{"name":"...", "description":"1–2 sentences describing what the competitor product does and who it serves", "edge":"one-line advantage over this competitor"},
   ...] (3 entries)
+  RULE: "description" must be about the COMPETITOR product itself — neutral, factual, as if written independently.
 
 ━━━ 3. NEWS (INSERT into company_news) ━━━
 GOLD STANDARD: See referenceData.md Section 3 for type→color mapping and depth.
@@ -183,6 +191,8 @@ Single row per company:
 - revenue_growth: last 5 COMPLETED full fiscal years only. The most recent entry must
   be the latest completed full fiscal year (e.g. FY2024 for companies whose FY2024 is
   complete but FY2025 is not). Never include partial years or projections.
+  STALENESS RULE: The most recent revenue_growth entry must not be more than 1 year old.
+  If a newer completed FY is available, use it. Only omit if truly unavailable.
   [{"year":2021,"revenue":"$1.2B","growth_rate":"+18%"}, ...]
 - competitors: pct must sum to exactly 100; this company listed first
   [{"name":"...","pct":34,"clr":"#hexcolor"}, ...]

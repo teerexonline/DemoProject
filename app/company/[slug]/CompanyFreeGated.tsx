@@ -7,6 +7,8 @@ import CompanyOverview from './CompanyOverview'
 import SaveButton from '@/components/SaveButton'
 import CompanyLogo from '@/components/CompanyLogo'
 import RelatedCompanies from '@/components/RelatedCompanies'
+import { Building2, Network, TrendingUp, Settings, Target, Package, Lock, Gift } from 'lucide-react'
+import type { LucideIcon } from 'lucide-react'
 
 interface Company {
   id: string
@@ -24,16 +26,76 @@ interface Company {
   website: string | null
 }
 
-const NAV = [
-  { id: 'overview',   label: 'Company Overview',  icon: '🏢', pro: false },
-  { id: 'org',        label: 'Org Chart',          icon: '🗂️',  pro: true },
-  { id: 'financials', label: 'Financials',          icon: '💹', pro: true },
-  { id: 'internal',   label: 'Internal Tools & Processes', icon: '🔧', pro: true },
-  { id: 'prep',       label: 'Interview Prep',              icon: '🎯', pro: true },
-  { id: 'product',    label: 'Product Use Cases',            icon: '📦', pro: true },
-] as const
-type SectionId = typeof NAV[number]['id']
+const NAV: { id: string; label: string; color: string; icon: LucideIcon; pro: boolean }[] = [
+  { id: 'overview',   label: 'Company Overview',          color: '#2563EB', icon: Building2,  pro: false },
+  { id: 'org',        label: 'Org Chart',                  color: '#7C3AED', icon: Network,    pro: true  },
+  { id: 'financials', label: 'Financials',                  color: '#16A34A', icon: TrendingUp, pro: true  },
+  { id: 'internal',   label: 'Internal Tools & Processes',  color: '#EA580C', icon: Settings,   pro: true  },
+  { id: 'prep',       label: 'Interview Prep',              color: '#DC2626', icon: Target,     pro: true  },
+  { id: 'product',    label: 'Product Use Cases',            color: '#CA8A04', icon: Package,    pro: true  },
+]
+type SectionId = 'overview' | 'org' | 'financials' | 'internal' | 'prep' | 'product'
 
+// ─── Guest gate (not logged in) ───────────────────────────────────────────────
+
+function GuestGatePanel({ section, company }: { section: typeof NAV[number]; company: Company }) {
+  const Icon = section.icon
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '420px', padding: '40px 24px', textAlign: 'center' }}>
+      {/* Blurred preview rows */}
+      <div style={{ width: '100%', marginBottom: '32px', filter: 'blur(4px)', userSelect: 'none', pointerEvents: 'none', opacity: 0.4 }}>
+        {Array.from({ length: 4 }).map((_, i) => (
+          <div key={i} style={{ height: '48px', borderRadius: '10px', background: i % 2 === 0 ? '#F4F4F5' : '#EBEBED', marginBottom: '8px' }} />
+        ))}
+      </div>
+
+      {/* Gate card */}
+      <div style={{
+        background: '#fff', borderRadius: '20px',
+        border: '1px solid #E4E4E7',
+        boxShadow: '0 16px 48px rgba(0,0,0,0.10), 0 4px 12px rgba(0,0,0,0.06)',
+        padding: '32px 36px', maxWidth: '380px', width: '100%',
+        marginTop: '-160px', position: 'relative', zIndex: 2,
+      }}>
+        <div style={{ width: 48, height: 48, borderRadius: 14, background: `${section.color}12`, border: `1px solid ${section.color}30`, display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 14px' }}>
+          <Icon size={22} color={section.color} strokeWidth={1.75} />
+        </div>
+        <h2 style={{ fontSize: '17px', fontWeight: 800, letterSpacing: '-0.04em', color: '#09090B', margin: '0 0 8px' }}>
+          {section.label}
+        </h2>
+        <p style={{ color: '#71717A', fontSize: '13px', lineHeight: 1.6, margin: '0 0 24px' }}>
+          Create a free account to access this section.<br />No credit card needed.
+        </p>
+
+        <Link
+          href={`/signup?next=/company/${company.slug}`}
+          style={{
+            display: 'block', padding: '12px', background: '#063f76',
+            color: '#fff', textDecoration: 'none', borderRadius: '10px',
+            fontWeight: 600, fontSize: '14px', marginBottom: '10px',
+            boxShadow: '0 4px 12px rgba(6,63,118,0.28)',
+            transition: 'background 0.15s',
+          }}
+          onMouseEnter={e => (e.currentTarget as HTMLElement).style.background = '#04294f'}
+          onMouseLeave={e => (e.currentTarget as HTMLElement).style.background = '#063f76'}
+        >
+          Sign up for free
+        </Link>
+
+        <Link
+          href={`/login?next=/company/${company.slug}`}
+          style={{ display: 'block', color: '#71717A', fontSize: '12.5px', textDecoration: 'none', padding: '6px' }}
+          onMouseEnter={e => (e.currentTarget as HTMLElement).style.color = '#063f76'}
+          onMouseLeave={e => (e.currentTarget as HTMLElement).style.color = '#71717A'}
+        >
+          Already have an account? Sign in
+        </Link>
+      </div>
+    </div>
+  )
+}
+
+// ─── Free-user gate (logged in, no token / Pro teaser) ────────────────────────
 
 function ProGatePanel({
   section,
@@ -48,6 +110,7 @@ function ProGatePanel({
   isPending: boolean
   onUseToken: () => void
 }) {
+  const Icon = section.icon
   return (
     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '420px', padding: '40px 24px', textAlign: 'center' }}>
       {/* Blurred preview rows */}
@@ -59,7 +122,9 @@ function ProGatePanel({
 
       {/* Gate card */}
       <div style={{ background: '#fff', borderRadius: '20px', border: '1px solid #E4E4E7', boxShadow: '0 16px 48px rgba(0,0,0,0.10), 0 4px 12px rgba(0,0,0,0.06)', padding: '32px 36px', maxWidth: '380px', width: '100%', marginTop: '-160px', position: 'relative', zIndex: 2 }}>
-        <div style={{ fontSize: '28px', marginBottom: '12px' }}>{section.icon}</div>
+        <div style={{ width: 48, height: 48, borderRadius: 14, background: `${section.color}12`, border: `1px solid ${section.color}30`, display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 12px' }}>
+          <Icon size={22} color={section.color} strokeWidth={1.75} />
+        </div>
         <h2 style={{ fontSize: '17px', fontWeight: 800, letterSpacing: '-0.04em', color: '#09090B', margin: '0 0 8px' }}>
           {section.label}
         </h2>
@@ -72,7 +137,7 @@ function ProGatePanel({
             {/* Token option */}
             <div style={{ background: '#eef4fb', border: '1px solid #a8cbe8', borderRadius: '12px', padding: '16px', marginBottom: '12px', textAlign: 'left' }}>
               <div style={{ display: 'flex', alignItems: 'flex-start', gap: '10px', marginBottom: '12px' }}>
-                <div style={{ fontSize: '20px', lineHeight: 1 }}>🎁</div>
+                <Gift size={18} color="#063f76" strokeWidth={1.75} style={{ flexShrink: 0, marginTop: 2 }} />
                 <div>
                   <div style={{ color: '#04294f', fontSize: '13px', fontWeight: 700, marginBottom: '3px' }}>
                     You have 1 free company unlock
@@ -131,12 +196,14 @@ function ProGatePanel({
   )
 }
 
+// ─── Main component ───────────────────────────────────────────────────────────
+
 interface RelatedCompany {
   id: string; name: string; slug: string; category: string | null
   description: string | null; logo_color: string | null; logo_url: string | null
 }
 
-export default function CompanyFreeGated({ company, hasToken, initialSaved, relatedCompanies = [] }: { company: Company; hasToken: boolean; initialSaved: boolean; relatedCompanies?: RelatedCompany[] }) {
+export default function CompanyFreeGated({ company, hasToken, initialSaved, isGuest = false, relatedCompanies = [] }: { company: Company; hasToken: boolean; initialSaved: boolean; isGuest?: boolean; relatedCompanies?: RelatedCompany[] }) {
   const [activeSection, setActiveSection] = useState<SectionId>('overview')
   const [animKey, setAnimKey] = useState(0)
   const [isPending, startTransition] = useTransition()
@@ -169,18 +236,26 @@ export default function CompanyFreeGated({ company, hasToken, initialSaved, rela
           <span style={{ color: '#D4D4D8', fontSize: '13px' }}>›</span>
           <span style={{ color: '#09090B', fontSize: '13px', fontWeight: 600 }}>{company.name}</span>
           <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: 8 }}>
-            {hasToken && (
+            {!isGuest && hasToken && (
               <div style={{ background: '#eef4fb', border: '1px solid #a8cbe8', borderRadius: '8px', padding: '4px 10px', display: 'flex', alignItems: 'center', gap: '5px' }}>
-                <span style={{ fontSize: '12px' }}>🎁</span>
+                <Gift size={12} color="#063f76" strokeWidth={2} />
                 <span style={{ color: '#063f76', fontSize: '12px', fontWeight: 600 }}>1 free unlock</span>
               </div>
             )}
-            <SaveButton companyId={company.id} companyName={company.name} initialSaved={initialSaved} logoColor={color} />
+            {isGuest ? (
+              <Link href={`/signup?next=/company/${company.slug}`}
+                style={{ padding: '6px 14px', borderRadius: '8px', background: '#063f76', color: '#fff', textDecoration: 'none', fontSize: '12.5px', fontWeight: 600, transition: 'background 0.15s' }}
+                onMouseEnter={e => (e.currentTarget as HTMLElement).style.background = '#04294f'}
+                onMouseLeave={e => (e.currentTarget as HTMLElement).style.background = '#063f76'}
+              >Sign up free</Link>
+            ) : (
+              <SaveButton companyId={company.id} companyName={company.name} initialSaved={initialSaved} logoColor={color} />
+            )}
           </div>
         </div>
       </div>
 
-      {/* Mobile tab strip */}
+      {/* Mobile tab strip — matches CompanyFull exactly */}
       <div className="company-mobile-tabs" style={{
         display: 'none',
         overflowX: 'auto',
@@ -194,7 +269,7 @@ export default function CompanyFreeGated({ company, hasToken, initialSaved, rela
         {NAV.map(nav => (
           <button
             key={nav.id}
-            onClick={() => changeSection(nav.id)}
+            onClick={() => changeSection(nav.id as SectionId)}
             style={{
               flexShrink: 0, padding: '7px 12px', borderRadius: '8px', border: 'none',
               background: activeSection === nav.id ? '#eef4fb' : '#F4F4F5',
@@ -202,18 +277,18 @@ export default function CompanyFreeGated({ company, hasToken, initialSaved, rela
               fontSize: '12.5px', fontWeight: activeSection === nav.id ? 600 : 400,
               cursor: 'pointer', whiteSpace: 'nowrap',
               transition: 'background 0.15s, color 0.15s',
-              display: 'flex', alignItems: 'center', gap: '4px',
+              display: 'inline-flex', alignItems: 'center', gap: '6px',
             }}
           >
-            <span>{nav.icon}</span>
-            <span>{nav.label}</span>
-            {nav.pro && <span style={{ fontSize: '10px', opacity: 0.6 }}>🔒</span>}
+            <nav.icon size={13} color={activeSection === nav.id ? nav.color : '#A1A1AA'} strokeWidth={1.75} style={{ flexShrink: 0 }} />
+            {nav.label}
+            {nav.pro && <Lock size={10} color="#A1A1AA" strokeWidth={2.5} style={{ flexShrink: 0 }} />}
           </button>
         ))}
       </div>
 
       <div className="company-layout" style={{ maxWidth: '1200px', margin: '0 auto', padding: '24px 24px', display: 'grid', gridTemplateColumns: '220px 1fr', gap: '24px', alignItems: 'start' }}>
-        {/* Sidebar — hidden on mobile */}
+        {/* Sidebar */}
         <div className="company-sidebar" style={{ position: 'sticky', top: '80px', background: '#fff', borderRadius: '14px', border: '1px solid #E4E4E7', padding: '12px 8px', boxShadow: '0 1px 4px rgba(0,0,0,0.04)' }}>
           <div style={{ padding: '8px 8px 14px', borderBottom: '1px solid #F4F4F5', marginBottom: '8px' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
@@ -228,7 +303,7 @@ export default function CompanyFreeGated({ company, hasToken, initialSaved, rela
           {NAV.map(nav => (
             <button
               key={nav.id}
-              onClick={() => changeSection(nav.id)}
+              onClick={() => changeSection(nav.id as SectionId)}
               style={{
                 width: '100%', display: 'flex', alignItems: 'center', gap: '8px',
                 padding: '8px 10px', borderRadius: '8px', border: 'none',
@@ -239,30 +314,40 @@ export default function CompanyFreeGated({ company, hasToken, initialSaved, rela
               onMouseEnter={e => { if (activeSection !== nav.id) (e.currentTarget as HTMLElement).style.background = '#F7F7F8' }}
               onMouseLeave={e => { if (activeSection !== nav.id) (e.currentTarget as HTMLElement).style.background = 'transparent' }}
             >
-              <span style={{ fontSize: '13px' }}>{nav.icon}</span>
+              <nav.icon size={14} color={activeSection === nav.id ? nav.color : '#A1A1AA'} strokeWidth={1.75} style={{ flexShrink: 0 }} />
               <span style={{ fontSize: '12.5px', fontWeight: activeSection === nav.id ? 600 : 400, color: activeSection === nav.id ? '#063f76' : '#52525B', flex: 1 }}>
                 {nav.label}
               </span>
-              {nav.pro && (
-                <span style={{ fontSize: '10px', color: '#A1A1AA' }}>🔒</span>
-              )}
+              {nav.pro && <Lock size={11} color="#C4C4C8" strokeWidth={2.2} style={{ flexShrink: 0 }} />}
             </button>
           ))}
 
-          {/* Upgrade nudge */}
+          {/* Nudge card */}
           <div style={{ marginTop: '12px', padding: '12px', borderRadius: '10px', background: '#eef4fb', border: '1px solid #a8cbe8' }}>
-            <div style={{ color: '#04294f', fontSize: '11.5px', fontWeight: 700, marginBottom: '6px' }}>Unlock everything</div>
-            <div style={{ color: '#063f76', fontSize: '11px', lineHeight: 1.5, marginBottom: '10px', opacity: 0.85 }}>
-              Get access to all 8 sections for every company.
-            </div>
-            <Link
-              href="/signup?plan=pro"
-              style={{ display: 'block', textAlign: 'center', background: '#063f76', color: '#fff', textDecoration: 'none', borderRadius: '8px', padding: '8px', fontSize: '12px', fontWeight: 600, transition: 'background 0.15s' }}
-              onMouseEnter={e => (e.currentTarget as HTMLElement).style.background = '#04294f'}
-              onMouseLeave={e => (e.currentTarget as HTMLElement).style.background = '#063f76'}
-            >
-              Upgrade to Pro
-            </Link>
+            {isGuest ? (
+              <>
+                <div style={{ color: '#04294f', fontSize: '11.5px', fontWeight: 700, marginBottom: '10px', textAlign: 'center' }}>Create a free account</div>
+                <Link
+                  href={`/signup?next=/company/${company.slug}`}
+                  style={{ display: 'block', textAlign: 'center', background: '#063f76', color: '#fff', textDecoration: 'none', borderRadius: '8px', padding: '8px', fontSize: '12px', fontWeight: 600, transition: 'background 0.15s' }}
+                  onMouseEnter={e => (e.currentTarget as HTMLElement).style.background = '#04294f'}
+                  onMouseLeave={e => (e.currentTarget as HTMLElement).style.background = '#063f76'}
+                >Sign up for free</Link>
+              </>
+            ) : (
+              <>
+                <div style={{ color: '#04294f', fontSize: '11.5px', fontWeight: 700, marginBottom: '6px', textAlign: 'center' }}>Unlock everything</div>
+                <div style={{ color: '#063f76', fontSize: '11px', lineHeight: 1.5, marginBottom: '10px', opacity: 0.85 }}>
+                  Get access to all sections for every company.
+                </div>
+                <Link
+                  href="/signup?plan=pro"
+                  style={{ display: 'block', textAlign: 'center', background: '#063f76', color: '#fff', textDecoration: 'none', borderRadius: '8px', padding: '8px', fontSize: '12px', fontWeight: 600, transition: 'background 0.15s' }}
+                  onMouseEnter={e => (e.currentTarget as HTMLElement).style.background = '#04294f'}
+                  onMouseLeave={e => (e.currentTarget as HTMLElement).style.background = '#063f76'}
+                >Upgrade to Pro</Link>
+              </>
+            )}
           </div>
         </div>
 
@@ -274,6 +359,8 @@ export default function CompanyFreeGated({ company, hasToken, initialSaved, rela
         >
           {activeSection === 'overview' ? (
             <CompanyOverview company={company} showProTeaser />
+          ) : isGuest ? (
+            <GuestGatePanel section={activeNav} company={company} />
           ) : (
             <ProGatePanel
               section={activeNav}

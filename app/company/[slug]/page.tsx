@@ -3,7 +3,6 @@ import { createClient } from '@/lib/supabase/server'
 import { getUserTier, isPaidTier } from '@/lib/access'
 import { getMonthlyViewCount, hasViewedThisMonth } from '@/lib/quota'
 import CompanyFull from './CompanyFull'
-import CompanyTeaser from './CompanyTeaser'
 import CompanyFreeGated from './CompanyFreeGated'
 
 // Always fetch fresh data — never serve a cached version of a company profile
@@ -40,7 +39,8 @@ export default async function CompanyPage({ params }: Props) {
   const { data: { user } } = await supabase.auth.getUser()
 
   if (!user) {
-    return <CompanyTeaser company={company} relatedCompanies={relatedCompanies ?? []} />
+    // Guests see company overview only — all other sections prompt sign-up
+    return <CompanyFreeGated company={company} hasToken={false} initialSaved={false} isGuest relatedCompanies={relatedCompanies ?? []} />
   }
 
   // Fetch plan + saved state + all company content in parallel
@@ -75,10 +75,6 @@ export default async function CompanyPage({ params }: Props) {
   }
 
   const related = relatedCompanies ?? []
-
-  if (tier === 'anonymous') {
-    return <CompanyTeaser company={company} relatedCompanies={related} />
-  }
 
   if (isPaidTier(tier)) {
     return <CompanyFull company={company} initialSaved={initialSaved} dbContent={dbContent} relatedCompanies={related} />

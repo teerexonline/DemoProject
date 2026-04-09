@@ -23,7 +23,7 @@ export default function Pricing() {
       desc: 'For students and casual job seekers.',
       cta: 'Get Started',
       href: '/signup',
-      features: ['1 company full access per month', 'Limited preview for all others', 'Basic company profiles', 'Public org structure', 'Email support'],
+      features: ['1 company full access per month', 'Limited preview for all others', 'Basic company profiles', 'Email support'],
       highlight: false,
     },
     {
@@ -32,7 +32,7 @@ export default function Pricing() {
       period: PRO_PRICING[billing].period,
       savings: PRO_PRICING[billing].savings,
       desc: 'For serious job seekers and career changers.',
-      cta: 'Start Free Trial',
+      cta: 'Get Started',
       href: '/signup',
       features: ['Unlimited searches', 'Full view on all companies', 'Deep org charts & headcount', 'Internal tools & tech stack', 'Revenue & funding data', 'Competitor comparisons', 'Export to PDF'],
       highlight: true,

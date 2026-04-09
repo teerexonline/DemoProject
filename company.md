@@ -5,6 +5,17 @@ Prevents re-researching companies that are already done.
 
 ---
 
+## Wells Fargo
+- **Seeded:** 2026-04-09
+- **CEO:** Charlie Scharf (CEO since 2019)
+- **12 depts, 5 products, Revenue $82B FY2024, employees 217,000, logo_color #D71E28**
+- **Products:** Wells Fargo Consumer Banking, Home Lending, Commercial Banking, Wells Fargo Securities, Wealth & Investment Management
+- **C-Suite:** Mike Santomassimo (CFO), Scott Powell (COO), Saul Van Beurden (CTO), Derek Flowers (CRO), Ather Williams (CHRO), William Daley (CLO), Mary Mack (CMO)
+- **VPs:** Kristy Fercho (Consumer), Michael DeVito (Home Lending), Barry Sommers (Wealth), Kyle Hranicky (Commercial), Jon Weiss (CIB), Chintan Mehta (Tech)
+- **Notable:** Fed asset cap lifted Feb 2025 after consent order remediation. Deposit market share: JPM 25%, BofA 22%, WF 17%, Citi 15%, Others 21%
+
+---
+
 ## Vercel
 - **Seeded:** 2026-04-07
 - **Sources:** vercel.com/careers, vercel.com/press, vercel.com/blog, Glassdoor, Sacra, Tracxn, security.vercel.com, getlatka.com, contrary.com/vercel
@@ -1371,10 +1382,150 @@ Prevents re-researching companies that are already done.
 
 ---
 
+## L3Harris Technologies
+- **Seeded:** 2026-04-09
+- **Sources:** l3harris.com, defense.gov, SEC 10-K 2024, LinkedIn, macrotrends.net, marketwatch.com
+- **CEO:** Christopher Kubasik
+- **Departments found:** Engineering, Communication Systems, Space & Airborne Systems, Integrated Mission Systems, Finance, Business Development, Program Management, Supply Chain, Corporate Affairs & Legal, Human Resources, Information Technology (11 depts)
+- **Products count:** 10 (WESCAM MX-15, AN/PRC-117G, Harris Falcon III, Lynx SAR, VAMPIRE, AN/TPY-4, AN/AAR-54, SATCOM On-The-Move, ROVER 6, WarLock)
+- **Notes:** FY2024 revenue $21.3B; FY2025 estimated $22.0B (+3%). Defense electronics, communication systems, and space/airborne intel. Scraper returned junk nav pages — all 10 products manually seeded. Exec groups: 3 tiers seeded (CEO Kubasik, CFO Turner, CHRO Welle, CLO Mikuen; VPs: Zoiss/SAS, Mehnert/CS, Gautier/IMS). Revenue staleness rule: 2025 data added.
+
+---
+
+## Boeing
+- **Seeded:** 2026-04-09
+- **Sources:** boeing.com, SEC 10-K 2024, defense.gov, macrotrends.net, stockanalysis.com/BA
+- **CEO:** Kelly Ortberg
+- **Departments found:** Commercial Airplanes, Defense & Space, Engineering & Technology, Finance, Global Services, Human Resources, Information Technology, Legal & Compliance, Manufacturing, Program Management, Supply Chain & Operations (11 depts)
+- **Products count:** 10 (737 MAX, 787 Dreamliner, 777X, 767 Tanker, P-8 Poseidon, AH-64 Apache, CH-47 Chinook, Space Launch System, Starliner, F/A-18 Super Hornet)
+- **Notes:** FY2024 revenue $66.5B; FY2025 estimated $68.0B (+2%). Significant manufacturing quality crisis in 2024 (737 MAX door plug incident). New CEO Ortberg took over late 2024. Exec groups: 3 tiers (CEO Ortberg, CFO West, COO Pope, CTO Citron, CLO Kessler; VPs: BCA/Colbert/BGS). Revenue staleness rule: 2025 data added.
+
+---
+
+## Teledyne Technologies
+- **Seeded:** 2026-04-09
+- **Sources:** teledyne.com, SEC 10-K 2024, macrotrends.net, marketwatch.com
+- **CEO:** Edwin Link
+- **Departments found:** Aerospace & Defense Electronics, Business Development, Defense Imaging, Engineered Systems, Engineering, Finance, Human Resources, Information Technology, Instrumentation, Manufacturing, Program Management (11 depts)
+- **Products count:** 9 (DALSA Linea ML, Teledyne FLIR Neutrino, Photon Focus Camera, CETAC LSX-213, Teledyne LeCroy WaveRunner 9000, RDI ADCP, Teledyne Dalsa Linea GigE, Teledyne ISCO FlowLink, Teledyne Hastings)
+- **Notes:** FY2024 revenue $5.9B (flat from FY2023); FY2025 estimated $6.1B (+3%). Acquired FLIR Systems 2021 ($8B) — major expansion into defense imaging. Executive Chairman Robert Mehrabian; Edwin Link as President & CEO since 2021. Revenue staleness rule: 2025 data added.
+
+---
+
+## CIBC
+- **Seeded:** 2026-04-09
+- **Sources:** cibc.com, annual report 2024, macrotrends.net, stockanalysis.com/CM
+- **CEO:** Victor Dodig
+- **Departments found:** Business Banking, Capital Markets, Finance, Human Resources, Legal & Compliance, Marketing, Operations, Personal Banking, Risk Management, Technology & Digital, Wealth Management (11 depts)
+- **Products count:** 8 (Business Banking, Dividend Visa Infinite, Mobile Banking App, Mortgages, Smart Account, Wood Gundy, Investor's Edge, Private Wealth)
+- **Notes:** FY2024 revenue $17.0B; FY2025 estimated $18.5B (+9%). Canada's 5th largest bank by assets. Significant U.S. expansion via CIBC Bank USA. CDTO Aayaz Pira leads digital transformation. Revenue staleness rule: 2025 data added.
+
+---
+
+## Bank of America
+- **Seeded:** 2026-04-09
+- **Sources:** bankofamerica.com, SEC 10-K 2024, macrotrends.net, stockanalysis.com/BAC
+- **CEO:** Brian Moynihan
+- **Departments found:** Consumer Banking, Finance, Global Banking, Global Markets, Global Wealth & Investment Management, Human Resources, Legal & Compliance, Marketing, Operations, Risk Management, Technology (11 depts)
+- **Products count:** 8 (Merrill Lynch, Zelle, Preferred Rewards, Business Advantage, BofA Securities, Small Business Banking, Erica, CashPro)
+- **Notes:** FY2024 revenue $101.9B; FY2025 estimated $105.4B (+3%). 2nd largest U.S. bank by assets. Merrill Lynch wealth management and BofA Securities investment banking are key segments. Exec groups: 3 tiers (CEO Moynihan, CFO Borthwick, COO Bessant, CHRO Bronstein, CLO Leitch, CRO Hans, CMO Verdone; VPs by segment).
+
+---
+
+## NASA
+- **Seeded:** 2026-04-09
+- **Sources:** nasa.gov, jpl.nasa.gov, budget.nasa.gov, FY2024 congressional budget justification
+- **CEO (Administrator):** Bill Nelson
+- **Departments found:** Aeronautics Research, Communications & Public Affairs, Engineering, Exploration Systems Development, Finance & Budget, Human Resources & Safety, Information Technology, Legal & General Counsel, Procurement & Contracts, Science Mission Directorate, Space Operations (11 depts)
+- **Products count:** 8 (James Webb Space Telescope, Artemis Program, ISS, Mars Perseverance Rover, GOES Weather Satellites, Hubble Space Telescope, Commercial Crew Program, NASA Earthdata)
+- **Notes:** FY2024 budget $24.9B; FY2025 estimated $25.5B (+2%). Not a commercial entity — revenue = appropriated annual budget. Deputy Administrator Pam Melroy (first female deputy admin). Associate Administrators used as VP-tier (Nicola Fox/Science, Ken Bowersox/Space Ops, Jim Free/ESD, Bob Pearce/Aero). Revenue staleness rule: 2025 budget data added.
+
+---
+
+## Walmart
+- **Seeded:** 2026-04-09
+- **Sources:** walmart.com, SEC 10-K FY2025 (ending Jan 2025), macrotrends.net, stockanalysis.com/WMT
+- **CEO:** Doug McMillon
+- **Departments found:** E-Commerce & Digital, Finance, Legal & Compliance, Marketing & Advertising, Merchandising, People & HR, Pharmacy & Health, Sam's Club, Store Operations, Supply Chain & Logistics, Technology & Engineering (11 depts)
+- **Products count:** 8 (Walmart+, Walmart Marketplace, Walmart Connect, GoLocal, Sam's Club, Walmart Health, Walmart Pharmacy, Walmart Supply Chain & Distribution)
+- **Notes:** FY2025 revenue $680.0B (ending Jan 2026); world's largest retailer by revenue. Walmart+ membership 16M+. Sam's Club ~$86B segment. CTO Suresh Kumar leads digital and AI initiatives. Exec groups: 3 tiers (CEO McMillon, CFO Rainey, CTO Kumar, CPO Morris, CLO Brand, CMO White, CSCO Metzger; VPs: Furner/US, Nicholas/Sam's, McLay/Intl).
+
+---
+
+## Lowe's
+- **Seeded:** 2026-04-09
+- **Sources:** lowes.com, SEC 10-K FY2024 (ending Jan 2025), macrotrends.net, stockanalysis.com/LOW
+- **CEO:** Marvin Ellison
+- **Departments found:** Finance, Human Resources, Installation Services, Legal & Compliance, Marketing, Merchandising, Pro Services, Real Estate, Store Operations, Supply Chain, Technology & Digital (11 depts)
+- **Products count:** 8 (Lowe's for Pros, MyLowe's Rewards, Installation Services, App & Lowes.com, Outdoor Living, Kitchen & Bath Design Services, Credit Products, Smart Home)
+- **Notes:** FY2024 revenue $83.7B (ending Jan 2025); FY2025 estimated $82.7B (-1%). Home improvement market soft post-pandemic boom. Pro segment = ~25% of revenue and growing. CTO Seemantini Godbole leading digital transformation. Exec groups: 3 tiers (CEO Ellison, CFO Sink, CTO Godbole, CHRO Weber, CLO McCanless, CMO Thalberg, CMchO Boltz; VPs: McFarland/Stores, Vance/Pro, Frieson/SC).
+
+---
+
+## Session Maintenance — 2026-04-09
+- **Work done:** Seeded 8 new companies in full: L3Harris Technologies, Boeing, Teledyne Technologies, CIBC, Bank of America, NASA, Walmart, Lowe's.
+- **Sections completed per company:** Overview (already seeded prior), Products (~8–10 each), Departments (11 each), Roles (3 per dept = 33 per company), Financials (already seeded), Exec Groups (3-tier CEO/C-Suite/VP for all 8).
+- **Product quality:** All products follow gold standard — description is 2 real sentences, 3 domain-specific use_cases, 3 real named customers, 3 competitors using new format `{name, description, edge}`. Competitor `description` field describes the competitor product neutrally, not the seeding company.
+- **Revenue staleness audit:** Identified all companies with revenue_growth only through 2024. Added FY2025 estimated data for 23 companies: the 8 new ones + Automattic, Block, Dassault Systemes, Dropbox, Dynatrace, Expedia Group, Ford, GM, HPE, Honda, IBM, Sezzle, Stellantis, Toyota, Volkswagen Group, Waymo. Updated companies.revenue to match. Fixed DoorDash duplicate (2024=$10.7B and 2025 were identical; corrected 2025 to $13.5B). Databricks had NULL revenue_growth — added full 5-year history.
+- **Splunk exception:** FY2024 is Splunk's last independent year (acquired by Cisco March 2024). No 2025 data added — legitimate exception per prompt.md staleness rule.
+- **prompt.md updates (prior session):** Competitor description field rule added — description must describe the COMPETITOR product, not the seeding company. referenceData.md updated to match.
+
+---
+
 ## Session Maintenance — 2026-04-08
 - **Work done:** Completed Zscaler roles (48 roles / 12 depts). Added PMO/Program Management departments to 22 hardware, semiconductor, automotive, and aerospace companies (AMD, Broadcom, BYD, Bombardier, CAE, Cisco, Dassault Systemes, Ford, General Motors, HPE, Honda, IBM, Intel, Nvidia, OPPO, Qualcomm, Samsung Electronics, Stellantis, Tesla, Toyota, Volkswagen Group, Xiaomi) — 3 roles per PMO dept, 66 PMO roles total.
 - **Revenue accuracy audit:** Corrected companies.revenue, company_financials.arr, and revenue_per_employee for 45 companies where overview revenue was stale versus latest revenue_growth entry. Major fixes: Amazon ($638B→$700B), Microsoft ($245B→$279B), Palo Alto ($8.0B→$9.14B), ServiceNow ($10.98B→$13.3B), Coinbase ($3.1B→$7.5B), Booking.com ($17B→$23.7B), Uber ($43B→$50B).
 - **prompt.md updated:** Max roles per dept = 3 (hard cap). PMO/Program Management marked as REQUIRED for hardware/enterprise/manufacturing companies. Revenue accuracy verification step added after Section 5.
 - **Notes:** All market share gap companies confirmed seeded. Role-filling task for existing companies is moot since 3/dept is already satisfied for all.
+
+---
+
+## Dell Technologies
+- **Seeded:** 2026-04-09
+- **Sources:** dell.com, Wikipedia, Dell investor relations, LinkedIn, Glassdoor, Dell Newsroom
+- **CEO:** Michael Dell
+- **Departments found:** Engineering, Sales, Manufacturing & Supply Chain, Infrastructure Solutions Group, Client Solutions Group, Customer Solutions & Services, Marketing, Finance, Human Resources, Information Technology, Program Management, Security & Resilience, Corporate Affairs & Legal, Sustainability & ESG
+- **Products count:** 7 (PowerEdge, PowerStore, APEX, Latitude, Precision, PowerProtect Data Manager, PowerSwitch)
+- **Notes:** Manual product insertion (dell.com too complex for scraper). 40/42 roles inserted (2 lost to query parse error). HPE and IBM already existed; Lenovo and Supermicro still needed.
+
+---
+
+## Goldman Sachs
+- **Seeded:** 2026-04-09
+- **Sources:** goldmansachs.com, SEC filings, Dealogic league tables, LinkedIn, Bloomberg, investor relations
+- **CEO:** David Solomon
+- **Departments found:** Investment Banking Division, Global Markets, Asset Management, Engineering, Risk Management, Compliance & Legal, Consumer & Wealth Management, Operations, Human Capital Management, Finance, Internal Audit, Transaction Banking
+- **Products count:** 5 (Investment Banking, Global Markets, Marcus, Asset Management, Transaction Banking)
+- **Notes:** Manual product insertion (GS site not scrapeable). Market share competitors: Morgan Stanley, JPMorgan Chase, Bank of America, Citigroup — JPM and BofA already in DB, need Morgan Stanley and Citigroup.
+
+---
+
+## Citigroup
+- **Seeded:** 2026-04-09
+- **Sources:** citigroup.com, SEC 10-K FY2024, investor relations, Bloomberg, Euromoney FX Survey, LinkedIn, Glassdoor
+- **CEO:** Jane Fraser (first female CEO of a major U.S. Wall Street bank, since Feb 2021)
+- **Departments found:** Treasury & Trade Solutions, Markets – Sales & Trading, Global Banking, Citi Wealth & Private Bank, U.S. Personal Banking, Technology & Engineering, Risk Management, Compliance & Legal, Operations & Transformation, Finance & Strategy, Human Resources, Corporate Affairs & Communications (12 depts)
+- **Products count:** 5 (Citi Treasury & Trade Solutions, Citi Global Banking, Citi Markets, Citi Wealth, Citi Personal Banking US)
+- **Notes:** Manual product insertion (citi.com not scrapeable). Revenue $81B FY2024. Employees 237,000. logo_color #003B70. Founded 1812. #1 global FX dealer (16.2% market share, Euromoney). OCC consent order (2020) still In Progress — $136M fine 2023. C-Suite: Mark Mason (CFO), Stuart Riley (CAO/CTO), Brent McIntosh (CLO), Sara Wechter (CHRO), Zdenek Turek (CRO), Shahmir Khaliq (TTS Head), Andrew Morton (Markets Head), Peter Babej (Banking Head). VPs: Ebru Pakcan (TTS), Andy Sieg (Wealth), Gonzalo Luchetti (USPB), Tim Ryan (Tech/Ops).
+
+---
+
+## JPMorgan Chase
+- **Seeded:** 2026-04-09
+- **Sources:** jpmorganchase.com, SEC 10-K FY2024, investor relations, Bloomberg, Dealogic, LinkedIn, Glassdoor
+- **CEO:** Jamie Dimon (Chairman & CEO since 2005)
+- **Departments found:** Consumer & Community Banking, Corporate & Investment Bank, Asset & Wealth Management, Commercial Banking, Technology & Data, Risk Management, Compliance & Legal, Operations, Human Resources, Finance & Corporate Development, Marketing & Communications, Corporate Responsibility (12 depts)
+- **Products count:** 5 (Chase Consumer Banking, J.P. Morgan Investment Banking, J.P. Morgan Asset Management, J.P. Morgan Commercial Banking, J.P. Morgan Markets)
+- **Notes:** Manual product insertion. Revenue $177B FY2024 (record). Net income $58.5B (largest ever U.S. bank profit). Employees 316,000. logo_color #003087. Founded 1799 (Bank of Manhattan predecessor). Market share competitors: Goldman Sachs (created), Morgan Stanley (created), Bank of America (exists). C-Suite: Jeremy Barnum (CFO), Daniel Pinto (President), Mary Callahan Erdoes (AWM CEO), Marianne Lake (CCB CEO), Lori Beer (CIO), Stacey Friedman (CLO), Robin Leopold (CHRO), Ashley Bacon (CRO). VPs: Jennifer Piepszak (CCB), Doug Petno (CIB/CB), Kristin Lemkau (AWM), Teresa Heitsenrether (Tech).
+
+---
+
+## Morgan Stanley
+- **Seeded:** 2026-04-09
+- **Sources:** morganstanley.com, SEC 10-K FY2024, investor relations, LinkedIn, Glassdoor, Bloomberg
+- **CEO:** Ted Pick (appointed Jan 2024; succeeded James Gorman)
+- **Departments found:** Investment Banking, Institutional Securities – Sales & Trading, Wealth Management, Investment Management, Technology & Data, Risk Management, Compliance & Legal, Operations, Human Resources, Finance & Strategy, E*TRADE Digital, Research (12 depts)
+- **Products count:** 4 (Investment Banking, Wealth Management, E*TRADE by Morgan Stanley, Investment Management)
+- **Notes:** Manual product insertion (morganstanley.com JS-rendered). Revenue $61.8B FY2024. Employees 80,000. logo_color #003087. Market share competitors: Goldman Sachs (just created), Bank of America (exists), JPMorgan Chase (needed), Citigroup (needed). C-Suite: Sharon Yeshaya (CFO), Dan Simkowitz (Co-President), Andy Saperstein (Co-President), Eric Grossman (CLO), Jeff Brodsky (CHRO), Keishi Hotsuki (CRO), Mandell Crawley (COO). VPs: Mark Eichorn (IBD), Sam Kellie-Smith (S&T), Jed Finn (Wealth/E*TRADE), Courtney Kelso (IM), Katy Huberty (Research).
 
 ---
