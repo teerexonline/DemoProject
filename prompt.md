@@ -107,7 +107,7 @@ IMPORTANT — use the scraper first, then patch only what it cannot produce:
 
   STEP 2 — After the scraper completes, research and UPDATE only the two fields
   the scraper cannot produce:
-  - customers: [{"name":"...", "abbr":"XX", "bg":"#hexcolor"}, ...] (3 entries)
+  - customers: [{"name":"...", "abbr":"XX", "bg":"#hexcolor"}, ...] (MAXIMUM 3 entries — never more than 3)
     Source from the company's official customer success/case study pages.
     Use real named customers — never generic placeholders.
   - competitors: [{"name":"...", "description":"1–2 sentences describing what the competitor product does and who it serves", "edge":"one-line advantage over this competitor"},
@@ -127,6 +127,10 @@ IMPORTANT — use the scraper first, then patch only what it cannot produce:
   - use_cases: scraper generates generic fallbacks ("Product Integration", "Business
     Automation", "Workflow Optimization"). Always replace with 3 domain-specific use cases
     written as real-world scenarios (e.g. "Agile Sprint Planning & Backlog Management").
+    FORMAT RULE: use_cases MUST be a plain JSON array of strings — never an array of objects.
+    CORRECT:   ["Scenario one", "Scenario two", "Scenario three"]
+    INCORRECT: [{"text":"Scenario one"}, {"text":"Scenario two"}, {"text":"Scenario three"}]
+    Wrapping strings in {text:"..."} objects will break the UI with a React key error.
   - description: scraper auto-generates "{name} by {company}. {tagline}." Always replace
     with 2 proper sentences explaining what the product does and who uses it.
   - tagline: scraper sometimes grabs page meta text ("Get the highlights.", "We're
@@ -148,8 +152,9 @@ Fields reference (for manual fallback only):
   Collaboration, Aircraft, Simulation]
 - cat_color: hex matching the category
 - image_url: scraped og:image if available; logo_url for abstract/SaaS; NULL for hardware
-- use_cases: 3 domain-specific real-world scenarios — never generic placeholders
-- customers: [{"name":"...", "abbr":"XX", "bg":"#hexcolor"}, ...] (3 entries)
+- use_cases: ["Scenario one", "Scenario two", "Scenario three"] — plain array of strings ONLY.
+  Never wrap in objects like [{"text":"..."}]. 3 domain-specific real-world scenarios, never generic placeholders.
+- customers: [{"name":"...", "abbr":"XX", "bg":"#hexcolor"}, ...] (MAXIMUM 3 entries — never more than 3)
 - competitors: [{"name":"...", "description":"1–2 sentences describing what the competitor product does and who it serves", "edge":"one-line advantage over this competitor"},
   ...] (3 entries)
   RULE: "description" must be about the COMPETITOR product itself — neutral, factual, as if written independently.
@@ -206,6 +211,12 @@ After inserting financials, verify these three values are internally consistent:
    must also be "$36.8B"). Patch whichever is wrong:
      UPDATE companies SET revenue = '[value]' WHERE slug = '[slug]';
      -- OR update the revenue_growth JSON to match.
+   FORMAT CONSISTENCY: Both values must use identical string format — not just the same
+   number. "$2.2B" ≠ "$2,168M" ≠ "$2.17B" even though they are the same figure.
+   Use the same format in both fields. Preferred format: "$X.XB" (e.g. "$2.17B", "$36.8B").
+   Never use comma-thousands notation like "$2,168M" — use "$2.17B" instead.
+   ARRAY ORDER: revenue_growth entries must be stored oldest-first (ascending year).
+   Newest-first ordering causes staleness checks to silently fail.
 2. companies.employees must be current (cross-check LinkedIn). Patch if stale:
      UPDATE companies SET employees = [n] WHERE slug = '[slug]';
 3. company_financials.revenue_per_employee must equal companies.revenue ÷

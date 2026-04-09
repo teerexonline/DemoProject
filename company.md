@@ -5,6 +5,161 @@ Prevents re-researching companies that are already done.
 
 ---
 
+## Datalogic
+- **Seeded:** 2026-04-09
+- **CEO:** Valentina Volta (daughter of founder Romano Volta; company taken private 2021)
+- **12 depts, 5 products, Revenue $762M FY2024, employees 5,200, logo_color #E8732A**
+- **Products:** PowerScan PM9600, Memor 11, Matrix 220, Gryphon I GFS4400, AV900 Dimensioning System
+- **C-Suite:** Gabriele Benedini (CFO), Pier Paolo Mura (CTO), Michela Benedetti (COO), Ricardo Carniel (CCO), Monica Lugli (CPO)
+- **VPs:** Mauro Brasca (R&D), Luca Mantovani (Mfg/Ops), Marco Degli Esposti (Industrial Sales), Elena Barberis (Retail/Healthcare Sales), Andrea Caregari (Finance/Strategy), Cristina Maldini (HR)
+- **Market share:** Zebra 34%, Honeywell 24%, Datalogic 12%, Cognex 10%, Others 20% (enterprise barcode/mobile computing)
+- **Notes:** Italian AIDC company founded 1972. Went private 2021. US manufacturing in Eugene, Oregon (acquired from PSC Inc. 2005). Four segments: Industrial Automation, Retail, Healthcare, Logistics. Competes directly with Zebra and Honeywell on rugged scanners.
+
+---
+
+## Cognex
+- **Seeded:** 2026-04-09
+- **CEO:** Robert Shillman (Founder & CEO; "Dr. Bob")
+- **12 depts, 5 products, Revenue $990M FY2024, employees 4,400, logo_color #0057B8**
+- **Products:** In-Sight 2000 Series, DataMan 370, VisionPro ViDi, In-Sight D900, Edge Intelligence
+- **C-Suite:** Carl Gerst (Pres/COO), Dennis Fehr (CFO), Sebastian Buettner (SVP Vision), Carl Vanderby (SVP ID), Mark Smedley (CTO)
+- **VPs:** John Lewis (Eng), Jeff Horch (Sales), Sheila Brennan (Mktg), Jon Stoll (Ops), Paul Todgham (Finance), Amy Villeneuve (HR)
+- **Market share:** Cognex 10%, Keyence 18%, Zebra 34%, Datalogic 12%, Others 26% (enterprise ID/machine vision)
+- **Notes:** World's leading machine vision company. Founded 1981 at MIT. PatMax and ViDi deep learning are flagship IP. FY2023 revenue dipped -16% due to electronics downturn; FY2024 recovered +14%. Acquired Moritex (Japanese optics) 2024.
+
+---
+
+## Embraer
+- **Seeded:** 2026-04-09
+- **CEO:** Francisco Gomes Neto (CEO since 2019)
+- **12 depts, 5 products, Revenue $6.7B FY2024, employees 19,400, logo_color #003A63**
+- **Products:** E190-E2, E175, Phenom 300E, KC-390 Millennium, Praetor 600
+- **C-Suite:** Antonio Carlos Garcia (CFO), Luis Carlos Affonso (CTO), Ana Paula Lugão (CPO), Ailton Barcelos Filho (CLO), Arjan Meijer (Pres. Commercial), Michael Amalfitano (Pres. Executive Jets), Bosco da Costa Junior (Pres. Defense)
+- **VPs:** Mauro Kern (Engineering), Alexandre Gonçalves Silva (Manufacturing/SC), Rodrigo Silva e Souza (Sales), Martyn Holmes (Strategy), Luciana Nunes (HR), Nelson Salgado (Finance)
+- **Market share:** Embraer 53%, Bombardier 31%, ATR 12%, Others 4% (regional jets under 150 seats)
+- **Notes:** World's 3rd-largest commercial aircraft maker. E175 dominates US scope-clause market. KC-390 breaking into NATO with Hungary, Netherlands, Portugal, Austria as customers. Record $6.7B revenue in 2024.
+
+---
+
+## Honeywell
+- **Seeded:** 2026-04-09
+- **CEO:** Vimal Kapur (CEO since 2023)
+- **12 depts, 5 products, Revenue $36.7B FY2024, employees 99,000, logo_color #ED1C24**
+- **Products:** Honeywell Forge (industrial IoT), Primus Epic Avionics Suite, Experion PKS (DCS), Honeywell CN80 (rugged mobile), EBI Building Management System
+- **C-Suite:** Greg Lewis (CFO), Suresh Venkatarayalu (CTO), Stephanie Abramson (CHRO), Anne Madden (CLO), Rhonda Germany Ballard (CMO), Jim Currier (Pres. Aerospace), Billal Hammoud (Pres. Industrial Automation), Alessandro Gili (Pres. Building Automation)
+- **VPs:** Kevin Dehoff (Aero Eng), Tim Mahoney (IA Eng), Chris Penrose (Software/Digital), Mark Swainson (Sales), David Cote Jr. (Supply Chain), Robin Watson (Finance), Laura Markevicius (HR), Daniel Shook (Strategy & Corp Dev)
+- **Market share:** Zebra 34%, Honeywell 24%, Datalogic 12%, Cognex 10%, Others 20% (enterprise mobile computing)
+- **Notes:** Industrial conglomerate spanning aerospace, building automation, performance materials. Splitting into 3 standalone companies (announced 2024). CN80 competes directly with Zebra TC73.
+
+---
+
+## UKG (Ultimate Kronos Group)
+- **Seeded:** 2026-04-09
+- **CEO:** Chris Todd (CEO since 2020, formed from Kronos + Ultimate Software merger)
+- **12 depts, 5 products, Revenue $1.9B ARR FY2024, employees 15,000, logo_color #005151**
+- **Products:** UKG Pro, UKG Dimensions, UKG Ready, UKG TeleStaff, UKG Bryte AI
+- **C-Suite:** Brian Donn (CFO), Zach Thomas (CTO), Adam Rogers (CRO), Pat Wadors (CPO), Bob Gault (CMO), Chris Phenicie (CPrO), Kirsten Engelhardt (CCO), Shannon Deegan (CLO)
+- **VPs:** Dave Almeda (Eng HCM+WFM), Mike Morini (Enterprise Sales), Jennifer Morgan (Customer Success), Scott Rupp (Professional Services), Lisa Stevens (Product Mgmt), Kelley Steven-Waiss (Marketing), Greg Swick (Finance), Sue Marks (People & Talent), John Beil (Legal & Compliance)
+- **Market share:** SAP SuccessFactors 20%, Workday 19%, Oracle HCM 15%, UKG 12%, Ceridian 8%, Others 26%
+- **Notes:** PE-owned by Hellman & Friedman and Blackstone since 2020 merger. Largest pure-play HCM/WFM company. Kronos (1977) + Ultimate Software (1990) combined. Great Place to Work acquired 2022. FedRAMP In Progress. SOC 2 Type II + ISO 27001 certified.
+
+---
+
+## Check Point Software
+- **Seeded:** 2026-04-09
+- **CEO:** Gil Shwed (Co-founder & CEO since 1993)
+- **12 depts, 5 products, Revenue $2.4B FY2024 (+7% YoY), employees 7,200, logo_color #CC0000**
+- **Products:** Quantum Security Gateway, CloudGuard, Harmony Endpoint, Infinity AI Copilot, Harmony Email & Collaboration
+- **C-Suite:** Roei Golan (CFO), Dorit Dor (CTO), Rupal Hollenbeck (CRO), Meirav Oren (CPO), Ekram Ahmed (CMO), Nataly Kremer (CPrO), Daphna Levy (GC)
+- **VPs:** Oded Gonda (R&D + ThreatCloud), TJ Gonen (Cloud Security), Frank Rauch (Sales + Channel), Sharon Mandell (CS), Eyal Manor (Product), Cindi Carter (Marketing), Alon Kantor (Finance), Hila Levy (HR), Gili Berkovitz (Legal), Ronen Shnidman (IT)
+- **Market share:** Palo Alto Networks 20%, Fortinet 18%, Cisco 16%, Check Point 13%, Juniper 5%, Others 28% (enterprise NGFW/network security)
+- **Notes:** Founded in Tel Aviv 1993; invented stateful inspection firewall (FireWall-1 1994). HQ Israel + San Carlos CA. IPO 1996 Nasdaq (CHKP). Acquired Zone Labs 2003 ($142M), Atmosec 2023. Gartner MQ Leader 24 consecutive years. ThreatCloud AI processes 3B daily indicators. Security subscription revenue grew 12% YoY. Common Criteria EAL4+ certified.
+
+---
+
+## Supermicro
+- **Seeded:** 2026-04-09
+- **CEO:** Charles Liang (Founder & CEO since 1993)
+- **12 depts, 5 products, Revenue $14.9B FY2024 (+110% YoY), employees 5,500, logo_color #1E7D3A**
+- **Products:** GPU SuperServer, SuperBlade, SuperServer 2U Twin, All-Flash NVMe Storage, MicroBlade
+- **C-Suite:** Ken Gao (CFO), Raju Penumatcha (SVP P&T), Don Clegg (SVP Worldwide Sales), Wally Liaw (SVP International), Phidias Chou (SVP Ops), Judy Castillejo (GC)
+- **VPs:** Michael McNerney (HW Eng + Firmware), Vik Malyala (AI/HPC), Sherman Lin (Mfg/SC/Ops), Aaron Heller (Enterprise Sales), Tom Garrison (Customer Eng), Jessica Chiu (Finance), Linda Wang (HR + Mktg), Brian Chang (Legal)
+- **Market share:** Dell 16%, HPE 15%, Lenovo ISG 15%, Supermicro 11%, IBM 5%, Others 38% (x86 server market)
+- **Notes:** AI server boom drove 110% YoY growth in FY2024 ($14.9B). Bloomberg 2018 chip story denied. DOJ settlement $17.5M (2020). E&Y resigned Oct 2024; BDO USA appointed. Nasdaq compliance restored Feb 2025. Malaysia campus opened 2024. ITAR compliant. NVIDIA GPU allocation partner.
+
+---
+
+## BAE Systems
+- **Seeded:** 2026-04-09
+- **CEO:** Charles Woodburn (Group CEO since 2017)
+- **12 depts, 5 products, Revenue $31.5B (£25.3B) FY2024, employees 107,000, logo_color #003F87**
+- **Products:** Eurofighter Typhoon, M109A7 Paladin Howitzer, Bradley IFV, Type 26 City-class Frigate, Hawk Advanced Jet Trainer
+- **C-Suite:** Brad Greve (CFO), Tom Arseneault (Pres. US), Dave Armstrong (MD Air), Simon Lister (MD Maritime), John Stocker (MD Land), Amanda Rowlatt (CPO), Philip Bramwell (GGC), Ged Scadding (CTO)
+- **VPs:** Brian Phillipson (Air Eng), Lori Walker (Elec Sys), Mark Prendergast (Land), Ian Booth (Naval), Clare Hawkins (Finance), Sarah Munroe (HR), David Moran (Legal)
+- **Market share:** LM 17%, RTX 11%, NG 9%, GD 8%, Boeing Defense 7%, BAE 5%, Others 43%
+- **Notes:** Europe's largest defence contractor. SFO DPA compliance ongoing. GCAP (6th-gen fighter) UK prime with Japan + Italy. FY2024 growth +14% driven by Ukraine-related NATO demand.
+
+---
+
+## Lockheed Martin
+- **Seeded:** 2026-04-09
+- **CEO:** James Taiclet (Chairman, President & CEO since 2020)
+- **12 depts, 5 products, Revenue $71.0B FY2024, employees 122,000, logo_color #0B2C5E**
+- **Products:** F-35 Lightning II, THAAD, C-130J Super Hercules, Aegis Combat System, GPS III
+- **C-Suite:** Jay Malave (CFO), Frank St. John (COO), Mark Maier (Aero), Todd Ernst (MFC), Joanna Hashem (RMS), Robert Lightfoot (Space), Brian Colan (CLO), Stephanie Hill (CPO)
+- **VPs:** Greg Ulmer (F-35), Sarah Reeves (MFC Eng), Lisa Callahan (Space Eng), Michael Cosentino (BD), John Rose (Finance), Nanci Bailey (IT), Randolph Church (Comms)
+- **Market share:** LM 17%, RTX 11%, NG 9%, GD 8%, Boeing Defense 7%, BAE 5%, Others 43%
+- **Notes:** Largest defense contractor globally. F-35 = 27% of revenue. Sikorsky acquired 2015 ($9B). LRSO nuclear cruise missile contract won 2024.
+
+---
+
+## Airbus
+- **Seeded:** 2026-04-09
+- **CEO:** Guillaume Faury (CEO since 2019)
+- **12 depts, 5 products, Revenue $71.0B FY2024, employees 134,000, logo_color #00205B**
+- **Products:** A320neo Family, A350 XWB, A220, A400M Atlas, H145
+- **C-Suite:** Thomas Toepfer (CFO), Sabine Klauke (CTO), Christian Scherer (CCO), Thierry Baril (CHRO), John Harrison (CLO), Michael Schöllhorn (CEO D&S), Bruno Even (CEO Helicopters), Philippe Mhun (EVP Programmes)
+- **VPs:** Jean-Marc Thomas (Eng), Olivier Cauquil (Manufacturing), Wouter Van Wersch (Sales), Philippe Keryer (Digital), Sophie Goossens (Finance), Nathalie Kosciusko-Morizet (HR), Marc Chaumeil (Legal)
+- **Market share:** Airbus 51% narrow-body, Boeing 42%, Embraer 4%, COMAC 2%, Others 1%
+- **Notes:** World's largest commercial aircraft manufacturer by deliveries. 8,700+ aircraft backlog. ZEA hydrogen programme targeting 2035. A321XLR certified 2024.
+
+---
+
+## RTX (Raytheon Technologies)
+- **Seeded:** 2026-04-09
+- **CEO:** Chris Calio (CEO since 2023; previously P&W President)
+- **12 depts, 5 products, Revenue $80.8B FY2024, employees 185,000, logo_color #C0152A**
+- **Products:** Patriot Air & Missile Defense, F135 Engine, AIM-120 AMRAAM, Tomahawk Block V, GTF Engine
+- **C-Suite:** Neil Mitchill (CFO), Stephen Timm (Collins), Wesley Kremer (RMD), Roy Azevedo (RIS), Michael Dunn (CLO), Felicia Pulley (CHRO)
+- **VPs:** Thomas Laliberty (Missiles), Jill Albertelli (Propulsion/MRO), Tom Laliberty (Radar/EW), Phil Ryan (Avionics)
+- **Market share:** Lockheed 17%, RTX 11%, NG 9%, GD 8%, Boeing Defense 7%, BAE 5%, Others 43%
+- **Notes:** Formed 2020 merger of Raytheon + United Technologies. GTF powder metal issue = $3B+ remediation cost.
+
+---
+
+## General Dynamics
+- **Seeded:** 2026-04-09
+- **CEO:** Phebe Novakovic (Chairman & CEO since 2013)
+- **12 depts, 5 products, Revenue $47.7B FY2024, employees 103,000, logo_color #1B4B8A**
+- **Products:** Virginia-class Submarine, Columbia-class Submarine, M1A2 Abrams SEPv3, Stryker ICV, GDIT Cloud & IT Services
+- **C-Suite:** Jason Aiken (CFO), Kevin Graney (Marine), Gary Whited (Combat), Amy Gilliland (GDIT), Mark Burns (Gulfstream), Gregory Gallopoulos (GC), Kimberly Kuryea (HR)
+- **VPs:** Daniel Bowling (Marine Eng), Douglas Bush (Combat Eng), Brian Sheridan (GDIT/Cyber), Dan Nachtrieb (Gulfstream)
+- **Market share:** Lockheed 17%, RTX 11%, NG 9%, GD 8%, Boeing Defense 7%, BAE 5%, Others 43%
+- **Notes:** Gulfstream owned by GD (Aerospace segment). GDIT is federal IT services segment.
+
+---
+
+## Northrop Grumman
+- **Seeded:** 2026-04-09
+- **CEO:** Kathy Warden (Chairman, CEO & President since 2019)
+- **12 depts, 5 products, Revenue $40.8B FY2024, employees 101,000, logo_color #003580**
+- **Products:** B-21 Raider, E-2D Advanced Hawkeye, Sentinel ICBM, MQ-4C Triton, IBCS
+- **C-Suite:** Dave Keffer (CFO), Mark Caylor (COO), Chris Valentino (CTO), Lesley Kalan (CHRO), Jennifer McGarey (CLO), Roshan Roeder (CSDO)
+- **VPs:** Tom Jones (Aero), Janis Pamiljans (Mission Sys), Tom Wilson (Space), Mary Petryszyn (Defense Sys), Shawn Purvis (Eng/Mfg)
+- **Market share:** Lockheed 17%, RTX 11%, NG 9%, GD 8%, Boeing Defense 7%, BAE 5%, Others 43%
+
+---
+
 ## Wells Fargo
 - **Seeded:** 2026-04-09
 - **CEO:** Charlie Scharf (CEO since 2019)
@@ -1527,5 +1682,193 @@ Prevents re-researching companies that are already done.
 - **Departments found:** Investment Banking, Institutional Securities – Sales & Trading, Wealth Management, Investment Management, Technology & Data, Risk Management, Compliance & Legal, Operations, Human Resources, Finance & Strategy, E*TRADE Digital, Research (12 depts)
 - **Products count:** 4 (Investment Banking, Wealth Management, E*TRADE by Morgan Stanley, Investment Management)
 - **Notes:** Manual product insertion (morganstanley.com JS-rendered). Revenue $61.8B FY2024. Employees 80,000. logo_color #003087. Market share competitors: Goldman Sachs (just created), Bank of America (exists), JPMorgan Chase (needed), Citigroup (needed). C-Suite: Sharon Yeshaya (CFO), Dan Simkowitz (Co-President), Andy Saperstein (Co-President), Eric Grossman (CLO), Jeff Brodsky (CHRO), Keishi Hotsuki (CRO), Mandell Crawley (COO). VPs: Mark Eichorn (IBD), Sam Kellie-Smith (S&T), Jed Finn (Wealth/E*TRADE), Courtney Kelso (IM), Katy Huberty (Research).
+
+---
+
+## PTC
+- **Seeded:** 2026-04-09
+- **Sources:** ptc.com, ir.ptc.com, LinkedIn, Glassdoor, SEC EDGAR, Gartner, IDC PLM reports
+- **CEO:** Jim Heppelmann (President & CEO since 2010)
+- **12 depts, 5 products, Revenue $2.4B FY2024 (ARR $2.2B), employees 7,500, logo_color #007DB8**
+- **Products:** Windchill PLM, Creo CAD, ThingWorx IIoT, Vuforia AR, Servicemax FSM
+- **C-Suite:** Kristian Talvitie (CFO), Catherine Kniker (CTO), Howard Heppelmann (CRO), Janine Smith (CPO), Aaron von Staats (CLO), Rebecca Carder (CMO)
+- **VPs:** Paul Sagar (Eng PLM+CAD), Marc Mölkner (Eng IoT+AR), Dana Ganor (Sales+CS), Michael DiTullio (Product+Marketing), Andrew Miller (Finance+IT), Sarah Chen (HR+Legal)
+- **Market share:** Autodesk 40%, Siemens Digital Industries 20%, Dassault 15%, PTC 12%, Others 13% (global PLM software)
+- **Notes:** Founded 1985 by Sam Geisberg; Pro/ENGINEER 1.0 (1988) invented parametric CAD. IPO 1989 on Nasdaq. Rockwell Automation $1B strategic investment (2018). Acquired ThingWorx 2013 ($112M), Vuforia 2015 ($65M), Kepware 2016 ($100M), Servicemax 2023 ($1.46B from GE Digital). HBR article with Michael Porter on smart connected products (2014) is foundational IoT strategy reading. 100% subscription ARR since FY2022. Digital thread vision: Creo→Windchill→ThingWorx→Vuforia→Servicemax. ITAR-compliant cloud PLM.
+
+---
+
+## Siemens Digital Industries Software
+- **Seeded:** 2026-04-09
+- **Sources:** sw.siemens.com, Siemens AG FY2024 Annual Report, Euronext/Frankfurt filings, IDC PLM reports, LinkedIn, Glassdoor, Realize LIVE 2024
+- **CEO:** Tony Hemmelgarn (President & CEO, long-serving; 2023 transition underway — use as primary reference)
+- **12 depts, 5 products, Revenue $5.2B FY2024 (~€4.9B, +11% YoY), employees 18,000, logo_color #009999**
+- **Products:** NX, Teamcenter, Simcenter, Opcenter, Xcelerator
+- **C-Suite:** Mark Bergman (CFO), Jan Leuridan (CTO/simulation), Bob Haubrock (CRO/industry solutions), Zvi Feuer (EVP Manufacturing), Stephanie Aldrete (CMO), Michael Wohlfeil (CLO), Karen Thole (CPO)
+- **VPs:** Peter Bilello (NX+Simcenter Eng), John Miller (Teamcenter+Opcenter Eng), Dean Wiltgen (EDA+Cloud), Scott Salzwedel (Sales+CS), Mark Burhop (Product+Mktg), Sarah Jensen (Finance+HR)
+- **Market share:** Siemens DIS 20%, Autodesk 40%, Dassault Systèmes 15%, PTC 12%, Others 13% (global industrial PLM software)
+- **Notes:** Formed from Siemens 2007 acquisition of UGS Corp ($3.5B). Originally United Computing (1969) → UNIGRAPHICS → UGS → Siemens PLM → Siemens Digital Industries Software (2019 rebrand). Key acquisitions: CD-adapco ($970M CFD, 2014), Mentor Graphics ($4.5B EDA, 2016). Xcelerator SaaS launched 2022. 20% global PLM market share, 2nd in enterprise discrete manufacturing PLM. Revenue reported within Siemens AG Digital Industries segment. Competes with Autodesk, Dassault, PTC across NX/Teamcenter/Simcenter product lines.
+
+---
+
+## Keyence
+- **Seeded:** 2026-04-09
+- **Sources:** keyence.com, keyence.com/corporate, Tokyo Stock Exchange filings, LinkedIn, Glassdoor, Nikkei, Bloomberg
+- **CEO:** Tomoo Yamashita (President & CEO; son-in-law of founder Takizaki Kazuo)
+- **12 depts, 5 products, Revenue ~$9.2B FY2024 (~¥1.37T), employees 10,800, logo_color #E60012**
+- **Products:** CV-X Vision System, SR-G Series Barcode Reader, LJ-X8000 3D Laser Profiler, IM-8000 Image Dimension Measurement, KV-X Series PLC
+- **C-Suite:** Akinori Yamashita (CFO), Hiroki Nakagawa (CTO), David Willette (CRO), Masahiro Tanaka (COO), Jennifer Park (CMO), Kenji Matsumoto (CLO), Yuki Shimada (CPO)
+- **VPs:** Takashi Inoue (Eng & R&D — Vision+Sensor+Software), Michael Breen (Sales+Customer Support), Satoshi Fujiwara (Product+Marketing), Noriko Hayashi (Ops & SC), Robert Chen (Finance), Lisa Nakamura (HR), Andrew Watanabe (Legal+IT)
+- **Market share:** Keyence 18%, Cognex 22%, Zebra 34%, Datalogic 12%, Others 14% (machine vision & industrial ID)
+- **Notes:** Founded 1974 by Takizaki Kazuo in Osaka. World's most profitable industrial automation company — ~55% operating margin. Listed on Tokyo Stock Exchange. ~¥1.37T (~$9.2B USD) revenue FY2024. Zero-inventory direct-sales model is core competitive differentiation. Owns no factories — outsources all manufacturing to contract manufacturers. Largest market cap in Japan at times ($70B+). Competes with Cognex in vision, Zebra/Datalogic in barcode. Known for extreme secrecy about internal structure.
+
+---
+
+## Infor
+- **Seeded:** 2026-04-09
+- **Sources:** infor.com, Koch Industries press releases, LinkedIn, Glassdoor, Gartner Magic Quadrant Cloud ERP, IDC ERP reports
+- **CEO:** Kevin Samuelson (CEO since 2019)
+- **12 depts, 5 products, Revenue $3.5B FY2024, employees 17,000, logo_color #B2292E**
+- **Products:** CloudSuite Industrial, CloudSuite Distribution, CloudSuite Healthcare, Infor M3, Infor OS
+- **C-Suite:** Soma Somasundaram (President & CTO), Brian Shepherd (CFO), Pam Murphy (COO), Amanda Jobbins (CMO), Kevin Parkin (CRO), Maria Hughes (CPO), David Abramowitz (GC)
+- **VPs:** Ranjit Notani (Engineering — CloudSuite + AI), Chris Layfield (Sales + Partner), Sarah Knutson (Marketing), James Hatem (Customer Success + Industry), Leigh Jasper (Product), Travis Miller (Cloud Operations), Lisa Tecklenburg (HR)
+- **Market share:** SAP 24%, Oracle ERP 19%, Microsoft Dynamics 17%, Infor 10%, Others 30% (cloud ERP for manufacturing/distribution/healthcare)
+- **Notes:** Founded 2002. Owned by Koch Industries since 2017 ($2B investment; consolidated full ownership 2023). Private company. 67,000+ customers in 170+ countries. Coleman AI embedded across CloudSuite products. Infor OS is low-code orchestration + AI layer on top of CloudSuite. M3 is the renamed Movex/Lawson M3 ERP for fashion, food, and distribution (Lawson acquired 2012 for $2B). 10% cloud ERP market share primarily in asset-heavy manufacturing, distribution, and healthcare verticals — niche depth vs. SAP/Oracle breadth.
+
+---
+
+## Jack Henry & Associates
+- **Seeded:** 2026-04-09
+- **Sources:** jackhenry.com, ir.jackhenry.com, LinkedIn, Glassdoor, Celent, Aite-Novarica, Gartner, NACHA, Federal Reserve FedNow press releases
+- **CEO:** Greg Adelson (President & CEO; succeeded David Foss 2025)
+- **12 depts, 5 products, Revenue $2.2B FY2024, employees 7,000, logo_color #E8A000**
+- **Products:** SilverLake System, Banno Digital Platform, Symitar, JHA PayCenter, ProfitStars
+- **C-Suite:** Kevin Williams (CFO), Ted Bilke (CTO), Stacey Zengel (COO), Matthew Rizai (CRO), Melissa Grottke (CPO), Craig Skaggs (GC)
+- **VPs:** Shawn Rapp (Core Banking), Ben Metz (Digital + Payments), Dave Foss (Sales), Vince Kasten (Client Services + Product), Sara Pope (Risk + Legal), Tony Wormington (Cloud Ops), Kimber Maderazzo (HR)
+- **Market share:** Fiserv 35%, FIS 22%, Jack Henry 27%, NCR Voyix 10%, Others 6% (U.S. community bank core processing)
+- **Notes:** Founded 1976 in Monett, Missouri by Jack Henry and Jerry Hall. Nasdaq: JKHY. 7,500+ community bank and credit union clients. SilverLake (community banks) and Symitar (credit unions) are the two core platforms. Banno Digital acquired 2014. Private Cloud hosting = 80%+ of clients by 2025. FedNow launch partner July 2023 — 1,500+ FIs onboarded. IBM i (AS/400 / RPG IV) is the specialized tech stack for SilverLake/Symitar — thin talent market. Competes with Fiserv and FIS at every core deal.
+
+---
+
+## Electronic Arts (EA)
+- **Seeded:** 2026-04-09
+- **Sources:** ea.com, ir.ea.com, SEC EDGAR 10-K FY2024, LinkedIn, Glassdoor, Gartner, VGChartz, GamesIndustry.biz
+- **CEO:** Andrew Wilson (CEO since 2013)
+- **12 depts, 5 products, Revenue $7.6B FY2024, employees 9,800, logo_color #FF4747**
+- **Products:** EA Sports FC, Apex Legends, The Sims, Battlefield, EA Play
+- **C-Suite:** Stuart Canfield (CFO), Zachary Anderson (CTO), Meredith Caram (CRO), Laura Miele (COO), Chris Bruzzo (CMO), Jacob Schatz (CLO), Mala Singh (CPO)
+- **VPs:** Mario Guevara (Game Engineering), Joel Mesherghi (Live Services & Platform + Data Science), Cam Weber (EA Sports Brand & Partnerships), Mike Blank (Sales & Marketing), Chris Suh (Finance), Jacqueline Corbelli (People & Places), Todd Sitrin (Legal & Business Affairs)
+- **Market share:** Activision/MSFT 12%, Sony 11%, EA 8%, Take-Two 6%, Ubisoft 4%, Others 59% (global video game publisher revenue)
+- **Notes:** Founded 1982 by Trip Hawkins in San Mateo, CA. Nasdaq: EA. Live services = 71% of revenue (Ultimate Team, battle passes, in-game purchases). EA Sports FC (formerly FIFA) relaunched under EA brand after FIFA licensing split 2023. Apex Legends = ~$2B annual run-rate live service. EA Play subscription ~35M members. Frostbite and Unreal Engine 5 both used across studios. 2024 restructuring: 5% workforce reduction, focus on fewer bigger bets. logo_url set to null per protocol.
+
+---
+
+## Target
+- **Seeded:** 2026-04-09
+- **CEO:** Brian Cornell (Chairman & CEO since 2014)
+- **12 depts, 5 products, Revenue $109.1B FY2024, employees 450,000, logo_color #CC0000**
+- **Products:** Target Stores, Target Circle & RedCard, Target Owned Brands, Target.com & Same-Day Services, Roundel
+- **C-Suite:** Jim Lee (CFO), John Mulligan (COO), Brett Craig (CIO), Christina Hennington (CGO), Melissa Kremer (CPO), Don Liu (CLO), Lisa Roath (CMO)
+- **VPs:** Prat Vemana (Tech & Digital), Gretchen McCarthy (Supply Chain + Shipt), Mark Schindele (Store Ops), Cara Sylvester (Roundel & Media), Jacqueline Woods (HR), Michael Fiddelke (Finance)
+- **Market share:** Target 8%, Walmart 25%, Amazon 15%, Costco 7%, Kroger 5%, Others 40% (US general merchandise)
+- **Notes:** Founded 1902 as Goodfellow Dry Goods; first Target store opened 1962. Acquired Shipt for $550M in 2017. Roundel retail media network generated $649M+ revenue in FY2024. Target Circle has 100M+ enrolled members. 45+ owned brands including Good & Gather, Cat & Jack, Threshold, A New Day, All in Motion. Drive Up available at 1,900+ stores — industry-leading curbside NPS. $7B store remodel program completed 2019. 2013 holiday data breach (40M cards) was transformational catalyst for security overhaul. Shopify marketplace partnership announced 2024.
+
+---
+
+## Home Depot
+- **Seeded:** 2026-04-09
+- **CEO:** Ted Decker (President & CEO since 2022)
+- **12 depts, 5 products, Revenue $157.4B FY2024, employees 470,000, logo_color #F96302**
+- **Products:** Home Depot Stores, The Home Depot Pro, Home Depot Tool Rental, homedepot.com & App, Home Depot Installation Services
+- **C-Suite:** Richard McPhail (CFO), Matt Carey (CIO), Ann-Marie Campbell (COO), Tim Hourigan (CHRO), Teresa Wynn Roseborough (CLO), William Bastek (EVP Merch), Hector Padilla (EVP Pro)
+- **VPs:** Fahim Siddiqui (Tech & Digital), Scott Spata (Supply Chain), Chip Devine (Finance), Molly Battin (Marketing), Steve Holmes (Real Estate), Jeff Kinnaird (HR)
+- **Market share:** Home Depot 32%, Lowe's 20%, Menards 6%, True Value/Ace 4%, Others 38% (US home improvement retail)
+- **Notes:** World's largest home improvement retailer. Founded 1978 by Bernie Marcus and Arthur Blank. $18.25B acquisition of SRS Distribution (Pro roofing/pool distributor, 760+ branches) closed June 2024 — largest acquisition in company history. Pro Xtra loyalty program has 6M+ active members. $23B+ in digital sales. Private labels: Husky (tools), HDX (value tools/storage), Hampton Bay (lighting/fans), Vigoro (lawn). Spring Black Friday is largest promotional event. 2014 data breach (56M cards) led to total PCI DSS rebuild.
+
+---
+
+## Kroger
+- **Seeded:** 2026-04-09
+- **CEO:** Rodney McMullen (Chairman & CEO since 2014)
+- **12 depts, 5 products, Revenue $150B FY2024, employees 420,000, logo_color #003DA5**
+- **Products:** Kroger Supermarkets, Our Brands Private Label, Kroger Boost & Delivery, Kroger Precision Marketing, Fred Meyer & Multi-Department Stores
+- **C-Suite:** Todd Foley (CFO), Yael Cosset (CIO), Stuart Aitken (CMMO), Gabriel Arreaga (COO), Tim Massa (CPO), Christine Wheatley (CLO), Mandy Rassi (CMO)
+- **VPs:** Cara Kinsey (Technology & Digital), Eric Doidge (Supply Chain), Kim Rook (Store Operations), Kevin Brown (Marketing & Loyalty + KPM), Laura Ristuccia (HR), Gary Millerchip (Finance), Colleen Lindholz (Pharmacy & Health)
+- **Market share:** Walmart 25%, Kroger 10%, Costco 8%, Albertsons 6%, Ahold Delhaize 5%, Others 46% (US grocery retail)
+- **Notes:** America's largest pure-play grocer. 2,700+ stores across 35 states under 20+ banners (Kroger, Ralph's, Fred Meyer, King Soopers, Harris Teeter, Smith's, etc.). 84.51° is Kroger's proprietary customer analytics subsidiary. Kroger Precision Marketing generated $1B+ in revenue FY2024. Proposed $24.6B merger with Albertsons blocked by federal judge January 2024. Ocado-powered CFCs (customer fulfillment centers) for automated grocery delivery. PC Optimum note: loyalty program is Kroger Plus / KrogerFuel rewards. Zero Hunger | Zero Waste is Kroger's 2030 sustainability platform. Fuel centers at 1,600+ locations.
+
+---
+
+## Loblaw Companies
+- **Seeded:** 2026-04-09
+- **Sources:** loblaw.ca, shoppersdrug mart.ca, pcoptimum.ca, Loblaw Companies FY2024 Annual Report, SEC EDGAR equivalent (SEDAR), LinkedIn, Glassdoor, Canada Competition Bureau, CFIA
+- **CEO:** Per Bank (President & CEO, since Feb 2024); Galen G. Weston (Executive Chairman)
+- **12 depts, 5 products, Revenue $57.5B CAD FY2024, employees 220,000, logo_color #C8102E**
+- **Products:** PC Optimum Loyalty Program, Shoppers Drug Mart, PC Financial, PC and No Name Private Label, Loblaw Digital & E-Commerce
+- **C-Suite:** Richard Dufresne (CFO), Robert Sawyer (COO), Zlatko Dobrijevic (CTAO), Jeff Leger (President SDM), Tamara Paton (CLO), Johanna Letts (CPO)
+- **VPs:** Hesham Fahmy (Technology & Digital), John Sheridan (Supply Chain), Lesley Hawkins (Loyalty & Marketing), Andrew Iacobucci (PC Financial), Ian Clarke (Real Estate), Karen Wong (HR), Sumeeta Vohra (Health & Wellness)
+- **Market share:** Loblaw 28%, Empire/Sobeys 21%, Walmart Canada 14%, Metro 12%, Costco 9%, Others 16% (Canadian grocery retail)
+- **Notes:** Canada's largest retailer. 22+ grocery banners (Loblaws, No Frills, Real Canadian Superstore, Zehrs, Fortinos, Maxi, T&T). Shoppers Drug Mart acquired 2014 for $12.4B CAD — largest Canadian retail acquisition ever. PC Optimum = 18M+ active members. PC and No Name private labels ~30% of grocery sales. Weston family controls company via George Weston Ltd. holding company. CEO transition: previous CEO Galen Weston Jr. stepped back from operational role; Per Bank joined from Salling Group (Danish grocery). 2024 grocery price inflation parliamentary scrutiny was significant public reputational event.
+
+---
+
+## TD Bank Group
+- **Seeded:** 2026-04-09
+- **CEO:** Raymond Chun (President & CEO since Nov 2024, succeeded Bharat Masrani)
+- **12 depts, 5 products, Revenue $53.0B CAD FY2024, employees 95,000, logo_color #00B140**
+- **Products:** TD App, TD Direct Investing, TD Insurance, TD Securities, TD Aeroplan Visa Infinite
+- **C-Suite:** Kelvin Tran (CFO), Ajai Bambawale (CRO), Brett Pitts (CIO), Kenn Lalonde (CHRO), Amy Bannerman (CLO), Michael Rhodes (Group Head CPB), Leo Salom (Group Head U.S.), Riaz Ahmed (Group Head WM & Securities), Sonia Baxendale (Group Head Insurance)
+- **VPs:** Norie Campbell (P&C Banking), David Olive (TD Securities), Dan Bosman (Technology), Barbara Hooper (Risk), Miriam McKenna (Finance), Jacqueline De Sorbo (AML Compliance U.S.), Shahzad Bhatti (TD Wealth)
+- **Market share:** RBC 28%, TD 24%, Scotiabank 14%, BMO 12%, CIBC 11%, Others 11% (Canadian banking by assets)
+- **Notes:** Canada's 2nd-largest bank by assets (~$2.0T CAD). October 2024: pleaded guilty to BSA/AML violations, $3.09B USD penalty — largest AML fine in U.S. banking history. OCC asset cap on U.S. retail growth until remediation milestones met. Acquired Canada Trust 1999 ($8B). Acquired Commerce Bancorp 2009 ($8.5B). TD Ameritrade sold to Schwab 2020; TD retained ~10% Schwab stake. First Horizon deal ($13.4B USD) terminated May 2023 after regulatory block. 12 departments: Personal & Commercial Banking, TD Securities, TD Wealth Management, Technology & Innovation, Risk Management, Finance & Treasury, Legal & Compliance, Human Resources, Marketing & Brand, Operations & Client Services, TD Insurance, U.S. Banking – TD Bank America.
+
+---
+
+## Royal Bank of Canada
+- **Seeded:** 2026-04-09
+- **CEO:** Dave McKay (President & CEO since 2014)
+- **12 depts, 5 products, Revenue $57.9B FY2024 (total revenue), employees 98,000, logo_color #003168**
+- **Products:** RBC Mobile Banking App, RBC Avion Visa Infinite, RBC InvestEase (robo-advisor), RBC Capital Markets Advisory, City National Bank (U.S. Private & Commercial Banking)
+- **C-Suite:** Katherine Gibson (CFO), Graeme Hepworth (CRO), Helena Gottschling (CHRO), Jacqueline Moss (CLO), Mary DePaoli (CMO), Neil McLaughlin (Group Head P&C Banking), Derek Neldner (Group Head Capital Markets), Doug Guzman (Group Head Wealth & Insurance), Bruce Ross (Group Head T&O)
+- **VPs:** Jennifer Tory (Personal Banking), Andrea Cotroneo (CM Technology), Maria Douvas (Enterprise Risk), Sean Amato-Gauci (Finance & Treasury), Rami Thabet (Data & Analytics), Lisa Scott (HR), Kelly Coffey (President & CEO City National Bank)
+- **Market share:** RBC 28%, TD Bank 24%, Scotiabank 14%, BMO 12%, CIBC 11%, Others 11% (Canadian banking by assets)
+- **Notes:** Canada's largest bank by market cap and assets (~$2.1T CAD). Acquired HSBC Canada $13.5B March 2024 (600K+ new clients). City National Bank acquired 2015 ($5.4B). OSFI D-SIB (domestic systemically important). Operates in 29 countries. FY2024 net income $16.2B. 12 departments tracked: Personal & Commercial Banking, RBC Capital Markets, RBC Wealth Management, Technology & Innovation, Risk Management, Finance & Accounting, Legal & Compliance, Human Resources, Marketing & Brand, Operations & Client Services, Data & Analytics, City National Bank (U.S.).
+
+---
+
+## Take-Two Interactive
+- **Seeded:** 2026-04-09
+- **CEO:** Strauss Zelnick (Chairman & CEO since 2007)
+- **12 depts, 5 products, Revenue $5.4B FY2024 (net bookings), employees 11,000, logo_color #D42C29**
+- **Products:** Grand Theft Auto Online, NBA 2K25, Red Dead Redemption 2, Sid Meier's Civilization VII, Zynga Mobile Games
+- **C-Suite:** Karl Slatoff (President), Lainie Goldstein (CFO), Matt Breitman (CMO), Daniel Einhorn (CLO), Scott Kohler (CTO), Jacqueline Lee (CPO), Sam Houser (Pres. Rockstar), David Ismailer (Pres. 2K), Frank Gibeau (Pres. Zynga)
+- **VPs:** Jennifer Kolbe (Rockstar Ops), Sarah Anderson (2K Publishing), Bernard Kim (Zynga Mobile & UA), Michael Condrey (Finance & Corp Dev), Ryan Wyatt (Live Services & Engineering), Tara Bruno (People & Talent)
+- **Market share:** Take-Two 8%, Activision/Microsoft 12%, Sony 11%, EA 8%, Ubisoft 4%, Others 57% (global game publisher revenue)
+- **Notes:** Three publishing labels: Rockstar Games (GTA, RDR), 2K (NBA 2K, Civilization, BioShock, Borderlands), Zynga (Toon Blast, Empires & Puzzles, Words With Friends). Acquired Zynga for $12.7B in May 2022. Acquired Bungie for $3.6B? No — Bungie was acquired by Sony. Rockstar acquired Bungie was PlayStation. GTA VI confirmed for fall 2025 — projected to drive $15B+ net bookings in FY2026. $165M cost reduction initiative announced Jan 2024. Live services = 66% of net bookings. GTA V remains a top-10 weekly seller 11 years after launch.
+
+---
+
+## Sony Interactive Entertainment
+- **Seeded:** 2026-04-09
+- **CEO:** Hermen Hulst (Co-CEO, PlayStation Studios) & Hideaki Nishino (Co-CEO, Platform Experience)
+- **12 depts, 5 products, Revenue $26.0B FY2024 (PlayStation segment), employees 9,000, logo_color #003087**
+- **Products:** PlayStation 5, PlayStation Network, PlayStation Plus, PlayStation Store, PlayStation Studios (First-Party Games)
+- **C-Suite:** Nicola Rossi (CFO), Veronica Rogers (CRO), Eric Lempel (CMO), Shuhei Yoshida (CTO), Riley Russell (CLO), Grace Chen (CPO)
+- **VPs:** Connie Booth (Studios), Jay Binder (Platform Eng + Hardware), Stephen Turvey (Finance), Mary Yee (Marketing), Peter Jamison (Store + Plus), Garret Fredley (Dev Relations), Jayne Simmons (HR), Andrew House (Supply Chain)
+- **Market share:** PlayStation 31%, Xbox/Microsoft 24%, Nintendo 21%, PC Gaming 16%, Others 8% (global console gaming)
+- **Notes:** Wholly owned subsidiary of Sony Group Corporation. Headquartered in San Mateo, CA and Tokyo, Japan. PS5 sold 70M+ units by early 2026 — fastest-selling PlayStation console. PlayStation Network has 116M+ monthly active users. PlayStation Plus has 47M+ subscribers. PlayStation Studios comprises 19 first-party studios (including Naughty Dog, Santa Monica Studio, Insomniac Games, Guerrilla Games, Bungie). Acquired Bungie for $3.6B in January 2023. PlayStation Store digital game sales now exceed physical (52%+ digital attach rate). Jim Ryan served as CEO from 2019 until Dec 2023 when dual co-CEO structure with Hulst and Nishino was announced. SIE is Sony's largest revenue segment.
+
+---
+
+## Autodesk
+- **Seeded:** 2026-04-09
+- **Sources:** autodesk.com, ir.autodesk.com, LinkedIn, Glassdoor, SEC EDGAR, Gartner, IDC PLM reports
+- **CEO:** Andrew Anagnost (President & CEO since 2017)
+- **12 depts, 5 products, Revenue $5.9B FY2024, employees 14,000, logo_color #0696D7**
+- **Products:** AutoCAD, Fusion 360, Revit, Autodesk Construction Cloud (ACC), Maya
+- **C-Suite:** Janesh Moorjani (CFO), Raji Arasu (CTO), Steve Blum (EVP Worldwide Sales), Rebecca Pearce (CPO), Kirandeep Anand (CLO), Amy Bunszel (EVP AEC D&M)
+- **VPs:** Nicholas Jankovic (Eng AEC+Platform), Marcus Liotta (Eng D&M+Product Mgmt), Sarah Hodges (Sales+CS+Channel), Lisa Campbell (Marketing), Tiffany Sherwood (HR), Michael Chadwick (Finance+IT+Legal)
+- **Market share:** Autodesk 40%, Siemens PLM 18%, Dassault 15%, PTC 12%, Others 15% (AEC/Design/Manufacturing software)
+- **Notes:** Completed full perpetual-to-subscription transition in FY2022 — 100% subscription revenue. Revenue grew +11% FY2024 on strong AEC demand. ACC (Construction Cloud) is fastest-growing product after PlanGrid ($875M), BuildingConnected, Assemble acquisitions. Maya dominates VFX/animation pipeline at major studios. Autodesk AI (generative design, AI drafting) launched 2024 across AutoCAD, Revit, and Fusion. Competes with Siemens Digital Industries, Dassault Systèmes (3DS), and PTC in PLM/CAD. 40% global AEC+D&M software market share.
 
 ---

@@ -417,10 +417,12 @@ function LogoField({
     try {
       const supabase = createClient()
       const ext      = file.name.split('.').pop() ?? 'png'
-      const filePath = `${slug}.${ext}`
+      // Include timestamp in filename so each upload gets a unique URL,
+      // ensuring the DB value changes and the browser fetches the new file.
+      const filePath = `${slug}-${Date.now()}.${ext}`
       const { error } = await supabase.storage
         .from('logos')
-        .upload(filePath, file, { upsert: true, cacheControl: '3600' })
+        .upload(filePath, file, { cacheControl: '31536000' })
       if (error) { setUploadErr(error.message); return }
       const { data: { publicUrl } } = supabase.storage.from('logos').getPublicUrl(filePath)
       onLogoUrl(publicUrl)

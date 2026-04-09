@@ -500,7 +500,10 @@ function ProductSection({ company, dbProducts }: { company: Company; dbProducts:
         description: p.description ?? '',
         category: p.category ?? '',
         catColor: p.cat_color,
-        useCases:    (Array.isArray(p.use_cases) ? (p.use_cases as string[]) : (typeof p.use_cases === 'string' ? (() => { try { return JSON.parse(p.use_cases as string) as string[] } catch { return [] as string[] } })() : [])),
+        useCases:    (() => {
+          const raw = Array.isArray(p.use_cases) ? p.use_cases : (typeof p.use_cases === 'string' ? (() => { try { return JSON.parse(p.use_cases as string) } catch { return [] } })() : [])
+          return (raw as unknown[]).map((uc) => (typeof uc === 'string' ? uc : (uc && typeof (uc as Record<string,unknown>).text === 'string' ? (uc as Record<string,unknown>).text as string : String(uc))))
+        })(),
         customers:   (p.customers as { name: string; abbr: string; bg: string }[]) ?? [],
         competitors: (p.competitors as { name: string; description?: string; edge: string }[]) ?? [],
         imageUrl:    p.image_url ?? null,
@@ -581,62 +584,133 @@ function ProductSection({ company, dbProducts }: { company: Company; dbProducts:
           </div>
         </div>
 
-        {/* ── 3 equal columns: customers | competitors | image ── */}
-        <div className="product-detail-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr' }}>
-          <div className="product-detail-col" style={{ padding: '14px 18px', borderRight: '1px solid #F0F0F2' }}>
-            <div style={{ color: '#A1A1AA', fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.07em', marginBottom: 10 }}>Key Customers</div>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-              {p.customers.map(c => (
-                <div key={c.name} style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                  <div style={{ width: 24, height: 24, borderRadius: 6, background: c.bg, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                    <span style={{ color: '#fff', fontSize: 9, fontWeight: 800 }}>{c.abbr}</span>
+        {/* ── Bottom: sidebar + competitor cards ── */}
+        <div className="product-detail-grid" style={{ display: 'grid', gridTemplateColumns: '190px 1fr' }}>
+
+          {/* ── Left sidebar: image on top, customers below ── */}
+          <div className="product-detail-col" style={{ borderRight: '1px solid #F0F0F2', display: 'flex', flexDirection: 'column' }}>
+
+            {/* Product image */}
+            <div className="product-detail-img" style={{
+              background: `linear-gradient(145deg, ${color}08 0%, ${color}03 100%)`,
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              padding: '20px 16px', minHeight: 120, borderBottom: '1px solid #F0F0F2',
+            }}>
+              {p.imageUrl && !imgError ? (
+                <img
+                  src={p.imageUrl}
+                  alt={p.name}
+                  onError={() => setImgErrors(prev => ({ ...prev, [p.id]: true }))}
+                  style={{ width: '100%', maxHeight: 90, objectFit: 'contain', display: 'block' }}
+                />
+              ) : (
+                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6 }}>
+                  <div style={{ width: 40, height: 40, borderRadius: 10, background: `${color}18`, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" style={{ opacity: 0.4 }}><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
                   </div>
-                  <span style={{ color: '#3F3F46', fontSize: 12.5, fontWeight: 500 }}>{c.name}</span>
+                  <span style={{ color, fontSize: 10, fontWeight: 600, opacity: 0.3 }}>No image</span>
                 </div>
-              ))}
+              )}
             </div>
-          </div>
-          <div className="product-detail-col" style={{ padding: '14px 18px', borderRight: '1px solid #F0F0F2' }}>
-            <div style={{ color: '#A1A1AA', fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.07em', marginBottom: 10 }}>vs. Competitors</div>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-              {p.competitors.map(c => (
-                <div key={c.name}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 5, marginBottom: 2 }}>
-                    <span style={{ fontSize: 9, color: '#EF4444', fontWeight: 700, background: '#FEF2F2', border: '1px solid #FECACA', borderRadius: 3, padding: '1px 4px', flexShrink: 0 }}>vs</span>
-                    <span style={{ color: '#09090B', fontSize: 12.5, fontWeight: 700 }}>{c.name}</span>
+
+            {/* Key customers */}
+            <div style={{ padding: '14px 16px', flex: 1 }}>
+              <div style={{ color: '#A1A1AA', fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.07em', marginBottom: 10 }}>Key Customers</div>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 7 }}>
+                {p.customers.length > 0 ? p.customers.map(c => (
+                  <div key={c.name} style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                    <div style={{ width: 22, height: 22, borderRadius: 5, background: c.bg, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                      <span style={{ color: '#fff', fontSize: 8.5, fontWeight: 800 }}>{c.abbr}</span>
+                    </div>
+                    <span style={{ color: '#3F3F46', fontSize: 12, fontWeight: 500 }}>{c.name}</span>
                   </div>
-                  {c.description && (
-                    <div style={{ color: '#52525B', fontSize: 11, lineHeight: 1.5, paddingLeft: 22, marginBottom: 2 }}>{c.description}</div>
-                  )}
-                  <div style={{ color: '#71717A', fontSize: 11.5, lineHeight: 1.4, paddingLeft: 22 }}>{c.edge}</div>
-                </div>
-              ))}
-            </div>
-          </div>
-          <div className="product-detail-img" style={{ background: `${color}06`, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 16 }}>
-            {p.imageUrl && !imgError ? (
-              <img
-                src={p.imageUrl}
-                alt={p.name}
-                onError={() => setImgErrors(prev => ({ ...prev, [p.id]: true }))}
-                style={{ width: '100%', objectFit: 'contain', display: 'block' }}
-              />
-            ) : (
-              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8 }}>
-                <div style={{ width: 44, height: 44, borderRadius: 12, background: `${color}15`, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" style={{ opacity: 0.45 }}><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
-                </div>
-                <span style={{ color, fontSize: 10.5, fontWeight: 600, opacity: 0.35 }}>No image</span>
+                )) : (
+                  <span style={{ color: '#D4D4D8', fontSize: 11.5, fontStyle: 'italic' }}>Not specified</span>
+                )}
               </div>
+            </div>
+          </div>
+
+          {/* ── Right: competitor intelligence cards ── */}
+          <div style={{ padding: '16px 20px' }}>
+            <div style={{ color: '#A1A1AA', fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.07em', marginBottom: 12 }}>Competitive Intelligence</div>
+
+            {p.competitors.length > 0 ? (
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+                {p.competitors.map(c => (
+                  <div key={c.name} style={{
+                    borderRadius: 10,
+                    border: '1px solid #F0F0F2',
+                    overflow: 'hidden',
+                    boxShadow: '0 1px 3px rgba(0,0,0,0.04)',
+                  }}>
+                    {/* Card header */}
+                    <div style={{
+                      display: 'flex', alignItems: 'center', gap: 7,
+                      padding: '8px 12px',
+                      background: '#FAFAFA',
+                      borderBottom: '1px solid #F0F0F2',
+                    }}>
+                      <span style={{
+                        fontSize: 8.5, color: '#EF4444', fontWeight: 800,
+                        background: '#FEF2F2', border: '1px solid #FECACA',
+                        borderRadius: 3, padding: '1px 5px', letterSpacing: '0.04em', flexShrink: 0,
+                      }}>VS</span>
+                      <span style={{ color: '#09090B', fontSize: 12.5, fontWeight: 700, letterSpacing: '-0.01em' }}>{c.name}</span>
+                    </div>
+
+                    {/* THEM row */}
+                    {c.description && (
+                      <div style={{
+                        display: 'flex', gap: 0,
+                        borderBottom: '1px solid #F0F0F2',
+                      }}>
+                        <div style={{
+                          width: 36, flexShrink: 0,
+                          display: 'flex', alignItems: 'flex-start', justifyContent: 'center',
+                          paddingTop: 9,
+                          background: '#F7F7F8',
+                          borderRight: '1px solid #F0F0F2',
+                        }}>
+                          <span style={{ fontSize: 8, fontWeight: 800, color: '#A1A1AA', letterSpacing: '0.06em', writingMode: 'vertical-rl', transform: 'rotate(180deg)', userSelect: 'none' }}>THEM</span>
+                        </div>
+                        <div style={{ padding: '8px 12px', flex: 1 }}>
+                          <p style={{ margin: 0, color: '#71717A', fontSize: 11.5, lineHeight: 1.6 }}>{c.description}</p>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* EDGE row */}
+                    <div style={{ display: 'flex', gap: 0 }}>
+                      <div style={{
+                        width: 36, flexShrink: 0,
+                        display: 'flex', alignItems: 'flex-start', justifyContent: 'center',
+                        paddingTop: 9,
+                        background: `${color}08`,
+                        borderRight: `1px solid ${color}20`,
+                      }}>
+                        <span style={{ fontSize: 8, fontWeight: 800, color, letterSpacing: '0.06em', writingMode: 'vertical-rl', transform: 'rotate(180deg)', userSelect: 'none', opacity: 0.7 }}>EDGE</span>
+                      </div>
+                      <div style={{ padding: '8px 12px', flex: 1, background: `${color}04` }}>
+                        <p style={{ margin: 0, color: '#1a1a1a', fontSize: 12, lineHeight: 1.6, fontWeight: 500 }}>{c.edge}</p>
+                      </div>
+                    </div>
+
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <span style={{ color: '#D4D4D8', fontSize: 11.5, fontStyle: 'italic' }}>No competitive data available</span>
             )}
           </div>
+
         </div>
       </div>
       <style>{`
         @media (max-width: 600px) {
           .product-detail-grid { grid-template-columns: 1fr !important; }
           .product-detail-col { border-right: none !important; border-bottom: 1px solid #F0F0F2; }
-          .product-detail-img { border-top: 1px solid #F0F0F2; min-height: 120px; }
+          .product-detail-img { border-top: 1px solid #F0F0F2 !important; min-height: 100px; }
         }
       `}</style>
     </div>
