@@ -1497,6 +1497,12 @@ function DataSection() {
   const [seedSummary, setSeedSummary] = useState<{ succeeded: number; failed: number; total: number } | null>(null)
   const seedLogRef = useRef<HTMLDivElement>(null)
 
+  // ── Fix Logos state ──
+  const [logoRunning, setLogoRunning] = useState(false)
+  const [logoLog, setLogoLog] = useState<{ text: string; ok: boolean }[]>([])
+  const [logoSummary, setLogoSummary] = useState<{ fixed: number; skipped: number; failed: number; total: number } | null>(null)
+  const logoLogRef = useRef<HTMLDivElement>(null)
+
   // ── Bulk Add state ──
   const [bulkFile, setBulkFile] = useState<File | null>(null)
   const [bulkRunning, setBulkRunning] = useState(false)
@@ -1555,6 +1561,59 @@ function DataSection() {
       setSeedLog(l => [...l, { text: `Network error: ${e}`, ok: false }])
     }
     setSeedRunning(false)
+  }
+
+  // ── Fix Logos ──
+  async function runFixLogos(slug?: string) {
+    setLogoRunning(true)
+    setLogoLog([])
+    setLogoSummary(null)
+    try {
+      const res = await fetch('/api/fix-logos', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: slug ? JSON.stringify({ slug }) : '{}',
+      })
+      if (!res.ok) {
+        const json = await res.json().catch(() => ({ error: `HTTP ${res.status}` }))
+        setLogoLog([{ text: json.error ?? `HTTP ${res.status}`, ok: false }])
+        setLogoRunning(false)
+        return
+      }
+      if (!res.body) { setLogoLog([{ text: 'No response body', ok: false }]); setLogoRunning(false); return }
+      const reader = res.body.getReader()
+      const dec = new TextDecoder()
+      let buf = ''
+      while (true) {
+        const { done, value } = await reader.read()
+        if (done) break
+        buf += dec.decode(value, { stream: true })
+        const parts = buf.split('\n\n')
+        buf = parts.pop() ?? ''
+        for (const part of parts) {
+          const line = part.replace(/^data: /, '').trim()
+          if (!line) continue
+          try {
+            const ev = JSON.parse(line)
+            if (ev.type === 'start') {
+              setLogoLog(l => [...l, { text: `Fixing ${ev.total} logos…`, ok: true }])
+            } else if (ev.type === 'ok') {
+              setLogoLog(l => [...l, { text: `✓ ${ev.slug}`, ok: true }])
+            } else if (ev.type === 'skip') {
+              setLogoLog(l => [...l, { text: `– ${ev.slug} (already in storage)`, ok: true }])
+            } else if (ev.type === 'fail') {
+              setLogoLog(l => [...l, { text: `✗ ${ev.slug} — ${ev.reason}`, ok: false }])
+            } else if (ev.type === 'summary') {
+              setLogoSummary({ fixed: ev.fixed, skipped: ev.skipped, failed: ev.failed, total: ev.total })
+            }
+            scrollLog(logoLogRef)
+          } catch { /* malformed line */ }
+        }
+      }
+    } catch (e) {
+      setLogoLog([{ text: `Network error: ${e}`, ok: false }])
+    }
+    setLogoRunning(false)
   }
 
   // ── Bulk Add ──
@@ -1721,6 +1780,46 @@ function DataSection() {
               <div key={i} style={{ color: l.ok ? '#A1A1AA' : '#F87171', whiteSpace: 'pre' }}>{l.text}</div>
             ))}
             {bulkRunning && <div style={{ color: '#063f76' }}>●</div>}
+          </div>
+        )}
+      </div>
+
+      {/* Fix Logos */}
+      <div style={cardStyle}>
+        <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: 10 }}>
+          <div>
+            <div style={{ fontSize: 14, fontWeight: 700, color: '#09090B', marginBottom: 3 }}>Fix Broken Logos</div>
+            <div style={{ fontSize: 12, color: '#71717A', lineHeight: 1.5 }}>
+              Re-uploads logos for all companies whose <code style={{ fontSize: 11, background: '#F4F4F5', padding: '1px 5px', borderRadius: 4, color: '#374151' }}>logo_url</code> points to an external URL instead of Supabase storage.
+              Tries the current URL first, then falls back to icon.horse.
+            </div>
+          </div>
+          <div style={{ display: 'flex', gap: 8, flexShrink: 0, marginLeft: 16 }}>
+            <button
+              onClick={() => runFixLogos()}
+              disabled={logoRunning}
+              style={{ ...btnStyle(logoRunning), background: logoRunning ? '#E4E4E7' : '#7C3AED', color: logoRunning ? '#A1A1AA' : '#fff', cursor: logoRunning ? 'not-allowed' : 'pointer' }}
+            >
+              {logoRunning ? 'Fixing…' : 'Fix All Logos'}
+            </button>
+          </div>
+        </div>
+
+        {logoSummary && (
+          <div style={{ display: 'flex', gap: 8, marginBottom: 12 }}>
+            <span style={{ padding: '3px 10px', borderRadius: 6, background: '#DCFCE7', color: '#16A34A', fontSize: 12, fontWeight: 600, border: '1px solid #BBF7D0' }}>{logoSummary.fixed} fixed</span>
+            {logoSummary.skipped > 0 && <span style={{ padding: '3px 10px', borderRadius: 6, background: '#F4F4F5', color: '#71717A', fontSize: 12, fontWeight: 600, border: '1px solid #E4E4E7' }}>{logoSummary.skipped} already ok</span>}
+            {logoSummary.failed > 0 && <span style={{ padding: '3px 10px', borderRadius: 6, background: '#FEE2E2', color: '#DC2626', fontSize: 12, fontWeight: 600, border: '1px solid #FECACA' }}>{logoSummary.failed} failed</span>}
+            <span style={{ padding: '3px 10px', borderRadius: 6, background: '#F4F4F5', color: '#71717A', fontSize: 12, fontWeight: 600, border: '1px solid #E4E4E7' }}>{logoSummary.total} total</span>
+          </div>
+        )}
+
+        {logoLog.length > 0 && (
+          <div ref={logoLogRef} style={logStyle}>
+            {logoLog.map((l, i) => (
+              <div key={i} style={{ color: l.ok ? '#A1A1AA' : '#F87171' }}>{l.text}</div>
+            ))}
+            {logoRunning && <div style={{ color: '#7C3AED' }}>●</div>}
           </div>
         )}
       </div>

@@ -84,6 +84,30 @@ IMPORTANT — same quality rules apply to seed_company.py output as all other se
 After inserting, verify:
   SELECT id, logo_url, logo_color, description FROM companies WHERE slug = '[slug]';
 
+━━━ LOGO STORAGE CHECK — MANDATORY BEFORE SECTION 1 ━━━
+⛔ DO NOT proceed to section 1 until this check passes.
+
+Run:
+  SELECT slug, logo_url FROM companies WHERE slug = '[slug]';
+
+The logo_url MUST start with the Supabase storage prefix:
+  https://cznnhdeahfnowfimqbrg.supabase.co/storage/v1/object/public/logos/
+
+If logo_url is NULL, empty, points to a favicon.ico, icon.horse URL, Wikipedia URL,
+or ANY external domain — the logo is NOT properly stored. Fix it before continuing:
+
+  Option A (preferred): Go to Admin → Data Management → "Fix Broken Logos" and click
+    "Fix All Logos" (or run: POST /api/fix-logos { "slug": "[slug]" }).
+
+  Option B (manual): Download the image and upload it yourself:
+    1. Find the company's logo URL (icon.horse/icon/{domain} is a reliable fallback)
+    2. Call the seed-company API: POST /api/seed-company { "name": "...", "website": "..." }
+       The API will scrape the logo and upload it to Supabase storage automatically.
+
+Why this matters: External logo URLs (favicons, CDN links, icon.horse) break over time.
+Third-party domains change, rate-limit, or block hotlinking. All logos MUST live in our
+own Supabase storage bucket to guarantee they always load for users.
+
 ━━━ 1. COMPANY OVERVIEW (UPDATE companies SET ... WHERE id = company_id) ━━━
 GOLD STANDARD: See referenceData.md Section 1 for field depth requirements.
 - description: 2-3 sentence company summary
@@ -116,6 +140,19 @@ IMPORTANT — use the scraper first, then patch only what it cannot produce:
     RULE: "description" must be about the COMPETITOR product — not about this company's product.
     It should read as a neutral summary of what the competitor product is and does (as if
     writing about it independently). Do not mention this company's product in the description field.
+
+  ⚠️ UNIQUENESS RULE — NEVER COPY-PASTE ACROSS PRODUCTS:
+  Every product's customers and competitors arrays MUST be unique and specific to that
+  product. NEVER use the same customers or competitors data across multiple products of
+  the same company. This is the single most common data quality error.
+  - customers: reflect who actually buys/uses THAT specific product (e.g. Merchant Platform
+    customers are restaurant chains; DoorDash for Business customers are enterprise HR teams;
+    DashPass customers are subscription-seeking consumers).
+  - competitors: reflect who competes with THAT specific product (e.g. a whiteboard tool
+    competes with Miro/Mural, not Sketch; an enterprise plan competes with enterprise tiers
+    of other design tools, not their free-tier competitors).
+  If you find yourself reusing the same 3 competitors for all 6+ products of a company,
+  STOP — you are copy-pasting. Research each product's actual competitive landscape.
 
   Run this SQL to patch all products at once after researching:
     UPDATE company_products SET customers = '[...]'::jsonb, competitors = '[...]'::jsonb

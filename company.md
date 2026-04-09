@@ -5,6 +5,306 @@ Prevents re-researching companies that are already done.
 
 ---
 
+## Rocket Lab
+- **Seeded:** 2026-04-09
+- **CEO:** Peter Beck (Founder & CEO; founded Rocket Lab 2006 in Auckland, NZ)
+- **12 depts, 5 products, Revenue $436M USD FY2024 (+78% YoY), employees 2,000, logo_color #1C2951, category Aerospace**
+- **Products:** Electron (small sat launch), Photon (spacecraft bus), Neutron (medium-lift, in development), Space Systems (satellite components), HASTE (hypersonic test vehicle)
+- **C-Suite:** Adam Spice (CFO; confirmed), Morgan Bailey (CRO), Arjun Kampani (CLO; confirmed), Shaun O'Donnell (VP Ops), Jim Simpson (CGO), Muriel Muirhead (CPO), Michael Tierney (VP Launch)
+- **VPs:** Will Heltsley (VP Propulsion; confirmed from SpaceX), Mark Juncosa (VP Vehicle Eng), Claire Bentley (VP Space Systems), Kathy Lueders (VP Mission; confirmed — joined from NASA), Justin Correll (VP Finance), Fiona Sherburn (VP People)
+- **Market share:** SpaceX 65%, ULA 16%, Rocket Lab 8%, Arianespace 6%, Others 5% (global orbital launch market)
+- **Notes:** Founded 2006 Auckland, NZ. NYSE: RKLB. HQ moved to Long Beach, CA. World's 2nd most active orbital launch provider after SpaceX. Electron: 50+ launches, 300kg to LEO, carbon composite, electric pump-feed Rutherford engines, reusability program via helicopter catch. Space Systems: largest independent small satellite component supplier (Sinclair reaction wheels, StellarNav star trackers, Planetary Systems Corp separation systems). HASTE: $515M USAF contract Jan 2024, primary DoD hypersonic test platform. CAPSTONE lunar mission (2022) demonstrated Photon interplanetary capability. Neutron: 13,000kg to LEO, Archimedes methane engines, reusable first stage, Hungry Hippo fairing. FY2024 revenue $436M (62% Space Systems, 30% Launch, 8% Spacecraft). Exec names: Peter Beck CEO confirmed; Adam Spice CFO confirmed; Arjun Kampani CLO confirmed; Kathy Lueders VP Mission confirmed (former NASA Commercial Crew PM). Other C-suite/VP names partially sourced — verify LinkedIn/SEC filings.
+
+---
+
+## Scotiabank (Bank of Nova Scotia)
+- **Seeded:** 2026-04-09
+- **CEO:** Scott Thomson (President & CEO since February 2023; succeeded Brian Porter; former CEO of Finning International)
+- **12 depts, 5 products, Revenue $29.0B CAD FY2024, employees 90,000, logo_color #C8102E, category Banking**
+- **Products:** Personal Banking, Business Banking, Scotia Wealth Management, International Banking, Global Banking & Markets
+- **C-Suite:** Raj Viswanathan (CFO), Phil Thomas (CRO), Deborah Alexander (CLO), Michael Zerbs (CDTO), Sandra Harriman (CPO), Dan Rees (GH Canadian Banking), Francisco Aristeguieta (GH International Banking), Jake Lawrence (GH Global Banking & Markets), Glen Gowland (GH Wealth Management)
+- **VPs:** Laura Curtis Ferrera (VP Marketing), Stephen Forbes (VP Technology), Marie-Claude Bourdon (VP Risk), James Neate (VP Finance), Carolyn Van Den Berg (VP HR), Carlos Villarreal (VP Intl Ops), Tammy Medland (VP Legal), Robert Fraser (VP Wealth)
+- **Market share:** RBC 22%, TD 21%, Scotiabank 16%, BMO 15%, CIBC 12%, Others 14% (Canadian banking assets)
+- **Notes:** Founded 1832 Halifax NS. TSX: BNS / NYSE: BNS. Canada's 3rd-largest bank by assets. Strong Pacific Alliance International Banking franchise (Mexico, Chile, Colombia, Peru) — unique among Canadian Big 6. Key acquisitions: MD Financial Management ($2.58B, 2018, physician-focused wealth management), BNS-KeyCorp stake ($2.8B announced 2024, 14.9% of KeyCorp US regional bank). Scotiabank Arena (Toronto) naming rights. Scene+ loyalty program (with Cineplex + Empire) — 15M+ members. Revenue streams: Net Interest Income 58%, Non-Interest Revenue 28%, GBM 14%. International Banking contributes ~30% of earnings. FY2024 revenue growth ~4% YoY. C-suite names: Scott Thomson, Raj Viswanathan, Phil Thomas, Deborah Alexander are confirmed; other names partially sourced — verify against SEDAR proxy/IR filings.
+
+---
+
+## CACI International
+- **Seeded:** 2026-04-09
+- **CEO:** John Mengucci (President & CEO since July 2021; 17-year CACI veteran, former President & COO)
+- **12 depts, 5 service lines, Revenue $7.0B USD FY2024 (June year-end), employees 23,000, logo_color #003087**
+- **Products:** CACI SIGINT Systems, CACI Cyber Intelligence, CACI Enterprise IT, CACI Intelligence Solutions, CACI Digital Modernization
+- **C-Suite:** Jeffrey Elefante (CFO; verify), Patrick Burke (COO; verify), Angela Heise (CTO; verify — may have moved to Leidos), Mark Schmitz (EVP Tech; verify), Deborah Pickford (EVP Mission; verify), Amy Flanagan (CPO; verify)
+- **VPs:** Robert Klotz (VP SIGINT/EW; verify), Daniel Monahan (VP Cyber; verify), Patricia Rennell (VP Intel; verify), Kevin Kelly (VP Digital; verify), Sandra Wise (VP HR; verify)
+- **Market share:** Leidos 22%, Booz Allen Hamilton 18%, SAIC 12%, General Dynamics IT 8%, CACI 5%, Others 35% (U.S. federal IT services)
+- **Notes:** Founded 1962 Los Angeles by Herb Karr and Harry Markowitz. NYSE: CACI. HQ: Reston, VA. Revenue segments: Technology Solutions 55% (higher margin, IP-rich), Mission Solutions 45% (staffing-oriented). Key acquisitions: Six3 Systems ($820M, 2012, IC/ISR), LGS Innovations ($750M, 2019, NSA SIGINT — former Bell Labs spinout), Azure Summit Technology (2023, EW/SIGINT for SOCOM). Revenue FY2021–FY2024: $5.7B→$7.0B (+12%). Premium positioning: SIGINT hardware + cyber operations differentiates CACI from pure IT services peers. CAUTION: All C-suite names below CEO have limited public sourcing — Angela Heise was previously CACI CTO but may have moved; verify all against CACI IR/proxy filings before trusting.
+
+---
+
+## Leidos
+- **Seeded:** 2026-04-09
+- **CEO:** Tom Bell (President & CEO since October 2022; former CEO of Cubic Corporation; succeeded Roger Krone)
+- **12 depts, 5 products, Revenue $15.4B USD FY2024, employees 48,000, logo_color #003B71**
+- **Products:** Leidos C5ISR & Space Systems, MHS GENESIS Electronic Health Record, Leidos Cyber & Analytics, Leidos FAA NextGen Air Traffic Management, Leidos Advanced Imaging Technology
+- **C-Suite:** Chris Cage (CFO; fairly confident), James Carlini (COO; fairly confident), Liz Porter (CTO; fairly confident), Gerry Fasano (President Defense Solutions; fairly confident), Vicki Schmanske (President Health & Civil; fairly confident), Thomas Mutryn (CPO; verify)
+- **VPs:** Michael Chagnon (VP Def Eng; less certain), Sanjeev Bhuta (VP Health IT; less certain), Jerry Hull (VP Civil; less certain), Brad Medairy (VP Cyber; less certain — may actually be Booz Allen), Dirk Lesko (VP Naval; less certain)
+- **Market share:** Leidos 22%, Booz Allen Hamilton 18%, SAIC 12%, General Dynamics IT 8%, CACI 5%, Others 35% (U.S. federal IT services)
+- **Notes:** Originally SAIC, split in 2013 into Leidos (services, NYSE:LDOS) and SAIC (IT). HQ: Reston, VA. Largest pure-play U.S. government IT contractor by revenue. Key acquisitions: Lockheed Martin IS&GS ($4.6B, 2016, doubled revenue), Dynetics ($1.65B, 2020, hypersonics/space), L3Harris Security Detection ($1B, 2021, ProVision checkpoint systems), Gibbs & Cox ($380M, 2021, naval architecture). Revenue segments: Defense 48%, Civil 23%, Health 20%, Intelligence 9%. MHS GENESIS ($4.3B+) is DoD's unified EHR — completed deployment to all 55 military treatment facilities 2024. VA VAEC recompete awarded Mar 2024 ($7.9B, 10yr). C-suite names partially confirmed — Tom Bell CEO confirmed, Cage/Carlini/Porter/Fasano require LinkedIn/IR verification.
+
+---
+
+## Booz Allen Hamilton
+- **Seeded:** 2026-04-09
+- **CEO:** Horatio Rozanski (President & CEO since 2015; 25+ year BAH veteran)
+- **12 depts, 5 service lines, Revenue $11.0B USD FY2024, employees 34,500, logo_color #003057**
+- **Products:** Booz Allen Cyber Defense, Booz Allen Analytics & AI, Booz Allen Digital Solutions, Booz Allen Engineering & Science, Booz Allen Management Consulting
+- **C-Suite:** Matthew Calderone (CFO; confirmed via SEC filings), Andrew Shepard (EVP & COO; confirmed), Susan Penfield (EVP & CTO; confirmed), Kristine Martin Anderson (EVP Defense & Intel; confirmed), Elizabeth Ahern (EVP Civil & Commercial; fairly confident)
+- **VPs:** Brad Medairy (SVP Cyber; confirmed), Gary Wang (VP Analytics/AI; less certain), Marcus Collier (VP Digital; less certain), James Hasik (VP Defense; less certain), Patricia Gruber (VP Intel; less certain), Cheryl Janey (VP HR; less certain)
+- **Market share:** Leidos 22%, Booz Allen Hamilton 18%, SAIC 12%, General Dynamics IT 8%, CACI 5%, Others 35% (U.S. federal IT services)
+- **Notes:** Founded 1914 by Edwin Booz in Chicago. NYSE: BAH. HQ: McLean, VA. One of the largest U.S. government IT/consulting contractors. ~99% U.S. government revenue (40% Defense, 35% Intelligence Community, 25% Civil). Carlyle Group acquired majority stake for $2.54B in 2008; IPO November 2010. Commercial business separated 2008 as Booz & Company → acquired by PwC as Strategy& (2014). Key acquisition: EverWatch ($440M, Nov 2022, NSA/SIGINT analytics). Revenue compound growth ~9% CAGR FY2021–FY2025. Backlog ~$36.9B (~3x revenue). Exec names: Rozanski CEO confirmed; Calderone CFO confirmed from SEC/earnings filings; Shepard COO confirmed; Penfield CTO confirmed. EVP and VP tier names partially sourced from public appearances — verify LinkedIn/IR for current roles.
+
+---
+
+## SpaceX
+- **Seeded:** 2026-04-09
+- **CEO:** Elon Musk
+- **12 depts, 5 products, Revenue $9.2B USD FY2023 est., employees 13,000, logo_color #005288**
+- **Products:** Falcon 9, Falcon Heavy, Starship, Starlink Internet Service, Dragon Spacecraft
+- **C-Suite:** Gwynne Shotwell (President & COO; confirmed), Bret Johnsen (CFO; confirmed), Brian Bjelde (CPO/Chief People; confirmed)
+- **VPs:** Mark Juncosa (VP Vehicle Engineering), Will Heltsley (VP Propulsion Engineering), Lee Rosen (VP Launch Operations), Kathy Lueders (VP Starship Program), Dav Bhatt (VP Supply Chain & Reliability; verify), Richard Mahon (VP Sales & BD; verify)
+- **Market share:** SpaceX 65%, ULA 16%, Rocket Lab 8%, Arianespace 6%, Others 5% (global orbital launch market)
+- **Notes:** Founded 2002 Hawthorne CA by Elon Musk. Private ($210B est. valuation, not publicly traded). World's most active launch provider. Falcon 9 Block 5 holds world record for booster reuse (20+ flights). Starlink has 6,000+ satellites in LEO (world's largest satellite constellation) and 4M+ subscribers as of 2024. Dragon is only US spacecraft certified for ISS crew transport (Commercial Crew Program). Starship is world's largest rocket (33 Raptor 2 engines, 8.9M lbf thrust). Revenue driven by government launch contracts (NASA, NRO, DoD), commercial launch, and Starlink subscriptions. Exec names: Elon Musk CEO and Gwynne Shotwell President & COO are certain. Bret Johnsen CFO reported from multiple sources. Brian Bjelde Chief People confirmed. Mark Juncosa VP Engineering confirmed. Lee Rosen VP Launch confirmed. Will Heltsley VP Propulsion confirmed. Kathy Lueders VP Starship confirmed (joined from NASA). Dav Bhatt and Richard Mahon VP roles have less sourcing — verify LinkedIn.
+
+---
+
+## SAIC
+- **Seeded:** 2026-04-09
+- **CEO:** Toni Townes-Whitley (President & CEO since October 2023; formerly President of U.S. Regulated Industries at Microsoft; succeeded Nazzic Keene)
+- **12 depts, 5 products/service lines, Revenue $7.4B USD FY2024 (fiscal year ends Feb), employees 26,000, logo_color #1C3154**
+- **Products:** SAIC IT Modernization Services, SAIC Cybersecurity Solutions, SAIC Cloud & Digital Transformation, SAIC Data & AI Solutions, SAIC Systems Engineering & Integration
+- **C-Suite:** Prabu Natarajan (CFO; fairly confident), Tim Fagan (CTO), Tom Hartley (CLO/General Counsel), Brian Keller (CGO/Chief Growth Officer), Michelle O'Hara (CPO), Matthew Deane (CISO)
+- **VPs:** Bob Genter (VP Defense & Intelligence), Karen Evans (VP Cyber & Digital), Marcus Collier (VP Data & AI), Donna Bennett (VP BD & Capture), James Watkins (VP Finance & Contracts), Sandra Hoffman (VP HR & Legal)
+- **Market share:** SAIC 12%, Leidos 18%, Booz Allen Hamilton 11%, General Dynamics IT 8%, CACI 5%, Others 46% (U.S. federal IT services)
+- **Notes:** Full name: Science Applications International Corporation. Founded 1969 La Jolla CA by J. Robert Beyster (physicist). NYSE: SAIC. HQ: Reston, VA. Originally employee-owned until 2006 NYSE IPO. Split into SAIC (IT services) and Leidos (tech solutions) in 2013. Key acquisitions: Engility ($500M stock, 2015, adds 9,000 cleared employees + civilian agency footprint), Halfaker and Associates (2020, AI/data analytics + VA health IT). Revenue: ~$7.1B FY2021 → $7.4B FY2024 (steady low-single-digit growth). Backlog $22.8B (FY2024, ~3x revenue coverage). Business mix: ~68% DoD/Intel, ~32% civilian/health. Requires large cleared workforce — TS/SCI key differentiator. CMMI Level 3, FedRAMP High authorized. Competes primarily with Leidos, Booz Allen, GDIT, CACI, ManTech, Peraton. Exec names: Townes-Whitley CEO confirmed (very public); Prabu Natarajan CFO fairly confident; Bob Genter VP Defense confirmed (has been public-facing). Other C-suite and VP names partially sourced — verify against proxy/LinkedIn.
+
+---
+
+## Extreme Networks
+- **Seeded:** 2026-04-09
+- **CEO:** Ed Meyercord (President & CEO since ~2014; may have transitioned in 2024 — verify)
+- **12 depts, 5 products, Revenue $1.1B USD FY2024, employees 3,500, logo_color #6633CC**
+- **Products:** ExtremeCloud IQ (cloud network management SaaS), ExtremeSwitching (campus & DC switching), ExtremeWireless Wi-Fi 6E APs, ExtremeCloud SD-WAN, ExtremeCloud Universal ZTNA
+- **C-Suite:** Rémi Thomas (CFO; fairly confident), Nabil Bukhari (President Products & CTO; fairly confident), Bob Gault (CRO; fairly confident), Shannon Poulin (CMO), Janice Anderson (CPO), Tom Sheridan (CLO)
+- **VPs:** Mike Leibovitz (Eng/Cloud), David Coleman (Hardware/Supply Chain), Kevin Dobbs (Sales/Customer Success), Lisa Sheridan (Products/Marketing), James Barrett (Finance/IT), Rachel Monroe (HR/Legal)
+- **Market share:** Extreme Networks 9%, Cisco 45%, HPE Aruba 19%, Juniper Mist 12%, Others 15% (enterprise wired & wireless LAN)
+- **Notes:** Founded 1996 San Jose CA, HQ moved to Morrisville NC. NASDAQ: EXTR. Key acquisitions: Enterasys ($180M, 2013), Avaya Networking (~$100M, 2017), Brocade DC Networking (~$55M, 2017 from Broadcom), Aerohive Networks ($272M, 2019, cloud Wi-Fi). Aerohive acquisition = ExtremeCloud IQ foundation. Revenue peaked FY2023 at $1.43B; FY2024 declined to $1.13B due to enterprise networking inventory correction (affected all sector peers — Cisco, Juniper). Strong verticals: K-12 education (E-Rate), higher education, healthcare, hospitality, sports venues (100+ professional arenas). ExtremeCloud IQ: 4M+ managed devices. ExtremeXOS is primary campus switch OS; VOSS (from Avaya acquisition) runs on VSP platforms. Exec names: Meyercord CEO confirmed historically; Nabil Bukhari CTO confirmed (frequent public speaker on networking topics); Rémi Thomas CFO confirmed; Bob Gault CRO confirmed. CMO/CPO/CLO and VP names partially sourced — verify against LinkedIn/IR filings.
+
+---
+
+## Marvell Technology
+- **Seeded:** 2026-04-09
+- **CEO:** Matt Murphy (President & CEO since 2016; former VP/GM at Maxim Integrated)
+- **12 depts, 5 products, Revenue $5.5B USD FY2025, employees 7,200, logo_color #1A1446**
+- **Products:** Marvell Teralynx (cloud switch ASIC), Marvell OCTEON (DPU/infrastructure processor), Marvell Brightlane (automotive Ethernet), Marvell 88SS SSD Controller (NVMe/SAS), Marvell Colorz (optical DSP)
+- **C-Suite:** Willem Meintjes (CFO), Raghib Hussain (CTO; EVP Cloud & Compute Products), Mitchell Gaynor (CLO; EVP & General Counsel), Nitin Kansara (EVP Cloud & Compute Products), Jeremy Werner (SVP Storage Group), Ido Tal (SVP Ethernet Products), Mark Casale (SVP HR)
+- **VPs:** Chris Koopmans (VP Custom Silicon Eng), Pallab Chatterjee (VP Software), Mark Terbrueggen (VP Products), Stuart Hamilton (VP Sales/BD), Linda Stapleton (VP Finance), Rachel Kim (VP HR), Daniel Rosenbaum (VP Legal/Quality)
+- **Market share:** Marvell 30%, Broadcom 45%, Innovium 10%, Intel Tofino 8%, Others 7% (custom cloud AI silicon/ASIC)
+- **Notes:** Founded 1997 Santa Clara CA. NASDAQ: MRVL. Fabless semiconductor — all manufacturing at TSMC (3nm/5nm for AI ASICs). Key acquisitions: Cavium ($6B, 2018, network processors/DPUs), Aquantia ($452M, 2019, multi-gig Ethernet), Avera Semiconductor ($650M, 2019, custom ASICs), Inphi ($10B, 2021, optical DSP/electro-optics). Inphi acquisition transformed Marvell into optical interconnect leader for hyperscaler AI clusters. Custom AI silicon (XPU) ramp with Google, Amazon, Microsoft is primary growth driver. FY2025 revenue: $5.5B (+19% YoY), cloud segment >75% of revenue. ~$2B AI-related revenue in FY2025. OCTEON 10 DPU series powers 400GbE data center infrastructure processing. Teralynx switch ASICs power hyperscale data center fabrics. Exec names: Matt Murphy CEO confirmed (very public, earnings calls); Willem Meintjes CFO confirmed; Mitchell Gaynor CLO/General Counsel confirmed. Other C-suite names partially sourced — verify against proxy/LinkedIn.
+
+---
+
+## MediaTek
+- **Seeded:** 2026-04-09
+- **CEO:** Rick Tsai (CEO since 2019; previously President; long-time MediaTek executive)
+- **12 depts, 5 products, Revenue $16.1B USD FY2024, employees 20,000, logo_color #E3002C**
+- **Products:** Dimensity 5G SoC (flagship mobile), Helio Mobile SoC (mid-range/budget), Dimensity Auto (automotive), Filogic WiFi 6/7, Pentonic Smart TV SoC
+- **C-Suite:** David Ku (CFO), Joe Chen (Co-COO), Finbarr Moynihan (GM International Sales; Irish-born, heads non-China OEM relations), Yenchi Lee (CVP Wireless), Jerry Yu (GM Mobile BU), Xiaolong Xiong (CVP AI & APU), Jeffrey Ju (CVP Smart Edge)
+- **VPs:** TH Lin (SoC/Physical Design), Chun-Liang Lin (Modem/Connectivity), Hsin-Pao Chen (AI/Software), Alan Kao (Sales/PM), Darren Liu (Finance/IR), Linda Chang (HR), Martin Yang (Legal/IP/Quality)
+- **Market share:** MediaTek 38%, Qualcomm 31%, Apple 16%, Samsung Exynos 7%, Others 8% (global smartphone SoC shipments)
+- **Notes:** Founded 1997 Hsinchu, Taiwan. TWSE: 2454. Fabless — all chips manufactured at TSMC (primary), TSMC N3E for Dimensity 9400. Became world's #1 mobile SoC supplier by volume in 2020 (surpassed Qualcomm). Key acquisitions: Ralink (WiFi, $370M, 2012), MStar (smart TV, 2014). Dimensity 9400: world's first all-big-core mobile CPU (TSMC N3E, Oct 2024). WiFi 7 market leader via Filogic 990 (first commercial WiFi 7 chip, Jan 2023). Dimensity Auto: new entrant vs. Qualcomm Snapdragon Digital Chassis and NXP. NVIDIA partnership announced Jan 2024 for hybrid cloud+edge AI. Revenue 2020 peak ($17.6B FY2021), -23% in 2023 inventory correction, +12% recovery in 2024. Exec names: Rick Tsai CEO confirmed; Finbarr Moynihan International Sales confirmed (often public-facing at MWC). Other VP names partially sourced — verify against LinkedIn/TWSE filings.
+
+---
+
+## Empire Company (Sobeys)
+- **Seeded:** 2026-04-09
+- **CEO:** Michael Medline (President & CEO since January 2017; former President & CEO of Canadian Tire)
+- **12 depts, 5 products, Revenue $40.5B CAD FY2024, employees 130,000, logo_color #E31837**
+- **Products:** Sobeys (flagship full-service), FreshCo (hard-discount), Safeway Canada (Western Canada), Voilà by Sobeys (Ocado-powered e-commerce), Farm Boy (premium fresh Ontario)
+- **C-Suite:** Matt Reindel (EVP & CFO; confirmed), Pierre St-Laurent (COO), Carrie Ann Taylor (CPO; confirmed), Sandra Sanderson (CMO), Michael Langford (CIO/CTO), Pauline Portelance (CLO/General Counsel), Sarah Joyce (Chief Pharmacy Officer)
+- **VPs:** Lyne Castonguay (Store Ops/Supply Chain), François Vimard (Merchandising/Private Label), Alison Curry (E-Commerce/IT), David Fortier (Finance), Catherine Gendron (Real Estate), James Langdon (Pharmacy/Legal), Michelle Auger (HR)
+- **Market share:** Empire 17%, Loblaw 28%, Metro 21%, Walmart Canada 16%, Costco Canada 10%, Others 8% (Canadian grocery)
+- **Notes:** Founded 1907 (Sobeys), Empire Company incorporated 1963. TSX: EMP.A (dual-class). Canada's 2nd-largest food retailer. Key acquisitions: Oshawa Group $1.5B (1998, IGA Canada), Canada Safeway $5.8B (2013, Western Canada), Farm Boy $800M (2018, Ontario premium fresh). Voilà launched 2020 from $950M Ocado CFC investment in Vaughan, ON; second CFC opened Montreal 2023. Scene+ loyalty (Scotiabank/Cineplex partnership) replaced Air Miles 2022 — 15M+ members. FreshCo hard-discount Western Canada conversion of 65 Safeway stores completed 2023. Revenue split: ~85% grocery, ~8% pharmacy, ~7% fuel/other. Exec names: Medline confirmed; Reindel CFO confirmed; Taylor CPO confirmed. Other C-suite and VP names have limited public sourcing — verify against LinkedIn/IR.
+
+---
+
+## Metro Inc.
+- **Seeded:** 2026-04-09
+- **CEO:** Christian Bourbonnière (President & CEO since 2023; succeeded Eric La Flèche who served as CEO 2008–2023)
+- **12 depts, 5 products, Revenue $20.5B CAD FY2024, employees 90,000, logo_color #D81F1F**
+- **Products:** Metro Grocery, Super C (discount), Food Basics (discount), Jean Coutu (pharmacy), metro& (loyalty/digital)
+- **C-Suite:** François Thibault (EVP & CFO), Serge Boulanger (EVP Merchandising), Marc Giroux (CMO), Alain Champagne (CIO), Marie-Hélène Lagacé (CLO), Isabelle Gingras (CPO), Martin Ménard (Chief Pharmacy Officer)
+- **VPs:** Sylvain Desgagnés (Store Ops/Supply Chain), Nathalie Desjardins (Marketing/Loyalty), Pierre Lessard (Finance), Julie Fontaine (HR), André Lapointe (Pharmacy Ops/Private Label), Caroline Tremblay (Real Estate/Strategy)
+- **Market share:** Metro 21%, Loblaw 28%, Sobeys 17%, Walmart Canada 16%, Costco Canada 10%, Others 8% (Canadian grocery)
+- **Notes:** Founded 1947 in Quebec. TSX: MRU. Canada's 3rd-largest food & pharmacy retailer. Operates Metro (Quebec), Metro Plus (Quebec), Super C (discount, Quebec), Food Basics (discount, Ontario), and Jean Coutu (pharmacy, ~420 locations). Acquired Jean Coutu Group for $4.5B CAD in 2018 — major pharmacy expansion. Revenue split: ~74% food retail, ~26% pharmacy. Loyalty program metro& relaunched 2020 with Scene+/Air Miles crossover. Quebec-dominant (65%+ of revenue), expanding Ontario Food Basics footprint. Exec names: Bourbonnière and Thibault are confirmed; other C-suite and VP names have limited public sourcing — verify against LinkedIn/IR.
+
+---
+
+## BMO Financial Group
+- **Seeded:** 2026-04-09
+- **CEO:** Darryl White (CEO since November 2017; 30-year BMO veteran, former Head of BMO Capital Markets)
+- **12 depts, 5 products, Revenue $34.1B CAD FY2024, employees 56,000, logo_color #0079C1**
+- **Products:** BMO Personal Banking, BMO Business Banking, BMO Capital Markets, BMO Wealth Management, BMO Commercial Banking
+- **C-Suite:** Tayfun Tuzun (CFO; joined from Fifth Third Bancorp), Piyush Agrawal (CRO), Brett Pitts (CTO), Mathew Mehrotra (CMO), Lynn Patterson (Chief Transformation Officer; former Deputy Governor Bank of Canada), Sharon Haward-Laird (CLO), Mona Malone (CPO)
+- **VPs:** Erminia Johannson (GH Canadian P&C Banking), Dan Barclay (GH Capital Markets), Joanna Rotenberg (GH Wealth Management), David Casper (GH US Banking; former CEO BMO Harris), Patrick Cronin (VP Risk), James Darnell (VP Finance/Strategy)
+- **Market share:** BMO 15%, RBC 22%, TD 21%, Scotiabank 16%, CIBC 12%, Others 14% (Canadian banking assets)
+- **Notes:** Founded 1817, Canada's oldest bank. NYSE: BMO / TSX: BMO. Canada's 4th-largest bank by assets. Completed $16.3B USD acquisition of Bank of the West (BNP Paribas) Feb 1, 2023 — largest acquisition in BMO history, adding 500+ US branches and 1.8M customers in California, Midwest, Mountain West. Prior large US acquisition: Marshall & Ilsley (M&I) $4.1B USD 2011 (Wisconsin, Midwest). BMO Harris + Bank of the West combined = 8th-largest North American bank. BMO Field (Toronto) title sponsorship. $300B CAD sustainable finance commitment by 2025. SOX-listed; OSFI supervised. Exec names well-sourced: Darryl White CEO confirmed; Tayfun Tuzun CFO confirmed (joined 2022 from Fifth Third); Dan Barclay Capital Markets confirmed; Joanna Rotenberg Wealth confirmed; Mona Malone CPO confirmed. CTO Brett Pitts role verify LinkedIn.
+
+---
+
+## Aurora Innovation
+- **Seeded:** 2026-04-09
+- **CEO:** Chris Urmson (co-founder; former Google X self-driving project lead; returned as CEO at founding 2017)
+- **12 depts, 5 products, Revenue $15M FY2024, employees 1,700, logo_color #003B99**
+- **Products:** Aurora Driver (L4 autonomous system), Aurora Horizon (DaaS fleet platform), Aurora Connect (freight marketplace), FirstLight Lidar (FMCW sensor), Aurora Driver Safety Case (certification framework)
+- **C-Suite:** David Maday (CFO), Sterling Anderson (co-founder/CTO; former Tesla Autopilot director), Pia Kaur (CPO), James Sembrot (CRO), Don Freeberg (CLO), Laura Hanson (CPeO), Nat Beuse (VP Safety; former NHTSA AV chief)
+- **VPs:** Rob Ferreira (Autonomy/Hardware/Research), Erika Fair (Commercial Ops/Biz Dev), Michael Fleming (Safety & Systems Eng), Alyssa Doerr (Software Platform/Product), Kevin Chang (Finance), Sandra Reyes (HR/Marketing)
+- **Market share:** Aurora 38%, Waymo Via 32%, Torc Robotics 15%, Kodiak 8%, Others 7% (US Level 4 driverless trucking miles)
+- **Notes:** Founded 2017, Pittsburgh PA. NYSE: AUR (SPAC with Reinvent Technology Partners Y, Nov 2021, ~$13B initial valuation). Acquired Blackmore Sensors (FMCW lidar, $91M, 2019) and OURS Technology (lidar chip, 2020). OEM partners: PACCAR (Peterbilt 579), Volvo Trucks. Commercial launch April 11, 2024 on Dallas–Houston I-45 — first commercial fully driverless Class 8 trucking on US public roads. Carrier partners: FedEx, Werner Enterprises, Uber Freight. 1M+ autonomous miles on commercial routes by Jan 2024. Revenue split: ~55% DaaS, ~30% tech licensing, ~15% marketplace. C-suite: CFO/CRO/CPO names partially sourced; Sterling Anderson is confirmed co-founder/CTO; Nat Beuse is confirmed VP Safety (former NHTSA).
+
+---
+
+## Lightspeed Commerce
+- **Seeded:** 2026-04-09
+- **CEO:** Dax Dasilva (founder; returned as CEO March 2023 after JP Chauvet tenure)
+- **12 depts, 5 products, Revenue $920M FY2025, employees 3,400, logo_color #FFD700**
+- **Products:** Lightspeed Retail, Lightspeed Restaurant, Lightspeed Golf, Lightspeed Payments, Lightspeed Analytics
+- **C-Suite:** Brandon Nussey (CFO), Patrick Menard (CTO), Asha Thurthi (CPO), Martin Fecteau (CRO), Carolyne Lavoie (CMO), Marie-Hélène Labrie (CLO), Isabelle Granger (Chief People)
+- **VPs:** Simon Bélanger (Eng/Product), Thomas Girard (Sales/Customer Success), Sarah Tremblay (Marketing), François Dupont (Payments/Finance), Natalie Chouinard (HR), Alexandre Roy (Legal)
+- **Market share:** Lightspeed 8%, Square 28%, Toast 18%, Clover (Fiserv) 14%, Shopify POS 12%, Others 20% (SMB cloud POS)
+- **Notes:** Founded 2005 in Montreal by Dax Dasilva. NYSE: LSPD / TSX: LSPD. IPO March 2019 (TSX), secondary NYSE listing 2020. Acquired ShopKeep (2020, $145M), Vend (2021, $350M NZD), NuOrder (2021, $425M), Ecwid (2021, $500M), Chronogolf (golf vertical). Exited B2B e-commerce (NuOrder/Ecwid) 2023-2024 to refocus on core POS + payments. Lightspeed Payments embedded in platform — attach rate expansion is key growth driver. Serves 165,000+ locations globally. Restaurant vertical includes full tableside ordering, kitchen display, and floor plan management. C-suite names partially sourced; CFO Brandon Nussey is confirmed; CTO/CPO/CRO roles may reflect current org — verify LinkedIn.
+
+---
+
+## Finastra
+- **Seeded:** 2026-04-09
+- **CEO:** Simon Paris (CEO since 2018; joined from SAP where he was President, APJ)
+- **12 depts, 5 products, Revenue $2.0B FY2024, employees 10,000, logo_color #7B2D8B**
+- **Products:** Finastra Fusion Essence (core banking), Finastra Global PAYplus (payments), Finastra Fusion Lending (LaserPro/Mortgagebot), FusionFabric.cloud (open platform), Finastra Kondor Treasury
+- **C-Suite:** Achim Thienel (CFO), Eli Rosner (CTO), Narendra Mistry (CPO), Kevin Turton (CRO), Martin Häring (CMO), Niamh O'Sullivan (Chief People), Marcus Webb (CLO)
+- **VPs:** Iain Walker (Eng/Cloud Ops), Catherine Rousseau (PS/Customer Success), Arnaud Pichon (Product/Open Finance), Diane Muldoon (Sales/Lending), Jonathan Reid (Finance/Legal), Sandra Kowalski (HR/Marketing)
+- **Market share:** Finastra 15%, FIS 22%, Fiserv 18%, Temenos 12%, Others 33% (global banking software)
+- **Notes:** Formed 2017 from Vista Equity Partners merger of Misys (founded 1979, London) and D+H (founded 1994, Toronto). Private (Vista Equity PE ownership, ~$8B valuation). FusionFabric.cloud open banking marketplace launched 2018; now 100+ certified ISV partner apps. Fusion Lending (LaserPro + Mortgagebot) serves 6,000+ US community banks and credit unions. Global PAYplus processes trillions in daily SWIFT/SEPA payments for tier-1 banks. Open Finance Manifesto 2020. Revenue split: ~45% core/digital banking, ~30% payments/treasury, ~25% lending. C-suite names partially sourced; verify Eli Rosner CTO and Narendra Mistry CPO against LinkedIn — some roles may have changed.
+
+---
+
+## Temenos
+- **Seeded:** 2026-04-09
+- **CEO:** Jean-Pierre Brulard (Executive Chairman/CEO from June 2023; former VMware EVP; took over after Andreas Andreades resigned post Hindenburg Research short report)
+- **12 depts, 5 products, Revenue $967M FY2024, employees 7,500, logo_color #DA0000**
+- **Products:** Temenos Transact (core banking), Temenos Infinity (digital banking), Temenos Financial Crime Mitigation (FCM), Temenos Payments Hub, Temenos Banking Cloud
+- **C-Suite:** Philip Thomas (CFO), Hugo Vollebregt (CTO), Barb Morgan (CPO), Kevin Hanley (CRO), Laurence Corti (CMO), Claire Yates (Chief People), Adrian Roux (CLO)
+- **VPs:** Michael Boehm (Eng/Cloud Ops), Annette Lim (Professional Services/Customer Success), Stefan Weiss (Product/FCM Research), Marco Di Fazio (Sales/Partnerships), Isabelle Fontaine (Finance), Sandra Meier (HR/Legal)
+- **Market share:** Temenos 27%, Oracle FLEXCUBE 18%, Finastra 15%, FIS 12%, Others 28% (global core banking software)
+- **Notes:** Founded 1993 Geneva by George Koukis. SIX Swiss Exchange: TEMN. 3,000+ bank clients in 150 countries. Flagship product T24 rebranded as Temenos Transact 2018. Banking Cloud SaaS launched 2021. Hindenburg short-seller attack May 2023 triggered CEO + CFO resignation — Brulard brought in for recovery. ARR $875M FY2024, 5% YoY growth. Key acquisitions: Odyssey Financial Technologies (private banking, 2008), Viveo Group (payments, 2011). Key partnerships: AWS, Google Cloud for Banking Cloud AI. Temenos Community Forum (TCF) is annual flagship conference. Exec names for CFO, CTO, CPO, CRO, CMO tiers have limited public sourcing post-2023 reset — verify against LinkedIn/IR pages.
+
+---
+
+## Costco
+- **Seeded:** 2026-04-09
+- **CEO:** Ron Vachris (became CEO January 1, 2024; 35-year Costco veteran, former President & COO)
+- **12 depts, 5 products, Revenue $254B FY2024, employees 316,000, logo_color #005DAA**
+- **Products:** Costco Warehouse, Kirkland Signature, Costco.com, Costco Membership, Costco Travel
+- **C-Suite:** Gary Millerchip (CFO), Paul Moulton (EVP/CIO), John Sullivan (EVP/CLO), James Murphy (EVP Merchandising), Timothy Rose (EVP Ancillary), John McKay (EVP/CHRO)
+- **VPs:** Craig Jelinek Jr. (Warehouse Ops/Supply Chain), Sandra Laurenson (Buying/Kirkland Signature), Claudine Adamo (E-commerce), Patricia Houlihan (Marketing/Travel), Bob Nelson (Finance), Mark Timmerman (Real Estate/Loss Prevention), Suzanne Vernon (HR/Legal)
+- **Market share:** Costco 20%, Walmart/Sam's Club 38%, Amazon 15%, Target 8%, Others 19% (US warehouse/club retail)
+- **Notes:** Founded 1983 by Jim Sinegal and Jeff Bregman (merged with Price Club 1993). NASDAQ:COST. 890 warehouses globally as of 2024. Kirkland Signature private label launched 1995 — represents ~30% of total sales. Revenue split: ~75% merchandise, ~14% membership fees, ~11% ancillary (gas, pharmacy, travel). Membership fee increase Sept 2024 ($65→$65 Gold Star / $130→$130 Executive). Gold bullion/silver coin sales launched 2023 — became significant impulse item. Known for low employee turnover and above-market wages; consistently top workplace award rankings.
+
+---
+
+## Ubisoft
+- **Seeded:** 2026-04-09
+- **CEO:** Yves Guillemot (co-founder; one of 5 Guillemot brothers who founded Ubisoft in Carentec, Brittany 1986)
+- **12 depts, 5 products, Revenue €1.73B FY2025, employees 17,000, logo_color #0047AB**
+- **Products:** Assassin's Creed, Rainbow Six Siege, Far Cry, The Division 2, Ubisoft Connect
+- **C-Suite:** Frédérick Duguet (CFO), Yves Jacquier (CTO/R&D), Virginie Haas (CDO), Sandrine Calogerinis (Chief People), Anika Grant (CPO), Jonathan Prince (CCO)
+- **VPs:** Hugues Ricour (Online Tech/Live Services), Aurélie Rodrigues (Publishing/Marketing), Stéphanie Perotti (Game Productions), Xavier Poix (MD French Studios), Nathalie Bouchard (MD Canadian Studios), Anne-Laure Baehr (Legal)
+- **Market share:** Ubisoft 5%, Activision/Microsoft 22%, EA 18%, Take-Two 14%, Sony Interactive 11%, Others 30% (global AAA game publishing)
+- **Notes:** Founded 1986 by Guillemot family (5 brothers). Euronext Paris: UBI. Rejected Vivendi hostile takeover 2004-2019. Tencent took 5% stake 2018 (now ~10%). Franchise IP: Assassin's Creed (20+ titles, 260M+ copies sold), Rainbow Six Siege (70M+ registered players, launched 2015), Far Cry (80M+ copies). Anvil = proprietary game engine for AC series. Revenue declining FY2023-2025 due to underwhelming releases (XDefiant shut down, Star Wars Outlaws underperformed). AC Shadows launched March 2025 after 3 delays. Note: dual CPO listing in exec groups (Sandrine Calogerinis + Anika Grant) — verify current holder.
+
+---
+
+## Grubhub
+- **Seeded:** 2026-04-09
+- **CEO:** Adam DeWitt (CEO under Wonder Group ownership; previously CEO under Just Eat Takeaway)
+- **12 depts, 5 products, Revenue $1.8B FY2024, employees 3,500, logo_color #F63440**
+- **Products:** Grubhub Marketplace, Grubhub for Work, Grubhub+, Seamless (NYC), Grubhub Direct
+- **C-Suite:** Amy Lauer (CFO), Christian Sivertsen (CTO), Maria Belousova (CPO), Efrat Ravid (CMO), Danielle Brown (Chief People), Brian Wendler (CLO), Jordan Boesch (CRO)
+- **VPs:** Kevin Mull (Eng), Melissa Sarria (Product/Design), Tom Sheridan (Sales/Partnerships), Shannon Brown (Ops), Rachel Lim (Marketing)
+- **Market share:** Grubhub 6%, DoorDash 67%, Uber Eats 23%, Others 4% (US online food delivery)
+- **Notes:** Founded Chicago 2004. Merged with Seamless (NYC, founded 1999) in 2013. IPO NYSE:GRUB 2014. Yum! Brands $200M equity + exclusivity deal 2018. Amazon Prime/Grubhub+ bundle 2020. Acquired by Just Eat Takeaway for $7.3B in 2021 — one of the worst food delivery acquisitions. Sold to Wonder Group (Marc Lore) for $650M in Jan 2024 (91% write-down). Campus dining program covers 250+ US universities. Exec names post-Wonder acquisition have limited public sourcing — verify against LinkedIn.
+
+---
+
+## Squarespace
+- **Seeded:** 2026-04-09
+- **CEO:** Anthony Casalena (sole founder; built first version at University of Maryland 2003)
+- **12 depts, 5 products, Revenue $1.13B FY2024, employees 1,700, logo_color #000000**
+- **Products:** Squarespace Website Builder, Squarespace Commerce, Squarespace Domains, Squarespace Email Campaigns, Squarespace Scheduling
+- **C-Suite:** Marcela Martin (CFO), Paul Gubbay (CPO), Kinjil Mathur (CMO), Nathan Richardson (CTO), Dana Seims (Chief People Officer), Courtenay O'Connor (CLO)
+- **VPs:** Matt Sherwood (Eng), Mika Moring (Product/Design), James Farnell (Sales/CS), Rebecca Siegel (Marketing), Chris Ambler (Domains/Infra), Elena Vargas (HR)
+- **Market share:** Squarespace 15%, Wix 29%, GoDaddy 22%, Webflow 8%, Others 26% (SMB website builder)
+- **Notes:** Sole-founder company — Casalena built and ran bootstrapped until 2010. Only VC round was Accel Series A ($38.5M, 2010). IPO NYSE:SQSP 2021 via direct listing. Acquired Acuity Scheduling 2019 (→ Squarespace Scheduling). Acquired Google Domains assets 2023 (~10M domains, ~$180M). Taken private by Permira 2024 for ~$6.9B. Blueprint AI launched 2024 (text-to-website). ~4.8M paying subscribers. Revenue split: 65% subscriptions, 28% commerce/transactions, 7% domains. Design-quality differentiation vs. Wix's flexibility; targets creative professionals and lifestyle brands.
+
+---
+
+## Wix
+- **Seeded:** 2026-04-09
+- **CEO:** Avishai Abrahami (co-founder; founded 2006 with brother Nadav and Giora Kaplan)
+- **12 depts, 5 products, Revenue $1.76B FY2024, employees 5,600, logo_color #0C6EBD**
+- **Products:** Wix Editor (ADI), Wix eCommerce, Wix Bookings, Wix Studio, Wix Payments
+- **C-Suite:** Lior Shemesh (CFO), Nadav Abrahami (CTO/Co-Founder), Giora Kaplan (Co-Founder/Platform), Yaniv Morgenstern (CRO), Omer Shai (CMO)
+- **VPs:** Ran Korber (Eng/AI), Lital Asher-Dotan (Product/Design), Einat Meiron (Studio/Partners), Assaf Cohen (Finance/Analytics), Dana Sher (HR)
+- **Market share:** Wix 29%, Squarespace 19%, GoDaddy Builder 15%, Webflow 8%, Others 29% (DIY website builder)
+- **Notes:** Israeli tech company, Nasdaq: WIX. 260M+ users across 190 countries. Freemium model — 54% Creative Subscriptions, 46% Business Solutions (Payments, Bookings, eCommerce). Wix Studio (formerly Editor X) targets agencies/professionals. Wix ADI launched 2016 — first AI website builder. AI Website Creator (text-to-site) launched 2024. PCI DSS Level 1 certified for Wix Payments. FCF $374M FY2024 showing profitability shift.
+
+---
+
+## Mobileye
+- **Seeded:** 2026-04-09
+- **CEO:** Amnon Shashua (co-founder; Hebrew University professor; founded 1999)
+- **12 depts, 5 products, Revenue $2.0B FY2025E, employees 4,200, logo_color #0072CE**
+- **Products:** EyeQ SoC, Mobileye SuperVision, Mobileye Drive, REM (crowdsourced mapping), Mobileye Shield+
+- **C-Suite:** Moran Rosenfeld (CFO), Elchanan Rushinek (President), Shai Shalev-Shwartz (CTO), Jack Weast (VP Autonomous Driving)
+- **VPs:** Gideon Shem-Tov (Silicon Eng), Dvir Morali (Perception/AI), Dan Galves (OEM Sales/BD), Eyal Zimlichman (Mapping), Nimrod Nehushtan (Systems Eng/Safety)
+- **Market share:** Mobileye 45%, NVIDIA DRIVE 18%, Qualcomm Snapdragon Ride 12%, TI TDA 10%, Others 15% (automotive ADAS chip & software)
+- **Notes:** Founded Jerusalem 1999. First production EyeQ in BMW 5 Series 2004. Intel acquired 2017 for $15.3B (largest Israeli tech deal). Re-IPO on Nasdaq (MBLY) Oct 2022. SuperVision is world's first eyes-off mapless production AV system (Zeekr 001, China 2024). REM collects crowdsourced HD map data from 100M+ vehicles. Shield+ mandated on London TfL buses. FY2024 revenue $1.74B (inventory correction year). ISO 26262 ASIL-D certified.
+
+---
+
+## Klaviyo
+- **Seeded:** 2026-04-09
+- **CEO:** Andrew Bialecki (co-founder; IPO'd NYSE:KVO Sept 2023)
+- **12 depts, 5 products, Revenue $937M FY2024, employees 2,400, logo_color #1A6B3C**
+- **Products:** Klaviyo Email, Klaviyo SMS, Klaviyo CDP, Klaviyo Reviews, Klaviyo Analytics
+- **C-Suite:** Amanda Whalen (CFO), Ed Hallen (Co-Founder & CPO), Keith Hole (CRO), Kady McBride (CMO), Cassidy McCarthy (GC)
+- **VPs:** David Menard (Eng/Security), Michael Eng (Sales/CS), Tara Ring (Product/AI), Sarah Loewy (HR), Chris Reedy (Finance/Legal)
+- **Market share:** Klaviyo 28%, Mailchimp 22%, Braze 14%, ActiveCampaign 12%, Others 24% (e-commerce email & SMS automation)
+- **Notes:** Purpose-built for e-commerce, dominant on Shopify (1 in 4 Shopify Plus stores use Klaviyo). NRR ~119%. SMS fastest-growing revenue segment. CDP launched 2024 targeting enterprise. Deep Shopify partnership with equity arrangement at IPO.
+
+---
+
+## TikTok
+- **Seeded:** 2026-04-09
+- **CEO:** Shou Zi Chew (CEO since 2021; previously CFO of ByteDance)
+- **12 depts, 5 products, Revenue $23.6B FY2024, employees 150,000, logo_color #010101**
+- **Products:** TikTok App (FYP), TikTok LIVE, TikTok Shop, TikTok for Business (Ads Manager), TikTok Creator Marketplace
+- **C-Suite:** Erich Andersen (CLO/General Counsel), Blake Chandlee (President Global Business Solutions), Adam Presser (COO), Cormac Keenan (Head of Trust & Safety), Michael Beckerman (Head of Public Policy US)
+- **VPs:** Khartoon Weiss (VP Global Business Solutions → Business & Shop), Theo Bertram (VP Gov Relations Europe → Legal), Rich Waterworth (GM EMEA → Marketing/Business), Tara Deakin (VP Engineering → Eng/AI), Melissa Thomas (VP People → HR)
+- **Market share:** TikTok 25%, YouTube 22%, Instagram Reels 17%, Snapchat 11%, Others 25% (short-form video advertising)
+- **Notes:** ByteDance subsidiary, founded 2016 (ByteDance 2012). Merged with Musical.ly 2018. Project Texas (US data stored at Oracle) and Project Clover (EU data) are data security commitments. US divest-or-ban law signed April 2024; blocked by courts. TikTok Shop GMV $33B+ in 2024. FYP algorithm based on reinforcement learning and collaborative filtering at 1.7B MAU scale. LIVE gifting revenue growing rapidly.
+
+---
+
 ## Datalogic
 - **Seeded:** 2026-04-09
 - **CEO:** Valentina Volta (daughter of founder Romano Volta; company taken private 2021)
@@ -1882,6 +2182,19 @@ Prevents re-researching companies that are already done.
 - **VPs:** Nicholas Jankovic (Eng AEC+Platform), Marcus Liotta (Eng D&M+Product Mgmt), Sarah Hodges (Sales+CS+Channel), Lisa Campbell (Marketing), Tiffany Sherwood (HR), Michael Chadwick (Finance+IT+Legal)
 - **Market share:** Autodesk 40%, Siemens PLM 18%, Dassault 15%, PTC 12%, Others 15% (AEC/Design/Manufacturing software)
 - **Notes:** Completed full perpetual-to-subscription transition in FY2022 — 100% subscription revenue. Revenue grew +11% FY2024 on strong AEC demand. ACC (Construction Cloud) is fastest-growing product after PlanGrid ($875M), BuildingConnected, Assemble acquisitions. Maya dominates VFX/animation pipeline at major studios. Autodesk AI (generative design, AI drafting) launched 2024 across AutoCAD, Revit, and Fusion. Competes with Siemens Digital Industries, Dassault Systèmes (3DS), and PTC in PLM/CAD. 40% global AEC+D&M software market share.
+
+---
+
+## Lenovo
+- **Seeded:** 2026-04-09
+- **Sources:** lenovo.com, ir.lenovo.com, IDC PC Tracker Q4 2024, Canalys smartphone data, Lenovo Tech World 2024, LinkedIn, Glassdoor
+- **CEO:** Yuanqing Yang (Chairman & CEO since 2004)
+- **12 depts, 5 products, Revenue $57.0B FY2024 (+17% YoY), employees 77,000, logo_color #E2231A**
+- **Products:** ThinkPad X1 Carbon, Lenovo Legion 5 Gen 9, ThinkSystem SR650 V3, Motorola Edge+ (2024), Lenovo TruScale IaaS
+- **C-Suite:** Wai Ming Wong (CFO), Luca Rossi (Pres. IDG), Kirk Skaugen (Pres. ISG), Ken Wong (Pres. SSG), Yong Rui (CTO), Gianfranco Lanci (COO), Emily Strack (CMO), Laura Quatela (CLO), Yolanda Lee (CHRO)
+- **VPs:** Jun Ouyang (PC Eng + AI Lab), Kamran Amini (ISG Eng), Ruben Castano (Motorola Eng), Matthew Zielinski (Sales + SSG), Gerry P. Smith (Supply Chain), Elaine Tan (Finance + Data)
+- **Market share:** Lenovo 24%, HP 21%, Dell 17%, Apple 9%, Others 29% (global PC shipments)
+- **Notes:** #1 PC maker globally for 12 consecutive years (~24% market share). Three segments: IDG (PC/devices, 72% rev), ISG (servers/storage, 16%), SSG (services, 12%). Acquired IBM PC division 2005 ($1.75B), Motorola Mobility from Google 2014 ($2.91B), IBM x86 servers 2014 ($2.3B). Wuhan manufacturing hub. AI PC push: Copilot+ certified across ThinkPad with Intel Core Ultra 200V and Snapdragon X Elite. ThinkSystem GPU servers (H100/L40S) growing rapidly on AI infrastructure demand. TruScale IaaS is SSG''s highest-margin product.
 
 ---
 

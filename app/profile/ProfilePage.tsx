@@ -29,6 +29,8 @@ interface Props {
   user: User
   profile: Profile
   savedCompanies: SavedCompany[]
+  unlockedCompanyIds: string[]
+  nextResetAt: string
 }
 
 function InputField({ label, value, onChange, placeholder }: {
@@ -59,7 +61,145 @@ function InputField({ label, value, onChange, placeholder }: {
   )
 }
 
-export default function ProfilePage({ user, profile, savedCompanies: initialSaved }: Props) {
+// ── Countdown helper ──────────────────────────────────────────────────────────
+
+function daysUntil(isoDate: string): number {
+  return Math.ceil((new Date(isoDate).getTime() - Date.now()) / 86_400_000)
+}
+
+function formatResetDate(isoDate: string): string {
+  return new Date(isoDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
+}
+
+// ── Free Unlock card ──────────────────────────────────────────────────────────
+
+function UnlockedCard({ company, nextResetAt }: { company: SavedCompany; nextResetAt: string }) {
+  const color = company.logo_color ?? '#063f76'
+  const days = daysUntil(nextResetAt)
+  const resetLabel = formatResetDate(nextResetAt)
+
+  return (
+    <div
+      style={{
+        background: '#fff',
+        borderRadius: 13,
+        border: '1.5px solid #c5ddf5',
+        overflow: 'hidden',
+        boxShadow: '0 2px 12px rgba(6,63,118,0.08)',
+        position: 'relative',
+        transition: 'box-shadow 0.15s',
+      }}
+      onMouseEnter={e => (e.currentTarget as HTMLElement).style.boxShadow = '0 4px 20px rgba(6,63,118,0.13)'}
+      onMouseLeave={e => (e.currentTarget as HTMLElement).style.boxShadow = '0 2px 12px rgba(6,63,118,0.08)'}
+    >
+      {/* Top accent bar */}
+      <div style={{ height: 3, background: 'linear-gradient(90deg, #063f76, #3B82F6)' }} />
+
+      {/* Unlock badge */}
+      <div style={{
+        position: 'absolute', top: 11, right: 11,
+        display: 'flex', alignItems: 'center', gap: 4,
+        background: '#eef4fb', border: '1px solid #a8cbe8',
+        borderRadius: 6, padding: '3px 7px',
+      }}>
+        <svg width="9" height="10" viewBox="0 0 12 14" fill="none">
+          <rect x="1" y="5" width="10" height="8" rx="2" fill="#063f76" opacity="0.15" stroke="#063f76" strokeWidth="1.2"/>
+          <path d="M4 5V3.5a2 2 0 0 1 4 0V5" stroke="#063f76" strokeWidth="1.2" strokeLinecap="round" fill="none"/>
+          <circle cx="6" cy="9" r="1.2" fill="#063f76"/>
+        </svg>
+        <span style={{ fontSize: 10, fontWeight: 700, color: '#063f76', letterSpacing: '0.02em' }}>UNLOCKED</span>
+      </div>
+
+      <div style={{ padding: '13px 14px 14px' }}>
+        {/* Company info */}
+        <Link href={`/company/${company.slug}`} style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 9, marginBottom: 11, marginRight: 70 }}>
+          <CompanyLogo name={company.name} logoUrl={company.logo_url} logoColor={company.logo_color} size={32} style={{ boxShadow: `0 2px 8px ${color}30` }} />
+          <div>
+            <div style={{ fontSize: 13, fontWeight: 700, color: '#09090B', letterSpacing: '-0.02em' }}>{company.name}</div>
+            <div style={{ fontSize: 11, color: '#A1A1AA' }}>{company.category}</div>
+          </div>
+        </Link>
+
+        {/* Stats row */}
+        <div style={{ display: 'flex', gap: 10, marginBottom: 11 }}>
+          {company.employees && <span style={{ fontSize: 10.5, color: '#A1A1AA' }}>{company.employees >= 1000 ? `${(company.employees / 1000).toFixed(0)}k` : company.employees} emp.</span>}
+          {company.valuation && <span style={{ fontSize: 10.5, color: '#A1A1AA' }}>· {company.valuation}</span>}
+          {company.hq && <span style={{ fontSize: 10.5, color: '#A1A1AA' }}>· {company.hq.split(',')[0]}</span>}
+        </div>
+
+        {/* Reset countdown */}
+        <div style={{
+          display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+          background: '#eef4fb', borderRadius: 8, padding: '8px 10px',
+          border: '1px solid #d0e8f7',
+        }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#063f76" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+            </svg>
+            <span style={{ fontSize: 11, color: '#063f76', fontWeight: 600 }}>
+              Resets {days === 0 ? 'today' : days === 1 ? 'tomorrow' : `in ${days} days`}
+            </span>
+          </div>
+          <span style={{ fontSize: 10.5, color: '#5B8AB5', fontWeight: 500 }}>{resetLabel}</span>
+        </div>
+
+        <Link href={`/company/${company.slug}`} style={{ display: 'flex', alignItems: 'center', gap: 5, marginTop: 10, fontSize: 11.5, fontWeight: 600, color, textDecoration: 'none' }}>
+          View profile
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </Link>
+      </div>
+    </div>
+  )
+}
+
+// ── Regular saved card ────────────────────────────────────────────────────────
+
+function SavedCard({ company, onUnsave }: { company: SavedCompany; onUnsave: (id: string) => void }) {
+  const color = company.logo_color ?? '#063f76'
+  return (
+    <div
+      style={{ background: '#fff', borderRadius: 12, border: '1.5px solid #E4E4E7', overflow: 'hidden', boxShadow: '0 1px 5px rgba(0,0,0,0.04)', transition: 'box-shadow 0.15s' }}
+      onMouseEnter={e => (e.currentTarget as HTMLElement).style.boxShadow = `0 4px 16px ${color}18`}
+      onMouseLeave={e => (e.currentTarget as HTMLElement).style.boxShadow = '0 1px 5px rgba(0,0,0,0.04)'}
+    >
+      <div style={{ height: 4, background: color }} />
+      <div style={{ padding: '14px 14px 12px' }}>
+        <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: 10 }}>
+          <Link href={`/company/${company.slug}`} style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 9 }}>
+            <CompanyLogo name={company.name} logoUrl={company.logo_url} logoColor={company.logo_color} size={32} style={{ boxShadow: `0 2px 8px ${color}30` }} />
+            <div>
+              <div style={{ fontSize: 13, fontWeight: 700, color: '#09090B', letterSpacing: '-0.02em' }}>{company.name}</div>
+              <div style={{ fontSize: 11, color: '#A1A1AA' }}>{company.category}</div>
+            </div>
+          </Link>
+          <button
+            onClick={() => onUnsave(company.id)}
+            title="Remove from saved"
+            style={{ width: 26, height: 26, borderRadius: 7, border: '1px solid #E4E4E7', background: '#F7F7F8', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', transition: 'background 0.12s, border-color 0.12s', flexShrink: 0 }}
+            onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = '#FEF2F2'; (e.currentTarget as HTMLElement).style.borderColor = '#FECACA' }}
+            onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = '#F7F7F8'; (e.currentTarget as HTMLElement).style.borderColor = '#E4E4E7' }}
+          >
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#A1A1AA" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+          </button>
+        </div>
+        <div style={{ display: 'flex', gap: 10 }}>
+          {company.employees && <span style={{ fontSize: 10.5, color: '#A1A1AA' }}>{company.employees >= 1000 ? `${(company.employees / 1000).toFixed(0)}k` : company.employees} emp.</span>}
+          {company.valuation && <span style={{ fontSize: 10.5, color: '#A1A1AA' }}>· {company.valuation}</span>}
+          {company.hq && <span style={{ fontSize: 10.5, color: '#A1A1AA' }}>· {company.hq.split(',')[0]}</span>}
+        </div>
+        <Link href={`/company/${company.slug}`} style={{ display: 'flex', alignItems: 'center', gap: 5, marginTop: 10, fontSize: 11.5, fontWeight: 600, color, textDecoration: 'none' }}>
+          View profile
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </Link>
+      </div>
+    </div>
+  )
+}
+
+// ── Main component ────────────────────────────────────────────────────────────
+
+export default function ProfilePage({ user, profile, savedCompanies: initialSaved, unlockedCompanyIds, nextResetAt }: Props) {
   const [name, setName] = useState(profile.name)
   const [jobRole, setJobRole] = useState(profile.job_role)
   const [jobCompany, setJobCompany] = useState(profile.job_company)
@@ -70,6 +210,13 @@ export default function ProfilePage({ user, profile, savedCompanies: initialSave
 
   const displayName = name || user.email?.split('@')[0] || 'User'
   const initials = displayName.split(' ').map((w: string) => w[0]).join('').toUpperCase().slice(0, 2)
+
+  const unlockedSet = new Set(unlockedCompanyIds)
+  const isFree = profile.plan === 'Free'
+
+  // Split: unlocked (free token, can't remove) vs regular saves
+  const unlockedSaved = isFree ? saved.filter(c => unlockedSet.has(c.id)) : []
+  const regularSaved  = saved.filter(c => !unlockedSet.has(c.id))
 
   function handleSaveProfile() {
     startTransition(async () => {
@@ -197,101 +344,108 @@ export default function ProfilePage({ user, profile, savedCompanies: initialSave
             </div>
           </div>
 
-          {/* ── Right: Saved companies ── */}
-          <div>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 14 }}>
-              <div>
-                <div style={{ fontSize: 15, fontWeight: 800, color: '#09090B', letterSpacing: '-0.03em' }}>Saved Companies</div>
-                <div style={{ fontSize: 12, color: '#A1A1AA', marginTop: 1 }}>
-                  {saved.length} {saved.length === 1 ? 'company' : 'companies'} · sorted A–Z
-                </div>
-              </div>
-              <Link href="/" style={{ fontSize: 12, fontWeight: 600, color: '#063f76', textDecoration: 'none', opacity: 0.8 }}
-                onMouseEnter={e => (e.currentTarget as HTMLElement).style.opacity = '1'}
-                onMouseLeave={e => (e.currentTarget as HTMLElement).style.opacity = '0.8'}
-              >
-                Browse more →
-              </Link>
-            </div>
+          {/* ── Right: Saved sections ── */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 28 }}>
 
-            {saved.length === 0 ? (
-              <div style={{ background: '#fff', borderRadius: 14, border: '1px solid #E4E4E7', padding: '48px 24px', textAlign: 'center' }}>
-                <div style={{ fontSize: 32, marginBottom: 12 }}>🔖</div>
-                <div style={{ fontSize: 14, fontWeight: 700, color: '#09090B', marginBottom: 6 }}>No saved companies yet</div>
-                <p style={{ fontSize: 13, color: '#A1A1AA', lineHeight: 1.6, margin: '0 0 20px' }}>
-                  Click the bookmark icon on any company profile to save it here.
-                </p>
-                <Link href="/" style={{ display: 'inline-flex', alignItems: 'center', gap: 6, padding: '9px 18px', borderRadius: 9, background: '#063f76', color: '#fff', textDecoration: 'none', fontSize: 13, fontWeight: 600 }}>
-                  Browse companies
-                </Link>
-              </div>
-            ) : (
-              <div className="pp-saved-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 10 }}>
-                {saved.map(c => {
-                  const color = c.logo_color ?? '#063f76'
-                  return (
-                    <div key={c.id} style={{ background: '#fff', borderRadius: 12, border: '1.5px solid #E4E4E7', overflow: 'hidden', boxShadow: '0 1px 5px rgba(0,0,0,0.04)', transition: 'box-shadow 0.15s' }}
-                      onMouseEnter={e => (e.currentTarget as HTMLElement).style.boxShadow = `0 4px 16px ${color}18`}
-                      onMouseLeave={e => (e.currentTarget as HTMLElement).style.boxShadow = '0 1px 5px rgba(0,0,0,0.04)'}
-                    >
-                      <div style={{ height: 4, background: color }} />
-                      <div style={{ padding: '14px 14px 12px' }}>
-                        <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: 10 }}>
-                          <Link href={`/company/${c.slug}`} style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 9 }}>
-                            <CompanyLogo name={c.name} logoUrl={c.logo_url} logoColor={c.logo_color} size={32} style={{ boxShadow: `0 2px 8px ${color}30` }} />
-                            <div>
-                              <div style={{ fontSize: 13, fontWeight: 700, color: '#09090B', letterSpacing: '-0.02em' }}>{c.name}</div>
-                              <div style={{ fontSize: 11, color: '#A1A1AA' }}>{c.category}</div>
-                            </div>
-                          </Link>
-                          <button
-                            onClick={() => handleUnsave(c.id)}
-                            title="Remove from saved"
-                            style={{ width: 26, height: 26, borderRadius: 7, border: '1px solid #E4E4E7', background: '#F7F7F8', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', transition: 'background 0.12s, border-color 0.12s', flexShrink: 0 }}
-                            onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = '#FEF2F2'; (e.currentTarget as HTMLElement).style.borderColor = '#FECACA' }}
-                            onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = '#F7F7F8'; (e.currentTarget as HTMLElement).style.borderColor = '#E4E4E7' }}
-                          >
-                            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#A1A1AA" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
-                          </button>
-                        </div>
-                        <div style={{ display: 'flex', gap: 10 }}>
-                          {c.employees && <span style={{ fontSize: 10.5, color: '#A1A1AA' }}>{c.employees >= 1000 ? `${(c.employees / 1000).toFixed(0)}k` : c.employees} emp.</span>}
-                          {c.valuation && <span style={{ fontSize: 10.5, color: '#A1A1AA' }}>· {c.valuation}</span>}
-                          {c.hq && <span style={{ fontSize: 10.5, color: '#A1A1AA' }}>· {c.hq.split(',')[0]}</span>}
-                        </div>
-                        <Link href={`/company/${c.slug}`} style={{ display: 'flex', alignItems: 'center', gap: 5, marginTop: 10, fontSize: 11.5, fontWeight: 600, color, textDecoration: 'none' }}>
-                          View profile
-                          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-                        </Link>
+            {/* ── Free Unlock section (only for free plan users with an active unlock) ── */}
+            {isFree && unlockedSaved.length > 0 && (
+              <div>
+                {/* Section header */}
+                <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 14 }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 7 }}>
+                    <div style={{ width: 28, height: 28, borderRadius: 8, background: '#eef4fb', border: '1px solid #a8cbe8', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                      <svg width="13" height="13" viewBox="0 0 12 14" fill="none">
+                        <rect x="1" y="5" width="10" height="8" rx="2" fill="#063f76" opacity="0.15" stroke="#063f76" strokeWidth="1.2"/>
+                        <path d="M4 5V3.5a2 2 0 0 1 4 0V5" stroke="#063f76" strokeWidth="1.2" strokeLinecap="round" fill="none"/>
+                        <circle cx="6" cy="9" r="1.2" fill="#063f76"/>
+                      </svg>
+                    </div>
+                    <div>
+                      <div style={{ fontSize: 14, fontWeight: 800, color: '#09090B', letterSpacing: '-0.03em' }}>Free Unlock</div>
+                      <div style={{ fontSize: 11, color: '#A1A1AA', marginTop: 1 }}>
+                        Auto-saved · resets {formatResetDate(nextResetAt)}
                       </div>
                     </div>
-                  )
-                })}
+                  </div>
+                  <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: 5, padding: '4px 10px', borderRadius: 20, background: '#eef4fb', border: '1px solid #c5ddf5' }}>
+                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#063f76" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                      <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+                    </svg>
+                    <span style={{ fontSize: 11, fontWeight: 700, color: '#063f76' }}>
+                      {daysUntil(nextResetAt)}d left
+                    </span>
+                  </div>
+                </div>
+
+                {/* Info notice */}
+                <div style={{ display: 'flex', alignItems: 'flex-start', gap: 9, padding: '10px 13px', borderRadius: 10, background: '#eef4fb', border: '1px solid #c5ddf5', marginBottom: 12 }}>
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#5B8AB5" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0, marginTop: 1 }}>
+                    <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+                  </svg>
+                  <p style={{ margin: 0, fontSize: 11.5, color: '#3a6e9e', lineHeight: 1.55 }}>
+                    This company was unlocked with your free monthly token and saved automatically. It will move to your Saved Companies when your token resets on <strong>{formatResetDate(nextResetAt)}</strong>.
+                  </p>
+                </div>
+
+                <div className="pp-saved-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 10 }}>
+                  {unlockedSaved.map(c => (
+                    <UnlockedCard key={c.id} company={c} nextResetAt={nextResetAt} />
+                  ))}
+                </div>
               </div>
             )}
-          </div>
 
+            {/* ── Saved Companies section ── */}
+            <div>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 14 }}>
+                <div>
+                  <div style={{ fontSize: 14, fontWeight: 800, color: '#09090B', letterSpacing: '-0.03em' }}>Saved Companies</div>
+                  <div style={{ fontSize: 12, color: '#A1A1AA', marginTop: 1 }}>
+                    {regularSaved.length} {regularSaved.length === 1 ? 'company' : 'companies'} · sorted A–Z
+                  </div>
+                </div>
+                <Link href="/" style={{ fontSize: 12, fontWeight: 600, color: '#063f76', textDecoration: 'none', opacity: 0.8 }}
+                  onMouseEnter={e => (e.currentTarget as HTMLElement).style.opacity = '1'}
+                  onMouseLeave={e => (e.currentTarget as HTMLElement).style.opacity = '0.8'}
+                >
+                  Browse more →
+                </Link>
+              </div>
+
+              {regularSaved.length === 0 ? (
+                <div style={{ background: '#fff', borderRadius: 14, border: '1px solid #E4E4E7', padding: '48px 24px', textAlign: 'center' }}>
+                  <div style={{ fontSize: 32, marginBottom: 12 }}>🔖</div>
+                  <div style={{ fontSize: 14, fontWeight: 700, color: '#09090B', marginBottom: 6 }}>No saved companies yet</div>
+                  <p style={{ fontSize: 13, color: '#A1A1AA', lineHeight: 1.6, margin: '0 0 20px' }}>
+                    Click the bookmark icon on any company profile to save it here.
+                  </p>
+                  <Link href="/" style={{ display: 'inline-flex', alignItems: 'center', gap: 6, padding: '9px 18px', borderRadius: 9, background: '#063f76', color: '#fff', textDecoration: 'none', fontSize: 13, fontWeight: 600 }}>
+                    Browse companies
+                  </Link>
+                </div>
+              ) : (
+                <div className="pp-saved-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 10 }}>
+                  {regularSaved.map(c => (
+                    <SavedCard key={c.id} company={c} onUnsave={handleUnsave} />
+                  ))}
+                </div>
+              )}
+            </div>
+
+          </div>
         </div>
       </div>
 
       <style>{`
         @media (max-width: 860px) {
-          .pp-grid {
-            grid-template-columns: 1fr !important;
-          }
+          .pp-grid { grid-template-columns: 1fr !important; }
         }
         @media (max-width: 640px) {
-          .pp-container {
-            padding: 20px 16px !important;
-          }
-          .pp-saved-grid {
-            grid-template-columns: 1fr !important;
-          }
+          .pp-container { padding: 20px 16px !important; }
+          .pp-saved-grid { grid-template-columns: 1fr !important; }
         }
         @media (max-width: 400px) {
-          .pp-container {
-            padding: 16px 12px !important;
-          }
+          .pp-container { padding: 16px 12px !important; }
         }
       `}</style>
     </div>
