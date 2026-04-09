@@ -14,11 +14,35 @@ Before starting any section, always:
 Claude, research [COMPANY NAME] using the official website and reliable sources.
 Populate ALL fields below into Supabase.
 
-━━━ 0. SEED COMPANY ROW (run script → INSERT into companies) ━━━
-First check if the company already exists:
-  SELECT id, name, slug, logo_url FROM companies WHERE name ILIKE '[COMPANY NAME]';
+━━━ DUPLICATE CHECK — RUN THIS FIRST, EVERY TIME ━━━
+Before doing ANYTHING else, run this query to check if the company already exists
+AND what sections are already seeded:
 
-If it does NOT exist, run the seed script to scrape logo + basic data:
+  SELECT
+    c.id, c.name, c.slug,
+    (SELECT COUNT(*) FROM company_products    WHERE company_id = c.id) AS products,
+    (SELECT COUNT(*) FROM company_news        WHERE company_id = c.id) AS news,
+    (SELECT COUNT(*) FROM company_milestones  WHERE company_id = c.id) AS milestones,
+    (SELECT COUNT(*) FROM company_financials  WHERE company_id = c.id) AS financials,
+    (SELECT COUNT(*) FROM company_standards   WHERE company_id = c.id) AS standards,
+    (SELECT COUNT(*) FROM company_departments WHERE company_id = c.id) AS departments,
+    (SELECT COUNT(*) FROM company_roles       WHERE company_id = c.id) AS roles,
+    (SELECT COUNT(*) FROM company_exec_groups WHERE company_id = c.id) AS exec_groups
+  FROM companies c
+  WHERE c.name ILIKE '[COMPANY NAME]';
+
+Decision rules:
+- If the query returns NO rows → company does not exist. Proceed with section 0.
+- If the query returns a row AND all section counts are > 0 → company is fully seeded.
+  SKIP this company entirely. Move to the next one.
+- If the query returns a row BUT some sections have 0 count → company is partial.
+  Use the returned id as company_id and fill in only the missing sections.
+- Always check exec_groups: if exec_groups > 0 but names are null, rebuild them
+  (DELETE + re-INSERT with real names in the 3-tier ceo/c_suite/vp structure).
+
+━━━ 0. SEED COMPANY ROW (run script → INSERT into companies) ━━━
+The duplicate gate above already determined whether this company exists.
+If it does NOT exist (case A from the duplicate gate), run the seed script:
   python scripts/seed_company.py --name "[COMPANY NAME]" --website "[website]"
 
 The script outputs JSON to stdout. Use the returned fields to INSERT the company row:
@@ -34,9 +58,8 @@ The script outputs JSON to stdout. Use the returned fields to INSERT the company
 
 Capture the returned id as company_id for all subsequent inserts.
 
-If the company already EXISTS, just run:
-  SELECT id FROM companies WHERE name ILIKE '[COMPANY NAME]';
-and use that id — then continue to section 1 to overwrite all content fields.
+If the company already EXISTS (case B or C above), use the id already captured
+from the duplicate gate query. For case C, only INSERT the missing sections.
 
 IMPORTANT — same quality rules apply to seed_company.py output as all other sections:
 - logo_url: the script scrapes from the company's official website. If it returns null
@@ -49,6 +72,9 @@ IMPORTANT — same quality rules apply to seed_company.py output as all other se
   summary sourced from the official website or reliable news.
 - employees / revenue / founded / hq: the script sources from SEC EDGAR + Wikipedia.
   Cross-check against LinkedIn headcount and recent earnings reports. Patch if stale.
+- revenue: MUST be the most recent COMPLETED full fiscal year only. Never use partial-year
+  figures, TTM (trailing twelve months), or forward projections. If the latest completed
+  full fiscal year is FY2024, use that — do not use a partial FY2025 figure.
 - tags: the script may return generic tags. Replace with 3–5 tags that accurately
   reflect this company's market (e.g. ["Enterprise", "Cloud", "AI", "SaaS", "DevTools"]).
 After inserting, verify:
@@ -60,7 +86,8 @@ GOLD STANDARD: See referenceData.md Section 1 for field depth requirements.
 - founded: year (integer)
 - hq: "City, State/Country"
 - employees: headcount (integer) — cross-check LinkedIn
-- revenue: e.g. "$4.2B"
+- revenue: e.g. "$4.2B" — MUST be the most recent completed full fiscal year only.
+  Never use partial-year, TTM, or projected figures.
 - valuation: market cap if public, last funding round if private e.g. "$18B"
 - tags: string array e.g. ["Enterprise", "SaaS", "B2B"]
 - is_hiring: true/false (check careers page)
@@ -153,10 +180,30 @@ Single row per company:
 - business_units: [{"name":"...","revenue_contribution":"60%","description":"1 sentence"}, ...]
 - market_share: single entry — this company's share of its primary market segment
   [{"segment":"...","percentage":34,"context":"1 sentence with competitor context","year":2025}]
-- revenue_growth: last 5 years ending in current year (2025 or 2026)
+- revenue_growth: last 5 COMPLETED full fiscal years only. The most recent entry must
+  be the latest completed full fiscal year (e.g. FY2024 for companies whose FY2024 is
+  complete but FY2025 is not). Never include partial years or projections.
   [{"year":2021,"revenue":"$1.2B","growth_rate":"+18%"}, ...]
 - competitors: pct must sum to exactly 100; this company listed first
   [{"name":"...","pct":34,"clr":"#hexcolor"}, ...]
+
+━━━ REVENUE & EMPLOYEE ACCURACY CHECK (run after section 5) ━━━
+After inserting financials, verify these three values are internally consistent:
+1. companies.revenue (overview) must match the most recent COMPLETED full fiscal year
+   entry in company_financials.revenue_growth. Both must reflect the same full year.
+   Partial years, TTM, or forward projections are never acceptable in either field.
+   (e.g., if revenue_growth latest entry is 2024: "$36.8B", then companies.revenue
+   must also be "$36.8B"). Patch whichever is wrong:
+     UPDATE companies SET revenue = '[value]' WHERE slug = '[slug]';
+     -- OR update the revenue_growth JSON to match.
+2. companies.employees must be current (cross-check LinkedIn). Patch if stale:
+     UPDATE companies SET employees = [n] WHERE slug = '[slug]';
+3. company_financials.revenue_per_employee must equal companies.revenue ÷
+   companies.employees (rounded). Recalculate and patch if off:
+     UPDATE company_financials SET revenue_per_employee = '[value]'
+     WHERE company_id = '[id]';
+Never leave these three values inconsistent — they are displayed together on the
+company profile and any mismatch looks like a data error to users.
 
 ━━━ 6. STANDARDS (INSERT into company_standards) ━━━
 GOLD STANDARD: See referenceData.md Section 6 for category→color mapping and depth.
@@ -189,9 +236,10 @@ IMPORTANT — do not rely solely on the careers page category filters. Those
 filters aggregate roles into broad buckets and routinely omit real departments.
 Cross-check by scanning actual job description text for department/team names.
 Additionally, always verify these commonly omitted departments exist at the
-company before skipping them:
-- Program Management / PMO (present at almost every hardware or enterprise
-  tech company — look for TPM, NPI Program Manager, Senior Program Manager titles)
+company before skipping them — these are REQUIRED checks, not optional:
+- Program Management / PMO — MUST be included for any hardware, enterprise tech,
+  or manufacturing company. Look for TPM, NPI Program Manager, Senior Program
+  Manager titles. Do NOT skip this department.
 - Professional Services / Customer Success (look for Solutions Architect,
   Implementation Specialist, Customer Success Manager titles)
 - Research & Development / Advanced Engineering (separate from core Engineering
@@ -204,7 +252,7 @@ list, add that department — do not drop roles into an ill-fitting catch-all.
 ━━━ 8. ROLES (INSERT into company_roles, linked to department_id) ━━━
 GOLD STANDARD: See referenceData.md Section 8 for the exact depth required per field.
 Source from Glassdoor, LinkedIn job postings, and the company's careers page.
-3–5 roles per department. For each role:
+EXACTLY 3 roles per department (max 3 — do not add more). For each role:
 - title: exact job title as it appears at this company (not invented)
 - level: one of [Entry, Mid, Senior, Lead, Director, VP, C-Suite]
 - tools: 5 items — MUST match the actual tech stack for this specific role type.

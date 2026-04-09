@@ -19,9 +19,10 @@ interface Props {
   placeholder?: string
   size?: 'sm' | 'lg'
   autoFocus?: boolean
+  onSelect?: () => void
 }
 
-export default function SearchAutocomplete({ placeholder = 'Search any company...', size = 'sm', autoFocus = false }: Props) {
+export default function SearchAutocomplete({ placeholder = 'Search any company...', size = 'sm', autoFocus = false, onSelect }: Props) {
   const router = useRouter()
   const [query, setQuery] = useState('')
   const [results, setResults] = useState<Company[]>([])
@@ -43,6 +44,7 @@ export default function SearchAutocomplete({ placeholder = 'Search any company..
   }, [])
 
   function navigate(path: string) {
+    onSelect?.()
     if (!user) {
       router.push('/signup')
       return

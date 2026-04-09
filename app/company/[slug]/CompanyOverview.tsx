@@ -371,7 +371,6 @@ function HistoryTimeline({ milestones, color }: { milestones: Milestone[]; color
 
               {/* Icon + title */}
               <div style={{ flex: 1, minWidth: 0, display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <span style={{ display: 'inline-block', width: '8px', height: '8px', borderRadius: '50%', background: m.accentColor, flexShrink: 0 }} />
                 <span style={{
                   fontSize: '13px', fontWeight: isOpen ? 700 : 500,
                   color: isOpen ? '#09090B' : '#374151',
@@ -467,7 +466,7 @@ export default function CompanyOverview({ company, showProTeaser = false, dbNews
 
   const NAV_LOCKED = [
     'Org Chart', 'Financials',
-    'Internal Tools & Processes', 'Interview Prep', 'Product Use Case',
+    'Internal Tools & Processes', 'Interview Prep', 'Product Use Cases',
   ]
 
   return (

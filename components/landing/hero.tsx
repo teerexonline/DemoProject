@@ -60,7 +60,7 @@ const NAV: { id: string; label: string; color: string; icon: LucideIcon }[] = [
   { id: 'units',      label: 'Business Units',      color: '#F59E0B', icon: Layers     },
   { id: 'tools',      label: 'Internal Tools',      color: '#DC2626', icon: Wrench     },
   { id: 'processes',  label: 'Internal Processes',  color: '#06B6D4', icon: Settings   },
-  { id: 'product',    label: 'Product Use Case',    color: '#CA8A04', icon: Package    },
+  { id: 'product',    label: 'Product Use Cases',    color: '#CA8A04', icon: Package    },
 ]
 type SectionId = 'overview' | 'org' | 'revenue' | 'revdept' | 'market' | 'units' | 'tools' | 'processes' | 'product'
 

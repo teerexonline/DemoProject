@@ -71,7 +71,7 @@ const NAV: { id: string; label: string; color: string; icon: LucideIcon }[] = [
   { id: 'financials', label: 'Financials',                  color: '#16A34A', icon: TrendingUp },
   { id: 'internal',   label: 'Internal Tools & Processes',  color: '#EA580C', icon: Settings   },
   { id: 'prep',       label: 'Interview Prep',              color: '#DC2626', icon: Target     },
-  { id: 'product',    label: 'Product Use Case',            color: '#CA8A04', icon: Package    },
+  { id: 'product',    label: 'Product Use Cases',            color: '#CA8A04', icon: Package    },
 ]
 type SectionId = 'overview' | 'org' | 'financials' | 'internal' | 'prep' | 'product'
 
@@ -581,8 +581,8 @@ function ProductSection({ company, dbProducts }: { company: Company; dbProducts:
         </div>
 
         {/* ── 3 equal columns: customers | competitors | image ── */}
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr' }}>
-          <div style={{ padding: '14px 18px', borderRight: '1px solid #F0F0F2' }}>
+        <div className="product-detail-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr' }}>
+          <div className="product-detail-col" style={{ padding: '14px 18px', borderRight: '1px solid #F0F0F2' }}>
             <div style={{ color: '#A1A1AA', fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.07em', marginBottom: 10 }}>Key Customers</div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
               {p.customers.map(c => (
@@ -595,7 +595,7 @@ function ProductSection({ company, dbProducts }: { company: Company; dbProducts:
               ))}
             </div>
           </div>
-          <div style={{ padding: '14px 18px', borderRight: '1px solid #F0F0F2' }}>
+          <div className="product-detail-col" style={{ padding: '14px 18px', borderRight: '1px solid #F0F0F2' }}>
             <div style={{ color: '#A1A1AA', fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.07em', marginBottom: 10 }}>vs. Competitors</div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
               {p.competitors.map(c => (
@@ -609,7 +609,7 @@ function ProductSection({ company, dbProducts }: { company: Company; dbProducts:
               ))}
             </div>
           </div>
-          <div style={{ background: `${color}06`, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 16 }}>
+          <div className="product-detail-img" style={{ background: `${color}06`, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 16 }}>
             {p.imageUrl && !imgError ? (
               <img
                 src={p.imageUrl}
@@ -628,6 +628,13 @@ function ProductSection({ company, dbProducts }: { company: Company; dbProducts:
           </div>
         </div>
       </div>
+      <style>{`
+        @media (max-width: 600px) {
+          .product-detail-grid { grid-template-columns: 1fr !important; }
+          .product-detail-col { border-right: none !important; border-bottom: 1px solid #F0F0F2; }
+          .product-detail-img { border-top: 1px solid #F0F0F2; min-height: 120px; }
+        }
+      `}</style>
     </div>
   )
 }

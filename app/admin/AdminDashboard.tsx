@@ -1701,6 +1701,7 @@ export default function AdminDashboard({ currentUser, initialCompanies, initialP
   const [contentCompanyId, setContentCompanyId] = useState<string | undefined>(undefined)
   const [companies, setCompanies] = useState<Company[]>(initialCompanies)
   const [profiles, setProfiles] = useState<Profile[]>(initialProfiles)
+  const [sidebarOpen, setSidebarOpen] = useState(false)
 
   function handleViewContent(id: string) {
     setContentCompanyId(id)
@@ -1717,43 +1718,47 @@ export default function AdminDashboard({ currentUser, initialCompanies, initialP
     <div style={{ minHeight: '100vh', background: '#F5F5F7', display: 'flex', flexDirection: 'column' }}>
 
       {/* Top bar */}
-      <div style={{ background: '#09090B', borderBottom: '1px solid #1C1C1E', padding: '0 24px', height: 52, display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexShrink: 0 }}>
+      <div style={{ background: '#09090B', borderBottom: '1px solid #1C1C1E', padding: '0 16px', height: 52, display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexShrink: 0 }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
+          {/* Mobile hamburger */}
+          <button className="admin-sidebar-toggle" onClick={() => setSidebarOpen(v => !v)} style={{ display: 'none', background: 'none', border: '1px solid #2C2C2E', borderRadius: 6, padding: '5px 7px', cursor: 'pointer', color: '#A1A1AA', flexShrink: 0 }} aria-label="Toggle sidebar">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><line x1="4" y1="8" x2="20" y2="8"/><line x1="4" y1="16" x2="20" y2="16"/></svg>
+          </button>
           <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: 8, textDecoration: 'none' }}>
             <div style={{ width: 26, height: 26, borderRadius: 7, background: '#063f76', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               <svg width="13" height="13" viewBox="0 0 24 24" fill="#fff"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
             </div>
             <span style={{ color: '#fff', fontSize: 13, fontWeight: 700, letterSpacing: '-0.02em' }}>ResearchOrg</span>
           </Link>
-          <div style={{ width: 1, height: 16, background: '#2C2C2E' }} />
-          <span style={{ color: '#A1A1AA', fontSize: 12.5 }}>Admin Dashboard</span>
+          <div className="admin-topbar-divider" style={{ width: 1, height: 16, background: '#2C2C2E' }} />
+          <span className="admin-topbar-label" style={{ color: '#A1A1AA', fontSize: 12.5 }}>Admin Dashboard</span>
         </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-          <div style={{ padding: '3px 10px', borderRadius: 6, background: isSuperAdmin ? '#EF444420' : '#063f7620', border: `1px solid ${isSuperAdmin ? '#EF444430' : '#063f7630'}` }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+          <div className="admin-plan-badge" style={{ padding: '3px 10px', borderRadius: 6, background: isSuperAdmin ? '#EF444420' : '#063f7620', border: `1px solid ${isSuperAdmin ? '#EF444430' : '#063f7630'}` }}>
             <span style={{ fontSize: 11.5, fontWeight: 700, color: isSuperAdmin ? '#EF4444' : '#609dd6' }}>{currentUser.plan}</span>
           </div>
-          <span style={{ color: '#71717A', fontSize: 12 }}>{currentUser.email}</span>
-          <Link href="/logout" style={{ padding: '5px 12px', borderRadius: 7, border: '1px solid #2C2C2E', background: 'transparent', color: '#A1A1AA', fontSize: 12, textDecoration: 'none', fontWeight: 500 }}>Sign out</Link>
+          <span className="admin-email" style={{ color: '#71717A', fontSize: 12 }}>{currentUser.email}</span>
+          <Link href="/logout" style={{ padding: '5px 12px', borderRadius: 7, border: '1px solid #2C2C2E', background: 'transparent', color: '#A1A1AA', fontSize: 12, textDecoration: 'none', fontWeight: 500, whiteSpace: 'nowrap' }}>Sign out</Link>
         </div>
       </div>
 
       {/* Body */}
-      <div style={{ flex: 1, display: 'grid', gridTemplateColumns: '220px 1fr', overflow: 'hidden' }}>
+      <div className="admin-body" style={{ flex: 1, display: 'grid', gridTemplateColumns: '220px 1fr', overflow: 'hidden' }}>
 
         {/* Sidebar */}
-        <div style={{ background: '#fff', borderRight: '1px solid #E4E4E7', padding: '12px 8px', overflowY: 'auto' }}>
+        <div className={`admin-sidebar${sidebarOpen ? ' admin-sidebar--open' : ''}`} style={{ background: '#fff', borderRight: '1px solid #E4E4E7', padding: '12px 8px', overflowY: 'auto' }}>
           <SectionTitle>Company Data</SectionTitle>
-          <NavItem label="Companies" active={nav === 'companies'} onClick={() => setNav('companies')} count={companies.length} />
-          <NavItem label="Company Content" active={nav === 'content'} onClick={() => setNav('content')} />
+          <NavItem label="Companies" active={nav === 'companies'} onClick={() => { setNav('companies'); setSidebarOpen(false) }} count={companies.length} />
+          <NavItem label="Company Content" active={nav === 'content'} onClick={() => { setNav('content'); setSidebarOpen(false) }} />
 
           <SectionTitle>Users</SectionTitle>
-          <NavItem label="All Users" active={nav === 'users'} onClick={() => setNav('users')} count={profiles.length} />
+          <NavItem label="All Users" active={nav === 'users'} onClick={() => { setNav('users'); setSidebarOpen(false) }} count={profiles.length} />
 
           <SectionTitle>Analytics</SectionTitle>
-          <NavItem label="Views & Saves" active={nav === 'analytics'} onClick={() => setNav('analytics')} />
+          <NavItem label="Views & Saves" active={nav === 'analytics'} onClick={() => { setNav('analytics'); setSidebarOpen(false) }} />
 
           <SectionTitle>Data Management</SectionTitle>
-          <NavItem label="Data" active={nav === 'data'} onClick={() => setNav('data')} />
+          <NavItem label="Data" active={nav === 'data'} onClick={() => { setNav('data'); setSidebarOpen(false) }} />
 
           <div style={{ marginTop: 20, padding: '0 8px' }}>
             <div style={{ padding: '12px 14px', borderRadius: 10, background: '#eef4fb', border: '1px solid #d4e8f6' }}>
@@ -1795,6 +1800,31 @@ export default function AdminDashboard({ currentUser, initialCompanies, initialP
           {nav === 'data' && <DataSection />}
         </div>
       </div>
+
+      {/* Mobile sidebar backdrop */}
+      {sidebarOpen && (
+        <div onClick={() => setSidebarOpen(false)} style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.4)', zIndex: 39, display: 'none' }} className="admin-backdrop" />
+      )}
+
+      <style>{`
+        @media (max-width: 768px) {
+          .admin-sidebar-toggle { display: flex !important; }
+          .admin-topbar-divider, .admin-topbar-label { display: none !important; }
+          .admin-plan-badge, .admin-email { display: none !important; }
+          .admin-body { grid-template-columns: 1fr !important; }
+          .admin-sidebar {
+            position: fixed !important;
+            top: 52px; left: 0; bottom: 0;
+            width: 240px !important;
+            z-index: 40;
+            transform: translateX(-100%);
+            transition: transform 0.22s cubic-bezier(0.22,1,0.36,1);
+            box-shadow: 4px 0 24px rgba(0,0,0,0.12);
+          }
+          .admin-sidebar--open { transform: translateX(0) !important; }
+          .admin-backdrop { display: block !important; }
+        }
+      `}</style>
     </div>
   )
 }

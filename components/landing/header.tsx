@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useRef } from 'react'
 import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 import type { User } from '@supabase/supabase-js'
 import SearchAutocomplete from '@/components/SearchAutocomplete'
@@ -14,6 +15,7 @@ export default function Header() {
   const [scrolled, setScrolled] = useState(false)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [dropdownOpen, setDropdownOpen] = useState(false)
+  const pathname = usePathname()
   const dropdownRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -50,6 +52,11 @@ export default function Header() {
     window.addEventListener('scroll', onScroll)
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
+
+  // Close mobile menu on route change
+  useEffect(() => {
+    setMobileMenuOpen(false)
+  }, [pathname])
 
   useEffect(() => {
     function handleClickOutside(e: MouseEvent) {
@@ -253,20 +260,26 @@ export default function Header() {
       {mobileMenuOpen && (
         <div className="header-mobile-menu" style={{ borderTop: '1px solid #f0f6fc', background: '#fff', padding: '12px 16px 16px', display: 'flex', flexDirection: 'column', gap: '4px' }}>
           <div style={{ marginBottom: '8px' }}>
-            <SearchAutocomplete placeholder="Search any company..." size="sm" />
+            <SearchAutocomplete placeholder="Search any company..." size="sm" onSelect={() => setMobileMenuOpen(false)} />
           </div>
           {['Features', 'Enterprise', 'Pricing'].map(item => (
             <Link key={item} href={`#${item.toLowerCase()}`} onClick={() => setMobileMenuOpen(false)}
               style={{ color: '#52525B', textDecoration: 'none', fontSize: '14px', fontWeight: 500, padding: '10px 12px', borderRadius: '8px', background: '#f8fbfe' }}
             >{item}</Link>
           ))}
-          {user && (
+          {user ? (
             <>
               <Link href="/profile" onClick={() => setMobileMenuOpen(false)} style={{ color: '#52525B', textDecoration: 'none', fontSize: '14px', fontWeight: 500, padding: '10px 12px', borderRadius: '8px', background: '#f8fbfe' }}>My Profile</Link>
               <Link href="/settings" onClick={() => setMobileMenuOpen(false)} style={{ color: '#52525B', textDecoration: 'none', fontSize: '14px', fontWeight: 500, padding: '10px 12px', borderRadius: '8px', background: '#f8fbfe' }}>Settings</Link>
               {isAdmin && (
                 <Link href="/admin" onClick={() => setMobileMenuOpen(false)} style={{ color: '#92400E', textDecoration: 'none', fontSize: '14px', fontWeight: 600, padding: '10px 12px', borderRadius: '8px', background: '#FEF3C7' }}>Admin Dashboard</Link>
               )}
+              <button onClick={() => { setMobileMenuOpen(false); handleSignOut() }} style={{ color: '#DC2626', textDecoration: 'none', fontSize: '14px', fontWeight: 500, padding: '10px 12px', borderRadius: '8px', background: '#FEF2F2', border: 'none', cursor: 'pointer', textAlign: 'left', width: '100%' }}>Sign out</button>
+            </>
+          ) : (
+            <>
+              <Link href="/login" onClick={() => setMobileMenuOpen(false)} style={{ color: '#52525B', textDecoration: 'none', fontSize: '14px', fontWeight: 500, padding: '10px 12px', borderRadius: '8px', background: '#f8fbfe' }}>Sign In</Link>
+              <Link href="/signup" onClick={() => setMobileMenuOpen(false)} style={{ color: '#fff', textDecoration: 'none', fontSize: '14px', fontWeight: 600, padding: '10px 12px', borderRadius: '8px', background: '#063f76', textAlign: 'center' }}>Get Started Free</Link>
             </>
           )}
         </div>

@@ -2549,6 +2549,32 @@ _COMPANY_OVERRIDES: dict[str, list[dict]] = {
         {"name": "Aurora Vision Studio",                "tagline": "No-code machine vision software for quality inspection, OCR, and parcel automation"},
         {"name": "Zebra DNA",                           "tagline": "Enterprise suite for OTA updates, lifecycle management, and compliance across the Zebra product fleet"},
     ],
+
+    # Cisco: nav crawls into buy/trial pages and support docs instead of canonical
+    # product pages. Override with the main product portfolio.
+    "cisco": [
+        {"name": "Cisco Catalyst",       "tagline": "Enterprise networking switches and wireless access points for campus and branch"},
+        {"name": "Cisco Meraki",         "tagline": "Cloud-managed networking with zero-touch provisioning for distributed enterprises"},
+        {"name": "Cisco Webex",          "tagline": "Collaboration platform for meetings, calling, messaging, and contact center"},
+        {"name": "Cisco Secure Firewall","tagline": "Next-generation firewall with integrated IPS, URL filtering, and malware protection"},
+        {"name": "Cisco Duo",            "tagline": "Zero-trust access and multi-factor authentication for workforce and applications"},
+        {"name": "Splunk",               "tagline": "Security information and event management platform for threat detection and response"},
+        {"name": "Cisco ThousandEyes",   "tagline": "Network intelligence platform for visibility across enterprise and internet networks"},
+        {"name": "Cisco AppDynamics",    "tagline": "Application performance monitoring and business observability for modern applications"},
+    ],
+
+    # Block: block.xyz nav only shows Bitcoin and Impact pages — real products are
+    # across separate brand sites (squareup.com, cash.app, afterpay.com, etc.)
+    "block": [
+        {"name": "Square",     "tagline": "Commerce platform giving every seller the tools to start, run, and grow their business"},
+        {"name": "Cash App",   "tagline": "Financial services app for sending money, investing in stocks, and buying Bitcoin"},
+        {"name": "Afterpay",   "tagline": "Buy now, pay later service splitting purchases into four interest-free installments"},
+        {"name": "TIDAL",      "tagline": "Artist-owned music streaming service delivering high-fidelity audio and exclusive content"},
+        {"name": "Bitkey",     "tagline": "Self-custody Bitcoin hardware wallet designed for everyday use with mobile and web apps"},
+        {"name": "Spiral",     "tagline": "Bitcoin-focused subsidiary building open-source tools to improve Bitcoin's usability"},
+        {"name": "TBD",        "tagline": "Decentralized platform for building open financial services using Web5 and Bitcoin"},
+        {"name": "Square Banking", "tagline": "Business banking products for Square sellers including checking, savings, and loans"},
+    ],
 }
 
 # Keep old name as alias so any other call sites still work

@@ -29,7 +29,7 @@ const NAV = [
   { id: 'financials', label: 'Financials',          icon: '💹', pro: true },
   { id: 'internal',   label: 'Internal Tools & Processes', icon: '🔧', pro: true },
   { id: 'prep',       label: 'Interview Prep',              icon: '🎯', pro: true },
-  { id: 'product',    label: 'Product Use Case',            icon: '📦', pro: true },
+  { id: 'product',    label: 'Product Use Cases',            icon: '📦', pro: true },
 ] as const
 type SectionId = typeof NAV[number]['id']
 
