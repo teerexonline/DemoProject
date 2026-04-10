@@ -72,7 +72,7 @@ export default async function CareersPage() {
           {activeRoles.length > 0 && (
             <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
               {activeRoles.map(role => (
-                <div key={role.id} style={{
+                <div key={role.id} className="career-role-card" style={{
                   display: 'flex', alignItems: 'center', justifyContent: 'space-between',
                   gap: 24, padding: '22px 24px',
                   background: '#fff', borderRadius: 13, border: '1.5px solid #e2eaf2',
@@ -129,6 +129,14 @@ export default async function CareersPage() {
       <style>{`
         @media (max-width: 768px) {
           section > div > div[style*="repeat(3"] { grid-template-columns: 1fr !important; }
+          .career-role-card {
+            flex-direction: column !important;
+            align-items: flex-start !important;
+          }
+          .career-role-card a {
+            width: 100% !important;
+            text-align: center !important;
+          }
         }
       `}</style>
     </main>

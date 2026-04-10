@@ -299,7 +299,7 @@ export default function MarketingPage() {
             </a>
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))', gap: 14 }}>
+          <div className="explore-sectors-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: 14 }}>
             {EXPLORE_SECTORS.map(s => (
               <a
                 key={s.id}
@@ -329,6 +329,34 @@ export default function MarketingPage() {
       </section>
 
       <Pricing />
+
+      <style>{`
+        .section-2col {
+          grid-template-columns: 1fr 1.5fr;
+        }
+        @media (max-width: 860px) {
+          .section-2col {
+            grid-template-columns: 1fr !important;
+            gap: 36px !important;
+          }
+          .section-pad {
+            padding: 56px 20px !important;
+          }
+          .section-pad-sm {
+            padding: 40px 20px !important;
+          }
+          .stat-callout-inner {
+            flex-direction: column !important;
+            text-align: center !important;
+            gap: 16px !important;
+          }
+        }
+        @media (max-width: 480px) {
+          .explore-sectors-grid {
+            grid-template-columns: repeat(2, 1fr) !important;
+          }
+        }
+      `}</style>
     </main>
   )
 }

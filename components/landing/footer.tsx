@@ -13,7 +13,7 @@ export default function Footer() {
   return (
     <footer style={{ borderTop: '1px solid #e2eaf2', padding: '60px 24px 36px', background: '#f8fbfe' }}>
       <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
-        <div className="footer-grid" style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr 1fr', gap: '48px', marginBottom: '48px' }}>
+        <div className="footer-grid" style={{ marginBottom: '48px' }}>
           {/* Brand */}
           <div>
             <div style={{ marginBottom: '12px' }}>
@@ -77,11 +77,34 @@ export default function Footer() {
           ))}
         </div>
 
-        <div style={{ borderTop: '1px solid #e2eaf2', paddingTop: '24px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <div style={{ borderTop: '1px solid #e2eaf2', paddingTop: '24px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 8 }}>
           <span style={{ color: '#A1A1AA', fontSize: '13px' }}>© 2026 ResearchOrg, Inc. All rights reserved.</span>
           <span style={{ color: '#A1A1AA', fontSize: '13px' }}>Made for ambitious job seekers.</span>
         </div>
       </div>
+
+      <style>{`
+        .footer-grid {
+          display: grid;
+          grid-template-columns: 2fr 1fr 1fr 1fr;
+          gap: 48px;
+        }
+        @media (max-width: 860px) {
+          .footer-grid {
+            grid-template-columns: 1fr 1fr !important;
+            gap: 32px !important;
+          }
+          .footer-grid > div:first-child {
+            grid-column: 1 / -1;
+          }
+        }
+        @media (max-width: 480px) {
+          .footer-grid {
+            grid-template-columns: 1fr 1fr !important;
+            gap: 24px !important;
+          }
+        }
+      `}</style>
     </footer>
   )
 }
