@@ -182,7 +182,7 @@ export default function ProfileShowcase() {
                   <div key={s.name} style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                     <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: s.color, flexShrink: 0 }} />
                     <span style={{ color: 'rgba(255,255,255,0.55)', fontSize: '12px', flex: 1 }}>{s.name}</span>
-                    <span style={{ color: '#fff', fontSize: '12px', fontWeight: 700, tabularNums: 'true' }}>{s.pct}%</span>
+                    <span style={{ color: '#fff', fontSize: '12px', fontWeight: 700, fontVariantNumeric: 'tabular-nums' }}>{s.pct}%</span>
                   </div>
                 ))}
               </div>
