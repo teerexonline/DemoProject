@@ -45,6 +45,7 @@ Before inserting ANY scraper output, check:
    Any item older than 12 months must be replaced with a genuinely recent item.
    "We couldn't find 5 recent items" is not an acceptable reason to use old items —
    use fewer items rather than insert stale news.
+   TYPE: Use the most accurate type for each item — see referenceData.md Section 3 for valid types and color mapping.
 
 ━━━ PRE-FLIGHT: READ REFERENCE DATA ━━━
 Before starting any section, always:
@@ -250,7 +251,8 @@ Fields reference (for manual fallback only):
 
 ━━━ 3. NEWS (INSERT into company_news) ━━━
 GOLD STANDARD: See referenceData.md Section 3 for type→color mapping and depth.
-5 most recent press releases or announcements — real, dated, sourced events only.
+5 most recent press releases — real, dated, sourced events only.
+TYPE RULE: Use the most accurate type for each item. Valid types: Press Release, Partnership, Product Launch, Award, Funding, Acquisition. Match the type to the nature of the news — acquisitions get "Acquisition", product launches get "Product Launch", etc.
 DATE RULE: Every item must have published_date within the last 12 months relative to
 today's date (from SESSION DATE ANCHOR). Do not insert items older than 12 months.
 If fewer than 5 genuinely recent items exist, insert only what is recent — do not
@@ -260,7 +262,7 @@ For each:
 - summary: 1 sentence — specific, not generic. Mention numbers/outcomes where available.
 - published_date: "MMM DD, YYYY" (e.g. "Feb 12, 2026") — must be within last 12 months
 - source_url: direct URL to the press release or article
-- type: one of [Press Release, Partnership, Product Launch, Award, Funding, Acquisition]
+- type: one of [Press Release, Partnership, Product Launch, Award, Funding, Acquisition] — match to the nature of the news
 - type_color / type_bg / dot_color: use the color mapping in referenceData.md Section 3
 
 ━━━ 4. MILESTONES (INSERT into company_milestones) ━━━

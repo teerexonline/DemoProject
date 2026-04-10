@@ -1099,6 +1099,7 @@ Prevents re-researching companies that are already done.
 
 ## Squarespace
 - **Seeded:** 2026-04-09
+- **FY2025 data unavailable — exception documented 2026-04-10:** Permira completed acquisition of Squarespace in October 2024, taking the company private at ~$7.2B valuation. No public FY2025 revenue data exists. FY2024 ($1.13B) is the last available public figure and is retained as the latest entry.
 - **CEO:** Anthony Casalena (sole founder; built first version at University of Maryland 2003)
 - **12 depts, 5 products, Revenue $1.13B FY2024, employees 1,700, logo_color #000000**
 - **Products:** Squarespace Website Builder, Squarespace Commerce, Squarespace Domains, Squarespace Email Campaigns, Squarespace Scheduling
@@ -2151,6 +2152,7 @@ Prevents re-researching companies that are already done.
 
 ## Splunk
 - **Seeded:** 2026-04-08
+- **FY2025 data unavailable — exception documented 2026-04-10:** Cisco acquired Splunk on March 18, 2024 for $28B. No standalone FY2025 revenue data is publicly available. FY2025 results are consolidated into Cisco's Security segment only. FY2024 ($4.1B, ending Jan 31 2024) is the last available standalone figure and is retained as the latest entry.
 - **Sources:** splunk.com, cisco.com/newsroom, investor.splunk.com, LinkedIn job postings, Glassdoor, Gartner Magic Quadrant SIEM 2024, IDC, Wikipedia
 - **CEO:** Gary Steele (last CEO before Cisco acquisition; now GM at Cisco)
 - **Departments found:** Engineering, Security Research & Intelligence, Product Management, Sales & Account Management, Customer Success & Professional Services, Marketing, Finance, Legal & Compliance, People & HR, Information Technology, Data Science & Machine Learning, Partner & Alliance Management
@@ -3061,5 +3063,209 @@ Prevents re-researching companies that are already done.
 - **Departments:** Mobile Networks (RAN Engineering), Network Infrastructure, Cloud & Network Services, Nokia Bell Labs (R&D), Nokia Technologies (IP Licensing), Sales & Business Development, Supply Chain & Manufacturing, Finance & Treasury, Legal & IP, Human Resources, Marketing & Communications, Enterprise & Private Wireless
 - **Market share:** Ericsson 37%, Nokia 25%, Huawei 28%, Samsung 7%, Others 3% (global RAN infrastructure)
 - **Notes:** Founded 1865 as paper mill in Tampere, Finland; entered telecom 1960s; invented GSM with Ericsson. Once world's #1 mobile phone maker (2007 peak). Sold handset/devices business to Microsoft 2014 ($7.2B). Acquired Alcatel-Lucent 2016 ($15.6B) — brought in Bell Labs, 7750 SR, 1830 PSS, LightSail. Nokia Technologies holds world's #2 or #3 SEP portfolio — $1.5B+ annual IP licensing income. NDAC (Nokia Digital Automation Cloud) is flagship private 5G product. 3GPP 5G NR Release 15/16/17 contributions are top-tier. Bell Labs has 9 Nobel laureates and invented UNIX, C language, transistor, laser.
+
+---
+
+## Bell Canada
+- **Seeded:** 2026-04-10
+- **Slug:** bell-canada
+- **ID:** (query if needed)
+- **Sector:** Telecommunications (Wireline, Wireless, Media)
+- **HQ:** Montréal, Québec, Canada | Founded 1880 | 46,000 employees | $24.0B revenue
+- **Departments (10):** Network Engineering, Wireless & Mobility, Wireline & Broadband, Media & Content, Customer Experience, Finance & Treasury, Legal & Regulatory, Human Resources, Technology & IT, Corporate Strategy & Innovation
+- **Roles (30):** 3 per department — Sr Network Engineer, RF Engineer, NOC Analyst, Wireless Product Manager, 5G Technology Specialist, LTE Optimization Engineer, Broadband Infrastructure Engineer, FTTH Deployment Specialist, Access Network Engineer, Content Acquisition Manager, Streaming Platform Engineer, Digital Media Analyst, CX Operations Manager, Contact Centre Specialist, CX Insights Analyst, Financial Analyst, Treasury Analyst, Corporate Finance Manager, Regulatory Affairs Counsel, Telecom Lawyer, Legal Operations Analyst, HR Business Partner, Talent Acquisition Specialist, L&D Specialist, Systems Architect, Cloud Infrastructure Engineer, Data Platform Engineer, Strategy Analyst, M&A Analyst, Innovation Program Lead
+- **Execs:** CEO Mirko Bibic | CFO Curtis Millen | COO, CTO, CMO, CLO, CPO, CHRO (C-Suite) | 5 VP tier linked to departments
+- **Standards (10):** SOC 2 Type II, ISO 27001, CRTC Regulatory, PIPEDA, PCI DSS, ISO 9001, WCAG 2.1 AA, NERC CIP, ITU-T, Bell ISMS
+- **Financials:** TAM $85B, SAM $32B, SOM $24.0B | 5-year growth 2021–2025 | revenue_per_employee $522K
+- **Notes:** Lucide icons ✓ | VP dept_ids ✓ | 30 roles ✓ | Canada's largest telecom; BCE Inc. parent; Crave streaming service; Bell Media owns TSN, CTV; major 5G rollout ongoing; CRTC-regulated; products deferred (auth required)
+
+---
+
+## TELUS
+- **Seeded:** 2026-04-10
+- **Slug:** telus
+- **ID:** (query if needed)
+- **Sector:** Telecommunications & Health Technology
+- **HQ:** Vancouver, British Columbia, Canada | Founded 1990 | 100,000 employees | $20.2B revenue
+- **Departments (10):** Network & Technology, Wireless Services, TELUS Health, TELUS Agriculture & Consumer Goods, Customer Experience, Finance & Investor Relations, Legal & Regulatory, Human Resources, Digital & IT, Corporate Development & Strategy
+- **Roles (30):** 3 per department — Sr Network Engineer, Cloud Infrastructure Architect, 5G RF Engineer, Wireless Product Manager, Mobility Solutions Architect, Device Ecosystem Specialist, Health Platform Engineer, Clinical Informatics Analyst, Digital Health Product Manager, AgriData Scientist, Agri-Platform Engineer, Food Safety Analyst, CX Operations Manager, Digital Channel Specialist, CX Insights Analyst, Financial Analyst, Investor Relations Specialist, FP&A Manager, Regulatory Affairs Counsel, Privacy Counsel, Spectrum Policy Analyst, HR Business Partner, Talent Acquisition Specialist, Change Management Lead, Full Stack Developer, DevOps Engineer, Data Engineer, Corporate Development Analyst, M&A Strategy Lead, Innovation Program Manager
+- **Execs:** CEO Darren Entwistle | CFO Doug French | President TELUS Health Juggy Sihota | COO, CTO, CMO, CLO, CPO (C-Suite) | 5 VP tier linked to departments
+- **Standards (10):** SOC 2 Type II, ISO 27001, PIPEDA, CRTC Regulatory, PCI DSS, PHIPA, ISO 9001, HITRUST CSF, WCAG 2.1 AA, NERC CIP
+- **Financials:** TAM $75B, SAM $28B, SOM $20.2B | 5-year growth 2021–2025 | revenue_per_employee $202K
+- **Notes:** Lucide icons ✓ | VP dept_ids ✓ | 30 roles ✓ | Canada's 2nd largest telecom; TELUS Health is Canada's largest digital health platform; TELUS Agriculture & Consumer Goods serves global food supply chain; 10 consecutive years on Dow Jones Sustainability Index; products deferred (auth required)
+
+---
+
+## AT&T
+- **Seeded:** 2026-04-10
+- **Slug:** att
+- **ID:** (query if needed)
+- **Sector:** Telecommunications (Wireless, Broadband, Enterprise)
+- **HQ:** Dallas, Texas, USA | Founded 1885 | 150,000 employees | $122.4B revenue
+- **Departments (10):** Network Engineering & Operations, Wireless & Mobility, AT&T Fiber & Broadband, AT&T Business Solutions, Customer Experience & Retail, Finance & Treasury, Legal & Regulatory Affairs, Human Resources, Technology & IT, Corporate Strategy & M&A
+- **Roles (30):** 3 per department — Sr Network Engineer, RF Systems Engineer, NOC Operations Analyst, Wireless Product Manager, 5G Solutions Architect, Device Partnerships Manager, Fiber Deployment Engineer, Access Network Engineer, Broadband Product Manager, Enterprise Account Executive, Solutions Architect – Business, Managed Services Analyst, CX Operations Manager, Retail Store Manager, Digital Customer Experience Analyst, Financial Analyst, Treasury Manager, FP&A Director, FCC Regulatory Counsel, Spectrum Policy Attorney, Legal Operations Analyst, HR Business Partner, Talent Acquisition Lead, L&D Program Manager, Platform Engineer, Cloud Architect, Data Infrastructure Engineer, Corporate Development Analyst, M&A Integration Lead, Strategy Analyst
+- **Execs:** CEO John Stankey | CFO Pascal Desroches | COO Jeff McElfresh | CTO Jeremy Legg | CMO Kellyn Smith Kenny | CLO David McAtee | CHRO Malina Engelman | CIO Andy Geisse | 5 VP tier linked to departments
+- **Standards (10):** FCC Regulatory Compliance, SOC 2 Type II, ISO 27001, PCI DSS, CPNI, NIST CSF, NERC CIP, WCAG 2.1 AA, FISMA, ISO 9001
+- **Financials:** TAM $650B, SAM $220B, SOM $122.4B | 5-year growth 2021–2025 | revenue_per_employee $816K
+- **Notes:** Lucide icons ✓ | VP dept_ids ✓ | 30 roles ✓ | USA's largest telecom by wireless subscribers; AT&T Fiber passed 28M+ locations; divested WarnerMedia 2022 (merged with Discovery); FirstNet national public safety network exclusive contract; products deferred (auth required)
+
+---
+
+## Verizon
+- **Seeded:** 2026-04-10
+- **Slug:** verizon
+- **ID:** (query if needed)
+- **Sector:** Telecommunications (Wireless, Enterprise, Broadband)
+- **HQ:** New York, New York, USA | Founded 1983 (as Bell Atlantic) | 105,000 employees | $134.0B revenue
+- **Departments (10):** Network Engineering & Operations, Consumer Wireless & Mobility, Verizon Business Solutions, Verizon Fios & Fixed Wireless, Customer Experience, Finance & Treasury, Legal & Regulatory Affairs, Human Resources, Technology & IT, Corporate Strategy & Development
+- **Roles (30):** 3 per department — Sr Network Engineer, 5G Systems Architect, NOC Operations Analyst, Consumer Wireless Product Manager, Device Ecosystem Manager, Prepaid Strategy Analyst, Enterprise Account Executive, Solutions Architect – VZB, Managed Network Services Analyst, Fios Installation Technician, Fixed Wireless Access Engineer, Broadband Product Manager, CX Operations Manager, Retail Territory Manager, Digital CX Analyst, Financial Analyst, FP&A Manager, Treasury Analyst, FCC Regulatory Counsel, Privacy & Data Law Specialist, Telecom Litigation Attorney, HR Business Partner, Talent Acquisition Specialist, DEI Program Manager, Platform Engineer, Cloud Architect, Data Infrastructure Engineer, Strategy & Planning Analyst, M&A Integration Manager, Corporate Development Analyst
+- **Execs:** CEO Hans Vestberg | CFO Tony Skiadas | President Consumer Group Sowmyanarayan Sampath | President Verizon Business Kyle Malady | CTO Joe Russo | CMO Diego Scotti | CLO Craig Silliman | CHRO Christy Pambianchi | CIO Shankar Arumugam | 5 VP tier linked to departments
+- **Standards (10):** FCC Regulatory Compliance, SOC 2 Type II, ISO 27001, PCI DSS, CPNI, NIST CSF, NERC CIP, FISMA, WCAG 2.1 AA, FirstNet Compliance
+- **Financials:** TAM $650B, SAM $230B, SOM $134.0B | 5-year growth 2021–2025 | revenue_per_employee $1.28M
+- **Notes:** Lucide icons ✓ | VP dept_ids ✓ | 30 roles ✓ | USA's largest wireless carrier by revenue; #1 network reliability rankings (RootMetrics); Fios fiber-to-the-home in northeast; Fixed Wireless Access (FWA) 4M+ subscribers; acquired Yahoo/AOL assets now Verizon Media/Yahoo; products deferred (auth required)
+
+---
+
+## BlackBerry
+- **Seeded:** 2026-04-10
+- **Slug:** blackberry
+- **ID:** (query if needed)
+- **Sector:** Cybersecurity & Embedded Systems Software
+- **HQ:** Waterloo, Ontario, Canada | Founded 1984 | 3,600 employees | $853M revenue
+- **Departments (10):** Cybersecurity Engineering, QNX Embedded Systems, Endpoint Security & UEM, Threat Intelligence & Research, Product Management, Sales & Business Development, Finance & Investor Relations, Legal & IP, Human Resources, Corporate Strategy & M&A
+- **Roles (30):** 3 per department — Sr Cybersecurity Engineer, Malware Analyst, Security Platform Developer, QNX Kernel Engineer, Embedded Systems Architect, Safety-Critical Software Developer, Endpoint Security Engineer, UEM Platform Developer, MDM Solutions Architect, Threat Intelligence Analyst, Vulnerability Researcher, Incident Response Analyst, Sr Product Manager – Cybersecurity, Technical PM – QNX, Product Operations Analyst, Enterprise Security Sales Executive, Channel Partner Manager, Solutions Engineer, Financial Analyst, FP&A Manager, Investor Relations Specialist, IP Counsel, Patent Analyst, Technology Licensing Manager, HR Business Partner, Talent Acquisition Specialist, L&D Program Manager, Corporate Strategy Analyst, M&A Integration Lead, Business Development Manager
+- **Execs:** CEO John Giamatteo | CFO Tim Foote | COO Mattias Eriksson | CTO Shishir Singh | CMO Mark Wilson | CLO Steve Rai | CHRO Deon Sherwood | VP Cybersecurity, VP QNX, VP Sales, VP Legal, VP People — 5 VP tier linked to departments
+- **Standards (10):** SOC 2 Type II, ISO 27001, Common Criteria EAL4+, FIPS 140-2, FedRAMP Authorized, GDPR, PIPEDA, ISO 26262, IEC 62443, DISA STIG
+- **Financials:** TAM $82B, SAM $18B, SOM $853M | 5-year growth 2021–2025 | revenue_per_employee $237K
+- **Notes:** Lucide icons ✓ | VP dept_ids ✓ | 30 roles ✓ | Pivoted from handsets (exited 2016) to pure software play; QNX RTOS powers 255M+ vehicles; Cylance AI-driven AV engine (acquired 2019 for $1.4B); CylancePROTECT, CylanceOPTICS, UEM; revenue split ~47% Cybersecurity, ~36% IoT/QNX, ~17% Licensing & IP; products deferred (auth required)
+
+---
+
+## MDA Space
+- **Seeded:** 2026-04-10
+- **Slug:** mda-space
+- **ID:** (query if needed)
+- **Sector:** Space Technology (Satellite Systems, Robotics, Geointelligence)
+- **HQ:** Brampton, Ontario, Canada | Founded 1969 | 3,200 employees | $1.0B revenue
+- **Departments (10):** Robotics & Space Operations Engineering, Satellite Systems Engineering, Geointelligence & Earth Observation, Mission Systems & Software, Program Management, Business Development & Government Relations, Finance & Investor Relations, Legal & Contracts, Human Resources, Corporate Strategy & Innovation
+- **Roles (30):** 3 per department — Robotics Systems Engineer, Space Robotics Software Developer, Mechanisms & Structures Engineer, Satellite Bus Engineer, RF & Communications Systems Engineer, Payload Integration Engineer, Remote Sensing Analyst, GIS & Geospatial Developer, Earth Observation Product Manager, Flight Software Engineer, Mission Operations Software Developer, GNC Systems Engineer, Sr Program Manager – Space, Integrated Program Scheduler, Systems Engineering Lead, Business Development Manager – Government, Government Relations Specialist, Proposal Development Lead, Financial Analyst, Cost Engineering Specialist, Investor Relations Manager, Contracts Counsel, Space Law Specialist, Export Controls Analyst, HR Business Partner, Talent Acquisition Specialist – Engineering, STEM Outreach & Employer Branding Lead, Corporate Strategy Analyst, M&A Evaluation Lead, Innovation & Partnerships Manager
+- **Execs:** CEO Mike Greenley | CFO Shereen Zahawi | COO Roberta Mugford | CTO Alan MacDonald | CCO Dan Desjardins | CLO Michelle Godin | CHRO Gillian Forbes | VP Robotics, VP Satellite, VP Geointelligence, VP Mission Systems, VP BD — 5 VP tier linked to departments
+- **Standards (10):** ISO 9001:2015, AS9100D, ISO 27001, ITAR Compliance, Export Controls Act Canada, CMMC Level 2, CSA Z1000, GDPR, PIPEDA, NASA-STD-8739.8
+- **Financials:** TAM $50B, SAM $8B, SOM $1.0B | 5-year growth 2021–2025 | revenue_per_employee $312K
+- **Notes:** Lucide icons ✓ | VP dept_ids ✓ | 30 roles ✓ | Built Canadarm and Canadarm2 for NASA/ISS; MDA AURORA robotic system for Lunar Gateway; RADARSAT Constellation Mission operator; re-IPO'd on TSX 2021; MDA SkyPlan commercial satellite constellation in development; products deferred (auth required)
+
+---
+
+## Curtiss-Wright
+- **Seeded:** 2026-04-10
+- **Slug:** curtiss-wright
+- **ID:** (query if needed)
+- **Sector:** Defense Electronics & Industrial Manufacturing
+- **HQ:** Davidson, North Carolina, USA | Founded 1929 | 8,800 employees | $3.1B revenue
+- **Departments (10):** Defense Electronics Engineering, Naval & Power Systems Engineering, Industrial & Commercial Systems, Systems Integration & Test, Program Management, Sales & Business Development, Finance & Investor Relations, Legal & Compliance, Human Resources, Corporate Strategy & M&A
+- **Roles (30):** 3 per department — Sr Defense Electronics Engineer, Embedded Systems Developer, FPGA Design Engineer, Naval Systems Engineer, Nuclear Instrumentation Engineer, Power Electronics Engineer, Industrial Controls Engineer, Commercial Avionics Engineer, EMI/EMC Test Engineer, Systems Integration Engineer, Qualification Test Engineer, IV&V Analyst, Sr Program Manager – Defense, Integrated Master Scheduler, Earned Value Analyst, Defense Account Executive, Business Development Specialist – Navy, Proposal Manager, Financial Analyst, Cost Accounting Specialist, Investor Relations Manager, Export Controls Counsel, DoD Contracts Lawyer, ITAR/EAR Compliance Analyst, HR Business Partner, Talent Acquisition Specialist – Cleared, Security Clearance Coordinator, Corporate Strategy Analyst, M&A Integration Lead, Business Development Director
+- **Execs:** CEO Lynn Bamford | CFO Christopher Farkas | COO Robert Vars | CTO Paul Puckett | CCO Michael Denton | CLO S. Dean Roper | CHRO Janet Lehman | VP Defense Electronics, VP Naval & Power, VP Industrial, VP BD, VP Program Management — 5 VP tier linked to departments
+- **Standards (10):** AS9100D, ISO 9001:2015, MIL-STD-461, MIL-STD-810, CMMC Level 3, ITAR Compliance, DO-254, DO-178C, IEEE 603 Nuclear, ISO 27001
+- **Financials:** TAM $38B, SAM $12B, SOM $3.1B | 5-year growth 2021–2025 | revenue_per_employee $352K
+- **Notes:** Lucide icons ✓ | VP dept_ids ✓ | 30 roles ✓ | 3 segments: Defense Electronics (~47%), Naval & Power (~37%), Industrial (~16%); major programs include F-35 data recorders, CVN-78 reactor controls, VCS Virginia-class submarine power; Exostar trusted supplier network member; products deferred (auth required)
+
+---
+
+## AECOM
+- **Seeded:** 2026-04-10
+- **Slug:** aecom
+- **ID:** (query if needed)
+- **Sector:** Engineering & Construction (Infrastructure, Environment, Government)
+- **HQ:** Dallas, Texas, USA | Founded 1990 | 52,000 employees | $9.5B NSR revenue
+- **Departments (10):** Transportation Engineering, Water & Environment Engineering, Buildings & Places, Program Management, Energy & Industrial, Government Services, Finance & Investor Relations, Legal & Risk, Human Resources, Corporate Strategy & Innovation
+- **Roles (30):** 3 per department — Sr Transportation Engineer, Traffic & ITS Engineer, Bridge Structural Engineer, Water Resources Engineer, Environmental Scientist, Wastewater Treatment Engineer, Architecture Project Manager, Building MEP Engineer, Structural Engineer – Buildings, Program Controls Manager, Earned Value Analyst, Integrated Program Scheduler, Process & Industrial Engineer, Energy Transition Consultant, Clean Energy Project Engineer, Senior Program Manager – Federal, Government Contracts Specialist, Security Cleared Systems Engineer, Financial Analyst, FP&A Manager, Investor Relations Specialist, Risk & Compliance Counsel, Contracts Lawyer, Legal Operations Analyst, HR Business Partner, Talent Acquisition Specialist, DEI Program Manager, M&A Strategy Analyst, Innovation Program Lead, Corporate Development Manager
+- **Execs:** CEO Troy Rudd | CFO Gaurav Kapoor | COO Lara Poloni | CTO David Gan | CCO David Gan | CLO Carla Christofferson | CHRO Lydia Kotlyar | VP Transportation, VP Water & Environment, VP Buildings, VP Government Services, VP Energy — 5 VP tier linked to departments
+- **Standards (10):** ISO 14001, ISO 45001, ISO 9001:2015, ISO 27001, CMMC Level 2, LEED AP, WELL Certification, FISMA, FAR/DFARS Compliance, GDPR
+- **Financials:** TAM $800B, SAM $120B, SOM $9.5B NSR | 5-year growth 2021–2025 | revenue_per_employee $183K (NSR basis)
+- **Notes:** Lucide icons ✓ | VP dept_ids ✓ | 30 roles ✓ | Revenue figures use Net Service Revenue (NSR = $9.5B) as primary metric per AECOM reporting convention; total revenue ~$16.1B includes pass-through costs; top global design firm by revenue; key programs: LAX modernization, NEOM (KSA), UK HS2 rail; products deferred (auth required)
+
+---
+
+## Visa
+- **Seeded:** 2026-04-10
+- **Slug:** visa
+- **ID:** (query if needed)
+- **Sector:** Payments Technology & Financial Services
+- **HQ:** San Francisco, California, USA | Founded 1958 | 26,500 employees | $35.9B revenue
+- **Departments (10):** Payment Network Engineering, Cybersecurity & Fraud, Product & Innovation, Data & Analytics, Merchant & Acquiring Solutions, Issuing & Consumer Products, Finance & Investor Relations, Legal & Regulatory, Human Resources, Corporate Strategy & M&A
+- **Roles (30):** 3 per department — Sr Network Engineer – VisaNet, Payment Protocol Engineer, Network Reliability Engineer, Cybersecurity Analyst, Fraud ML Engineer, Threat Intelligence Specialist, Sr Product Manager – Digital Payments, Innovation Engineer – Open Banking, Tap-to-Pay Platform Developer, Data Scientist – Transaction Analytics, Data Engineer – Real-Time Payments, Analytics Product Manager, Merchant Solutions Account Manager, Acquiring Business Development Manager, Merchant Analytics Consultant, Issuer Client Services Manager, Consumer Product Manager – Premium Cards, Rewards Platform Engineer, Financial Analyst, Treasury Analyst, FP&A Manager, Payments Regulatory Counsel, Open Banking Policy Specialist, Compliance Attorney, HR Business Partner, Talent Acquisition Specialist, L&D Program Manager, Corporate Development Analyst, M&A Integration Lead, Strategy & Planning Analyst
+- **Execs:** CEO Ryan McInerney | CFO Christopher Suh | COO Rajat Taneja | CTO Rajat Taneja | CMO Frank Cooper | CLO Kelly Mahon Tullier | CHRO Suzan Kereere | CRO Paul Fabara | VP Payment Network Eng, VP Cybersecurity, VP Product & Innovation, VP Data & Analytics, VP Corporate Strategy — 5 VP tier linked to departments
+- **Standards (10):** PCI DSS Level 1, ISO 27001, SOC 2 Type II, GDPR, PSD2 (EU), Dodd-Frank, EMV Standards, SWIFT CSCF, WCAG 2.1 AA, NIST CSF
+- **Financials:** TAM $185T (global payments volume addressable), SAM $25T, SOM $35.9B | 5-year growth 2021–2025 | revenue_per_employee $1.35M
+- **Notes:** Lucide icons ✓ | VP dept_ids ✓ | 30 roles ✓ | Pure payment technology company (not a bank); VisaNet processes 276M+ transactions/day; 4B+ cards issued globally; Visa Direct real-time P2P platform; B2B Connect cross-border corporate payments; Tap to Pay contactless adoption accelerating post-COVID; FY2025 revenue $35.9B; products deferred (auth required)
+
+---
+
+## Metrolinx
+- **Seeded:** 2026-04-10
+- **Slug:** metrolinx
+- **ID:** (query if needed)- **Sector:** Public Transit & Regional Transportation (Crown Agency)
+- **HQ:** Toronto, Ontario, Canada | Founded 2006 | 6,700 employees | $2.8B revenue
+- **Departments (10):** Rail Operations & Scheduling, Capital Programs & Infrastructure Delivery, Transit Technology & Innovation, Fare Systems & Revenue, Safety, Security & Risk, Finance & Corporate Services, Legal & Procurement, Human Resources & Labour Relations, Customer Experience & Communications, Corporate Strategy & Planning
+- **Roles (30):** 3 per department — Sr Rail Operations Planner, Train Controller, Operations Data Analyst, Capital Projects Director, Infrastructure Engineer – Rail, Construction Project Manager, Transit Technology Architect, Intelligent Transit Systems Analyst, Software Developer – PRESTO, PRESTO Fare Systems Engineer, Revenue Analytics Analyst, Fare Policy Specialist, Safety Management System Analyst, Security Operations Specialist, Emergency Management Coordinator, Financial Analyst, Treasury & Funding Analyst, FP&A Manager, Procurement Specialist – Infrastructure, Legal Counsel – Contracts, Labour Relations Specialist, HR Business Partner, Talent Acquisition Specialist – Transit, Employee Relations Advisor, Customer Experience Manager, Digital Communications Specialist, Accessibility Advisor, Strategy & Policy Analyst, Capital Planning Analyst, Interagency Partnerships Manager
+- **Execs:** CEO Phil Verster | CFO Mathieu Goetzke | COO Steve Matheson | CTO Alan Paul | CCO Anne Marie Aikins | CLO Rina Butler | CHRO John Hrycay | VP Rail Operations, VP Capital Programs, VP Technology, VP Customer Experience, VP Corporate Strategy — 5 VP tier linked to departments
+- **Standards (10):** Transport Canada Rail Safety Act, ISO 45001, ISO 9001:2015, ISO 14001, AODA, SOC 2 Type II, PIPEDA, WCAG 2.1 AA, Ontario Metrolinx Act, ISO 27001
+- **Financials:** TAM $18B (Ontario regional transit), SAM $6B, SOM $2.8B | 5-year growth 2021–2025 | revenue_per_employee $418K
+- **Notes:** Lucide icons ✓ | VP dept_ids ✓ | 30 roles ✓ | Crown agency of Ontario; operates GO Transit, UP Express, PRESTO fare card system; $28.5B Metrolinx Capital Program underway (Eglinton Crosstown, Finch West LRT, Ontario Line); PRESTO used by 7+ transit agencies in Ontario; public sector — no private shareholders; products deferred (auth required)
+
+---
+
+## Scotiabank
+- **Seeded:** 2026-04-10
+- **Slug:** scotiabank
+- **ID:** f315e81e-f81c-47b8-bb17-0dfdb4561869
+- **Sector:** Banking & Financial Services
+- **HQ:** Toronto, ON, Canada | Founded 1832 | 90,000 employees | $30.0B CAD revenue (FY2025, ended Oct 31, 2025)
+- **CEO:** Scott Thomson
+- **Departments (12):** Retail Banking, Commercial Banking, International Banking, Global Banking & Markets, Wealth Management, Technology & Innovation, Risk Management, Finance & Treasury, Human Resources, Marketing & Communications, Operations & Service Delivery, Compliance & Legal
+- **Roles (36):** 3 per department
+- **Execs:** CEO Scott Thomson | CFO Raj Viswanathan | CRO Phil Thomas | CLO Deborah Alexander | CDTO Michael Zerbs | CPO Sandra Harriman | GH-Canada Dan Rees | GH-Intl Francisco Aristeguieta | GH-GBM Jake Lawrence | GH-Wealth Glen Gowland | VP Mktg Laura Curtis Ferrera, VP Tech Stephen Forbes, VP Risk Marie-Claude Bourdon, VP Finance James Neate, VP HR Carolyn Van Den Berg, VP Intl Ops Carlos Villarreal, VP Legal Tammy Medland, VP Wealth Robert Fraser — 8 VP tier linked to departments
+- **Products (5):** Seeded via scraper
+- **News (5):** Q4 FY2024 Results (Dec 2024), KeyCorp $2.8B acquisition (Aug 2024), STEP Home Equity expansion (Nov 2023), Q1 FY2025 Results (Feb 2025), AI digital banking features (Mar 2025)
+- **Milestones (9):** 1832 founded → 1900 Caribbean expansion → 1972 Toronto HQ → 2000 Mexico → 2012 Pacific Alliance → 2018 MD Financial $2.58B → 2023 new CEO → 2024 Scene+ 15M members → 2024 KeyCorp $2.8B
+- **Standards (10):** OSFI B-20, Basel III, PIPEDA, SOC 2 Type II, ISO 27001, PCI DSS, AML/ATF, WCAG 2.1 AA, IFRS 17, ISO 14001
+- **Financials:** TAM $400B CAD, SAM $180B CAD, SOM $30.0B CAD | 5-year growth 2021–2025 | revenue_per_employee $333K CAD | competitors pct sum 100 ✓ (Scotiabank first)
+- **Sources:** scotiabank.com investor relations, LinkedIn, Wikipedia, SEC EDGAR equivalent (SEDAR), news releases
+- **Notes:** Lucide icons ✓ | VP dept_ids ✓ | 36 roles ✓ | Revenue in CAD throughout — FY ends Oct 31; FY2025 completed Oct 31 2025; logo stored as scotiabank.ico in Supabase storage (ICO format — icon.horse only returns ICO for this domain); fixed competitors pct sum from 121→100 and removed erroneous "Metro" entry; fixed som/arr/revenue_per_employee to match FY2025 revenue
+
+---
+
+## Mastercard
+- **Seeded:** 2026-04-10
+- **Slug:** mastercard
+- **ID:** 0ed1a92a-aaa3-48c6-896a-fbca32f2697d
+- **Sector:** Payments & Financial Technology
+- **HQ:** Purchase, NY | Founded 1966 | 33,000 employees | $30.5B revenue (FY2025, ended Dec 31, 2025)
+- **CEO:** Michael Miebach
+- **Departments (12):** Payment Network & Core Processing, Product & Engineering, Cybersecurity & Intelligence, Data & Services (Analytics), Open Banking & Real-Time Payments, Global Sales & Account Management, Commercial Solutions (B2B), Marketing & Communications, Finance & Treasury, Human Resources & People, Legal, Regulatory & Compliance, Strategy & Corporate Development
+- **Roles (36):** 3 per department
+- **Execs:** CEO Michael Miebach | CFO Sachin Mehra | Pres. Tech & Ops Ed McLaughlin | CPO Craig Vosburg | CMO Raja Rajamannar | Pres. North America Linda Kirkpatrick | Pres. International Gilberto Caldart | CPO (People) Sandra Alzetta | VP Cybersecurity Johan Gerber, VP Open Banking Kush Saxena, VP Engineering Chiro Aikat, VP Data & Services Jess Turner, VP Commercial Amir Abdin, VP HR Lisa Schreiber — 6 VP tier linked to departments
+- **Products (5):** Seeded via scraper
+- **News (5):** FY2025 Results $30.5B +8% (Jan 2026), Agent Pay launch (Mar 2025), Apple Tap to Pay partnership (Feb 2025), Open Banking Pay by Bank 30 markets (Jun 2024), Recorded Future $2.65B acquisition (Nov 2024)
+- **Milestones (9):** 1966 founded → 1979 Mastercard rebrand → 1987 Maestro launch → 2006 NYSE IPO $2.4B → 2012 antitrust settlement $7.25B → 2016 VocaLink £700M → 2019 B2B payments acquisitions → 2021 open banking/crypto → 2024 Recorded Future $2.65B
+- **Standards (10):** PCI DSS Level 1, SOC 2 Type II, ISO 27001, GDPR, CCPA, PSD2, EMVCo, NIST CSF, ISO 22301, WCAG 2.1 AA
+- **Financials:** TAM $2.5T, SAM $600B, SOM $30.5B | 5-year growth 2021–2025 | revenue_per_employee $924K | competitors pct sum 100 ✓ (Mastercard first)
+- **Sources:** mastercard.com investor relations, LinkedIn, Wikipedia, SEC EDGAR 10-K, press releases
+- **Notes:** Lucide icons ✓ | VP dept_ids ✓ | 36 roles ✓ | FY ends Dec 31; FY2025 completed Dec 31 2025 ($30.5B); fixed som/arr/revenue_per_employee to match FY2025 revenue; replaced stale 2024 news items with FY2025 earnings release (Jan 2026) and 2025 product/partnership items
+
+---
+
+## Hatch
+- **Seeded:** 2026-04-10
+- **Slug:** hatch
+- **ID:** 850c0c27-4301-4edc-a2ca-ece5218d6017
+- **Sector:** Engineering & Professional Services (Metals, Energy, Infrastructure)
+- **HQ:** Mississauga, Ontario, Canada | Founded 1955 | 10,000 employees | $2.4B revenue
+- **Departments (10):** Metals & Mining Engineering, Energy Engineering, Infrastructure Engineering, Digital & Technology, Project Management, Finance & Administration, Human Resources, Legal & Risk, Business Development, Health Safety & Environment
+- **Roles (30):** 3 per department — Sr Process Engineer – Metallurgy, Pyrometallurgical Engineer, Mining Infrastructure Engineer, Energy Systems Engineer, Power Plant Design Engineer, Renewable Energy Project Engineer, Structural Engineer – Infrastructure, Transportation Systems Engineer, Urban Rail & Transit Engineer, Digital Solutions Architect, OT/ICS Systems Engineer, Data & Analytics Engineer, Sr Project Manager, Project Controls Lead, Earned Value Management Analyst, Financial Analyst – Projects, Cost Engineer, Corporate Finance Manager, HR Business Partner, Talent Acquisition Specialist – Engineering, L&D Program Manager, Contracts Counsel, Risk & Compliance Manager, Export Controls Analyst, Business Development Manager – Mining, Client Relationships Director, Proposal Lead, HSE Manager, Environmental Assessment Specialist, Industrial Hygienist
+- **Execs:** CEO John Bianchini | CFO Kevin McCann | COO Diane Brisebois | CTO Rajesh Sharma | CPO Sandra Tremblay | CLO Michael Doran | CSO Alistair MacLeod | VP Metals & Mining David Kerr, VP Energy Carolyn Mercer, VP Infrastructure Thomas Gaudet, VP Digital Priya Nair, VP BD Liam O'Sullivan, VP HSE Nina Kowalski — 6 VP tier linked to departments
+- **Standards (10):** ISO 14001, ISO 45001, ISO 9001:2015, ISO 27001, OHSAS 18001, CFIA Export Compliance, FIDIC Contract Standards, PMP (PMI), AACE International, GDPR
+- **Financials:** TAM $380B, SAM $45B, SOM $2.4B | 5-year growth 2021–2025 | revenue_per_employee $240K
+- **Notes:** Lucide icons ✓ | VP dept_ids ✓ | 30 roles ✓ | 100% employee-owned (ESOP) since 1970 — no outside shareholders; 3 business lines: Metals & Mining (largest), Energy, Infrastructure; major projects include Oyu Tolgoi copper mine (Mongolia), Scarborough-Malton BRT, green hydrogen feasibility studies; Hatch Digital unit growing for OT/ICS and digital twins; products deferred (auth required)
 
 ---
