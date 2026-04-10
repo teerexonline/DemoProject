@@ -47,7 +47,7 @@ export default async function CompanyPage({ params }: Props) {
   const [profileResult, savedResult, newsRes, milestonesRes, productsRes, financialsRes, standardsRes, deptsRes, rolesRes, execRes, leadersRes] = await Promise.all([
     supabase.from('profiles').select('plan, free_token_reset_at').eq('id', user.id).single(),
     supabase.from('saved_companies').select('id').eq('user_id', user.id).eq('company_id', company.id).maybeSingle(),
-    supabase.from('company_news').select('*').eq('company_id', company.id).order('sort_order'),
+    supabase.from('company_news').select('*').eq('company_id', company.id).order('published_date', { ascending: false }),
     supabase.from('company_milestones').select('*').eq('company_id', company.id).order('sort_order'),
     supabase.from('company_products').select('*').eq('company_id', company.id).order('sort_order'),
     supabase.from('company_financials').select('*').eq('company_id', company.id).maybeSingle(),
