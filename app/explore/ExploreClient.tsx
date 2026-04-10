@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import CategoryFilter from '@/components/CategoryFilter'
 import CompanyLogo from '@/components/CompanyLogo'
+import SaveButton from '@/components/SaveButton'
 import type { CompanyRow } from '@/app/actions/companies'
 
 // ─── Sectors ────────────────────────────────────────────────────────────────
@@ -103,34 +104,35 @@ function inSector(c: CompanyRow, sectorId: string): boolean {
 
 // ─── Company grid card ───────────────────────────────────────────────────────
 
-function CompanyCard({ c }: { c: CompanyRow }) {
+function CompanyCard({ c, initialSaved }: { c: CompanyRow; initialSaved: boolean }) {
   const bg = c.logo_color ?? '#063f76'
   return (
-    <Link href={`/company/${c.slug}`} style={{ textDecoration: 'none', display: 'block' }}>
-      <div
-        style={{
-          background: '#fff',
-          borderRadius: 13,
-          border: '1.5px solid #EBEBED',
-          padding: '16px',
-          boxShadow: '0 1px 4px rgba(0,0,0,0.04)',
-          transition: 'border-color 0.18s, box-shadow 0.18s, transform 0.18s',
-          cursor: 'pointer',
-          height: '100%',
-        }}
-        onMouseEnter={e => {
-          const el = e.currentTarget as HTMLElement
-          el.style.borderColor = bg
-          el.style.boxShadow = `0 6px 22px ${bg}22`
-          el.style.transform = 'translateY(-2px)'
-        }}
-        onMouseLeave={e => {
-          const el = e.currentTarget as HTMLElement
-          el.style.borderColor = '#EBEBED'
-          el.style.boxShadow = '0 1px 4px rgba(0,0,0,0.04)'
-          el.style.transform = 'translateY(0)'
-        }}
-      >
+    <div style={{ position: 'relative' }}>
+      <Link href={`/company/${c.slug}`} style={{ textDecoration: 'none', display: 'block' }}>
+        <div
+          style={{
+            background: '#fff',
+            borderRadius: 13,
+            border: '1.5px solid #EBEBED',
+            padding: '16px',
+            boxShadow: '0 1px 4px rgba(0,0,0,0.04)',
+            transition: 'border-color 0.18s, box-shadow 0.18s, transform 0.18s',
+            cursor: 'pointer',
+            height: '100%',
+          }}
+          onMouseEnter={e => {
+            const el = e.currentTarget as HTMLElement
+            el.style.borderColor = bg
+            el.style.boxShadow = `0 6px 22px ${bg}22`
+            el.style.transform = 'translateY(-2px)'
+          }}
+          onMouseLeave={e => {
+            const el = e.currentTarget as HTMLElement
+            el.style.borderColor = '#EBEBED'
+            el.style.boxShadow = '0 1px 4px rgba(0,0,0,0.04)'
+            el.style.transform = 'translateY(0)'
+          }}
+        >
         <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: 10 }}>
           <CompanyLogo
             name={c.name}
@@ -181,8 +183,12 @@ function CompanyCard({ c }: { c: CompanyRow }) {
             <span style={{ fontSize: 10.5, color: '#A1A1AA' }}>{c.revenue}</span>
           )}
         </div>
+        </div>
+      </Link>
+      <div style={{ position: 'absolute', bottom: 14, right: 14 }} onClick={e => e.stopPropagation()}>
+        <SaveButton companyId={c.id} companyName={c.name} initialSaved={initialSaved} size="sm" logoColor={bg} />
       </div>
-    </Link>
+    </div>
   )
 }
 
@@ -249,9 +255,10 @@ interface Props {
   companies: CompanyRow[]
   initialCategory: string
   initialSort: SortMode
+  savedIds: string[]
 }
 
-export default function ExploreClient({ companies, initialCategory, initialSort }: Props) {
+export default function ExploreClient({ companies, initialCategory, initialSort, savedIds }: Props) {
   const router = useRouter()
   const [category, setCategory] = useState(initialCategory)
   const [sort, setSort] = useState<SortMode>(initialSort)
@@ -392,7 +399,7 @@ export default function ExploreClient({ companies, initialCategory, initialSort 
           </div>
         ) : (
           <div className="explore-grid">
-            {filtered.map(c => <CompanyCard key={c.id} c={c} />)}
+            {filtered.map(c => <CompanyCard key={c.id} c={c} initialSaved={savedIds.includes(c.id)} />)}
           </div>
         )}
       </div>
