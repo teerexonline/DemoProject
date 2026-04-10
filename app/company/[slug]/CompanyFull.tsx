@@ -13,6 +13,15 @@ import RelatedCompanies from '@/components/RelatedCompanies'
 
 // ─── DB → component data converters ──────────────────────────────────────────
 
+// Safely coerce a JSONB array to string[]. Handles both plain strings and
+// legacy {text: "..."} object format so bad data never crashes the UI.
+function toStringArray(val: unknown): string[] {
+  if (!Array.isArray(val)) return []
+  return val.map(item =>
+    typeof item === 'string' ? item : (item as Record<string, unknown>)?.text != null ? String((item as Record<string, unknown>).text) : ''
+  ).filter(Boolean)
+}
+
 function buildDepts(dbDepts: DbContent['departments'], dbRoles: DbContent['roles']): Dept[] {
   if (dbDepts.length === 0) return DEPARTMENTS
   return dbDepts.map(d => ({
@@ -28,11 +37,11 @@ function buildDepts(dbDepts: DbContent['departments'], dbRoles: DbContent['roles
         title: r.title,
         level: r.level,
         levelColor: LEVEL_COLORS[r.level] ?? '#71717A',
-        tools:               (r.tools as string[]) ?? [],
-        skills:              (r.skills as string[]) ?? [],
-        processes:           (r.processes as string[]) ?? [],
-        interviewQuestions:  (r.interview_questions as string[]) ?? [],
-        keywords:            (r.keywords as string[]) ?? [],
+        tools:               toStringArray(r.tools),
+        skills:              toStringArray(r.skills),
+        processes:           toStringArray(r.processes),
+        interviewQuestions:  toStringArray(r.interview_questions),
+        keywords:            toStringArray(r.keywords),
       })),
   }))
 }
