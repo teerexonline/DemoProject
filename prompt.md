@@ -1,3 +1,51 @@
+━━━ SESSION DATE ANCHOR — READ THIS FIRST, EVERY SESSION ━━━
+Today's date is injected by the system via currentDate in MEMORY.md.
+Read MEMORY.md before starting any session to confirm today's date.
+
+MINIMUM ACCEPTABLE YEAR for all time-sensitive data = (current year − 1).
+This means:
+• Financial data (revenue, revenue_growth): most recent entry must be FY(current year − 1)
+  or newer. FY(current year − 2) or older = stale = hard block, do not insert.
+• News items: published_date must be within the last 12 months. Older items are not
+  "recent news" — replace them.
+• Milestones: at least one milestone entry must have year ≥ (current year − 2).
+• Employee headcount: cross-check LinkedIn before inserting; reject Wikipedia/EDGAR
+  values that are more than 18 months old without verification.
+
+━━━ MANUAL DATA TAKES PRIORITY — NON-NEGOTIABLE ━━━
+If the seeding request provides specific values (e.g. "revenue: $280M",
+"employees: 2000", "founded: 1999"), those values are AUTHORITATIVE.
+Do NOT replace them with scraper output. Do NOT "correct" them based on
+Wikipedia or SEC EDGAR unless the request explicitly says the value is unknown.
+
+Rules:
+• Scraper output is a STARTING POINT, not a source of truth.
+• Any field explicitly provided by the user = final answer. Insert it as-is.
+• Any field NOT provided by the user = research it, but verify the year before inserting.
+• If scraper output conflicts with a user-provided value, the user-provided value wins.
+  Do not silently substitute. Do not average. Do not note the discrepancy as a reason
+  to use the scraper number instead.
+
+━━━ SCRAPER OUTPUT VALIDATION (run after ANY scraper call) ━━━
+Before inserting ANY scraper output, check:
+
+1. Does the JSON output contain a "_staleness_warning" key?
+   YES → Stop. Read the warning. Do not insert until you have resolved it by finding
+         current-year data from the company's investor relations page, latest 10-K,
+         or an authoritative news source. Replace the stale entries before inserting.
+   NO  → Proceed, but still verify the year of the most recent revenue_growth entry
+         against today's date (see SESSION DATE ANCHOR above).
+
+2. For seed_company.py output: check employees and revenue.
+   • employees: if the value came from Wikipedia/EDGAR, cross-check LinkedIn now.
+     If LinkedIn shows a materially different current headcount, use LinkedIn's value.
+   • revenue: confirm it reflects the most recent completed full FY (not TTM, not partial).
+
+3. For seed_news.py or manually researched news: check every published_date.
+   Any item older than 12 months must be replaced with a genuinely recent item.
+   "We couldn't find 5 recent items" is not an acceptable reason to use old items —
+   use fewer items rather than insert stale news.
+
 ━━━ PRE-FLIGHT: READ REFERENCE DATA ━━━
 Before starting any section, always:
 1. Read referenceData.md to load the gold standard structure into context.
@@ -203,10 +251,14 @@ Fields reference (for manual fallback only):
 ━━━ 3. NEWS (INSERT into company_news) ━━━
 GOLD STANDARD: See referenceData.md Section 3 for type→color mapping and depth.
 5 most recent press releases or announcements — real, dated, sourced events only.
+DATE RULE: Every item must have published_date within the last 12 months relative to
+today's date (from SESSION DATE ANCHOR). Do not insert items older than 12 months.
+If fewer than 5 genuinely recent items exist, insert only what is recent — do not
+pad with older items to reach 5. Inserting stale news is worse than inserting fewer items.
 For each:
 - headline: exact headline from the press release or news article
 - summary: 1 sentence — specific, not generic. Mention numbers/outcomes where available.
-- published_date: "MMM DD, YYYY" (e.g. "Feb 12, 2026")
+- published_date: "MMM DD, YYYY" (e.g. "Feb 12, 2026") — must be within last 12 months
 - source_url: direct URL to the press release or article
 - type: one of [Press Release, Partnership, Product Launch, Award, Funding, Acquisition]
 - type_color / type_bg / dot_color: use the color mapping in referenceData.md Section 3

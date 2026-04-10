@@ -885,26 +885,29 @@ class FinancialResult:
             self.revenue_growth = list(reversed(growth_list[:8]))
 
         # ── Staleness check ───────────────────────────────────────────────────
+        self._staleness_warning: str | None = None
         if self.revenue_growth:
             latest_year = self.revenue_growth[-1]["year"]   # last entry = most recent
             current_year = datetime.date.today().year
             # A completed FY is stale if it ended more than 12 months ago AND a newer
             # completed FY now exists. We flag when the latest year is ≥2 years old.
             if current_year - latest_year >= 2:
-                log.warning(
-                    "[STALENESS] Revenue data is from FY%d — current year is %d. "
-                    "A newer completed fiscal year likely exists. "
-                    "Verify via SEC EDGAR or the company's latest annual report before inserting.",
-                    latest_year, current_year,
+                msg = (
+                    f"STALE DATA — revenue_growth ends at FY{latest_year} but current year "
+                    f"is {current_year}. A newer completed fiscal year almost certainly exists. "
+                    f"DO NOT INSERT this output. Find FY{current_year - 1} data from SEC EDGAR "
+                    f"or the company's latest annual report first."
                 )
+                log.warning("[STALENESS] %s", msg)
+                self._staleness_warning = msg
             elif current_year - latest_year == 1:
-                # One year gap is normal during Q1 (10-K filing window),
-                # but flag it so the user can confirm no newer FY is available.
-                log.warning(
-                    "[STALENESS] Revenue data is from FY%d (current year: %d). "
-                    "If FY%d is now complete and the 10-K has been filed, update to that year.",
-                    latest_year, current_year, current_year - 1,
+                msg = (
+                    f"VERIFY BEFORE INSERTING — revenue_growth ends at FY{latest_year} "
+                    f"(current year: {current_year}). If FY{current_year - 1} is now complete "
+                    f"and the annual report/10-K has been filed, update to that year before inserting."
                 )
+                log.warning("[STALENESS] %s", msg)
+                self._staleness_warning = msg
 
         # ── YoY growth ────────────────────────────────────────────────────────
         if self.revenue_growth and len(self.revenue_growth) >= 2:
@@ -991,7 +994,7 @@ class FinancialResult:
             self.business_units = _default_business_units(self.category)
 
     def to_dict(self) -> dict[str, Any]:
-        return {
+        d: dict[str, Any] = {
             "tam":                  self.tam,
             "sam":                  self.sam,
             "som":                  self.som,
@@ -1004,6 +1007,12 @@ class FinancialResult:
             "revenue_growth":       self.revenue_growth,
             "_sources":             {k: v for k, v in self._sources.items() if not k.startswith("p_")},
         }
+        # Surface staleness warning in JSON output so it is impossible to overlook.
+        # Claude MUST check this field and resolve it before inserting any financial data.
+        warning = getattr(self, "_staleness_warning", None)
+        if warning:
+            d["_staleness_warning"] = warning
+        return d
 
 
 # ─── Category default revenue streams / business units ────────────────────────
