@@ -142,7 +142,10 @@ export default function Trending() {
                         fontSize: '10px', fontWeight: 700,
                         padding: '1px 6px', borderRadius: '4px',
                         border: '1px solid #FED7AA',
-                      }}>🔥 Hot</span>
+                      }}>
+                        <svg width="8" height="8" viewBox="0 0 24 24" fill="currentColor" stroke="none" style={{ display: 'inline', marginRight: 3, verticalAlign: 'middle' }}><path d="M12 2C9 8 4 10 4 15a8 8 0 0 0 16 0c0-5-4-7-8-13zm0 18a6 6 0 0 1-4-10.47C9.36 12 11 13.5 11 15a1 1 0 0 0 2 0c0-2-1.5-3.5-1-6 2 2 4 4 4 6a6 6 0 0 1-4 5.97z"/></svg>
+                        Hot
+                      </span>
                     )}
                   </div>
                   <div style={{ color: '#A1A1AA', fontSize: '12px', marginTop: '1px' }}>{co.category}</div>

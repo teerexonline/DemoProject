@@ -592,7 +592,10 @@ export default function CompanyOverview({ company, showProTeaser = false, dbNews
           border: '1px solid #a8cbe8',
         }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px' }}>
-            <span style={{ fontSize: '15px' }}>🔓</span>
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#5B21B6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+              <path d="M7 11V7a5 5 0 0 1 9.9-1"/>
+            </svg>
             <span style={{ color: '#5B21B6', fontSize: '13px', fontWeight: 700 }}>
               More available with Pro
             </span>
@@ -605,7 +608,11 @@ export default function CompanyOverview({ company, showProTeaser = false, dbNews
                 color: '#063f76', fontSize: '11.5px',
                 display: 'inline-flex', alignItems: 'center', gap: '4px',
               }}>
-                <span style={{ fontSize: '10px', opacity: 0.6 }}>🔒</span> {label}
+                <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="#063f76" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" style={{ opacity: 0.5, flexShrink: 0 }}>
+                  <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                  <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                </svg>
+                {label}
               </span>
             ))}
           </div>

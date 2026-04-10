@@ -52,8 +52,9 @@ export default function CompanyTeaser({ company, relatedCompanies = [] }: { comp
               <div style={{ height: '80px', background: '#F4F4F5', borderRadius: '8px' }} />
             </div>
             <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(255,255,255,0.5)' }}>
-              <div style={{ background: '#fff', border: '1px solid #E4E4E7', borderRadius: '10px', padding: '10px 20px', color: '#09090B', fontSize: '13px', fontWeight: 600, boxShadow: '0 4px 16px rgba(0,0,0,0.08)' }}>
-                🔒 Sign in to view
+              <div style={{ background: '#fff', border: '1px solid #E4E4E7', borderRadius: '10px', padding: '10px 20px', color: '#09090B', fontSize: '13px', fontWeight: 600, boxShadow: '0 4px 16px rgba(0,0,0,0.08)', display: 'flex', alignItems: 'center', gap: '7px' }}>
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                Sign in to view
               </div>
             </div>
           </div>

@@ -478,3 +478,48 @@ export async function adminSeedCompanyContent(companyId: string) {
   await revalidateCompanyProfile(supabase, companyId)
   return { error: null }
 }
+
+
+// ─── Career Roles ─────────────────────────────────────────────────────────────
+
+export interface CareerRole {
+  id: string
+  title: string
+  team: string
+  type: string
+  description: string
+  is_active: boolean
+  created_at: string
+}
+
+export async function adminGetCareerRoles(): Promise<{ data: CareerRole[]; error: string | null }> {
+  const supabase = await createClient()
+  const { data, error } = await supabase
+    .from('career_roles')
+    .select('*')
+    .order('created_at', { ascending: false })
+  return { data: (data as CareerRole[]) ?? [], error: error?.message ?? null }
+}
+
+export async function adminUpsertCareerRole(role: Partial<CareerRole> & { title: string; team: string; description: string }): Promise<{ error: string | null }> {
+  const supabase = await createClient()
+  const { error } = await supabase.from('career_roles').upsert({
+    ...(role.id ? { id: role.id } : {}),
+    title: role.title,
+    team: role.team,
+    type: role.type ?? 'Full-time · Hybrid',
+    description: role.description,
+    is_active: role.is_active ?? true,
+  })
+  revalidatePath('/careers')
+  revalidatePath('/admin')
+  return { error: error?.message ?? null }
+}
+
+export async function adminDeleteCareerRole(id: string): Promise<{ error: string | null }> {
+  const supabase = await createClient()
+  const { error } = await supabase.from('career_roles').delete().eq('id', id)
+  revalidatePath('/careers')
+  revalidatePath('/admin')
+  return { error: error?.message ?? null }
+}

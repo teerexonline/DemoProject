@@ -9,25 +9,40 @@ import type { LucideIcon } from 'lucide-react'
 
 // ─── Logo helper ──────────────────────────────────────────────────────────────
 const LOGOS: Record<string, { url: string; color: string }> = {
-  Google:     { url: '/logo/Google.svg',                          color: '#4285F4' },
-  Meta:       { url: '/logo/Meta.png',                            color: '#0866FF' },
-  Stripe:     { url: '/logo/Stripe.svg',                          color: '#533AFD' },
-  Airbnb:     { url: '/logo/Airbnb.svg',                          color: '#FF385C' },
-  Notion:     { url: '/logo/Notion.svg',                          color: '#000'    },
-  OpenAI:     { url: '/logo/OpenAI.svg',                          color: '#000'    },
-  Linear:     { url: '/logo/Linear.svg',                          color: '#222326' },
-  Figma:      { url: '/logo/Figma.svg',                           color: '#F24E1E' },
-  Anthropic:  { url: '/logo/Anthropic.svg',                       color: '#181818' },
-  Vercel:     { url: '/logo/Vercel.svg',                          color: '#000'    },
-  Canva:      { url: '/logo/Canva.jpeg',                          color: '#00C4CC' },
-  Databricks: { url: '/logo/Databricks.svg',                      color: '#FF3621' },
-  Datadog:    { url: 'https://logo.clearbit.com/datadoghq.com',  color: '#632CA6' },
-  Slack:      { url: 'https://logo.clearbit.com/slack.com',      color: '#4A154B' },
-  GitHub:     { url: 'https://logo.clearbit.com/github.com',     color: '#24292E' },
-  PagerDuty:  { url: 'https://logo.clearbit.com/pagerduty.com',  color: '#06AC38' },
-  Terraform:  { url: 'https://logo.clearbit.com/hashicorp.com',  color: '#7B42BC' },
-  Retool:     { url: 'https://logo.clearbit.com/retool.com',     color: '#3D63DD' },
-  Hex:        { url: 'https://logo.clearbit.com/hex.tech',       color: '#FF6B35' },
+  // ── Local assets (always reliable) ──
+  Google:      { url: '/logo/Google.svg',        color: '#4285F4' },
+  Meta:        { url: '/logo/Meta.png',           color: '#0866FF' },
+  Stripe:      { url: '/logo/Stripe.svg',         color: '#533AFD' },
+  Airbnb:      { url: '/logo/Airbnb.svg',         color: '#FF385C' },
+  Notion:      { url: '/logo/Notion.svg',         color: '#000'    },
+  OpenAI:      { url: '/logo/OpenAI.svg',         color: '#000'    },
+  Linear:      { url: '/logo/Linear.svg',         color: '#222326' },
+  Figma:       { url: '/logo/Figma.svg',          color: '#F24E1E' },
+  Anthropic:   { url: '/logo/Anthropic.svg',      color: '#181818' },
+  Vercel:      { url: '/logo/Vercel.svg',         color: '#000'    },
+  Canva:       { url: '/logo/Canva.jpeg',         color: '#00C4CC' },
+  Databricks:  { url: '/logo/Databricks.svg',     color: '#FF3621' },
+  // ── External — icon.horse (reliable, domain-based) ──
+  Datadog:     { url: 'https://icon.horse/icon/datadoghq.com',   color: '#632CA6' },
+  Slack:       { url: 'https://icon.horse/icon/slack.com',       color: '#4A154B' },
+  GitHub:      { url: 'https://icon.horse/icon/github.com',      color: '#24292E' },
+  PagerDuty:   { url: 'https://icon.horse/icon/pagerduty.com',   color: '#06AC38' },
+  HashiCorp:   { url: 'https://icon.horse/icon/hashicorp.com',   color: '#7B42BC' },
+  Retool:      { url: 'https://icon.horse/icon/retool.com',      color: '#3D63DD' },
+  HubSpot:     { url: 'https://icon.horse/icon/hubspot.com',     color: '#FF7A59' },
+  Shopify:     { url: 'https://icon.horse/icon/shopify.com',     color: '#96BF48' },
+  Twilio:      { url: 'https://icon.horse/icon/twilio.com',      color: '#F22F46' },
+  Snowflake:   { url: 'https://icon.horse/icon/snowflake.com',   color: '#29B5E8' },
+  Salesforce:  { url: 'https://icon.horse/icon/salesforce.com',  color: '#00A1E0' },
+  Atlassian:   { url: 'https://icon.horse/icon/atlassian.com',   color: '#0052CC' },
+  Zoom:        { url: 'https://icon.horse/icon/zoom.us',         color: '#2D8CFF' },
+  Adobe:       { url: 'https://icon.horse/icon/adobe.com',       color: '#FF0000' },
+  Microsoft:   { url: 'https://icon.horse/icon/microsoft.com',   color: '#00A4EF' },
+  Spotify:     { url: 'https://icon.horse/icon/spotify.com',     color: '#1DB954' },
+  Netflix:     { url: 'https://icon.horse/icon/netflix.com',     color: '#E50914' },
+  Uber:        { url: 'https://icon.horse/icon/uber.com',        color: '#000000' },
+  Pinterest:   { url: 'https://icon.horse/icon/pinterest.com',   color: '#E60023' },
+  Dropbox:     { url: 'https://icon.horse/icon/dropbox.com',     color: '#0061FF' },
 }
 
 function LogoImg({ name, size = 24, radius = 6 }: { name: string; size?: number; radius?: number }) {
@@ -239,7 +254,10 @@ function RevenueByDept() {
         ))}
       </div>
       <div style={{ padding: '9px 12px', borderRadius: '8px', background: '#eef4fb', border: '1px solid #a8cbe8', marginTop: '2px' }}>
-        <div style={{ color: '#04294f', fontSize: '11px', fontWeight: 600 }}>💡 Insight: Payments Core dominates but Treasury growing fastest at 38% YoY</div>
+        <div style={{ color: '#04294f', fontSize: '11px', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '5px' }}>
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          Insight: Payments Core dominates but Treasury growing fastest at 38% YoY
+        </div>
       </div>
     </div>
   )

@@ -5,6 +5,18 @@ import Features from '@/components/landing/features'
 import Testimonials from '@/components/landing/testimonials'
 import Trending from '@/components/landing/trending'
 import Pricing from '@/components/landing/pricing'
+const EXPLORE_SECTORS = [
+  { id: 'tech',       label: 'Technology',           desc: 'Software, AI, Cloud & Dev Tools',     accent: '#2563EB', img: 'https://images.unsplash.com/photo-1518770660439-4636190af475?w=480&h=260&fit=crop&auto=format&q=75' },
+  { id: 'finance',    label: 'Finance',              desc: 'Banking, Fintech & Capital Markets',  accent: '#059669', img: 'https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=480&h=260&fit=crop&auto=format&q=75' },
+  { id: 'defense',    label: 'Aerospace & Defense',  desc: 'Aviation, Space & Defense Systems',   accent: '#7C3AED', img: 'https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=480&h=260&fit=crop&auto=format&q=75' },
+  { id: 'security',   label: 'Security',             desc: 'Cybersecurity & Physical Security',   accent: '#DC2626', img: 'https://images.unsplash.com/photo-1563986768609-322da13575f3?w=480&h=260&fit=crop&auto=format&q=75' },
+  { id: 'consumer',   label: 'Consumer & Retail',    desc: 'E-commerce, CPG & Retail Brands',     accent: '#D97706', img: 'https://images.unsplash.com/photo-1483985988355-763728e1935b?w=480&h=260&fit=crop&auto=format&q=75' },
+  { id: 'services',   label: 'Services',             desc: 'Consulting, Staffing & Professional', accent: '#0891B2', img: 'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=480&h=260&fit=crop&auto=format&q=75' },
+  { id: 'industrial', label: 'Industrial',           desc: 'Manufacturing, Energy & Utilities',   accent: '#92400E', img: 'https://images.unsplash.com/photo-1565193566173-7a0ee3dbe261?w=480&h=260&fit=crop&auto=format&q=75' },
+  { id: 'health',     label: 'Healthcare',           desc: 'MedTech, Pharma & Health Systems',    accent: '#BE185D', img: 'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=480&h=260&fit=crop&auto=format&q=75' },
+  { id: 'energy',     label: 'Energy',               desc: 'Oil & Gas, Renewables & Utilities',   accent: '#CA8A04', img: 'https://images.unsplash.com/photo-1466611653911-95081537e5b7?w=480&h=260&fit=crop&auto=format&q=75' },
+  { id: 'infra',      label: 'Infrastructure', desc: 'Networking, CDN, Cloud & DevOps',      accent: '#0F766E', img: 'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=480&h=260&fit=crop&auto=format&q=75' },
+]
 
 export default function MarketingPage() {
   return (
@@ -29,7 +41,7 @@ export default function MarketingPage() {
                 Most candidates show up knowing only what&apos;s on a company&apos;s homepage. ResearchOrg gives you everything else — org depth, team structure, tooling, and strategic context.
               </p>
               <a
-                href="#"
+                href="/features"
                 style={{
                   display: 'inline-flex', alignItems: 'center', gap: '6px',
                   color: '#063f76', fontSize: '14px', fontWeight: 600, textDecoration: 'none',
@@ -94,7 +106,7 @@ export default function MarketingPage() {
           }}>
             ResearchOrg users are <span style={{ color: '#609dd6' }}>3×</span> more confident<br />walking into interviews.
           </h3>
-          <a href="#" style={{ color: '#063f76', fontSize: '14px', fontWeight: 600, textDecoration: 'none', whiteSpace: 'nowrap' }}>
+          <a href="/blog" style={{ color: '#063f76', fontSize: '14px', fontWeight: 600, textDecoration: 'none', whiteSpace: 'nowrap' }}>
             Read the story →
           </a>
         </div>
@@ -130,7 +142,9 @@ export default function MarketingPage() {
                   background: folder.active ? '#eef4fb' : '#f8fbfe',
                   border: folder.active ? '1px solid #a8cbe8' : '1px solid #eef4fb',
                 }}>
-                  <span style={{ fontSize: '14px' }}>📁</span>
+                  <span style={{ display: 'flex', alignItems: 'center', color: '#063f76' }}>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+                  </span>
                   <span style={{ color: folder.active ? '#063f76' : '#52525B', fontSize: '13px', fontWeight: folder.active ? 600 : 400, flex: 1 }}>
                     {folder.label}
                   </span>
@@ -150,7 +164,7 @@ export default function MarketingPage() {
               <p style={{ color: '#71717A', fontSize: '15px', lineHeight: 1.7, margin: '0 0 24px' }}>
                 Build research lists by industry, role, or application stage. Never lose track of a company you wanted to research.
               </p>
-              <a href="#" style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', color: '#063f76', fontSize: '14px', fontWeight: 600, textDecoration: 'none' }}
+              <a href="/signup" style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', color: '#063f76', fontSize: '14px', fontWeight: 600, textDecoration: 'none' }}
                 onMouseEnter={e => (e.currentTarget as HTMLElement).style.gap = '10px'}
                 onMouseLeave={e => (e.currentTarget as HTMLElement).style.gap = '6px'}
               >
@@ -184,7 +198,7 @@ export default function MarketingPage() {
                   </div>
                 ))}
               </div>
-              <a href="#" style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', color: '#063f76', fontSize: '14px', fontWeight: 600, textDecoration: 'none' }}>
+              <a href="/features" style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', color: '#063f76', fontSize: '14px', fontWeight: 600, textDecoration: 'none' }}>
                 Learn about our data →
               </a>
             </div>
@@ -217,7 +231,10 @@ export default function MarketingPage() {
                 ))}
               </div>
               <div style={{ padding: '10px 12px', borderRadius: '8px', background: '#eef4fb', border: '1px solid #a8cbe8' }}>
-                <div style={{ color: '#063f76', fontSize: '11.5px', fontWeight: 600, marginBottom: '2px' }}>🔔 Change detected</div>
+                <div style={{ color: '#063f76', fontSize: '11.5px', fontWeight: 600, marginBottom: '2px', display: 'flex', alignItems: 'center', gap: '5px' }}>
+                  <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+                  Change detected
+                </div>
                 <div style={{ color: '#609dd6', fontSize: '12px' }}>Hiring in Engineering increased 18% this month</div>
               </div>
             </div>
@@ -266,6 +283,51 @@ export default function MarketingPage() {
 
       <Testimonials />
       <Trending />
+
+      {/* Browse Companies */}
+      <section style={{ padding: '88px 24px', background: '#f8fbfe', borderTop: '1px solid #e2eaf2' }}>
+        <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
+          <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', marginBottom: 40, flexWrap: 'wrap', gap: 12 }}>
+            <div>
+              <p style={{ color: '#609dd6', fontSize: '12px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '8px' }}>EXPLORE</p>
+              <h2 style={{ fontSize: 'clamp(22px, 3vw, 36px)', fontWeight: 800, letterSpacing: '-0.04em', color: '#09090B', lineHeight: 1.1, margin: 0 }}>
+                Browse all companies
+              </h2>
+            </div>
+            <a href="/explore" style={{ color: '#063f76', fontSize: '14px', fontWeight: 600, textDecoration: 'none', whiteSpace: 'nowrap' }}>
+              See all companies →
+            </a>
+          </div>
+
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))', gap: 14 }}>
+            {EXPLORE_SECTORS.map(s => (
+              <a
+                key={s.id}
+                href={`/explore?category=${s.id}`}
+                style={{ textDecoration: 'none', display: 'block', borderRadius: 14, background: '#fff', border: '1.5px solid #e2eaf2', overflow: 'hidden', transition: 'border-color 0.15s, box-shadow 0.15s, transform 0.15s', cursor: 'pointer' }}
+                onMouseEnter={e => { const el = e.currentTarget as HTMLElement; el.style.borderColor = s.accent; el.style.boxShadow = `0 8px 28px ${s.accent}20`; el.style.transform = 'translateY(-3px)' }}
+                onMouseLeave={e => { const el = e.currentTarget as HTMLElement; el.style.borderColor = '#e2eaf2'; el.style.boxShadow = 'none'; el.style.transform = 'translateY(0)' }}
+              >
+                <div style={{ height: 130, overflow: 'hidden', background: '#f0f4f8' }}>
+                  <img
+                    src={s.img}
+                    alt={s.label}
+                    style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', transition: 'transform 0.4s ease' }}
+                    onMouseEnter={e => { (e.currentTarget as HTMLElement).style.transform = 'scale(1.05)' }}
+                    onMouseLeave={e => { (e.currentTarget as HTMLElement).style.transform = 'scale(1)' }}
+                  />
+                </div>
+                <div style={{ padding: '16px 18px 18px' }}>
+                  <div style={{ fontSize: 14, fontWeight: 700, color: '#09090B', letterSpacing: '-0.03em', marginBottom: 4 }}>{s.label}</div>
+                  <div style={{ fontSize: 12, color: '#71717A', lineHeight: 1.5, marginBottom: 12 }}>{s.desc}</div>
+                  <div style={{ fontSize: 12, fontWeight: 600, color: s.accent }}>Explore →</div>
+                </div>
+              </a>
+            ))}
+          </div>
+        </div>
+      </section>
+
       <Pricing />
     </main>
   )

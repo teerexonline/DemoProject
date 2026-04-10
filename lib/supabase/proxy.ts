@@ -37,7 +37,7 @@ export async function updateSession(request: NextRequest) {
 
   const user = data?.claims
 
-  const publicPaths = ['/', '/login', '/signup', '/forgot-password', '/auth', '/company', '/pricing']
+  const publicPaths = ['/', '/login', '/signup', '/forgot-password', '/auth', '/company', '/pricing', '/features', '/privacy', '/terms', '/cookies', '/blog', '/explore', '/about', '/careers']
   const isPublic = publicPaths.some(
     (p) => request.nextUrl.pathname === p || request.nextUrl.pathname.startsWith(p + '/')
   )

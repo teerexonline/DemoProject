@@ -47,8 +47,8 @@ export default function CompanyBlurred({ company }: { company: Company }) {
           {/* Overlay */}
           <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             <div style={{ background: '#fff', borderRadius: '20px', border: '1px solid #E4E4E7', boxShadow: '0 20px 60px rgba(0,0,0,0.12), 0 4px 16px rgba(0,0,0,0.06)', padding: '36px 40px', maxWidth: '380px', width: '100%', textAlign: 'center' }}>
-              <div style={{ width: '48px', height: '48px', borderRadius: '12px', background: '#eef4fb', border: '1px solid #a8cbe8', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 16px', fontSize: '22px' }}>
-                🔒
+              <div style={{ width: '48px', height: '48px', borderRadius: '12px', background: '#eef4fb', border: '1px solid #a8cbe8', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 16px' }}>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#063f76" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
               </div>
               <h2 style={{ fontSize: '18px', fontWeight: 800, letterSpacing: '-0.04em', color: '#09090B', margin: '0 0 8px' }}>
                 Monthly limit reached

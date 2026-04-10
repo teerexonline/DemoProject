@@ -77,8 +77,12 @@ IMPORTANT — same quality rules apply to seed_company.py output as all other se
   full fiscal year is FY2024, use that — do not use a partial FY2025 figure.
   STALENESS RULE: Revenue data must not be more than 1 year old relative to today's date.
   If the most recent completed FY ended more than 12 months ago and a newer completed FY
-  is now available, use the newer year. Only use older data when absolutely no current
-  data exists (e.g. private company with no public filings).
+  is available, use the newer year. Using stale data is a hard error, not a warning.
+  Exception: only use older data after a manual check confirms the newer year is genuinely
+  unavailable (e.g. private company, subsidiary with no public filings, or company acquired
+  before the newer year closed). Document the reason in a SQL comment. Do not assume data
+  is unavailable without first checking the company's investor relations page or official
+  financial filings.
 - tags: the script may return generic tags. Replace with 3–5 tags that accurately
   reflect this company's market (e.g. ["Enterprise", "Cloud", "AI", "SaaS", "DevTools"]).
 After inserting, verify:
@@ -231,13 +235,38 @@ Single row per company:
 - market_share: single entry — this company's share of its primary market segment
   [{"segment":"...","percentage":34,"context":"1 sentence with competitor context","year":2025}]
 - revenue_growth: last 5 COMPLETED full fiscal years only. The most recent entry must
-  be the latest completed full fiscal year (e.g. FY2024 for companies whose FY2024 is
-  complete but FY2025 is not). Never include partial years or projections.
-  STALENESS RULE: The most recent revenue_growth entry must not be more than 1 year old.
-  If a newer completed FY is available, use it. Only omit if truly unavailable.
-  [{"year":2021,"revenue":"$1.2B","growth_rate":"+18%"}, ...]
+  be the latest completed full fiscal year available. Never include partial years or projections.
+  STALENESS RULE (hard): The most recent revenue_growth entry must not be more than 1 year
+  old relative to today's date. If a newer completed FY has been reported, use it — this is
+  a hard requirement, not a guideline.
+  Exception procedure: if and only if the newer year's data is genuinely unavailable (private
+  company, no public filings, subsidiary not broken out), you must:
+    1. Manually check the company's investor relations page and latest press releases.
+    2. Check SEC EDGAR (or equivalent national filing body) for the most recent 10-K/20-F.
+    3. Only after confirming data does not exist publicly, leave the older year as the latest
+       entry and add a SQL comment: -- FY[year] data not publicly available: [reason].
+  Never skip this check and assume data is unavailable. Using stale data without the manual
+  check is a seeding error. Format: [{"year":2021,"revenue":"$1.2B","growth_rate":"+18%"}, ...]
 - competitors: pct must sum to exactly 100; this company listed first
   [{"name":"...","pct":34,"clr":"#hexcolor"}, ...]
+
+━━━ GLOBAL REVENUE STALENESS AUDIT (run periodically, not just per-company) ━━━
+Use this query at the start of any bulk seeding session to find ALL companies whose
+revenue_growth is more than 1 year stale. Fix them before adding new companies.
+
+  SELECT c.name, c.slug,
+    (cf.revenue_growth->-1->>'year')::int AS latest_year,
+    cf.revenue_growth->-1->>'revenue' AS latest_rev
+  FROM companies c
+  JOIN company_financials cf ON cf.company_id = c.id
+  WHERE cf.revenue_growth IS NOT NULL
+    AND cf.revenue_growth != '[]'::jsonb
+    AND (cf.revenue_growth->-1->>'year')::int < EXTRACT(YEAR FROM NOW()) - 1
+  ORDER BY c.name;
+
+For each result: either update the revenue_growth to include the newer completed FY,
+OR perform the manual check exception procedure described in Section 5 above and add
+a comment explaining why the data is unavailable. Zero rows is the target.
 
 ━━━ REVENUE & EMPLOYEE ACCURACY CHECK (run after section 5) ━━━
 After inserting financials, verify these three values are internally consistent:

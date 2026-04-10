@@ -7,7 +7,7 @@ import CompanyOverview from './CompanyOverview'
 import SaveButton from '@/components/SaveButton'
 import CompanyLogo from '@/components/CompanyLogo'
 import RelatedCompanies from '@/components/RelatedCompanies'
-import { Building2, Network, TrendingUp, Settings, Target, Package, Lock, Gift } from 'lucide-react'
+import { Building2, Network, TrendingUp, Settings, Target, Package, Lock, Gift, RotateCcw } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
 
 interface Company {
@@ -199,7 +199,7 @@ function ProGatePanel({
           return (
             <div style={{ marginTop: '14px', padding: '10px 12px', borderRadius: '9px', background: '#F7F7F8', border: '1px solid #E4E4E7', display: 'flex', alignItems: 'center', gap: '8px' }}>
               <div style={{ width: 28, height: 28, borderRadius: 8, background: '#fff', border: '1px solid #E4E4E7', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                <span style={{ fontSize: '13px' }}>🔄</span>
+                <RotateCcw size={13} color="#52525B" strokeWidth={2} />
               </div>
               <div style={{ textAlign: 'left' }}>
                 <div style={{ fontSize: '11.5px', fontWeight: 700, color: '#52525B' }}>Free token resets in {daysLeft} day{daysLeft !== 1 ? 's' : ''}</div>

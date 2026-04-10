@@ -1571,6 +1571,32 @@ def seed_company(name: str, website: str, timeout: int = DEFAULT_TIMEOUT) -> dic
         log.info("[Estimate] applied fallbacks for: %s", list(estimates.keys()))
 
     output = result.to_dict()
+
+    # ── Staleness check ───────────────────────────────────────────────────────
+    # Revenue should be from the most recent COMPLETED full fiscal year.
+    # Warn if the sourced revenue looks like it could be from an older year.
+    # We can't know the exact FY year from just a formatted revenue string, but
+    # we can warn when the revenue source is Wikipedia (which lags SEC filings).
+    revenue_source = output.get("_sources", {}).get("revenue", "")
+    if revenue_source in ("Wikipedia", "estimate"):
+        log.warning(
+            "[STALENESS] Revenue sourced from '%s' — this may lag the most recent completed FY. "
+            "Cross-check against SEC EDGAR or the company's latest annual report. "
+            "Required: most recent COMPLETED full fiscal year only (no TTM, no partials).",
+            revenue_source,
+        )
+    elif revenue_source == "SEC EDGAR":
+        # SEC EDGAR gives us the actual FY year via the filing end date.
+        # _latest_annual picks the most recent 10-K; verify it's not stale.
+        import datetime as _dt
+        current_year = _dt.date.today().year
+        # We don't store the raw FY year here, but we can warn if the company
+        # is known to have a fiscal year that ended more than 12 months ago.
+        # The full staleness check lives in seed_financials.py which has the year.
+        log.info("[STALENESS] Revenue from SEC EDGAR (most recent 10-K). "
+                 "Confirm the filing year is FY%d or FY%d before inserting.",
+                 current_year - 1, current_year)
+
     log.info("=" * 60)
     log.info("Final result:")
     for k, v in output.items():

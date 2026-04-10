@@ -328,15 +328,21 @@ export default function ProfilePage({ user, profile, savedCompanies: initialSave
             {/* Quick links */}
             <div style={{ background: '#fff', borderRadius: 14, border: '1px solid #E4E4E7', overflow: 'hidden', boxShadow: '0 1px 5px rgba(0,0,0,0.04)' }}>
               {[
-                { label: 'Account Settings', href: '/settings', icon: '⚙️' },
-                { label: 'Pricing & Plans',  href: '/pricing',  icon: '✦' },
-                { label: 'Browse Companies', href: '/',         icon: '→' },
+                { label: 'Account Settings', href: '/settings', icon: (
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
+                  )},
+                { label: 'Pricing & Plans',  href: '/pricing',  icon: (
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg>
+                  )},
+                { label: 'Browse Companies', href: '/',         icon: (
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+                  )},
               ].map(l => (
                 <Link key={l.label} href={l.href} style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '12px 16px', textDecoration: 'none', borderBottom: l.label !== 'Browse Companies' ? '1px solid #F4F4F5' : 'none', transition: 'background 0.12s' }}
                   onMouseEnter={e => (e.currentTarget as HTMLElement).style.background = '#F7F7F8'}
                   onMouseLeave={e => (e.currentTarget as HTMLElement).style.background = 'transparent'}
                 >
-                  <span style={{ fontSize: 13, width: 18, textAlign: 'center' }}>{l.icon}</span>
+                  <span style={{ width: 18, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#71717A' }}>{l.icon}</span>
                   <span style={{ fontSize: 13, color: '#3F3F46', fontWeight: 500 }}>{l.label}</span>
                   <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#D4D4D8" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ marginLeft: 'auto' }}><path d="M9 18l6-6-6-6"/></svg>
                 </Link>
@@ -414,7 +420,9 @@ export default function ProfilePage({ user, profile, savedCompanies: initialSave
 
               {regularSaved.length === 0 ? (
                 <div style={{ background: '#fff', borderRadius: 14, border: '1px solid #E4E4E7', padding: '48px 24px', textAlign: 'center' }}>
-                  <div style={{ fontSize: 32, marginBottom: 12 }}>🔖</div>
+                  <div style={{ width: 48, height: 48, borderRadius: 12, background: '#F4F4F5', border: '1px solid #E4E4E7', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 12px' }}>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#A1A1AA" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z"/></svg>
+                  </div>
                   <div style={{ fontSize: 14, fontWeight: 700, color: '#09090B', marginBottom: 6 }}>No saved companies yet</div>
                   <p style={{ fontSize: 13, color: '#A1A1AA', lineHeight: 1.6, margin: '0 0 20px' }}>
                     Click the bookmark icon on any company profile to save it here.

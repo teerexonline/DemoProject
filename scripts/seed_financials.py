@@ -43,6 +43,7 @@ Exit:   0 = success, 1 = validation error, 2 = all sources failed
 from __future__ import annotations
 
 import argparse
+import datetime
 import json
 import logging
 import re
@@ -879,11 +880,35 @@ class FinancialResult:
                     "revenue":     fmt_money(rev),
                     "growth_rate": f"{rate:+.1f}%" if rate is not None else None,
                 })
-            self.revenue_growth = growth_list[:8]
+            # Store oldest-first (prompt.md requirement — newest-first causes staleness
+            # checks to silently fail because the check always looks at index 0)
+            self.revenue_growth = list(reversed(growth_list[:8]))
+
+        # ── Staleness check ───────────────────────────────────────────────────
+        if self.revenue_growth:
+            latest_year = self.revenue_growth[-1]["year"]   # last entry = most recent
+            current_year = datetime.date.today().year
+            # A completed FY is stale if it ended more than 12 months ago AND a newer
+            # completed FY now exists. We flag when the latest year is ≥2 years old.
+            if current_year - latest_year >= 2:
+                log.warning(
+                    "[STALENESS] Revenue data is from FY%d — current year is %d. "
+                    "A newer completed fiscal year likely exists. "
+                    "Verify via SEC EDGAR or the company's latest annual report before inserting.",
+                    latest_year, current_year,
+                )
+            elif current_year - latest_year == 1:
+                # One year gap is normal during Q1 (10-K filing window),
+                # but flag it so the user can confirm no newer FY is available.
+                log.warning(
+                    "[STALENESS] Revenue data is from FY%d (current year: %d). "
+                    "If FY%d is now complete and the 10-K has been filed, update to that year.",
+                    latest_year, current_year, current_year - 1,
+                )
 
         # ── YoY growth ────────────────────────────────────────────────────────
         if self.revenue_growth and len(self.revenue_growth) >= 2:
-            latest = self.revenue_growth[0]
+            latest = self.revenue_growth[-1]  # last = most recent (oldest-first order)
             if latest.get("growth_rate"):
                 self.yoy_growth = latest["growth_rate"]
         if not self.yoy_growth:
@@ -924,7 +949,6 @@ class FinancialResult:
             # Market share: company revenue vs TAM
             if self.revenue_raw and tam > 0:
                 ms_pct = round(self.revenue_raw / tam * 100, 2)
-                import datetime
                 self.market_share = [{
                     "segment": "Global Market",
                     "percentage": ms_pct,
@@ -1045,71 +1069,99 @@ def _default_business_units(category: str) -> list[dict]:
 # Values are best public estimates from press coverage and Crunchbase.
 # revenue_raw in USD, market_cap_raw/valuation_raw in USD.
 PRIVATE_COMPANY_FINANCIALS: dict[str, dict[str, Any]] = {
+    # ── AI / Software ──────────────────────────────────────────────────────────
+    # NOTE: These are best public estimates. Always verify against the latest
+    # press coverage, funding announcements, and Crunchbase before inserting.
+    # The staleness warning above will flag if these figures are ≥2 years old.
     "anthropic": {
-        "revenue_raw":     3_000_000_000,   # ~$3B ARR reported 2024
-        "market_cap_raw":  61_500_000_000,  # $61.5B valuation (2024 fundraise)
+        "revenue_raw":     4_500_000_000,   # ~$4.5B ARR (2025 estimate; $3B in early 2024, fast growth)
+        "market_cap_raw":  61_500_000_000,  # $61.5B valuation (Oct 2024 fundraise; latest known)
         "category":        "Software",
-        "employees":       3_000,
-    },
-    "vercel": {
-        "revenue_raw":     200_000_000,     # ~$200M ARR estimated
-        "market_cap_raw":  3_250_000_000,   # $3.25B valuation (2023)
-        "category":        "Software",
-        "employees":       800,
-    },
-    "figma": {
-        "revenue_raw":     600_000_000,     # ~$600M ARR reported 2023
-        "market_cap_raw":  10_000_000_000,  # $10B valuation (Adobe acquisition attempt)
-        "category":        "Software",
-        "employees":       1_500,
-    },
-    "linear": {
-        "revenue_raw":     50_000_000,      # ~$50M ARR estimated
-        "market_cap_raw":  400_000_000,     # ~$400M valuation estimate
-        "category":        "Software",
-        "employees":       80,
-    },
-    "notion": {
-        "revenue_raw":     300_000_000,     # ~$300M ARR reported 2023
-        "market_cap_raw":  10_000_000_000,  # $10B valuation (2021)
-        "category":        "Software",
-        "employees":       800,
-    },
-    "databricks": {
-        "revenue_raw":     1_600_000_000,   # ~$1.6B ARR reported 2024
-        "market_cap_raw":  43_000_000_000,  # $43B valuation (2024)
-        "category":        "Cloud & Data Services",
-        "employees":       6_000,
-    },
-    "canva": {
-        "revenue_raw":     2_300_000_000,   # ~$2.3B ARR reported 2024
-        "market_cap_raw":  26_000_000_000,  # $26B valuation (2023)
-        "category":        "Software",
-        "employees":       4_000,
+        "employees":       4_000,           # ~4K headcount (2025 est)
     },
     "openai": {
-        "revenue_raw":     3_700_000_000,   # ~$3.7B ARR reported 2024
-        "market_cap_raw":  157_000_000_000, # $157B valuation (2024)
+        "revenue_raw":     11_300_000_000,  # ~$11.3B ARR (FY2025 reported annualized run rate mid-2025)
+        "market_cap_raw":  300_000_000_000, # ~$300B valuation (SoftBank-led round, early 2025)
         "category":        "Software",
-        "employees":       3_000,
+        "employees":       4_000,           # ~4K headcount (2025)
     },
+    "databricks": {
+        "revenue_raw":     2_400_000_000,   # ~$2.4B ARR (FY ending Jan 2026 estimate; $1.6B in FY2025)
+        "market_cap_raw":  62_000_000_000,  # $62B valuation (2024 fundraise)
+        "category":        "Cloud & Data Services",
+        "employees":       7_000,           # ~7K headcount (2025 est)
+    },
+    "figma": {
+        "revenue_raw":     800_000_000,     # ~$800M ARR (2025 est; $600M in 2023, continued growth)
+        "market_cap_raw":  12_500_000_000,  # ~$12.5B valuation (post-Adobe termination, secondary markets)
+        "category":        "Software",
+        "employees":       1_800,
+    },
+    "canva": {
+        "revenue_raw":     2_600_000_000,   # ~$2.6B ARR (2025 est; $2.3B in 2024)
+        "market_cap_raw":  26_000_000_000,  # $26B valuation (2023 round; not updated publicly since)
+        "category":        "Software",
+        "employees":       4_500,
+    },
+    "notion": {
+        "revenue_raw":     450_000_000,     # ~$450M ARR (2025 est; ~$300M in 2023)
+        "market_cap_raw":  10_000_000_000,  # $10B valuation (2021 round; not updated publicly)
+        "category":        "Software",
+        "employees":       900,
+    },
+    "vercel": {
+        "revenue_raw":     250_000_000,     # ~$250M ARR (2025 est; ~$200M in 2024)
+        "market_cap_raw":  3_250_000_000,   # $3.25B valuation (2022 Series E; latest known)
+        "category":        "Software",
+        "employees":       900,
+    },
+    "linear": {
+        "revenue_raw":     80_000_000,      # ~$80M ARR (2025 est; ~$50M in 2024)
+        "market_cap_raw":  600_000_000,     # ~$600M valuation estimate
+        "category":        "Software",
+        "employees":       100,
+    },
+    # ── Aerospace / Industrial ─────────────────────────────────────────────────
+    # These are publicly traded (TSX/NYSE) but the SEC scraper may miss them due
+    # to foreign private issuer filings. Values from latest annual reports.
     "bombardier": {
-        "revenue_raw":     8_800_000_000,   # $8.8B revenue (public 2023 annual report)
-        "market_cap_raw":  6_500_000_000,   # TSX listed, ~$6.5B market cap
+        "revenue_raw":     9_400_000_000,   # $9.4B revenue FY2024 (annual report)
+        "market_cap_raw":  7_200_000_000,   # ~$7.2B market cap (TSX: BBD, 2025)
         "category":        "Aerospace",
-        "employees":       18_900,
+        "employees":       19_500,
     },
     "cae": {
-        "revenue_raw":     2_000_000_000,   # ~$2B CAD revenue (public TSX/NYSE listed)
-        "market_cap_raw":  4_000_000_000,   # ~$4B CAD market cap
+        "revenue_raw":     4_700_000_000,   # ~$4.7B CAD revenue FY ending Mar 2025
+        "market_cap_raw":  5_500_000_000,   # ~$5.5B CAD market cap (TSX/NYSE: CAE, 2025)
         "category":        "Aerospace",
-        "employees":       13_000,
+        "employees":       13_500,
     },
+    # ── Professional Services ──────────────────────────────────────────────────
+    "deloitte": {
+        # Private partnership (Deloitte Touche Tohmatsu Limited) — no SEC filings ever.
+        # Revenue = global aggregate reported in annual Impact Report.
+        "revenue_raw":     67_200_000_000,  # $67.2B global revenue FY2024 (May 2024 annual report)
+        "market_cap_raw":  0,               # Private — no public valuation
+        "category":        "Professional Services",
+        "employees":       460_000,         # ~460K globally (FY2024 Impact Report)
+    },
+    "accenture": {
+        # Public (NYSE: ACN, FY ends Aug 31). SEC EDGAR should resolve this, but
+        # included here as a fallback since FY end is non-calendar (Aug ≠ Dec).
+        "revenue_raw":     64_900_000_000,  # $64.9B revenue FY2024 (year ended Aug 31, 2024)
+        "market_cap_raw":  220_000_000_000, # ~$220B market cap (NYSE: ACN, 2025)
+        "category":        "Professional Services",
+        "employees":       774_000,         # ~774K globally (FY2024 annual report)
+    },
+
+    # ── Public companies (SEC fallback) ───────────────────────────────────────
+    # Listed here as a curated fallback if the SEC scraper fails to find them.
+    # For public US companies, prefer the live SEC EDGAR result over these values.
     "palantir": {
-        "revenue_raw":     2_860_000_000,   # ~$2.86B revenue 2024 (public NYSE)
-        "market_cap_raw":  150_000_000_000, # ~$150B market cap 2024
+        "revenue_raw":     3_500_000_000,   # ~$3.5B revenue FY2025 (NYSE: PLTR, full year est)
+        "market_cap_raw":  200_000_000_000, # ~$200B market cap (2025; significant re-rating)
         "category":        "Software",
-        "employees":       3_800,
+        "employees":       4_100,
     },
 }
 

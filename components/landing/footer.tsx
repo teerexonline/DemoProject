@@ -4,17 +4,16 @@ import Link from 'next/link'
 import { LogoFull } from '@/components/Logo'
 
 export default function Footer() {
-  const cols = [
-    { title: 'Product', links: ['Features', 'Pricing', 'Changelog', 'Roadmap'] },
-    { title: 'Company', links: ['About', 'Blog', 'Careers', 'Press'] },
-    { title: 'Resources', links: ['Documentation', 'API Reference', 'Community', 'Status'] },
-    { title: 'Legal', links: ['Privacy Policy', 'Terms of Service', 'Cookie Policy', 'GDPR'] },
+  const cols: { title: string; links: { label: string; href: string }[] }[] = [
+    { title: 'Platform', links: [{ label: 'Explore', href: '/explore' }, { label: 'Features', href: '/features' }, { label: 'Pricing', href: '/pricing' }] },
+    { title: 'Company',  links: [{ label: 'About', href: '/about' }, { label: 'Blog', href: '/blog' }, { label: 'Careers', href: '/careers' }] },
+    { title: 'Legal',    links: [{ label: 'Privacy Policy', href: '/privacy' }, { label: 'Terms of Service', href: '/terms' }, { label: 'Cookie Policy', href: '/cookies' }] },
   ]
 
   return (
     <footer style={{ borderTop: '1px solid #e2eaf2', padding: '60px 24px 36px', background: '#f8fbfe' }}>
       <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
-        <div className="footer-grid" style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr 1fr 1fr', gap: '48px', marginBottom: '48px' }}>
+        <div className="footer-grid" style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr 1fr', gap: '48px', marginBottom: '48px' }}>
           {/* Brand */}
           <div>
             <div style={{ marginBottom: '12px' }}>
@@ -62,15 +61,15 @@ export default function Footer() {
               </h4>
               <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '10px' }}>
                 {col.links.map((link) => (
-                  <li key={link}>
-                    <a
-                      href="#"
+                  <li key={link.label}>
+                    <Link
+                      href={link.href}
                       style={{ color: '#71717A', textDecoration: 'none', fontSize: '13.5px', transition: 'color 0.15s' }}
                       onMouseEnter={e => (e.currentTarget as HTMLElement).style.color = '#063f76'}
                       onMouseLeave={e => (e.currentTarget as HTMLElement).style.color = '#71717A'}
                     >
-                      {link}
-                    </a>
+                      {link.label}
+                    </Link>
                   </li>
                 ))}
               </ul>

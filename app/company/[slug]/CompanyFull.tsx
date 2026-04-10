@@ -194,7 +194,7 @@ function InternalSection({ company: _company, dbDepts, dbRoles, dbStandards }: {
                       <div className="co-3col" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 10, marginTop: 12 }}>
                         {/* Tools */}
                         <div style={{ padding: 12, borderRadius: 10, background: '#F7F7F8', border: '1px solid #F0F0F2' }}>
-                          <div style={{ color: '#71717A', fontSize: 9.5, fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.09em', marginBottom: 8 }}>🔧 Tools</div>
+                          <div style={{ color: '#71717A', fontSize: 9.5, fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.09em', marginBottom: 8, display: 'flex', alignItems: 'center', gap: 4 }}><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>Tools</div>
                           {role.tools.length > 0
                             ? <div style={{ display: 'flex', flexWrap: 'wrap', gap: 5 }}>
                                 {role.tools.map(t => (
@@ -206,7 +206,7 @@ function InternalSection({ company: _company, dbDepts, dbRoles, dbStandards }: {
                         </div>
                         {/* Skills */}
                         <div style={{ padding: 12, borderRadius: 10, background: '#F7F7F8', border: '1px solid #F0F0F2' }}>
-                          <div style={{ color: '#71717A', fontSize: 9.5, fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.09em', marginBottom: 8 }}>⚡ Key Skills</div>
+                          <div style={{ color: '#71717A', fontSize: 9.5, fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.09em', marginBottom: 8, display: 'flex', alignItems: 'center', gap: 4 }}><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>Key Skills</div>
                           {role.skills.length > 0
                             ? <div style={{ display: 'flex', flexWrap: 'wrap', gap: 5 }}>
                                 {role.skills.map(s => (
@@ -218,7 +218,7 @@ function InternalSection({ company: _company, dbDepts, dbRoles, dbStandards }: {
                         </div>
                         {/* Processes */}
                         <div style={{ padding: 12, borderRadius: 10, background: '#F7F7F8', border: '1px solid #F0F0F2' }}>
-                          <div style={{ color: '#71717A', fontSize: 9.5, fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.09em', marginBottom: 8 }}>⚙️ Processes</div>
+                          <div style={{ color: '#71717A', fontSize: 9.5, fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.09em', marginBottom: 8, display: 'flex', alignItems: 'center', gap: 4 }}><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/></svg>Processes</div>
                           {role.processes.length > 0
                             ? <div style={{ display: 'flex', flexDirection: 'column', gap: 5 }}>
                                 {role.processes.map(p => (
@@ -355,8 +355,9 @@ function PrepSection({ dbDepts, dbRoles }: { dbDepts: DbContent['departments']; 
 
                   {/* Interview Questions */}
                   <div style={{ marginTop: 14, padding: '14px 16px', borderRadius: 10, background: '#eef4fb', border: '1px solid #a8cbe8' }}>
-                    <div style={{ color: '#04294f', fontSize: 10, fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.09em', marginBottom: 12 }}>
-                      🎯 Likely Interview Questions
+                    <div style={{ color: '#04294f', fontSize: 10, fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.09em', marginBottom: 12, display: 'flex', alignItems: 'center', gap: 5 }}>
+                      <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
+                      Likely Interview Questions
                     </div>
                     <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
                       {role.interviewQuestions.map((q, qi) => (
@@ -372,8 +373,9 @@ function PrepSection({ dbDepts, dbRoles }: { dbDepts: DbContent['departments']; 
 
                   {/* Keywords */}
                   <div style={{ marginTop: 10, padding: '14px 16px', borderRadius: 10, background: '#F0FDF4', border: '1px solid #BBF7D0' }}>
-                    <div style={{ color: '#15803D', fontSize: 10, fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.09em', marginBottom: 10 }}>
-                      🏷️ Keywords to Use — Resume &amp; Interview
+                    <div style={{ color: '#15803D', fontSize: 10, fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.09em', marginBottom: 10, display: 'flex', alignItems: 'center', gap: 5 }}>
+                      <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2H2v10l9.29 9.29a1 1 0 0 0 1.41 0l7.3-7.3a1 1 0 0 0 0-1.42L12 2z"/><circle cx="7" cy="7" r="1"/></svg>
+                      Keywords to Use — Resume &amp; Interview
                     </div>
                     <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
                       {role.keywords.map(kw => (
@@ -723,8 +725,10 @@ function SectionContent({ id, company, dbContent }: { id: SectionId; company: Co
   const color = company.logo_color ?? '#063f76'
 
   switch (id) {
-    case 'overview':
-      return <CompanyOverview company={company} dbNews={dbContent.news} dbMilestones={dbContent.milestones} />
+    case 'overview': {
+      const latestRevenue = (dbContent.financials?.revenue_growth as Array<{ revenue: string }> | null)?.at(-1)?.revenue ?? company.revenue
+      return <CompanyOverview company={{ ...company, revenue: latestRevenue }} dbNews={dbContent.news} dbMilestones={dbContent.milestones} />
+    }
 
     case 'org':
       return <OrgChart company={company} dbDepts={dbContent.departments} dbRoles={dbContent.roles} dbExecGroups={dbContent.execGroups} dbLeaders={dbContent.leaders} />

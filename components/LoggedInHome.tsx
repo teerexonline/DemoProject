@@ -54,13 +54,38 @@ const FALLBACK: Company[] = [
   { id: '20', name: 'Plaid',      slug: 'plaid',      category: 'Fintech',        description: 'The financial data network powering the fintech ecosystem.',   logo_color: '#111827', logo_url: null, employees: 1400,  founded: 2013, hq: 'San Francisco, CA', valuation: '$13.4B'  },
 ]
 
+// Sector groups map display names → exact DB category values (case-insensitive match)
 const SECTORS = [
-  { id: 'all',    label: 'All',            color: '#063f76', kw: [] },
-  { id: 'ai',     label: 'AI Research',    color: '#10A37F', kw: ['ai', 'machine', 'ml'] },
-  { id: 'fintech',label: 'Fintech',        color: '#635BFF', kw: ['fin', 'pay', 'bank', 'credit'] },
-  { id: 'saas',   label: 'SaaS',          color: '#F24E1E', kw: ['saas', 'crm', 'hr', 'workforce', 'communication'] },
-  { id: 'infra',  label: 'Infrastructure', color: '#0EA5E9', kw: ['infra', 'cloud', 'devops', 'data', 'analytics', 'monitoring'] },
-  { id: 'ecomm',  label: 'E-Commerce',    color: '#F59E0B', kw: ['commerce', 'retail', 'market'] },
+  { id: 'all',      label: 'All',                         color: '#063f76', cats: [] as string[] },
+  { id: 'tech',     label: 'Technology',                  color: '#F24E1E', cats: [
+    'software','enterprise software','saas','dev tools','developer tools','design software',
+    'design','design tools','productivity','data cloud','database','industrial software',
+    'business services','business software industry','process management','platform',
+    'observability','big tech','ai','ai research','ai safety','data & ai','machine learning',
+    'consumer tech','information technology','communications','computer hardware',
+  ]},
+  { id: 'finance',  label: 'Finance & Fintech',           color: '#635BFF', cats: [
+    'fintech','fintech','financial services','financial services','financial technology',
+    'financial technology','banking','finance','payments','payment processing','crypto',
+    'financial tech',
+  ]},
+  { id: 'defense',  label: 'Aerospace, Defense & Hardware',color: '#0EA5E9', cats: [
+    'aerospace & defense','aerospace','aircraft','hardware','semiconductors',
+    'industrial technology','industrial automation','networking & telecom',
+  ]},
+  { id: 'security', label: 'Security & Infrastructure',   color: '#EF4444', cats: [
+    'security','cybersecurity','network security','identity security','enterprise security',
+    'infrastructure',
+  ]},
+  { id: 'services', label: 'Services & Government',       color: '#8B5CF6', cats: [
+    'professional services','consulting','government it services','government',
+    'human capital management',
+  ]},
+  { id: 'consumer', label: 'Consumer & Retail',           color: '#F97316', cats: [
+    'retail','e-commerce','e-commerce','food delivery','restaurant technology',
+    'transportation','travel','automotive renewable energy','streaming','entertainment',
+    'gaming','gaming & entertainment','music & audio',
+  ]},
 ]
 
 const EDITOR_PICKS = [
@@ -68,6 +93,7 @@ const EDITOR_PICKS = [
   { slug: 'linear',    note: 'Legendary for craft. A masterclass in how small teams build exceptional products.' },
   { slug: 'anthropic', note: 'The fastest-growing AI lab — deep technical culture and mission-driven hiring.' },
   { slug: 'vercel',    note: 'Redefining frontend infrastructure. Excellent for DevRel and platform roles.' },
+  { slug: 'openai',    note: 'The most recognized name in AI — fast-moving culture with global research impact.' },
 ]
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
@@ -86,9 +112,19 @@ function fmtN(n: number): string {
 function inSector(c: Company, sectorId: string): boolean {
   if (sectorId === 'all') return true
   const s = SECTORS.find(x => x.id === sectorId)
-  if (!s || s.kw.length === 0) return false
-  const cat = (c.category ?? '').toLowerCase()
-  return s.kw.some(k => cat.includes(k))
+  if (!s || s.cats.length === 0) return false
+  const cat = (c.category ?? '').toLowerCase().trim()
+  return s.cats.includes(cat)
+}
+
+// Derive the visible sector list: only show sectors that have ≥1 company in the data
+function buildSectorCounts(companies: Company[]) {
+  return SECTORS.map(s => ({
+    ...s,
+    count: s.id === 'all'
+      ? companies.length
+      : companies.filter(c => inSector(c, s.id)).length,
+  })).filter(s => s.id === 'all' || s.count > 0)
 }
 
 // ─── Logo helper (thin wrapper so card code stays terse) ─────────────────────
@@ -259,7 +295,7 @@ function FeaturedCard({ c, initialSaved }: { c: Company; initialSaved: boolean }
 
 // ─── Featured carousel ───────────────────────────────────────────────────────
 
-const CAROUSEL_DURATION = 20000
+const CAROUSEL_DURATION = 7000
 
 function FeaturedCarousel({ companies, savedIds }: { companies: Company[]; savedIds: string[] }) {
   const [idx, setIdx] = useState(0)
@@ -421,7 +457,6 @@ function PickRow({ c, note, rank, initialSaved }: { c: Company; note: string; ra
 // ─── Main component ───────────────────────────────────────────────────────────
 
 export default function LoggedInHome({ user, plan, companies, isPro, savedIds }: Props) {
-  const [sector, setSector] = useState('all')
   const all = companies.length > 0 ? companies : FALLBACK
   const name = user.email?.split('@')[0] ?? 'there'
 
@@ -429,15 +464,21 @@ export default function LoggedInHome({ user, plan, companies, isPro, savedIds }:
   const trending     = all.slice(0, 6)
   const featuredList  = all.length >= 11 ? all.slice(6, 11) : all.slice(0, 5)
   const recentlyAdded = all.slice(7, 13)
-  const editorPicks  = EDITOR_PICKS
-    .map(ep => ({ ...ep, c: all.find(x => x.slug === ep.slug) ?? null }))
-    .filter(ep => ep.c !== null) as { slug: string; note: string; c: Company }[]
+  const editorPicks = (() => {
+    const named = EDITOR_PICKS
+      .map(ep => ({ ...ep, c: all.find(x => x.slug === ep.slug) ?? null }))
+      .filter(ep => ep.c !== null) as { slug: string; note: string; c: Company }[]
+    if (named.length >= 5) return named.slice(0, 5)
+    const usedSlugs = new Set(named.map(ep => ep.slug))
+    const fallbacks = all
+      .filter(c => !usedSlugs.has(c.slug))
+      .slice(0, 5 - named.length)
+      .map(c => ({ slug: c.slug, note: 'A top company worth researching before your next application.', c }))
+    return [...named, ...fallbacks]
+  })()
 
-  // Sidebar sector browse
-  const sectorCounts = SECTORS.map(s => ({
-    ...s,
-    count: s.id === 'all' ? all.length : all.filter(c => inSector(c, s.id)).length,
-  }))
+  // Sidebar sector browse — derived from real data, empty sectors hidden
+  const sectorCounts = buildSectorCounts(all)
 
   return (
     <div style={{ minHeight: '100vh', background: '#F5F5F7' }}>
@@ -464,7 +505,7 @@ export default function LoggedInHome({ user, plan, companies, isPro, savedIds }:
           <div className="lh-welcome-right" style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
             {/* Mini stats */}
             <div className="lh-welcome-stats" style={{ display: 'flex', gap: 16, borderRight: '1px solid #1C1C1E', paddingRight: 16 }}>
-              {[{ v: `${all.length}+`, l: 'companies' }, { v: '18', l: 'sectors' }, { v: '8.2k', l: 'weekly users' }].map(s => (
+              {[{ v: '8.2k', l: 'weekly users' }].map(s => (
                 <div key={s.l} style={{ textAlign: 'center' }}>
                   <div style={{ color: '#fff', fontSize: 12.5, fontWeight: 800, lineHeight: 1.2 }}>{s.v}</div>
                   <div style={{ color: '#3F3F46', fontSize: 10 }}>{s.l}</div>
@@ -493,8 +534,8 @@ export default function LoggedInHome({ user, plan, companies, isPro, savedIds }:
       </div>
 
       {/* ── Search zone ────────────────────────────────────────── */}
-      <div className="lh-search-zone" style={{ background: '#fff', borderBottom: '1px solid #EBEBED', padding: '28px 24px 24px' }}>
-        <div style={{ maxWidth: 600, margin: '0 auto', textAlign: 'center' }}>
+      <div className="lh-search-zone" style={{ background: '#fff', borderBottom: '1px solid #EBEBED', padding: '28px 24px 20px' }}>
+        <div style={{ maxWidth: 600, margin: '0 auto', textAlign: 'center', marginBottom: 20 }}>
           <h1 style={{ fontSize: 22, fontWeight: 800, color: '#09090B', letterSpacing: '-0.05em', lineHeight: 1.2, margin: '0 0 6px' }}>
             Research any company, inside out.
           </h1>
@@ -519,7 +560,7 @@ export default function LoggedInHome({ user, plan, companies, isPro, savedIds }:
 
           {/* 2. Trending This Week */}
           <section>
-            <SLabel title="Trending This Week" sub="Most-viewed companies in the last 7 days" accent="#F59E0B" action="See all" href="/" />
+            <SLabel title="Trending This Week" sub="Most-viewed companies in the last 7 days" accent="#F59E0B" action="See all" href="/explore?sort=trending" />
             <div className="lh-trend-scroll" style={{ display: 'flex', gap: 10, overflowX: 'auto', paddingBottom: 8, scrollbarWidth: 'none', marginRight: -4 } as React.CSSProperties}>
               {trending.map((c, i) => <TrendCard key={c.id} c={c} rank={i + 1} initialSaved={savedIds.includes(c.id)} />)}
             </div>
@@ -527,7 +568,7 @@ export default function LoggedInHome({ user, plan, companies, isPro, savedIds }:
 
           {/* 3. Recently Added */}
           <section>
-            <SLabel title="Recently Added" sub="New companies on ResearchOrg" accent="#10B981" action="View all" href="/" />
+            <SLabel title="Recently Added" sub="New companies on ResearchOrg" accent="#10B981" action="View all" href="/explore?sort=recent" />
             <div className="lh-recent-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 10 }}>
               {recentlyAdded.map((c, i) => (
                 <RecentCard key={c.id} c={c} daysAgo={[2, 3, 4, 5, 6, 7][i] ?? 8} initialSaved={savedIds.includes(c.id)} />
@@ -550,62 +591,39 @@ export default function LoggedInHome({ user, plan, companies, isPro, savedIds }:
         {/* ──────────────── RIGHT: sidebar ──────────────────── */}
         <div className="lh-sidebar" style={{ display: 'flex', flexDirection: 'column', gap: 16, position: 'sticky', top: 80 }}>
 
-          {/* Browse by sector */}
+          {/* Trending Companies */}
           <div style={{ background: '#fff', borderRadius: 14, border: '1px solid #EBEBED', overflow: 'hidden', boxShadow: '0 1px 5px rgba(0,0,0,0.04)' }}>
             <div style={{ padding: '13px 16px', borderBottom: '1px solid #F4F4F5', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-              <span style={{ fontSize: 13, fontWeight: 700, color: '#09090B', letterSpacing: '-0.02em' }}>Browse by Sector</span>
-              <span style={{ fontSize: 11, color: '#A1A1AA' }}>{all.length} total</span>
+              <span style={{ fontSize: 13, fontWeight: 700, color: '#09090B', letterSpacing: '-0.02em' }}>Trending Companies</span>
+              <Link href="/explore" style={{ fontSize: 11, color: '#063f76', fontWeight: 600, textDecoration: 'none' }}>See all →</Link>
             </div>
-            <div style={{ padding: '8px 6px' }}>
-              {sectorCounts.map(s => {
-                const active = sector === s.id
+            <div style={{ padding: '8px 10px' }}>
+              {trending.slice(0, 6).map((c, i) => {
+                const bg = c.logo_color ?? '#063f76'
                 return (
-                  <button key={s.id} onClick={() => setSector(s.id)} style={{
-                    width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-                    padding: '8px 10px', borderRadius: 8, border: 'none',
-                    background: active ? `${s.color}0C` : 'transparent',
-                    cursor: 'pointer', transition: 'background 0.12s', marginBottom: 1,
-                  }}
-                    onMouseEnter={e => { if (!active) (e.currentTarget as HTMLElement).style.background = '#F7F7F8' }}
-                    onMouseLeave={e => { if (!active) (e.currentTarget as HTMLElement).style.background = 'transparent' }}
+                  <Link key={c.id} href={`/company/${c.slug}`} style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 10, padding: '9px 6px', borderRadius: 9, transition: 'background 0.12s' }}
+                    onMouseEnter={e => (e.currentTarget as HTMLElement).style.background = '#F7F7F8'}
+                    onMouseLeave={e => (e.currentTarget as HTMLElement).style.background = 'transparent'}
                   >
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                      <div style={{ width: 8, height: 8, borderRadius: '50%', background: s.color, flexShrink: 0 }} />
-                      <span style={{ fontSize: 12.5, fontWeight: active ? 700 : 400, color: active ? s.color : '#3F3F46', letterSpacing: active ? '-0.02em' : 0 }}>{s.label}</span>
+                    <span style={{ fontSize: 11, fontWeight: 800, color: '#D4D4D8', letterSpacing: '-0.04em', minWidth: 16, textAlign: 'center', flexShrink: 0 }}>{i + 1}</span>
+                    <Logo c={c} size={28} />
+                    <div style={{ flex: 1, minWidth: 0 }}>
+                      <div style={{ fontSize: 12.5, fontWeight: 700, color: '#09090B', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', letterSpacing: '-0.02em' }}>{c.name}</div>
+                      <div style={{ fontSize: 10.5, color: '#A1A1AA', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{c.category}</div>
                     </div>
-                    <span style={{ fontSize: 11, color: '#A1A1AA', background: active ? `${s.color}12` : '#F4F4F5', padding: '1px 7px', borderRadius: 5, fontWeight: active ? 600 : 400 }}>{s.count}</span>
-                  </button>
+                    <span style={{ fontSize: 10, fontWeight: 700, color: '#10B981', background: '#F0FDF4', padding: '2px 5px', borderRadius: 4, flexShrink: 0 }}>{TREND_DELTAS[i]}</span>
+                  </Link>
                 )
               })}
             </div>
-
-            {/* Sector company list when filter active */}
-            {sector !== 'all' && (() => {
-              const filtered = all.filter(c => inSector(c, sector))
-              const sc = SECTORS.find(s => s.id === sector)!
-              return filtered.length > 0 ? (
-                <div style={{ borderTop: '1px solid #F4F4F5', padding: '10px 10px 8px' }}>
-                  <div style={{ fontSize: 10.5, color: '#A1A1AA', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 8, paddingLeft: 4 }}>
-                    {sc.label}
-                  </div>
-                  {filtered.slice(0, 6).map(c => (
-                    <Link key={c.id} href={`/company/${c.slug}`} style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 8, padding: '7px 6px', borderRadius: 8, transition: 'background 0.12s' }}
-                      onMouseEnter={e => (e.currentTarget as HTMLElement).style.background = '#F7F7F8'}
-                      onMouseLeave={e => (e.currentTarget as HTMLElement).style.background = 'transparent'}
-                    >
-                      <Logo c={c} size={24} />
-                      <div style={{ flex: 1, minWidth: 0 }}>
-                        <div style={{ fontSize: 12, fontWeight: 600, color: '#09090B', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{c.name}</div>
-                        <div style={{ fontSize: 10.5, color: '#A1A1AA' }}>{c.employees ? `${fmtN(c.employees)} emp.` : c.hq?.split(',')[0] ?? ''}</div>
-                      </div>
-                    </Link>
-                  ))}
-                  {filtered.length > 6 && (
-                    <div style={{ fontSize: 11, color: '#A1A1AA', paddingLeft: 6, marginTop: 4 }}>+{filtered.length - 6} more</div>
-                  )}
-                </div>
-              ) : null
-            })()}
+            <div style={{ padding: '10px 16px', borderTop: '1px solid #F4F4F5' }}>
+              <Link href="/explore" style={{ display: 'block', textAlign: 'center', padding: '8px', borderRadius: 8, border: '1px solid #E4E4E7', color: '#52525B', fontSize: 12, fontWeight: 600, textDecoration: 'none', background: '#FAFAFA', transition: 'background 0.15s, border-color 0.15s' }}
+                onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = '#F4F4F5'; (e.currentTarget as HTMLElement).style.borderColor = '#D4D4D8' }}
+                onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = '#FAFAFA'; (e.currentTarget as HTMLElement).style.borderColor = '#E4E4E7' }}
+              >
+                Browse all companies →
+              </Link>
+            </div>
           </div>
 
           {/* Plan card */}

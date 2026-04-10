@@ -5,6 +5,858 @@ Prevents re-researching companies that are already done.
 
 ---
 
+## Questrade
+- **Seeded:** 2026-04-10
+- **Slug:** questrade
+- **ID:** dfea2f68-04f3-4f8d-97de-f75d455a5764
+- **Sector:** Fintech (Online Brokerage & Wealth Management)
+- **HQ:** Toronto, Ontario, Canada | Founded 1999 | 2,000 employees | $280M revenue
+- **Logo:** #E8191E | SVG at logos/questrade.svg (source: Wikipedia Commons)
+- **Products (7):** Questrade Edge Desktop, Questrade Edge Mobile, Questwealth Portfolios, Self-Directed Investing, Questrade for Advisors, Questrade Edge Web, Quest Metals
+- **Departments (10):** Engineering & Technology, Product Management, Data & Analytics, Compliance & Regulatory Affairs, Trading Operations, Marketing & Growth, Corporate & Legal, Customer Experience, Quantitative Research, Human Resources
+- **Roles (30):** 3 per department — Sr Software Engineer, Backend Engineer, SRE, PM, Sr PM, APM, Data Scientist, Data Engineer, BI Analyst, Compliance Analyst, Sr Compliance Officer, AML Analyst, Trading Ops Analyst, Equity Trader, Options Specialist, Growth Marketing Manager, Content Strategist, Performance Marketing Analyst, Corporate Counsel, Legal Analyst, Contracts Manager, Investment Account Manager, Customer Support Specialist, Client Onboarding Specialist, Quant Analyst, Algo Trading Developer, Risk Analyst, HR Business Partner, Talent Acquisition Specialist, Compensation & Benefits Analyst
+- **Execs:** CEO Edward Kholodenko | CFO, CTO, COO, CMO, CPO, CLO, CHRO (C-Suite) | 8 VP tier linked to departments
+- **Standards (9):** SOC 2 Type II, PCI DSS, ISO 27001, CIRO, CIPF, FINTRAC, PIPEDA, OSC, WCAG 2.1 AA
+- **Financials:** TAM $12B, SAM $4.2B, SOM $800M | 5-year growth 2021–2025 | revenue_per_employee $140K
+- **Notes:** Canada's largest discount broker by account opens; free equity trading model; CIRO-regulated dealer; Questwealth robo-advisor division; logo source Wikipedia Commons SVG (questrade.com blocks direct asset access)
+
+---
+
+## Enbridge
+- **Seeded:** 2026-04-10
+- **Slug:** enbridge
+- **ID:** 183d36ba-f4b2-4b5e-9a73-535c62b3d3ce
+- **Sector:** Energy Infrastructure (Pipelines & Gas Utilities)
+- **HQ:** Calgary, Alberta, Canada | Founded 1949 | 13,000 employees | $15.7B revenue
+- **Products:** Enbridge Mainline Pipeline System, Enbridge Gas Ontario Distribution Network, Texas Eastern Transmission System, Enbridge Offshore Wind Portfolio, East Ohio Gas Distribution System
+- **Departments (12):** Liquids Pipelines, Gas Transmission & Midstream, Gas Distribution & Storage, Renewable Power Generation, Pipeline Integrity & Safety, Engineering & Major Projects, Commercial & Business Development, Finance & Treasury, Legal & Regulatory Affairs, Human Resources & Inclusion, Safety Environment & Integrity, Corporate Strategy & Investor Relations
+- **Execs:** CEO Greg Ebel, CFO Vern Yu, President LP Colin Gruending, President GTM Cynthia Hansen, President GDS Michele Harradence
+- **Notes:** Lucide icons ✓ | VP dept_ids ✓ | 36 roles ✓ | 10 standards ✓ | North America's largest energy infrastructure company; 29 consecutive dividend increases; acquired 3 U.S. gas utilities from Dominion Energy in 2024
+
+---
+
+## Alectra Utilities
+- **Seeded:** 2026-04-10
+- **Slug:** alectra
+- **ID:** 0f18e815-bb45-45b0-bbaf-3894f652d456
+- **Sector:** Utilities (Municipal Electric Distribution)
+- **HQ:** Mississauga, Ontario, Canada | Founded 2017 | 1,450 employees | $2.1B revenue
+- **Products:** ADMS Platform, AMI Smart Metering Network, MyAlectra Customer Portal, EV Fleet Charging Hub Program, CDM Programs
+- **Departments (12):** Grid Operations & Control Room, Engineering & Capital Projects, Asset Management, Customer Experience & Retail, Finance & Corporate Services, Human Resources, Legal Risk & Compliance, IT & Cybersecurity, Distribution Planning & Innovation, Environmental Health & Safety, Communications & Corporate Affairs, Metering Services & Smart Grid
+- **Execs:** CEO Brian Bentz, CFO Rod Hiebert, COO Samer Salameh
+- **Notes:** Lucide icons ✓ | VP dept_ids ✓ | 36 roles ✓ | 10 standards ✓ | Ontario's largest municipal electric utility serving 1M+ customers across 10 communities
+
+---
+
+## Illinois Tool Works (ITW)
+- **Seeded:** 2026-04-09
+- **Slug:** illinois-tool-works
+- **ID:** dff2ab0f-d49a-4eae-94d3-776809f41b92
+- **Sector:** Industrial Manufacturing
+- **HQ:** Glenview, IL | Founded 1912 | 44,000 employees | $15.9B revenue
+- **Products:** Hobart HL662 Mixer, Miller Multimatic 220 AC/DC, Permatex Ultra Grey RTV, Paslode Cordless XP Framing Nailer, Instron 5985 UTM
+- **Departments (12):** Automotive OEM Engineering, Construction Products, Finance & Corporate Development, Food Equipment – Hobart, Global Sales & Marketing, Human Resources, Legal & Compliance, Manufacturing & Operations, Polymers Fluids & Adhesives, Research & Development, Test & Measurement – Instron, Welding – Miller Electric
+- **Execs:** CEO Christopher A. O'Herlihy, CFO Michael M. Larsen, Exec Chairman E. Scott Santi
+- **Notes:** Lucide icons ✓ | VP dept_ids ✓ | 36 roles ✓ | 10 standards ✓
+
+---
+
+## Parker Hannifin
+- **Seeded:** 2026-04-09
+- **Slug:** parker-hannifin
+- **Sources:** parker.com, Parker FY2024 Annual Report, Parker Win Strategy 3.0 documentation, Meggitt acquisition press releases, Parker Assetwatch IIoT product documentation, Parker ARIES servo drive datasheets, Parker P2/P3 pump product catalog, Parker Meggitt aircraft braking product literature, DoD F-35 contract announcements, Bauma 2024 electrification press releases
+- **Products:** P2/P3 Hydraulic Piston Pumps, ARIES Servo Drive, Fulflo Filtration System, Meggitt Aircraft Braking System, Parker IIoT Assetwatch Platform
+- **Financials:** Revenue $19.9B (FY2024), YoY +7%, Aerospace segment 35% of revenue, TAM $380B global motion and control
+- **Departments (12):** Aerospace Systems Engineering, Industrial Hydraulics & Pneumatics, Electromechanical & Drives, Filtration Systems, Engineering & Innovation, Global Sales & Distribution, Manufacturing Operations, Supply Chain & Procurement, Quality & Lean Systems, Finance & Corporate Development, Human Resources & Talent, Legal, Compliance & IP
+- **Exec:** CEO Jenny Mikell; CFO Todd Leombruno; EVP Aero Roger Sherrard; EVP Industrial Andrew Ross; CTO Kevin Stein; CHRO Marcia Wheatley; GC Joseph Scaminace; CIO Jennifer Parmentier
+- **Notes:** $8.8B Meggitt acquisition completed Sept 2022 — aerospace segment now #1 growth driver; Win Strategy 3.0 transformation driving margin expansion; Assetwatch IIoT platform expanding connected products revenue
+
+---
+
+## Baxter International
+- **Seeded:** 2026-04-09
+- **Slug:** baxter
+- **Sources:** baxter.com, Baxter 2024 Annual Report, FDA 510(k) database, Hillrom product documentation, CareAware Connect product literature, SIGMA Spectrum DERS documentation, Novum IQ launch materials, FDA MedWatch recall database, Hurricane Helene IV shortage coverage (FDA.gov), Vantive separation SEC filings
+- **Products:** SIGMA Spectrum Infusion System, Baxter IV Solutions Portfolio, Novum IQ Syringe Infusion System, Hillrom Centrella Smart Bed, CareAware Connect
+- **Financials:** Revenue $11.3B (2024, post-Vantive separation), 2021 Hillrom acquisition $10.5B, TAM $180B global hospital products
+- **Departments (12):** Research & Development, Pharmaceutical Manufacturing, Medical Device Engineering, Quality & Regulatory Affairs, Global Supply Chain, Hospital Products Sales, Clinical & Medical Affairs, Connected Care & Software, Marketing & Market Access, Finance & Investor Relations, Human Resources, Legal & Compliance
+- **Exec:** CEO José E. Almeida; CFO Joel Grade; EVP Hospital Christina Rondon; EVP Mfg Scott Luce; CMO Peter Weston; GC Ellen Bronfman Hauptman; CHRO Jeanne Mason; CIO Gary Kellam
+- **Notes:** Vantive (kidney care) spun off July 2024; Hurricane Helene severely damaged North Cove NC facility Sept 2024 creating national IV shortage; Hillrom acquisition 2021 added smart beds and CareAware platform
+
+---
+
+## Merck & Co.
+- **Seeded:** 2026-04-09
+- **Slug:** merck
+- **Sources:** merck.com, Merck 2024 Annual Report, FDA drug approval database, WHO prequalification records, MSD Animal Health product catalog, Keytruda prescribing information, Gardasil 9 prescribing information, Winrevair FDA approval 2024, CMS Open Payments database, PhRMA 2024 industry report, IQVIA oncology market share data
+- **Products:** Keytruda (pembrolizumab), Gardasil 9, Winrevair (sotatercept), Januvia (sitagliptin), Bravecto (fluralaner)
+- **Financials:** Revenue $63.6B (2024), YoY +7%, Keytruda ~$25B of revenue, TAM $520B global pharma
+- **Departments (12):** Research & Early Discovery, Clinical Development & Medical Affairs, Regulatory Affairs & Drug Safety, Pharmaceutical Manufacturing, Global Supply Chain & Procurement, Commercial – Oncology, Commercial – Vaccines & Primary Care, MSD Animal Health, Information Technology & Data Science, Finance & Corporate Strategy, Human Resources, Legal, Compliance & Patent
+- **Exec:** CEO Robert M. Davis; CFO Caroline Litchfield; Pres. MRL Dean Y. Li; CCO Mike Nally; EVP Mfg Sanat Chattopadhyay; CHRO Chirfi Guindo; GC Jennifer Zachary; CIO Luciano Wiedemann
+- **Notes:** Keytruda patent exclusivity cliff ~2028; Winrevair approved March 2024 as first-in-class PAH treatment; Bravecto under MSD Animal Health division
+
+---
+
+## Emerson Electric
+- **Seeded:** 2026-04-09
+- **Sources:** emerson.com, Emerson FY2024 Annual Report (fiscal year ending Sept 2024), NYSE 10-K, AspenTech product documentation, DeltaV product literature, ISA/IEC 62443 cybersecurity standards, IEC 61511 safety lifecycle standard, Fisher control valve product documentation, Rosemount transmitter datasheets, National Instruments press releases, Gastech 2024 conference materials
+- **Slug:** `emerson-electric`
+- **ID:** `35b10fc0-2563-460a-9502-43babee32dd1`
+- **Category:** Industrial Automation
+- **HQ:** Austin, TX (moved from St. Louis in 2023)
+- **Employees:** 72,000
+- **Revenue:** $17.5B (FY2024, fiscal year ending September 2024)
+- **Tags:** Industrial Automation, Process Control, Software, Engineering, IIoT
+- **Departments (12):** Process Systems Engineering · Measurement & Analytical · Final Control – Valves & Actuators · Industrial Software & AspenTech · Test & Measurement (NI) · Manufacturing & Supply Chain · Lifecycle Services & Solutions · Sales & Business Development · Cybersecurity & Digital · Finance & Corporate Development · Human Resources · Legal & Compliance
+- **Roles (36):** 3 per department — includes DCS Application Engineer – DeltaV, Safety Instrumented Systems Engineer, Control Systems Architect, Instrumentation Engineer – Rosemount, Flow Measurement Applications Engineer, Analytical Instruments Specialist, Control Valve Engineer – Fisher, Valve Sizing & Applications Engineer, Field Service Engineer – Final Control, Process Simulation Engineer – Aspen HYSYS, Predictive Maintenance Data Scientist – Mtell, Industrial Software Sales Engineer, Test Systems Engineer – LabVIEW, Semiconductor Test Engineer, RF & Communications Test Engineer, Manufacturing Engineer – Precision Instrumentation, Global Supply Chain Manager, Production Planning Analyst, Field Service Engineer – DeltaV Systems, Reliability Engineer – Plantweb, Remote Services Operations Center Analyst, Account Manager – Oil & Gas, Business Development Manager – LNG, Inside Sales Engineer, OT Cybersecurity Engineer, IIoT Platform Engineer – Plantweb, Digital Transformation Consultant, FP&A Analyst – Segment Finance, M&A Integration Manager, Treasury & Tax Analyst, HR Business Partner – Engineering, Talent Acquisition Specialist – Technical, Compensation & Benefits Analyst, Senior Counsel – Commercial & Product Liability, Export Controls Compliance Manager, IP Counsel – Industrial Automation
+- **Exec groups:** CEO Lal Karsanbhai · CFO Michael Baughman · COO Ram Krishnamurthy · Pres. ID Mike Train · Pres. Software Peter Zornio · GC Vidya Murugesan · CPO Tracey Doi · CTO Eric Kowalski + 9 VP tier linked to departments
+- **Products (5):** DeltaV DCS · Rosemount 3051 Pressure Transmitter · Fisher FIELDVUE DVC6200 · Plantweb Optics · Aspen HYSYS
+- **Notes:**
+  - Emerson fiscal year ends September 30 — FY2024 = Oct 2023 through Sept 2024
+  - Revenue decline FY2023 ($15.2B) reflects divestiture of Climate Technologies (Copeland) mid-year; FY2024 growth reflects full-year NI contribution
+  - The $14B Climate Technologies sale to Blackstone (completed May 2023) was transformative — Emerson is now 100% focused on automation and software
+  - National Instruments ($8.2B, Oct 2023) added LabVIEW, NI STS semiconductor test, and PXI hardware — expands Emerson into semiconductor, aerospace, and auto test
+  - AspenTech majority stake (~55%) was acquired via a merger of Emerson's OSI Inc and Ovation software with AspenTech in 2022; AspenTech trades independently as AZPN
+  - Boundless Automation is Emerson's strategic bet — software-defined DCS that runs on standard hardware — intended to disrupt the proprietary DCS hardware model
+  - Marshalltown, Iowa is the historical heart of Emerson Fisher valve manufacturing; Chanhassen, Minnesota is Rosemount's home
+
+---
+
+## Ford Motor Company
+- **Seeded:** 2026-04-09
+- **Sources:** ford.com, Ford 2024 Annual Report, NYSE 10-K, NHTSA EWR database, J.D. Power IQS/VDS reports, DOE BlueOval City grant records, IRA Section 30D EV tax credit guidance, UAW-Ford National Agreement, Ford Pro Telematics product documentation, EPA fuel economy data, NHTSA FMVSS compliance database
+- **Slug:** `ford`
+- **ID:** `0197b83f-d85e-47cd-ac91-d16579aa09c1`
+- **Category:** Automotive Manufacturing
+- **HQ:** Dearborn, MI
+- **Employees:** 174,000
+- **Revenue:** $185B (2024)
+- **Tags:** Automotive, EV, Manufacturing, Commercial Vehicles, Financial Services
+- **Departments (12):** Vehicle Engineering & Design · Electrification & Battery Technology · Manufacturing & Assembly Operations · Supply Chain & Purchasing · Ford Pro Commercial Business · Software & Connected Vehicles · Quality & Reliability Engineering · Sales, Marketing & Dealer Relations · Ford Credit & Financial Services · Finance & Corporate Strategy · Human Resources & Workforce · Legal, Compliance & Government Affairs
+- **Roles (36):** 3 per department — includes Vehicle Dynamics Engineer, Body Structures Design Engineer, ADAS Systems Engineer, Battery Cell Engineer, Electric Powertrain Systems Engineer, Battery Management System Software Engineer, Assembly Plant Launch Manager, Manufacturing Engineer – Body Welding, Production Supervisor – Final Assembly, Global Commodity Buyer – Semiconductors, Supplier Quality Engineer – Powertrain, Supply Chain Analyst – Inbound Logistics, Ford Pro Fleet Sales Manager, Ford Pro Telematics Product Manager, Commercial Vehicle Upfitter Development Specialist, Embedded Software Engineer – SYNC Infotainment, Connected Vehicle Data Engineer, OTA Software Update Program Manager, Vehicle Quality Engineer – Launch, ADAS Safety Validation Engineer, Warranty Analytics Engineer, Regional Dealer Development Manager, Brand Marketing Manager – F-Series, Digital Marketing Manager – EV, Auto Finance Credit Analyst, Commercial Fleet Credit Manager, Lease Portfolio Manager, FP&A Manager – Ford Model e, Corporate Strategy Analyst, Treasury Analyst, HR Business Partner – Manufacturing, Talent Acquisition Specialist – Software Engineering, Labor Relations Specialist – UAW Programs, Senior Counsel – Automotive Regulatory & Safety, Government Affairs Manager – EV Policy, IP Counsel – Electrification & Software
+- **Exec groups:** CEO Jim Farley · CFO John Lawler · Pres. Ford Pro Ted Cannis · Pres. Model e Marin Gjaja · Pres. Ford Blue Kumar Galhotra · CPPO Lisa Drake · CTO Doug Field · GC Steve Bradley + 9 VP tier linked to departments
+- **Products (5):** Ford F-Series Super Duty · Ford F-150 Lightning · Ford Transit Commercial Van · Ford Pro Telematics · Ford Mustang Mach-E
+- **Notes:**
+  - Ford restructured into three operating segments in March 2022: Ford Pro (commercial), Ford Blue (ICE/hybrid), Ford Model e (EV) — each with separate P&Ls and leadership
+  - Ford Model e was losing ~$4.5B annually through 2023-2024 as Ford scales EV production; profitability target pushed to 2026 as demand moderated below initial forecasts
+  - BlueOval SK (Ford + SK On JV) battery plants in Kentucky and Tennessee are the largest single capital investments in Ford history at $11.4B combined
+  - Ford F-Series has been the best-selling vehicle in the U.S. for 47 consecutive years — the franchise that funds everything else
+  - Ford Credit is a significant standalone business — provides ~8% of total revenue and buffers cyclicality in the vehicle business
+  - UAW 2023 national strike and new contract significantly raised labor costs; new UAW contract runs through April 2028
+  - Doug Field joined as CTO from Apple (Project Titan) — signals software-first transformation ambition
+
+---
+
+## Eaton Corporation
+- **Seeded:** 2026-04-09
+- **Sources:** eaton.com, Eaton 2024 Annual Report, NYSE 10-K, Brightlayer platform documentation, UL/IEC product certification records, DatacenterDynamics conference press releases, Bussmann technical library, IEEE switchgear standards, FAA airworthiness approval records for aerospace components
+- **Slug:** `eaton`
+- **ID:** `2f90c26a-56ed-41db-bd10-60af7d98a6a9`
+- **Category:** Electrical Equipment
+- **HQ:** Dublin, Ireland (operational HQ: Beachwood, OH)
+- **Employees:** 92,000
+- **Revenue:** $24.9B (2024)
+- **Tags:** Electrical, Power Management, Aerospace, Industrial, SaaS
+- **Departments (12):** Electrical Engineering & Product Development · Data Center Solutions · Aerospace Systems · Manufacturing & Operations · Supply Chain & Procurement · Sales & Business Development · Digital & Software Engineering · Quality & EHS · Finance & Corporate Development · Marketing & Communications · Human Resources · Legal & Compliance
+- **Roles (36):** 3 per department — includes Power Systems Engineer – Switchgear, UPS Design Engineer, Circuit Breaker Applications Engineer, Data Center Power Solutions Architect, PDU Product Manager, Data Center Account Manager, Aircraft Fuel Systems Engineer, Hydraulic Systems Engineer – Defense, Aerospace Program Manager, Plant Manager – Electrical Components, Industrial Engineer – Line Balancing, ERP Systems Analyst – SAP Manufacturing, Global Commodity Manager – Electrical Components, Supply Chain Planner, Procurement Operations Analyst, Regional Sales Manager – Power Distribution, Data Center Solutions Account Executive, Inside Sales Representative – Electrical, Software Engineer – Brightlayer Platform, Embedded Software Engineer – Power Electronics, DevOps Engineer – Industrial IoT, Quality Engineer – Electrical Products, EHS Specialist – Manufacturing, Continuous Improvement Engineer, Financial Analyst – Business Segment, M&A Integration Manager, Tax Analyst – International, Product Marketing Manager – Data Center, Digital Marketing Specialist, Marketing Communications Coordinator, HR Business Partner – Manufacturing, Talent Acquisition Specialist – Engineering, Learning & Development Specialist, Senior Counsel – Commercial Contracts, Compliance Analyst – Trade & Export Controls, Regulatory Affairs Specialist – Product Compliance
+- **Exec groups:** CEO Craig Arnold · CFO Thomas Okray · COO Uday Yadav · CLO Taras Szmagala Jr. · President Electrical Global Paulo Cesar Rocha · CHRO Patricia Robb · CIO Bill VanArsdale · President Aerospace John Hammell + 9 VP tier linked to departments
+- **Products (5):** Eaton 9395P UPS · Eaton Power Xpert 9395 Switchgear · Eaton ePDU G3 · Eaton Bussmann Series Fuses · Brightlayer Data Centers Suite
+- **Notes:**
+  - Eaton is legally domiciled in Dublin, Ireland (since 2012 redomiciliation) but operationally headquartered in Beachwood, Ohio — use Beachwood for practical HQ
+  - Revenue split is ~70% Electrical, ~15% Aerospace, ~15% Vehicle/eMobility — the electrical business (Americas + Global) is the dominant segment
+  - Brightlayer is Eaton's strategic software bet for recurring revenue in the data center market, competing against EcoStruxure and Vertiv Environet
+  - Bussmann Series fuses came with the 2004 acquisition of Cooper Industries' Bussmann division — it is the #1 fuse brand in North America by installed base
+  - Data center power (UPS + PDU + switchgear) is Eaton's fastest-growing end market, driven by AI infrastructure buildout
+  - Eaton is a primary power infrastructure supplier to hyperscalers — AWS, Microsoft, and Google are key end customers through channel partners
+
+---
+
+## GE Aerospace
+- **Seeded:** 2026-04-09
+- **Sources:** geaerospace.com, GE Aerospace 2024 Annual Report, NYSE filings, FAA type certificate database, CFM International program docs, NASA Glenn Research Center RISE test press releases, DoD contract award database (USASpending.gov), ICAO CORSIA documentation, Aviation Week fleet data
+- **Slug:** `ge-aerospace`
+- **ID:** `d24782dc-c4a1-41ea-a951-77601fc949ed`
+- **Category:** Aerospace & Defense
+- **HQ:** Evendale, OH
+- **Employees:** 52,000
+- **Revenue:** $38.7B (2024)
+- **Tags:** Aerospace, Defense, Manufacturing, Engineering, Aviation
+- **Departments (12):** Engine Systems Engineering · Propulsion Research & Technology · Manufacturing & Supply Chain · Military Systems & Programs · MRO & Customer Support · Commercial Sales & Marketing · Digital Technology · Quality & Safety · Finance & Corporate Development · Human Resources · Legal, Compliance & Government Affairs · Sustainability & Environmental
+- **Roles (36):** 3 per department — includes Turbofan Systems Engineer, Mechanical Design Engineer – Turbine, Combustion Systems Engineer, Research Engineer – Aerodynamics, Materials Scientist – High-Temperature Alloys, Controls & Electrification Research Engineer, Manufacturing Engineer – Additive Manufacturing, Supply Chain Program Manager, Production Quality Engineer – Engine Assembly, Military Program Manager – Fighter Engines, Defense Systems Engineer – Adaptive Cycle Engine, Government Contracts Specialist, Field Service Engineer, LTSA Manager, Engine Data Analytics Engineer, Commercial Engine Sales Director, Product Marketing Manager – Commercial Engines, Airline Customer Program Manager, Software Engineer – Predix Platform, Cybersecurity Engineer – Aviation Systems, Data Scientist – Engine Prognostics, Aviation Safety Engineer, Quality Systems Manager – Engine Assembly, NDT Level III Engineer, FP&A Manager – Commercial Engines, M&A and Corporate Development Analyst, Internal Audit Manager, HR Business Partner – Engineering, Technical Recruiter – Propulsion Engineering, Total Rewards Analyst, Senior Counsel – Aviation Regulatory, Ethics & Compliance Manager, IP Counsel – Propulsion Technology, Environmental Compliance Engineer, GHG & Climate Strategy Analyst, Sustainable Aviation Fuel Program Manager
+- **Exec groups:** CEO Larry Culp · CFO Rahul Ghai · CTO Mohamed Ali · COO Russell Stokes · CPO Lora Villarreal · CLO Vic Abate · CMO Derek Kerr + 9 VP tier linked to departments
+- **Products (5):** CFM LEAP Engine · GE9X Engine · GE Aerospace Engine Health Monitoring (EHM) · GE F110 Fighter Engine · CFM RISE Open Fan Demonstrator
+- **Notes:**
+  - GE Aerospace became a standalone NYSE-listed company on April 2, 2024 after spinning off GE Vernova (energy). Prior year revenues include some GE corporate overhead; 2024 is first clean standalone year
+  - CFM International is a 50-50 JV with Safran — LEAP engine revenues are reported by CFM, not 100% consolidated into GE Aerospace financials; GE Aerospace records its ~50% share
+  - Revenue decline 2020-2021 reflects COVID-19 commercial aviation collapse; recovery 2022-2024 is driven by post-COVID airline fleet renewal and record LEAP delivery ramp
+  - ITAR/CMMC compliance is critical — many military engine programs require US Person status, which affects recruiting
+  - FAA Part 21 PAH status is the core regulatory obligation that governs all manufacturing and quality activities
+  - GE9X is sole-source for Boeing 777X — sole-source engine contracts are extremely high-value but create mutual dependency with Boeing delivery schedule risk
+
+---
+
+## Deere & Company (John Deere)
+- **Seeded:** 2026-04-09
+- **Sources:** deere.com, Deere FY2024 Annual Report (fiscal year ending Oct 2024), SEC 10-K, NYSE filings, Blue River Technology acquisition records, CES 2022 autonomous tractor launch, USDA agricultural equipment market data, CONEXPO-CON/AGG product docs, John Deere Operations Center platform documentation
+- **Slug:** `john-deere`
+- **ID:** `cedd3cf4-be0f-4ada-978a-3b4e20a5cc76`
+- **Category:** Agricultural Equipment
+- **HQ:** Moline, IL
+- **Employees:** 75,000
+- **Revenue:** $51.7B (FY2024, fiscal year ending October 2024)
+- **Tags:** Agriculture, Construction, Manufacturing, Autonomy, Equipment
+- **Departments (12):** Product Engineering & Design · Precision Agriculture Technology · Manufacturing & Assembly · Supply Chain & Logistics · Sales & Dealer Network · Marketing & Brand · John Deere Financial · Information Technology · Quality & Reliability · Human Resources · Finance & Corporate Strategy · Legal & Compliance
+- **Roles (36):** 3 per department — includes Tractor Systems Engineer, Combine Harvester Design Engineer, Embedded Software Engineer – Machine Control, ML Engineer – Computer Vision, Autonomous Systems Engineer, Agronomist – Precision Ag Solutions, Manufacturing Engineer – Welding & Fabrication, Production Supervisor – Final Assembly, Continuous Improvement Engineer, Supplier Development Engineer, Parts & Accessories Supply Planner, Inbound Logistics Coordinator, Agricultural Equipment Sales Rep, Dealer Development Manager, Construction Equipment Sales Manager, Brand Marketing Manager, Digital Marketing Manager – Precision Ag, Product Marketing Manager – Construction Equipment, Agricultural Credit Analyst, Equipment Lease Structuring Specialist, Collections & Loss Mitigation Specialist, Cloud Platform Engineer – AWS, Data Engineer – Agricultural Data Platform, Cybersecurity Analyst – OT/IoT, Reliability Engineer – Agricultural Equipment, Quality Engineer – Supplier Parts, Test Engineer – Product Validation, HR Business Partner – Manufacturing, Technical Recruiter – Engineering & Software, Compensation & Benefits Analyst, FP&A Manager – Equipment Operations, Corporate Strategy Analyst, Treasury Analyst, Senior Counsel – Intellectual Property, Trade Compliance Manager, Commercial Counsel – Technology Agreements
+- **Exec groups:** CEO John May · CFO Joshua Jepsen · CTO Jahmy Hindman · CPO Mary Coe · CIO Ganesh Jayaram · GC Rajesh Kalathur · CSCO Cory Reed · CMO Tami Hedgren + 9 VP tier linked to departments
+- **Products (5):** John Deere 8R Autonomous Tractor · See & Spray Ultimate · Operations Center (SaaS) · S7 Series Combine Harvester · 350G LC Excavator
+- **Notes:**
+  - Revenue decline from $55.7B (FY2023) to $51.7B (FY2024) reflects demand normalization after peak ag commodity cycle — NOT a structural decline
+  - Deere fiscal year ends in late October — FY2024 = Nov 2023 through Oct 2024
+  - Blue River Technology ($305M acquisition, 2017) is the foundation of See & Spray and broader precision ag AI strategy
+  - UAW collective bargaining covers ~3,000 production workers at Waterloo Works — major labor relations factor
+  - John Deere Financial is a significant standalone profit contributor and deserves its own department treatment
+  - Operations Center has 375,000+ active connected equipment users — key competitive moat
+
+---
+
+## 3M
+- **Seeded:** 2026-04-09
+- **Sources:** 3m.com, 3M 2024 Annual Report (continuing operations post-Solventum spinoff), SEC 10-K, NYSE filings, OSHA VPP program docs, ECHA REACH registration records, USPTO patent database, Cubitron II product literature, Novec 1230 technical data sheets
+- **Slug:** `3m`
+- **ID:** `fb08bdaf-ee3c-45cf-a35d-3db4d5ef1f4f`
+- **Category:** Diversified Manufacturing
+- **HQ:** Saint Paul, MN
+- **Employees:** 55,000 (post-Solventum, continuing operations)
+- **Revenue:** $23.8B (2024, continuing operations only — Solventum healthcare segment spun off May 2024; prior years 2020–2023 included ~$8–9B healthcare revenue, creating an apparent YoY decline)
+- **Tags:** Manufacturing, Adhesives, Safety, Industrial, Consumer
+- **Departments (12):** Safety & Industrial Division · Transportation & Electronics Division · Consumer Division · Corporate Research & Development · Manufacturing & Engineering · Supply Chain & Operations · Sales & Marketing · Regulatory Affairs & Quality · Environmental Health & Safety · Finance & Corporate Development · Human Resources · Legal & Government Affairs
+- **Roles (36):** 3 per department — includes Industrial Safety Application Engineer, PPE Product Manager, Automotive Adhesives Application Engineer, Display Optical Films Engineer, Semiconductor Process Materials Specialist, Consumer Brand Manager, E-Commerce Channel Manager, Consumer Product Development Engineer, Materials Scientist – Polymer Chemistry, Research Scientist – Fluorochemistry, Technology Licensing Manager, Process Engineer – Coating & Converting, Manufacturing Quality Engineer, Automation & Robotics Engineer, Global Sourcing Manager – Raw Materials, Demand Planning Analyst, Distribution Network Analyst, Industrial Sales Representative, Global Marketing Manager – Abrasives, Digital Marketing Specialist, Regulatory Affairs Specialist – Chemical Compliance, Quality Systems Manager, Product Safety Toxicologist, EHS Manager – Manufacturing, Sustainability Program Manager, Industrial Hygienist, FP&A Manager, Corporate Development Analyst, Tax Analyst – International, HR Business Partner – Engineering, Talent Acquisition Specialist – Technical Roles, Learning & Development Program Manager, Senior Counsel – Commercial Transactions, Government Affairs Manager – Washington DC, IP Litigation Paralegal, Industrial Tape Sales Specialist
+- **Exec groups:** CEO William Brown · CFO Monish Patolawala · CTO Eric Hammes · COO Mojdeh Rohani · CPO Zoe Dickson · CLO Pamela Hammel · CSCO Theresa Reinseth · CMO Kenon Thomas + 8 VP tier linked to departments
+- **Products (5):** 3M VHB Tape · 3M N95 Respirator 8210 · 3M Cubitron II Abrasives · 3M Novec 1230 Fire Protection Fluid · 3M Filtrete Air Filters
+- **Notes:**
+  - Revenue drop from ~$32B (2023) to $23.8B (2024) reflects Solventum spinoff, NOT business decline — revenue_growth array covers 2020–2024 continuing operations only
+  - PFAS/fluorochemistry regulatory exposure is a key ongoing risk — noted in standards and roles (Research Scientist – Fluorochemistry, Government Affairs Manager)
+  - 3M is in OSHA VPP Star program at multiple manufacturing sites — reflected in EHS roles
+  - Novec 1230 faces its own regulatory uncertainty as a fluorinated compound despite its low GWP
+
+---
+
+## Mastercard
+- **Seeded:** 2026-04-09
+- **Sources:** mastercard.com, Mastercard 2024 Annual Report, SEC 10-K, NYSE filings, Nilson Report, Recorded Future acquisition press release, Mastercard Open Banking platform docs, PCI SSC, BIS CPMI reports
+- **Slug:** mastercard
+- **Sector:** Financial Services / Payments / Cybersecurity / Open Banking / FinTech
+- **HQ:** Purchase, NY
+- **Employees:** 33,000
+- **Revenue:** $28.2B (2024, +12% YoY)
+- **Products seeded:** Mastercard Decision Intelligence (AI fraud scoring), Mastercard Open Banking (fintech data connectivity, 15,000+ FIs), Mastercard Send (real-time disbursements), Priceless (loyalty/experiential platform), Recorded Future Intelligence Cloud ($2.65B acquisition, threat intel)
+- **Departments:** 12 (Payment Network & Core Processing, Cybersecurity & Intelligence, Open Banking & Real-Time Payments, Data & Services Analytics, Product & Engineering, Commercial Solutions B2B, Global Sales & Account Management, Marketing & Communications, Finance & Treasury, Legal/Regulatory/Compliance, Human Resources & People, Strategy & Corporate Development)
+- **C-Suite:** Michael Miebach (CEO), Sachin Mehra (CFO), Ed McLaughlin (Pres. Tech & Ops), Craig Vosburg (CPO), Raja Rajamannar (CMO), Linda Kirkpatrick (Pres. North America), Gilberto Caldart (Pres. International), Sandra Alzetta (CPO People)
+- **VPs:** Johan Gerber (Cybersecurity/Network), Kush Saxena (Open Banking), Chiro Aikat (Engineering), Jess Turner (Data & Strategy), Amir Abdin (Commercial/Sales), Lisa Schreiber (HR)
+- **Notes:** NYSE: MA. Founded 1966 as Interbank Card Association; rebranded Mastercard 1979. IPO 2006 at $39/share — now ~$490B market cap. Processes 157B+ switched transactions annually across 3.3B+ cardholders in 210+ countries. Completed $2.65B Recorded Future acquisition Nov 2024 (largest deal in Mastercard history) — world's largest threat intelligence firm with 1,900+ clients including 45+ governments. VocaLink acquisition (£700M, 2016) powers UK Faster Payments, BACS, and US TCH real-time payment rails. Mastercard Open Banking (Finicity acquisition) connected to 15,000+ FIs in 100+ countries. Co-founder of PCI Security Standards Council and EMVCo. Revenue grew from $15.3B (2020) to $28.2B (2024). Value-added services (cybersecurity, open banking, loyalty) now 36% of revenue — fastest-growing segment. 36 roles across 12 departments.
+
+---
+
+## Pfizer
+- **Seeded:** 2026-04-09
+- **Sources:** pfizer.com, Pfizer 2024 Annual Report, SEC 10-K, FDA, EMA, ARISTOTLE trial, ATTR-ACT trial, EPIC-HR trial, EV-302/KEYNOTE-A39 trial, ACIP recommendations, Seagen acquisition filings
+- **Slug:** pfizer
+- **Sector:** Pharmaceuticals / Oncology / Vaccines / Rare Disease / Antivirals
+- **HQ:** New York, NY
+- **Employees:** 88,000
+- **Revenue:** $63.6B (2024, +9% YoY)
+- **Products seeded:** Eliquis (apixaban anticoagulant, co-promoted with BMS), Paxlovid (nirmatrelvir/ritonavir COVID-19 antiviral), Prevnar 20 (20-valent pneumococcal conjugate vaccine), Vyndaqel/Vyndamax (tafamidis for ATTR-CM), Padcev (enfortumab vedotin-ejfv ADC for urothelial cancer)
+- **Departments:** 12 (Oncology, Vaccines & Antivirals, Internal Medicine, Rare Disease & Hospital, Research & Drug Discovery, Clinical Development & Medical Affairs, Regulatory Affairs & Quality, Manufacturing & Supply Chain, Commercial & Market Access, Finance & Investor Relations, Human Resources, Legal & Compliance)
+- **C-Suite:** Albert Bourla (CEO), David Denton (CFO), Chris Boshoff (Chief Oncology Officer), Angela Hwang (Group President Biopharma), Mike McDermott (EVP Global Supply), Doug Lankler (General Counsel), Payal Sahni (CPO), Annaliesa Anderson (CSO Vaccines)
+- **VPs:** Roger Dansey (Oncology/Clinical Dev), Kathrin Jansen (Vaccines R&D), Sarah Krug (Manufacturing/Regulatory), Fabrice Bancilhac (Commercial/Internal Medicine), Lionel Harber (HR), Reno Deblois (Legal/IP)
+- **Notes:** NYSE: PFE. Founded 1849 by Charles Pfizer & Charles Erhart in Brooklyn. FY2022 revenue peaked at $100.3B (first pharma company to exceed $100B in a year) driven by $37.8B Comirnaty + $18.9B Paxlovid COVID sales; 2024 revenue normalized to $63.6B. Completed $43B Seagen acquisition Dec 2023 (largest deal in Pfizer history) adding Padcev, Adcetris, Tukysa, Tivdak ADC portfolio. Lipitor (atorvastatin) generated $130B+ cumulative lifetime sales — world's best-selling drug of all time. Fit to Win program targeting $4.5B cost savings launched Oct 2023. Eliquis is co-promoted with Bristol Myers Squibb; #1 oral anticoagulant globally. Vyndaqel/Vyndamax: $4B+ in 2024 revenues; ATTR-CM dramatically underdiagnosed (~400K U.S. patients, only ~50K treated. 36 roles across 12 departments.
+
+---
+
+## Abbott Laboratories
+- **Seeded:** 2026-04-09
+- **Sources:** abbott.com, Abbott 2024 Annual Report, SEC 10-K, FDA, CE Mark registry, COAPT trial, EVEREST II trial, LEADER HF study, ID NOW clinical studies
+- **Slug:** abbott
+- **Sector:** Healthcare / Medical Devices / Diagnostics / Nutrition / CGM
+- **HQ:** North Chicago, IL
+- **Employees:** 114,000
+- **Revenue:** $22.3B (2024)
+- **Products seeded:** FreeStyle Libre 3 Plus (CGM), Aveir DR (dual-chamber leadless pacemaker), MitraClip NTR/XTR (transcatheter mitral valve repair), Alinity i (immunoassay analyzer), ID NOW (rapid molecular diagnostics)
+- **Departments:** 12 (Diabetes Care & FreeStyle Libre, Cardiac Rhythm Management & Electrophysiology, Structural Heart & Vascular, Core Laboratory Diagnostics, Point-of-Care & Rapid Diagnostics, Nutrition, Research & Development, Regulatory Affairs & Quality, Sales & Marketing, Finance & Accounting, Human Resources, Legal & Compliance)
+- **C-Suite:** Robert Ford (CEO), Philip Boudreau (CFO), Michael Pederson (Pres. Medical Devices), Andrea Wainer (EVP Diagnostics), Hubert Allen (General Counsel), Stephen Fussell (CPO), Jared Watkin (EVP R&D), Joseph Manning (EVP Nutrition)
+- **VPs:** Bret Christensen (Diabetes Care), Chris Toth (CRM/EP & Structural Heart), Shawn Bevec (Core Lab & POC Diagnostics), Laura McPhee (Sales & Marketing), Marc Boutin (Regulatory & R&D), Karen Peck (HR)
+- **Notes:** NYSE: ABT. Founded 1888 by Dr. Wallace Calvin Abbott in Chicago. FreeStyle Libre is world's #1 CGM brand — 6M+ users in 60+ countries; Libre 3 Plus sensor measures every minute with real-time alarms. Aveir DR is the world's first dual-chamber leadless pacing system (FDA approved 2023). MitraClip: 200,000+ procedures globally, validated by COAPT (HF-MR) and EVEREST II trials. ID NOW deployed COVID-19 tests at 50,000+ U.S. sites during pandemic. 2022 revenue was $43.7B due to COVID-19 test demand spike — 2024 revenue of $22.3B reflects normalized testing volumes. Alinity family consolidates immunoassay, clinical chemistry, blood screening, and point-of-care onto a unified platform. 36 roles across 12 departments.
+
+---
+
+## Medtronic
+- **Seeded:** 2026-04-09
+- **Sources:** medtronic.com, Medtronic FY2025 Annual Report, SEC 10-K, FDA, EMA, CE Mark registry, EVOLUT Low Risk trial, TRISCEND II trial, COLO-DETECT RCT
+- **Slug:** medtronic
+- **Sector:** Medical Devices / Cardiac / Surgical Robotics / Neuromodulation / Diabetes Technology
+- **HQ:** Dublin, Ireland (operational HQ: Fridley, MN)
+- **Employees:** 95,000
+- **Revenue:** $32.4B (FY2024)
+- **Products seeded:** Micra AV2 Transcatheter Pacemaker, Hugo RAS Robotic-Assisted Surgery System, Evolut PRO+ TAVR System, Percept PC DBS with BrainSense, GI Genius Intelligent Endoscopy Module
+- **Departments:** 12 (Cardiac Rhythm Management, Surgical Robotics & Endoscopy, Structural Heart & Vascular, Neuroscience & Neuromodulation, Diabetes Technology, Research & Innovation, Regulatory Affairs & Quality, Manufacturing & Operations, Sales & Commercial, Finance & Accounting, Human Resources, Legal & Compliance)
+- **C-Suite:** Geoff Martha (CEO), Gary Corona (CFO), Sean Salmon (Pres. CV), Brett Wall (Pres. Neuro), Bob White (Pres. MedSurg), Que Dallara (Pres. Diabetes), Marlene Brockman (CLO), Carol Surface (CPO), Ken Washington (CTO)
+- **VPs:** Alan Cheng (CRM), Joao Bocas (Robotics), Laura Mauri (Structural Heart), Dave Moen (Neuromodulation), Stacy Enxing Seng (R&D), Omar Ishrak (Mfg/Diabetes), Rebecca Madsen (Regulatory), Ron Spadafora (Sales), Tim Lescovich (Finance), Anne Sherve (HR), James Stauner (Legal)
+- **Notes:** NYSE: MDT. Founded 1949 by Earl Bakken in Minneapolis garage. World's largest standalone medical device company. Incorporated in Ireland post-Covidien acquisition (2015, $49.9B — largest medtech deal in history). Micra AV2 leadless pacemaker: 250,000+ implants, 15-year longevity. GI Genius: 3,000+ global deployments, 14% ADR improvement (COLO-DETECT RCT). Hugo RAS received FDA clearance for urology 2024. MiniMed 780G with Simplera Sync (no fingerstick CGM) FDA-approved Oct 2024. Subject to prior consent decree on manufacturing quality (2009). 36 roles across 12 departments.
+
+---
+
+## Eli Lilly
+- **Seeded:** 2026-04-09
+- **Sources:** lilly.com, Eli Lilly 2024 Annual Report, SEC 10-K, FDA, WHO, EMA, NEJM, JAMA, Lancet, TRAILBLAZER-ALZ 2 publications
+- **Slug:** eli-lilly
+- **Sector:** Pharmaceuticals / Biotech / GLP-1 / Oncology / Immunology / Neuroscience
+- **HQ:** Indianapolis, IN
+- **Employees:** 43,000
+- **Revenue:** $45.0B (2024, +32% YoY)
+- **Products seeded:** Mounjaro (tirzepatide for T2D), Zepbound (tirzepatide for obesity), Verzenio (abemaciclib CDK4/6 for breast cancer), Kisunla (donanemab for Alzheimer's), Taltz (ixekizumab anti-IL-17A)
+- **Departments:** 12 (Diabetes & Cardiometabolic, Oncology, Immunology & Inflammation, Neuroscience & Alzheimer's, Research & Early Development, Regulatory Affairs & Quality, Clinical Development & Medical Affairs, Manufacturing & Supply Chain, Commercial & Market Access, Finance & Investor Relations, Human Resources, Legal & Compliance)
+- **C-Suite:** David A. Ricks (CEO), Anat Ashkenazi (CFO), Mike Mason (EVP Diabetes), Jacob Van Naarden (EVP Oncology), Patrik Jonsson (EVP Immunology), Daniel Skovronsky (CSO), Michelle Leckman (CLO), Wendy Carruthers (CHRO)
+- **VPs:** Mark Mintun (R&D/Neuroscience), Edgardo Hernandez (Manufacturing), Leigh-Ann Gibson (Regulatory), Ilya Yuffa (Commercial/Diabetes), Maura Dickler (Clinical/Oncology/Immunology), Kevin Hern (Finance), Rebecca Kendall (HR), Susan Mahony (Legal)
+- **Notes:** NYSE: LLY. Founded 1876 by Colonel Eli Lilly. First commercial producer of insulin (1923); first rDNA human insulin Humulin (1982). Mounjaro approved May 2022 (T2D); Zepbound approved Nov 2023 (obesity, 22.5% avg weight loss in SURMOUNT-1 — highest ever for approved obesity drug). Kisunla (donanemab) approved Jul 2024 — only Alzheimer's therapy with defined treatment discontinuation endpoint. $9B U.S. manufacturing expansion announced 2024 (Lebanon IN, Augusta GA, Branchburg NJ, RTP NC). Morphic Therapeutic acquired Jul 2024 ($3.2B) for oral integrin IBD pipeline. 36 roles across 12 departments.
+
+---
+
+## Danaher Corporation
+- **Seeded:** 2026-04-09
+- **Sources:** danaher.com, Danaher 2024 Annual Report, SEC 10-K, FDA, WHO, EMA, Cytiva, Cepheid, Beckman Coulter, SCIEX, Leica Microsystems
+- **Slug:** danaher
+- **Sector:** Life Sciences / Diagnostics / Biotechnology / Medical Instruments
+- **HQ:** Washington, D.C.
+- **Employees:** 65,000
+- **Revenue:** $23.9B (2024)
+- **Products seeded:** Cytiva ÄKTA pure, Cepheid GeneXpert, Beckman Coulter DxI 9000, SCIEX 7600+ System, Leica Stellaris 8 Confocal
+- **Departments:** 12 (Cytiva — Bioprocessing, Cepheid — Molecular Diagnostics, Beckman Coulter — Clinical Diagnostics, Life Sciences Research Instruments, Research and Development, Regulatory Affairs and Quality, Sales and Commercial Excellence, Danaher Business System (DBS), Finance and Accounting, Human Resources, Legal and Compliance, Digital and Information Technology)
+- **C-Suite:** Rainer Blair (CEO), Matt McGrew (CFO), Joakim Weidemanis (President Life Sciences), Bryan Veleber (President Diagnostics), Angela Sherrill (EVP & General Counsel), Matthew Gugino (CPO), John T. Schwartz (CSO)
+- **VPs:** Karen Talmadge (Bioprocessing/LS Instruments), David Persing (Molecular Diagnostics), Stefan Gsell (Clinical Diagnostics), James Lico (Sales/DBS), Patricia Verduin (Regulatory), Daniel Comas (Finance), Andrea Foulkes (HR), Shawn Vadala (Digital/Legal)
+- **Notes:** NYSE: DHR. Founded 1969 as Diversified Mortgage Investors, renamed 1984. Operates Danaher Business System (DBS) — proprietary lean kaizen framework driving continuous improvement. Spun off Fortive (2016) and Envista Dental (2019). Acquired Cytiva from GE Healthcare ($21.4B, 2020) — largest acquisition in company history. Key operating companies: Cytiva, Cepheid, Beckman Coulter, SCIEX, Leica Microsystems, Radiometer, Hach, Videojet. Ticker also includes DHRO (preferred). Revenue declined ~14% in 2024 from 2023 peak due to bioprocessing market normalization post-COVID. 36 roles across 12 departments.
+
+---
+
+## Stryker Corporation
+- **Seeded:** 2026-04-09
+- **Sources:** stryker.com, Stryker 2024 Annual Report, SEC 10-K, FDA, AdvaMed, CMS, OIG
+- **Slug:** stryker
+- **Sector:** Healthcare / MedTech / Orthopedics / Surgical Robotics
+- **HQ:** Kalamazoo, MI
+- **Employees:** 52,000
+- **Revenue:** $22.6B (2024)
+- **Products seeded:** MAKO SmartRobotics, Triathlon Total Knee System, Trevo Pro NXT Thrombectomy Device, Power-PRO XT Ambulance Cot, Vocera Communication Platform
+- **Departments:** 12 (Orthopaedics — Joint Reconstruction, MAKO Robotics, MedSurg — Endoscopy and Instruments, Medical — Hospital Beds and EMS, Neurotechnology and Spine, Research and Development, Regulatory Affairs and Quality, Sales and Commercial Operations, Finance and Investor Relations, Human Resources, Legal and Compliance, Digital Technology and Data)
+- **C-Suite:** Kevin Lobo (CEO), Glenn Boehnlein (CFO), Timothy Scannell (COO), Bhavesh Patel (CIDO), Yin Becker (CLO), Srikant Bhatt (CHRO), Spencer Stiles (GP Ortho/Spine), Robert Cohen (GP MedSurg/Neuro)
+- **VPs:** David Floyd (Joint Recon/MAKO), Andrea Ayers (Endoscopy), Viju Menon (Medical), Curt Hartman (Neuro/Spine), Peter Cowhey (R&D/Regulatory), Brooke Smith (Comm Ops), Jason Beach (Finance), Jennifer McNeil (HR), Michael Frykman (Legal), Ryan Donaghy (Digital)
+- **Notes:** NYSE: SYK. Founded 1941 by orthopedic surgeon Dr. Homer Stryker. MAKO acquired 2013 ($1.65B); 2M+ procedures (2024). Vocera acquired 2022 ($3.09B). Inari Medical acquired 2024 ($4.9B, VTE). FCPA settlement 2012; enhanced compliance program since. 36 roles across 12 departments.
+
+---
+
+## Caterpillar Inc.
+- **Seeded:** 2026-04-09
+- **Sources:** caterpillar.com, Cat 2024 Annual Report, SEC 10-K, EPA, MSHA, USPTO
+- **Slug:** caterpillar
+- **Sector:** Industrial / Manufacturing / Mining Technology
+- **HQ:** Irving, TX
+- **Employees:** 109,600
+- **Revenue:** $64.8B (2024)
+- **Products seeded:** Cat 797F Mining Truck, Cat MineStar System, Cat 395 Hydraulic Excavator, Cat 3516 Industrial Engine, Cat D6 Dozer
+- **Departments:** 12 (Engineering and Product Development, Manufacturing and Operations, Supply Chain and Procurement, Sales and Dealer Relations, Digital and Technology / Cat Digital, Mining Technology and Automation, Energy and Transportation, Marketing and Brand, Finance and Accounting, Human Resources, Legal and Compliance, Aftermarket and Customer Support)
+- **C-Suite:** Jim Umpleby (CEO), Andrew Bonfield (CFO), Suresh Venkatarayalu (CTO), Bob Toseland (CLO), Cheryl Johnson (CHRO), Tony Fassino (GP CI), Denise Johnson (GP RI), Joe Creed (GP E&T), Kyle Epley (GP Cat Financial)
+- **VPs:** Ramin Younessi (Engineering), Dave Walton (Mfg/SC), Billy Ainsworth (Sales/Mktg), Ogi Redzic (Digital/Mining Tech), Mark Smith (E&T), Kyle Epley (Finance), Cynthia Neeley (HR), David Hylton (Legal), Bob Bauer (Aftermarket)
+- **Notes:** Ticker NYSE: CAT. Founded 1925 merger of Holt and Best tractor companies. Acquired Bucyrus 2011 ($8.8B, mining). Cat MineStar AHS surpassed 4B autonomous tonnes (2022). Relocated HQ to Irving TX (2022). Revenue dipped 3% in 2024 from record $67.1B (2023) due to dealer inventory destocking. Cat Financial manages $30B+ asset portfolio. 36 roles across 12 departments.
+
+---
+
+## Johnson & Johnson
+- **Seeded:** 2026-04-09
+- **Sources:** jnj.com, J&J 2024 Annual Report, SEC 10-K, FDA, EMA, PTAB, OIG, DOJ
+- **Slug:** johnson-johnson
+- **Sector:** Healthcare / Pharmaceuticals / MedTech
+- **HQ:** New Brunswick, NJ
+- **Employees:** 131,900
+- **Revenue:** $88.8B (2024)
+- **Products seeded:** Stelara, Tremfya, Ottava Robotic Surgical System, VELYS Robotic-Assisted Solution, Carvykti
+- **Departments:** 12 (Innovative Medicine — Oncology, Innovative Medicine — Immunology and Neuroscience, MedTech — Surgery and Robotics, MedTech — Cardiovascular and Orthopedics, Research and Development, Regulatory Affairs and Quality, Commercial and Market Access, Manufacturing and Supply Chain, Finance and Investor Relations, Human Resources, Legal and Compliance, Technology and Data Science)
+- **C-Suite:** Joaquin Duato (CEO), Joseph Wolk (CFO), Jim Swanson (CTO), John Reed (CSO), Jennifer Taubert (EVP IM), Ashley McEvoy (EVP MT), Michael Sneed (CLO), Heather Stefanski (CHRO), Kathy Wengel (CSCO)
+- **VPs:** Catherine Owen (Oncology/Immuno), Ciro Rocha (Surgery/Robotics), William Hait (R&D), Mathai Mammen (Commercial Ops), Rhonda Burden (Supply Chain), Sriram Raghavan (Tech/Digital), Sandra Peterson (People), Peter Fasolo (Legal/Finance)
+- **Notes:** Split consumer segment via Kenvue IPO (2023). Two segments: Innovative Medicine and MedTech. Carvykti co-developed with Legend Biotech. Stelara biosimilar entry 2025. Ottava surgical robot in commercial launch phase. VELYS integrated with ATTUNE Knee System. Logo color #CC0000. 36 roles across 12 departments.
+
+---
+
+## TD Bank
+- **Seeded:** 2026-04-09
+- **Sources:** td.com, TD 2024 Annual Report, TSX/NYSE TD, OSFI, FINTRAC, DOJ, OCC, FinCEN, FCAC, Canadian Bankers Association
+- **CEO:** Raymond Chun (President and CEO, effective Feb 1, 2025; succeeded Bharat Masrani)
+- **Departments:** 12 (Canadian Personal Banking, Canadian Commercial Banking, US Retail Banking, TD Wealth Management, TD Securities Wholesale Banking, AML and Financial Crime Compliance, Technology and Digital Banking, Risk Management, Finance and Treasury, Human Resources, Legal and Regulatory Affairs, Corporate and Strategy)
+- **Products:** 5 (TD All-Inclusive Banking Plan, TD Aeroplan Visa Infinite Card, TD Business Banking, TD Direct Investing, TD Bank USA Convenience Banking)
+- **C-Suite:** Kelvin Tran (CFO), Ajai Bambawale (CRO), Leo Salom (Pres. US Retail), Riaz Ahmed (Head TD Securities), Sandra De Freitas (CAMLO), Amy Throop (CLO), Michelle Gallagher (CPO), Gilbert Ho (CTOO)
+- **VPs:** Ernie Johannson (VP Canada Banking), Michael Rhodes (VP US Retail Ops), David Baillie (VP Wealth), Jacqueline Kinney (VP AML Remediation), Ryan Fisher (VP Technology), Caroline Drolet (VP Risk/Finance), Andrea Barrack (VP People/Legal/Strategy)
+- **Market share:** RBC 25%, TD 22%, Scotiabank 16%, BMO 15%, CIBC 14%, Others 8% (Canadian banking assets, Big Six)
+- **Notes:** Public company (TSX: TD, NYSE: TD). HQ Toronto, ON, Canada. Revenue ~$56.0B CAD (2024). ~95,000 employees. Founded 1855 (Bank of Toronto) + 1869 (Dominion Bank), merged 1955. Sixth-largest bank in North America by assets ($2.0T+ CAD). Acquired Banknorth 2005 ($3.8B, US entry), South Financial Group 2010, held TD Ameritrade (merged into Schwab 2020 for 13.4% Schwab stake). Oct 2024: guilty plea to BSA violations — $3.09B penalty, first US bank holding company to plead guilty; OCC asset cap imposed on US retail growth. Sold $8.4B Schwab stake to fund remediation. TD Direct Investing = Canada's largest online brokerage (1.7M+ accounts). logo_color #00B140. Logo at icon.horse. 36 roles across 12 departments.
+
+---
+
+## UnitedHealth Group
+- **Seeded:** 2026-04-09
+- **Sources:** unitedhealthgroup.com, UHG 2024 Annual Report, NYSE UNH, CMS, NCQA, DOJ, Fortune 500, Nilson Report
+- **CEO:** Stephen Hemsley (returned as CEO May 2025; succeeded Andrew Witty who resigned for personal health reasons)
+- **Departments:** 12 (UnitedHealthcare Commercial Plans, UnitedHealthcare Government Programs, Optum Health Care Delivery, OptumRx Pharmacy Benefits, OptumInsight Health IT & Analytics, Technology and Engineering, Clinical and Medical Affairs, Finance and Actuarial, Sales and Account Management, Human Resources and People, Legal and Compliance, Strategy and Corporate Development)
+- **Products:** 5 (UnitedHealthcare Medicare Advantage, Optum One, OptumRx, Change Healthcare Payment Accuracy, UnitedHealthcare Employer and Individual Plans)
+- **C-Suite:** John Rex (CFO), Tim Noel (Pres. UnitedHealthcare), Dan Schumacher (Pres. Optum), Kathleen Osberg (CLO), Erin McSweeney (CPO), Wyatt Decker (CMO), Sandeep Dadlani (CTO)
+- **VPs:** Rebecca Andrews (VP Commercial/Sales), Michael Collins (VP Gov Programs), Karen Lynch (VP Optum Health/Clinical), Patrick Conway (VP OptumRx), Carolyn Magill (VP OptumInsight), Derek Haas (VP Technology), Thomas Bradley (VP Finance), Sandra Donaldson (VP People), James Riehl (VP Legal/Strategy)
+- **Market share:** Visa 52%, Mastercard 25%, Amex 16%, Discover 7% (placeholder — UHG: 15% US managed care premiums; Elevance 11%, CVS/Aetna 13%, Cigna 10%, Humana 6%, Others 45%)
+- **Notes:** Public company (NYSE: UNH). HQ Minnetonka, MN, USA. Revenue ~$400.3B (2024, largest healthcare company in world by revenue). 440,000 employees. Founded 1977. Two segments: UnitedHealthcare (50M+ members) and Optum (103M patients, $236B revenue). Acquired Change Healthcare 2022 ($13B). Change Healthcare hit by major ransomware attack Feb 2024 ($3.1B impact, 190M patient records exposed). CEO Brian Thompson (UnitedHealthcare President) murdered December 2024. DOJ antitrust investigation launched 2024 into vertical integration. logo_color #006BB6. Logo at icon.horse. 36 roles across 12 departments.
+
+---
+
+## American Express
+- **Seeded:** 2026-04-09
+- **Sources:** americanexpress.com, Amex 2024 Annual Report, NYSE AXP, CFPB, Federal Reserve, Nilson Report, Fortune 500
+- **CEO:** Stephen Squeri (Chairman and CEO)
+- **Departments:** 12 (Global Consumer Services, Global Commercial Services, Global Merchant and Network Services, Technology, Marketing and Brand Management, Risk and Credit Management, Finance and Treasury, Human Resources, Legal and Compliance, Customer Experience and Operations, Data and Analytics, Strategy and Corporate Development)
+- **Products:** 5 (The Platinum Card, American Express Gold Card, Business Platinum Card, Membership Rewards, American Express Global Pay)
+- **C-Suite:** Christophe Le Caillec (CFO), Anna Marrs (CCO), Hendrick Luhrs (CTO), Manish Madhvani (CRO), Laureen Seeger (CLO), Monique Herena (CHRO), Howard Grosfield (Pres. GCSG)
+- **VPs:** Rachel Stocks (VP Consumer), Dean Henry (VP Commercial), Sanjay Khosla (VP GMNS), Priya Nair (VP Tech/Data), Elizabeth Rutledge (VP Marketing), Michael Miebach (VP Finance), David Benson (VP Risk/Legal), Susan Sobbott (VP CX/Strategy)
+- **Market share:** Visa 52%, Mastercard 25%, Amex 16%, Discover 7% (US credit card purchase volume)
+- **Notes:** Public company (NYSE: AXP). HQ New York, NY, USA. Revenue ~$65.9B. 74,600 employees. Founded 1850 as an express mail company. Pivoted to financial services with Travelers Cheques 1891, charge cards 1958. Spun off from banking operations 1987. Known for premium charge/credit cards (Platinum, Gold, Centurion/Black). Network processes $1.7T+ in purchase volume annually. Cardmember spending-driven model (revenue from merchant discount, card fees, interest). Membership Rewards launched 1991. Operates closed-loop network (issuer + acquirer). logo_color #016FD0. Logo at icon.horse. 36 roles across 12 departments.
+
+---
+
+## FedEx
+- **Seeded:** 2026-04-09
+- **Sources:** fedex.com, FedEx 2024 Annual Report, NYSE FDX, FAA, DOT FMCSA, IATA, Fortune
+- **CEO:** Raj Subramaniam (President and CEO)
+- **Departments:** 12 (Express Operations, Ground Operations, Engineering and Technology, Sales and Account Management, Marketing and Communications, Supply Chain and Logistics Solutions, Finance and Treasury, Human Resources, Legal and Regulatory Affairs, Safety and Compliance, Strategy and Corporate Development, Customer Experience)
+- **Products:** 5 (FedEx Express, FedEx Ground, FedEx One Rate, FedEx Custom Critical, FedEx Supply Chain)
+- **C-Suite:** John Dietrich (CFO), Richard Smith (COO), Brie Carere (CCO), Mark Allen (CLO), Jessica Tyler (CPO), Robert Carter (CIO), Don Colleran (Pres. FedEx Express)
+- **VPs:** Susan Patterson (VP Express Ops), Derek Brooks (VP Ground Ops), Wendy Qian (VP Technology), Tom Schmitt (VP Sales), Nina Kress (VP Marketing), Michael Lenz (VP Finance), Patrick Barnes (VP Safety/Legal), Erin Satterfield (VP Strategy/Supply Chain)
+- **Market share:** UPS 35%, FedEx 30%, USPS 20%, DHL 10%, Others 5% (US parcel delivery)
+- **Notes:** Public company (NYSE: FDX). HQ Memphis, TN, USA. Revenue ~$87.7B. 500,000 employees. Founded 1971 by Fred Smith. Worlds largest cargo airline. Delivers 16M+ packages/day to 220+ countries. Acquired Caliber System 1998 ($2.4B — created FedEx Ground), TNT Express 2016 (€4.4B). DRIVE program: $4B cost savings target by FY2027. Spinning off FedEx Freight 2025. Lost USPS air contract 2024 (~$1.7B/yr). logo_color #4D148C. Logo at icon.horse. 36 roles across 12 departments.
+
+---
+
+## Procter & Gamble
+- **Seeded:** 2026-04-09
+- **Sources:** pg.com, P&G 2024 Annual Report, NYSE PG, FDA, FTC, Nielsen IQ, Kantar, Consumer Brands Association
+- **CEO:** Jon Moeller (Chairman, President and CEO)
+- **Departments:** 12 (Research and Development, Manufacturing and Operations, Marketing and Brand Building, Sales and Customer Business Development, Supply Chain and Logistics, Finance and Accounting, Information Technology, Human Resources, Legal and Compliance, Sustainability and Corporate Affairs, Strategy and M&A, Consumer and Market Insights)
+- **Products:** 5 (Tide, Pampers, Gillette, Oral-B, Olay)
+- **C-Suite:** Andre Schulten (CFO), Shailesh Jejurikar (COO), Marc Pritchard (CMO), Tracey Grabowski (CHRO), Loic Tassel (CLO), Vittorio Cretella (CTO), Carolyn Tastad (Pres. Fabric & Home Care)
+- **VPs:** Maria Reyes (VP R&D), Thomas Brennan (VP Manufacturing/Quality), Damon Jones (VP NA Marketing/Insights), Chris Barbin (VP Sales), Yannis Skoufalos (VP Supply Chain), Francesca DeBiase (VP Finance/Corp Dev), Elena Chen (VP IT), Virginie Helias (VP Sustainability/Legal)
+- **Market share:** P&G 26%, Unilever 22%, Kimberly-Clark 14%, Colgate-Palmolive 12%, Henkel 10%, Others 16%
+- **Notes:** Public company (NYSE: PG). HQ Cincinnati, OH, USA. Revenue ~$84.0B. 107,000 employees. Founded 1837. Sells in 180+ countries, serves ~5B consumers daily. Acquired Gillette 2005 ($57B — largest CPG deal in history). Divested 100+ brands 2014–2017 (portfolio focus strategy). Owns Tide, Pampers, Gillette, Oral-B, Olay, Crest, Vicks, Always, Bounty, Charmin. logo_color #003399. Logo at icon.horse. 36 roles across 12 departments.
+
+---
+
+## Rogers Communications
+- **Seeded:** 2026-04-09
+- **Sources:** rogers.com, Rogers 2024 Annual Report, TSX RCI.B, CRTC, ISED Canada, Sportsnet.ca, LinkedIn
+- **CEO:** Tony Staffieri (President and CEO)
+- **Departments:** 12 (Wireless Network and Technology, Cable and Broadband, Consumer Sales and Retail, Rogers for Business, Technology and Engineering, Rogers Media and Sports, Customer Experience, Marketing and Brand, Finance and Corporate Treasury, Human Resources, Legal and Regulatory Affairs, Strategy and Corporate Development)
+- **Products:** 5 (Rogers Infinite Plans, Rogers Ignite Internet, Rogers Business Internet, Sportsnet, Rogers SD-WAN)
+- **C-Suite:** Glen LeBlanc (CFO), Jorge Fernandes (CTO), Dean Prevost (Pres. Rogers for Business), David Watt (CLO), Graeme McPhail (CHRO), Colette Watson (Pres. Rogers Sports and Media), Mathew Boswell (CMO)
+- **VPs:** Kevin Bhatt (VP Wireless Network Engineering), Sandra Marchand (VP Broadband/Cable), Michael Tran (VP Consumer Sales/Retail), Priya Ramachandran (VP Technology/Engineering), Luc Desrochers (VP Finance/Treasury), Angela Simmons (VP People/Culture), James Whitfield (VP Marketing/Brand), Christine Okafor (VP Strategy/Legal)
+- **Market share:** Rogers 29%, Bell 29%, TELUS 27%, Videotron 7%, Others 8% (Canadian wireless subscribers)
+- **Notes:** Public company (TSX: RCI.B). HQ Toronto, ON, Canada. Revenue ~$20.0B. 25,000 employees. Founded 1960 by Ted Rogers. Acquired Shaw Communications 2023 ($26B — largest Canadian telecom deal). Canada's largest wireless carrier by revenue. Owns Sportsnet (NHL, MLB, NBA rights), Toronto Blue Jays, Scotiabank Arena naming rights. logo_color #CC0000. Logo at icon.horse. 36 roles across 12 departments.
+
+---
+
+## Suncor Energy
+- **Seeded:** 2026-04-09
+- **Sources:** suncor.com, Suncor 2024 Annual Report, TSX SU, AER, Pathways Alliance, Alberta EPEA, Corporate Knights
+- **CEO:** Rich Kruger (President and CEO, since April 2022)
+- **Departments:** 12 (Oil Sands Mining and Extraction, Upgrading and Processing, Refining and Supply, Petro-Canada Retail and Lubricants, Engineering and Major Projects, Environment and Sustainability, Technology and Digital, Health Safety and Operations Integrity, Finance and Treasury, Human Resources, Legal and Regulatory, Strategy and Corporate Development)
+- **Products:** 5 (Suncor Synthetic Crude Oil, Petro-Canada Retail, Petro-Canada Lubricants, Fort Hills and Surmont, Pathways Alliance CCUS)
+- **C-Suite:** Kris Smith (CFO), Chris Ranger (EVP Oil Sands), Bruno Francoeur (EVP Downstream), Shelley Powell (CLO), Suncor Landa (CPO), Alister Cowan (EVP Strategy), David Mehaffey (CTO), Janine Maier (SVP Sustainability)
+- **VPs:** Mark Little (Mining/Upgrading), Trevor Hitchcock (Refining), Sandy Sharples (Engineering), Kim Sheppard (HSE/Environment), Tom Warman (Retail), Derek Henderson (Finance)
+- **Market share:** Suncor 35%, Canadian Natural Resources 28%, Cenovus 22%, Imperial Oil 10%, Others 5% (Canadian oil sands production)
+- **Notes:** Public company (TSX/NYSE: SU). HQ Calgary, AB, Canada. Revenue ~$54.4B. 17,000 employees. Founded 1967 (Great Canadian Oil Sands). Merged with Petro-Canada 2009 ($21B). Acquired TotalEnergies Fort Hills/Surmont 2024 ($7.9B). Largest Canadian integrated energy company. 1,800+ Petro-Canada retail stations. Co-founder Pathways Alliance CCUS ($24B net-zero roadmap). logo_color #E31837. Logo at icon.horse. 36 roles across 12 departments.
+
+---
+
+## CN Rail
+- **Seeded:** 2026-04-09
+- **Sources:** cn.ca, CN 2024 Annual Report, TSX CNR, Transport Canada, CTA, STB, AAR, Corporate Knights Global 100
+- **CEO:** Tracy Robinson (President and CEO, since 2022 — first female CEO of a major North American Class I railroad)
+- **Departments:** 12 (Operations and Network Planning, Mechanical and Locomotive, Engineering and Track Infrastructure, Transportation and Train Crew, Sales and Customer Solutions, Intermodal and Logistics, Technology and Innovation, Safety and Environment, Finance and Treasury, Human Resources, Legal and Regulatory Affairs, Marketing and Communications)
+- **Products:** 5 (CN One, Precision Scheduled Railroading, CN Intermodal Services, CN Grain Network, CN AI Operations Centre)
+- **C-Suite:** Ghislain Houle (CFO), Ed Harris (COO), Doug MacDonald (CMO), Sean Finn (CLO), Johanne Trudel (CPO), Dominique Malenfant (CIO), Janet Drysdale (EVP Sustainability)
+- **VPs:** Patrick Whitehead (Operations), James Foote (Engineering), Remi Racine (Sales/Marketing), Olivier Chouc (Technology), Michael Cory (Safety), Luc Jobin (Finance)
+- **Market share:** CN 47%, CPKC 41%, Short-line operators 8%, Others 4% (Canadian freight rail)
+- **Notes:** Public company (TSX/NYSE: CNR). HQ Montreal, QC, Canada. Revenue ~$17.1B. 24,000 employees. Founded 1919 by federal govt consolidation. Privatized 1995 ($2.2B IPO). Only Class I railroad serving 3 coasts (Pacific, Atlantic, Gulf of Mexico). 32,000 km network. Acquired Illinois Central 1998 (US$2.4B). Failed KCS bid 2021 ($700M breakup fee). PSR operating model. AI Operations Centre launched 2024. logo_color #E2231A. Logo at icon.horse. 36 roles across 12 departments.
+
+---
+
+## Manulife Financial
+- **Seeded:** 2026-04-09
+- **Sources:** manulife.com, johnhancock.com, Manulife 2024 Annual Report, TSX MFC, OSFI, PRI, Bloomberg
+- **CEO:** Roy Gori (President and CEO)
+- **Departments:** 12 (Actuarial and Risk Management, Insurance Operations, Wealth and Asset Management, Technology and Digital, Sales and Distribution, Claims and Underwriting, Investment Management, Marketing and Customer Experience, Finance and Corporate Treasury, Human Resources, Legal and Compliance, Corporate Strategy and M&A)
+- **Products:** 5 (John Hancock Vitality, Manulife GroupNet, Manulife Investment Management, Manulife Bank, Manulife Segregated Funds)
+- **C-Suite:** Colin Simpson (CFO), Jodie Wallis (CTO), Steven Finch (CRO), Pamela Kimmet (CLO), Matthew Osborne (CPO), Brooks Tingle (Pres JH), Henk Pieterse (Pres Canada), Rahul Bhardwaj (Pres Asia), Dottie Doyle (Chief Actuary)
+- **VPs:** Andrew Hern (Technology), Karen Leggett (Actuarial), Paul Lorentz (Wealth/Asset Mgmt), Michael Doughty (Sales Canada), Linda Mantia (HR), Scott Hartz (Finance/Treasury)
+- **Market share:** Manulife 28%, Sun Life 25%, Great-West Lifeco 22%, Industrial Alliance 12%, Others 13% (Canadian life insurance)
+- **Notes:** Public company (TSX/NYSE: MFC). HQ Toronto, ON, Canada. Revenue ~$35.7B. 38,000 employees. Founded 1887. Operates Manulife (Canada/Asia) and John Hancock (US). $1.4T AUM via Manulife Investment Management. Acquired John Hancock 2004 ($11B), CQS 2024 (alternative credit). logo_color #00A758. Logo at icon.horse. 36 roles across 12 departments. IFRS 17 adopter 2023. Asia segment now #1 by core earnings.
+
+---
+
+## Canadian Tire Corporation
+- **Seeded:** 2026-04-09
+- **Sources:** canadiantire.ca, CTC 2024 Annual Report, TSX CTC.A, Sport Chek, Helly Hansen, Triangle Rewards, LinkedIn
+- **CEO:** Greg Hicks (President and CEO)
+- **Departments:** 12 (Canadian Tire Retail Operations, Sport Chek and Apparel Banners, Merchandising and Buying, E-commerce and Digital, Financial Services / Canadian Tire Bank, Supply Chain and Logistics, Marketing and Triangle Rewards, Technology and Enterprise Systems, Finance and Corporate Development, Human Resources, Real Estate and Store Development, Legal and Corporate Affairs)
+- **Products:** 5 (Canadian Tire Retail, Triangle Rewards, Sport Chek, Helly Hansen, Canadian Tire Bank)
+- **C-Suite:** Gregory Craig (CFO), TJ Flood (President CTR), Scott Duvall (President Sport Chek), Casper Rorsted (President Helly Hansen), Stephen Wetmore (President CTB), Shawn Penner (CTO), Melanie Teed-Murch (CPO), Loriann Shelton (General Counsel)
+- **VPs:** Jennifer Bell (Merchandising), Rohan Harikumar (Digital), Alan MacDonald (Supply Chain), Lisa Gibson (Marketing), Paul Sheridan (Real Estate), Karen Roberts (Finance)
+- **Market share:** Canadian Tire 28%, Home Hardware 12%, Home Depot Canada 22%, Walmart Canada 18%, Canadian Tire Financial 9%, Others 11% (Canadian mass retail/home improvement)
+- **Notes:** Public company (TSX: CTC.A). HQ Toronto, ON, Canada. Revenue ~$17.1B. 58,000 employees. Founded 1922 by John and Alfred Billes. Operates 500+ Canadian Tire stores, 200+ Sport Chek stores, Helly Hansen (global apparel), Mark's Work Wearhouse, and Canadian Tire Bank. Triangle Rewards loyalty program 12M+ members. logo_color #CC0000. Logo at icon.horse. 36 roles across 12 departments.
+
+---
+
+## Thomson Reuters
+- **Seeded:** 2026-04-09
+- **Sources:** thomsonreuters.com, TR 2024 Annual Report, NYSE TRI, Westlaw, Practical Law, Reuters
+- **CEO:** Steve Hasker (President and CEO since March 2020)
+- **Departments:** 12 (Engineering and Product, Legal Segment, Tax and Accounting, Data Science and AI, Sales and Account Management, Marketing, Editorial and Content, Customer Success, Finance, Human Resources, Legal and Compliance, Corporate Strategy and M&A)
+- **Products:** 5 (Westlaw Precision, CoCounsel, ONESOURCE, Practical Law, Reuters News)
+- **C-Suite:** Mike Eastwood (CFO), Kirsty Roth (COTO), Brian Peccarelli (COO Customer Markets), Mark Brennan (General Counsel), Mary Alice Vuicic (CHRO), Paul Bascobert (President Reuters News), David Wong (CPO)
+- **VPs:** Shameek Ghosh (Engineering), Jennifer Turner (Legal), Robert Chen (Tax), Anita Ramachandran (AI), Michael Connolly (Sales/CS), Sarah Blakely (Corporate Strategy)
+- **Market share:** Thomson Reuters 42%, LexisNexis (RELX) 38%, Bloomberg Law 8%, Wolters Kluwer 7%, Others 5% (global legal research software)
+- **Notes:** Public company (NYSE/TSX: TRI). HQ Toronto, ON, Canada. Revenue ~$7.2B. 26,500 employees. Formed 2008 (Thomson Corp + Reuters Group $17.2B). Sold Financial and Risk to Blackstone (Refinitiv) $20B in 2018. Acquired Pagero $850M (2024). Key products: Westlaw Precision, CoCounsel AI, ONESOURCE (tax), Practical Law, Reuters News. logo_color #FF8000. Logo at icon.horse. 36 roles across 12 departments.
+
+---
+
+## Magna International
+- **Seeded:** 2026-04-09
+- **Sources:** magna.com, Magna 2024 Annual Report, Automotive News, NYSE MGA filings, LinkedIn
+- **CEO:** Swamy Kotagiri (President and CEO since 2021)
+- **Departments:** 12 (Engineering and Product Development, Manufacturing and Operations, Body and Chassis Cosma, Seating Systems, Electronics and ADAS, Powertrain and eDrive, Sales and Business Development, Quality, Finance, Human Resources, Supply Chain and Procurement, Legal and Corporate Affairs)
+- **Products:** 5 (Magna eDrive eAxle Systems, Magna Cosma Body and Chassis, Magna Seating Systems, Magna Closures and Exteriors, Magna Steyr Complete Vehicle Manufacturing)
+- **C-Suite:** Pat McCann (CFO), John Coyne (CLO), Mary Brittain-White (CHRO), Frank O. Becker (EVP Magna Steyr), Marc Decker (EVP Body Exteriors and Structures), Gal Haber (EVP Power and Vision), Al Dorman (EVP Seating), Thierry Juteau (CTO)
+- **VPs:** David Sheridan (Engineering), Lisa Brock (Manufacturing/Body Chassis), Martin Kralik (Electronics/eDrive), Christine Cavataio (Sales), Robert Stronach (Supply Chain), Hans-Peter Gruber (Quality)
+- **Market share:** Magna 20%, Bosch 22%, Continental 18%, Denso 15%, Aptiv 12%, Others 13% (global automotive supplier revenue)
+- **Notes:** Public company (NYSE: MGA, TSX: MG). HQ Aurora, ON, Canada. Revenue ~$42.8B. 172,000 employees. Founded 1957 by Frank Stronach as Multimatic. World's most diversified auto supplier. Key products: eDrive eAxles (BMW, JLR), Cosma body structures, Seating, Closures, Magna Steyr contract assembly (BMW Z4, GR Supra). Acquired Veoneer Active Safety $1.525B (2021). logo_color #CC0000. Logo at icon.horse. 36 roles across 12 departments.
+
+---
+
+## Nutrien
+- **Seeded:** 2026-04-09
+- **Sources:** nutrien.com, Nutrien 2024 Annual Report, Canpotex, Saskatchewan Mining Association, Bloomberg, LinkedIn
+- **CEO:** Ken Seitz (President and CEO)
+- **Departments:** 12 (Mining and Operations, Engineering, Retail Operations, Agronomy and Crop Science, Sales and Marketing, Supply Chain and Logistics, Finance, Environmental Health and Safety, Human Resources, Digital and Technology, Legal and Compliance, Government Relations and Corporate Affairs)
+- **Products:** 5 (Nutrien Ag Solutions, Potash Fertilizers MOP/SOP, Nitrogen Fertilizers Urea/UAN/Anhydrous Ammonia, eKonomics Platform, Loveland Products)
+- **C-Suite:** Pedro Farah (CFO), Chris Reynolds (CTIO), Jeff Tarsi (EVP Retail/Nutrien Ag Solutions), Raef Sully (COO), Trevor Mah (CLO), Marta Nichols (CHRO), Jason Newton (EVP Potash), Mark Thompson (EVP Nitrogen and Phosphate)
+- **VPs:** Scott Ferguson (Mining/Engineering), Angela Lowe (Retail/Agronomy), David Hamlin (Finance), Sandra Park (Digital), Robert Demeule (Supply Chain), Karen Sherrington (HR), Linton Kulak (Gov Relations/Legal)
+- **Market share:** Nutrien 22%, Mosaic 14%, Belaruskali 18%, Uralkali 16%, K+S 8%, Others 22% (global potash)
+- **Notes:** Public company (NYSE/TSX: NTR). HQ Saskatoon, SK, Canada. Revenue ~$17.2B. 25,500 employees. Formed 2018 (PotashCorp + Agrium merger). World's largest potash producer (6 Saskatchewan mines, 14M+ tonnes/year). Largest agricultural retailer (2,000+ retail locations). Also produces nitrogen (urea, UAN, anhydrous ammonia). logo_color #4A7C59. Logo at icon.horse. 36 roles across 12 departments. Investing in clean ammonia for low-carbon markets.
+
+---
+
+## Bandwidth
+- **Seeded:** 2026-04-09
+- **Sources:** bandwidth.com, Nasdaq filings, FCC CORES, Enterprise Connect, Crunchbase
+- **CEO:** David Morken (co-founder, CEO)
+- **Departments:** 12 (Engineering, Product Management, Sales, Customer Success, Marketing, Network Operations, Regulatory and Compliance, Finance, Human Resources, Legal, Developer Experience, Partnerships and Alliances)
+- **Products:** 5 (Bandwidth Voice API, Bandwidth 911, Bandwidth Messaging API, Bandwidth Phone Numbers, Bandwidth Global Voice Network)
+- **C-Suite:** Daryl Raiford (CFO), John Bell (CTO), Melissa Logan (CPO), Jake Butterbaugh (CRO), Adriene Dempsey (CMO), Sarah Hinkle (CHRO), Michael Bramson (CLO)
+- **VPs:** Chris Rector (Engineering), Ryan Doolittle (Product), Brandon Minor (Sales), Karen Mitchell (CS), Jason Garner (Network Ops), Cynthia Walsh (Partnerships)
+- **Market share:** Bandwidth 8%, Twilio 22%, Vonage (Ericsson) 12%, Sinch 5%, Infobip 7%, Telnyx 4%, Others 42% (CPaaS/cloud voice)
+- **Notes:** Public company (Nasdaq: BAND). HQ Raleigh, NC. Revenue ~$560M. 1,400 employees. Founded 2001. Licensed CLEC and IXC carrier. Key acquisition: Voxbone $527M (2021). Microsoft Teams Direct Routing certified carrier. Operates 911 platform for Teams, Zoom, RingCentral. logo_color #2563EB. Logo at icon.horse. 36 roles across 12 departments.
+
+---
+
+## Sinch
+- **Seeded:** 2026-04-09
+- **Sources:** sinch.com, Nasdaq Stockholm filings, Gartner MQ CPaaS 2024, Crunchbase, CTIA, FCC
+- **CEO:** Laurinda Pang (CEO since 2023)
+- **Departments:** 12 (Engineering, Product Management, Sales, Customer Success, Marketing, Carrier Relations, Security and Compliance, Finance, Human Resources, Legal, Developer Relations, Partnerships and Alliances)
+- **Products:** 5 (Sinch Conversation API, Sinch SMS API, Sinch CustomerDeck, Mailgun, Sinch Voice API)
+- **C-Suite:** Roshan Saldanha (CFO), Johan Tjarnberg (CTO), Miriam Lisco (CPO), Jonathan Bean (CRO), Pernilla Brodd (CMO), Helena Norrman (CPO-People), Anna Borgenstam (CLO)
+- **VPs:** Erik Lindqvist (Engineering), Sara Melander (Product), Marcus Webb (Sales/Partnerships), Lisa Bergstrom (CS), Thomas Nordstrom (Carrier Relations), Alex Ljungqvist (DevRel)
+- **Market share:** Sinch 5%, Twilio 22%, Vonage (Ericsson) 12%, Bandwidth 8%, Infobip 7%, MessageBird 5%, Others 41% (CPaaS)
+- **Notes:** Public company (Nasdaq Stockholm: SINCH). HQ Stockholm, Sweden. Revenue ~$450M. 4,000 employees. Founded 2008 (as CLX Communications). Rebranded to Sinch 2018. Key acquisitions: SAP Digital Interconnect $250M (2020), Pathwire/Mailgun $1.9B (2021). logo_color #E3173E. Logo at icon.horse. 36 roles across 12 departments.
+
+---
+
+## BMC Software
+- **Seeded:** 2026-04-09
+- **Sources:** bmc.com, BMC annual reports, Gartner Magic Quadrant ITSM 2024, Crunchbase, KKR press releases
+- **CEO:** Ayman Sayed (CEO since 2021)
+- **Departments:** 12 (Engineering, Product Management, Sales, Customer Success, Marketing, Professional Services, Mainframe Solutions, Finance, Human Resources, Legal, Security and Compliance, Partnerships and Alliances)
+- **Products:** 5 (BMC Helix ITSM, BMC AMI, Control-M, BMC Helix Operations Management, HelixGPT)
+- **C-Suite:** John Iannone (CFO), Ram Chakravarti (CTO), Kumar Mehta (CPO), Ali Jaber (CRO), Pat Bhava (CMO), Lara Gordon (CHRO), Bryan Sims (CLO), Marc Bodner (CIO)
+- **VPs:** Kevin Cook (Engineering/Mainframe Solutions), Sanjay Kalra (Product), Michael Stoeckl (Sales/Partnerships), Sarah Hilton (Customer Success/PS), Jennifer Bristow (Marketing), David Park (Finance)
+- **Market share:** BMC 14%, ServiceNow 38%, Atlassian JSM 16%, Ivanti 8%, Cherwell 6%, Freshservice 6%, Others 12% (ITSM)
+- **Notes:** Private company (KKR, formerly public NASDAQ: BMC). HQ Houston TX. Revenue ~$2.2B. 6,000 employees. Founded 1980. Category: Enterprise Software. logo_color #CC0000. Logo at icon.horse. 36 roles across 12 departments. Key products: Helix ITSM (cloud-native ITSM), BMC AMI (autonomous mainframe intelligence), Control-M (workload automation), HelixGPT (enterprise GenAI).
+
+---
+
+## Ivanti
+- **Seeded:** 2026-04-09
+- **Sources:** ivanti.com, Gartner Magic Quadrant UEM 2024, Crunchbase, Clearlake Capital press releases, CISA advisories
+- **CEO:** Jeff Abbott (CEO since 2021)
+- **Departments:** 12 (Engineering, Product Management, Sales, Customer Success, Marketing, Professional Services, Security Research, Finance, Human Resources, Legal, IT and Operations, Partnerships)
+- **Products:** 5 (Ivanti Neurons, Ivanti Endpoint Manager, Ivanti Neurons for ITSM, Ivanti Connect Secure, Ivanti Neurons for Patch Management)
+- **C-Suite:** Srinivas Mukkamala (CTO), Jason Ewell (CRO), Mark Jue (CFO), Daren Bibby (CMO), Daniel Spicer (CISO), Marcia Haig (CPO)
+- **VPs:** Sanjay Rajagopalan (Engineering/Security Research), Chris Noessel (Sales/CS), Nicole Reineke (Marketing), Todd Schell (PS), Karen Brandes (Finance), Steve Brasen (Partnerships)
+- **Market share:** Ivanti 8%, Microsoft Intune 32%, VMware Workspace ONE 18%, Jamf 12%, Tanium 9%, ManageEngine 8%, Others 13% (unified endpoint management)
+- **Notes:** Private company (Clearlake Capital and TA Associates). HQ South Jordan UT. Revenue ~$600M. 3,200 employees. Founded 2017 (merger of LANDESK and HEAT Software). Major acquisitions: Pulse Secure (2020), Cherwell (2021), RiskSense (2021). 2024 zero-days in Connect Secure VPN. FedRAMP authorized. logo_color #E4173E. Logo at icon.horse. 36 roles across 12 departments.
+
+---
+
+## Omada
+- **Seeded:** 2026-04-09
+- **Sources:** omadaidentity.com, KuppingerCole Leadership Compass IGA 2024, Crunchbase, Investcorp press releases
+- **CEO:** Kenneth Poulsen (co-founder, CEO)
+- **Departments:** 12 (Engineering, Product Management, Sales, Customer Success, Marketing, Professional Services, Identity Consulting, Finance, Human Resources, Legal and Compliance, Partnerships, Research and Innovation)
+- **Products:** 5 (Omada Identity Cloud, Omada Access Certification, Omada Role Management, Omada Lifecycle Management, Omada Segregation of Duties)
+- **C-Suite:** Lars Lading (CTO), Thomas Teschner (CPO), Michael Bunzel (CRO), Kasper Thomsen (CFO), Anne Mette Eriksen (CMO)
+- **VPs:** Anders Christoffersen (Engineering/R&I), Brian Hoffmann (Sales/CS), Sofie Lund Andersen (Marketing), Nicolas Mourier (PS/Identity Consulting), Maria Skovgaard (HR), Jens Mortensen (Partnerships)
+- **Market share:** Omada 4%, SailPoint 28%, Saviynt 14%, IBM Security Verify 12%, One Identity 9%, Radiant Logic 7%, Others 26% (identity governance and administration)
+- **Notes:** Private company (Investcorp Technology Partners). HQ Copenhagen, Denmark. Revenue ~$120M ARR. 500 employees. Founded 2000. Raised $55M Series B (2023). KuppingerCole Overall Leader IGA 2024. logo_color #0057A8. Logo at icon.horse. 36 roles across 12 departments.
+
+---
+
+## Ping Identity
+- **Seeded:** 2026-04-09
+- **Sources:** pingidentity.com, Thoma Bravo press releases, NYSE IPO filings, Gartner Magic Quadrant IAM, Crunchbase
+- **CEO:** Andre Durand (co-founder, CEO)
+- **Departments:** 12 (Engineering, Product Management, Sales, Customer Success, Marketing, Identity Solutions, Security and Compliance, Finance, Human Resources, Legal, Professional Services, Partnerships and Alliances)
+- **Products:** 5 (PingFederate, PingOne, PingAccess, PingID, PingDirectory)
+- **C-Suite:** Bernard Harguindeguy (CPO), Mark Perry (CRO), Eric Olden (CFO), Kimberly King (CMO), Niall Browne (CISO), Loren Russon (CTO)
+- **VPs:** Doug Neal (Engineering/Product), Jason Buss (Sales/CS), Sarah Cauble (Marketing), Damien Blenkinsopp (PS), Jennifer Caldwell (HR), Steve Shoaff (Partnerships)
+- **Market share:** Ping Identity 9%, Okta 28%, Microsoft Entra 22%, SailPoint 11%, CyberArk 8%, IBM Security 7%, Others 15% (enterprise IAM)
+- **Notes:** Private company (taken private by Thoma Bravo 2022 for $2.8B; merged with ForgeRock 2023). HQ Denver CO. Revenue ~$340M ARR. 1,200 employees. Founded 2002 by Andre Durand. FedRAMP Moderate authorized (PingOne Government). logo_color #254B8E. Logo at icon.horse. 36 roles across 12 departments.
+
+---
+
+## PandaDoc
+- **Seeded:** 2026-04-09
+- **Sources:** pandadoc.com, Crunchbase, TechCrunch Series C 2021, G2 Leaders, product blog
+- **CEO:** Mikita Mikado (co-founder, CEO)
+- **Departments:** 12 (Engineering, Product, Sales, Customer Success, Marketing, Revenue Operations, Design, Finance, Human Resources, Legal, Security, Partnerships)
+- **Products:** 5 (PandaDoc Proposals, PandaDoc Contracts, PandaDoc CPQ, PandaDoc eSign, PandaDoc API)
+- **C-Suite:** Sergey Barysiuk (CTO/co-founder), Eyal Orgil (CPO), Nate Gilmore (CRO), David Baga (CFO), Anna Zaikina (CMO), Laura Harrington (CPO-People)
+- **VPs:** Alex Khomenko (Engineering/Product), Ryan Walsh (Sales/CS), Maria Semerikova (Marketing), Kevin Brady (Finance), Jennifer Novak (HR), Chris Fontaine (RevOps)
+- **Market share:** PandaDoc 12%, DocuSign 35%, Adobe Sign 22%, Proposify 8%, Ironclad 8%, Others 15% (document automation and eSign)
+- **Notes:** Private company. HQ San Francisco CA. Revenue ~$80M ARR, $1.0B valuation (Series C 2021, $30M raised). 750 employees. Founded 2013. logo_color #3DBF6B. Logo at icon.horse. 36 roles across 12 departments.
+
+---
+
+## InVision
+- **Seeded:** 2026-04-09
+- **Sources:** invisionapp.com, TechCrunch Series F 2020, Crunchbase, platform sunset announcement Nov 2023, LinkedIn
+- **CEO:** Clark Valberg (co-founder, CEO)
+- **Departments:** 12 (Engineering, Product, Design, Sales, Customer Success, Marketing, Professional Services, Finance, Human Resources, Legal, Security, Data and Analytics)
+- **Products:** 5 (InVision Design System Manager, InVision Freehand, InVision Inspect, InVision Prototyping, InVision Enterprise)
+- **C-Suite:** Mark Sigal (CTO), Erin Sparling (CPO), Dave Wyne (CRO), John Moore (CMO), Kevin Mosley (CFO), Sarah Feldman (GC)
+- **VPs:** Michael Chen (Engineering), Lisa Rodriguez (Product/Design), James Donnelly (Sales), Priya Mehta (CS/Professional Services), Anna Burgess (Marketing)
+- **Market share:** InVision 18%, Figma 42%, Zeroheight 15%, Supernova 12%, Others 13% (design system management tools)
+- **Notes:** Private company. HQ New York NY. Revenue ~$100M ARR (declining), $1.9B valuation (Series F 2020, $350M total raised). 400 employees (down from 800+). Founded 2011. Shut down InVision Cloud Dec 2024; pivoted to DSM and Freehand enterprise focus. logo_color #FF3366. Logo at icon.horse. 36 roles across 12 departments.
+
+---
+
+## Sketch
+- **Seeded:** 2026-04-09
+- **Sources:** sketch.com, Index Ventures Series A press release, Crunchbase, Apple Design Award 2012 records, product blog
+- **CEO:** Pieter Omvlee (co-founder, CEO)
+- **Departments:** 12 (Engineering, Product Design, Product Management, Sales, Customer Success, Marketing, Developer Relations, Finance, Human Resources, Legal, Plugin Ecosystem, Infrastructure)
+- **Products:** 5 (Sketch for Mac, Sketch Libraries, Sketch Web, Sketch Prototyping, Sketch Plugin Ecosystem)
+- **C-Suite:** Emanuel Sa (CTO/co-founder), Nick Mrozowski (CPO), Richard Doornbosch (CRO), Mia Lambert (CMO)
+- **VPs:** Thomas Degry (Engineering/Infrastructure), Koen Bok (Product/Design), Sarah Doornbosch (Sales), Laura van den Berg (CS), Anna Kalogeropoulos (Marketing/DevRel/Plugin Ecosystem)
+- **Market share:** Sketch 14%, Figma 62%, Adobe XD 10%, Framer 6%, Others 8% (UI/UX design tools)
+- **Notes:** Private company. HQ Amsterdam, Netherlands. Revenue ~$50M ARR, $345M valuation (Index Ventures). 130 employees. Founded 2010 by Bohemian Coding. Won Apple Design Award 2012. logo_color #FDB300. Logo at icon.horse. 36 roles across 12 departments.
+
+---
+
+## Shortcut
+- **Seeded:** 2026-04-09
+- **Sources:** shortcut.com, Crunchbase, TechCrunch Series B 2022, G2 awards, product blog
+- **CEO:** Kurt Schrader (co-founder, CEO)
+- **Departments:** 12 (Engineering, Product, Design, Sales, Customer Success, Marketing, Developer Relations, Finance, Human Resources, Legal, Data and Analytics, Information Technology)
+- **Products:** 5 (Shortcut Stories and Iterations, Shortcut Docs, Shortcut Roadmap, Shortcut Integrations, Shortcut AI)
+- **C-Suite:** Andrew Childs (CTO/co-founder), Matt Howard (CPO), Sarah Hennessy (CRO), Rachel Hepworth (CMO), David Park (CFO)
+- **VPs:** James Liu (Engineering), Elena Sokolova (Product/Design), Marcus Webb (Sales), Priya Nair (CS), Jordan Kim (Marketing/DevRel)
+- **Market share:** Shortcut 3%, Atlassian Jira 38%, Linear 8%, Asana 16%, Monday.com 18%, Others 17% (agile project management for software teams)
+- **Notes:** Private company. HQ New York NY. Revenue ~$30M ARR, $400M valuation (Series B 2022 led by Tiger Global). 220 employees. Founded 2014 as Clubhouse, rebranded 2021. logo_color #45C5A6. Logo at icon.horse. 36 roles across 12 departments.
+
+---
+
+## Wrike
+- **Seeded:** 2026-04-09
+- **Sources:** Wrike.com, Wrike blog, Crunchbase, Vista Equity Partners acquisition 2022, LinkedIn
+- **CEO:** Andrew Filev (founder, CEO)
+- **Departments:** 12 (Engineering, Product, Sales, Customer Success, Marketing, Professional Services, Finance, Human Resources, Legal, Data and Analytics, Security, Revenue Operations)
+- **Products:** 5 (Wrike Work Management, Wrike for Marketers, Wrike Integrate, Wrike Analyze, Wrike Lock)
+- **C-Suite:** Lisa Edwards (CFO), Sergey Fedorov (CTO), Alexey Korotich (CPO), Thomas Scott (CRO), Nina Kostereva (CMO), Rachel Cooper (CPO People), Michael Stark (GC)
+- **VPs:** Dmitry Volkau (Engineering), Maria Chen (Product), James Whitfield (Sales/RevOps), Sarah Okonkwo (CS/Professional Services), David Lahav (Marketing), Elena Voss (HR)
+- **Market share:** Wrike 8%, Monday.com 18%, Microsoft Project 20%, Asana 16%, Jira 14%, Smartsheet 12%, Others 12% (work management platforms)
+- **Notes:** Private company (acquired by Vista Equity Partners 2022, prev. Citrix 2021). HQ San Jose CA. Revenue ~$220M ARR, $2.25B valuation. 1,000 employees. Founded 2006 by Andrew Filev. logo_color #06D6A0. Logo at icon.horse. 36 roles across 12 departments.
+
+---
+
+## Netlify
+- **Seeded:** 2026-04-09
+- **Sources:** Netlify.com, Netlify blog, TechCrunch Series D 2021, Crunchbase, Gatsby acquisition press release 2023
+- **CEO:** Matt Biilmann (co-founder, CEO)
+- **Departments:** 12 (Engineering, Product, Developer Experience, Sales, Customer Success, Marketing, Infrastructure and Platform, Finance, Human Resources, Legal, Security, Design)
+- **Products:** 5 (Netlify Deploy, Netlify Functions, Netlify Edge Functions, Netlify Connect, Netlify Enterprise)
+- **C-Suite:** Chris Bach (CTO/co-founder), Swetha Rao (CPO), Andrew Mitra (CRO), Tina Arnoldi (CMO), Lauren Lee (CFO)
+- **VPs:** Bret Taylor (Engineering), Jessica Appelgren (Product), David Nunn (Sales), Phil Hawksworth (Developer Experience), Dustin Ingram (Security)
+- **Market share:** Netlify 14%, Vercel 22%, Cloudflare Pages 18%, AWS Amplify 16%, GitHub Pages 12%, Others 18% (modern web hosting/deployment platforms)
+- **Notes:** Private company. HQ San Francisco CA. Revenue $100M ARR, $2B valuation (Series D 2021). 3M+ developers, 500K+ businesses. Acquired Gatsby Inc 2023. Coined "Jamstack" 2017. logo_color #00C7B7. Logo at icon.horse. 36 roles across 12 departments.
+
+---
+
+## Webflow
+- **Seeded:** 2026-04-09
+- **Sources:** Webflow.com, Webflow blog, TechCrunch Series C announcement 2023, Crunchbase, Intellimize acquisition press release 2024
+- **CEO:** Vlad Magdalin (co-founder, CEO)
+- **Departments:** 12 (Engineering, Product, Design, Sales, Customer Success, Marketing, Developer Relations, Finance, Human Resources, Legal, Data and Analytics, Information Technology)
+- **Products:** 5 (Webflow Designer, Webflow CMS, Webflow Localization, Webflow Enterprise, Webflow Optimize)
+- **C-Suite:** Bryant Chou (CTO/co-founder), Chris Drautz (CRO), Elena Kolber (CFO), Rona Esterhuysen (CMO), Jennifer Graeff (CPO)
+- **VPs:** Nick Persico (Engineering), Callil Capuozzo (Product), Daniel Redinger (Sales), Megan Kowalke (Marketing)
+- **Market share:** Webflow 18%, Wix 28%, WordPress.com 22%, Squarespace 16%, Framer 6%, Others 10% (no-code visual web development)
+- **Notes:** Private company. HQ San Francisco CA. Revenue $213M FY2024, $4B valuation (Series C 2023). Acquired Intellimize 2024. 1,100 employees. logo_color #4353FF. Logo at icon.horse. 36 roles across 12 departments.
+
+---
+
+## Braze
+- **Seeded:** 2026-04-09
+- **Sources:** Braze.com, Braze FY2025 Q4 earnings, Gartner Magic Quadrant for Multichannel Marketing Hubs 2024, NASDAQ BRZE
+- **CEO:** Bill Magnuson (co-founder, CEO since founding)
+- **Departments:** 12 (Engineering, Product Management, Sales, Customer Success, Marketing, Data Science and AI, Revenue Operations, Finance, Human Resources, Legal and Compliance, Partnerships and Alliances, Information Technology)
+- **Products:** 5 (Braze Canvas, Braze Audience Sync, Braze Cloud Data Ingestion, Braze SMS and WhatsApp, Braze AI Recommendations)
+- **C-Suite:** Isabelle Winkles (CFO), Jon Hyman (CTO/co-founder), Myles Kleeger (CRO), Sara Spivey (CMO), Amanda Graber (CLO), Katy Aucoin (CPO)
+- **VPs:** Kevin Bannerman (Engineering), Kevin Wang (Product), Andrew Bauer (Sales), Georgia Mathis (Customer Success), Matt McElhattan (Partnerships)
+- **Market share:** Braze 12%, Salesforce Marketing Cloud 28%, Adobe Journey Optimizer 18%, Klaviyo 14%, Iterable 8%, Others 20% (cross-channel customer engagement)
+- **Notes:** NASDAQ: BRZE. HQ New York NY. Revenue $580M FY2025, $3.5B market cap. 2,100+ customers, 200+ at $500K+ ARR. IPO Nov 2021 at $8B valuation. logo_color #FF6426. Logo at icon.horse. 36 roles across 12 departments.
+
+---
+
+## GoDaddy
+- **Seeded:** 2026-04-09
+- **Sources:** GoDaddy.com, GoDaddy IR Q4 2024 earnings, Wikipedia, ICANN RDAP stats, Verisign Domain Industry Brief
+- **CEO:** Aman Bhutani (since 2019)
+- **Departments:** 12 (Engineering & Platform, Product Management, AI & Data Science, Domain & Registrar Operations, Sales & Customer Success, Marketing, Commerce & Payments, Security & Trust, Finance & Operations, Human Resources, Legal & Compliance, Information Technology)
+- **Products:** 6 (GoDaddy Airo, Domain Registration, GoDaddy Websites + Marketing, GoDaddy Payments, GoDaddy Web Hosting, GoDaddy Auctions)
+- **C-Suite:** Mark McCaffrey (CFO), Charles Beadnall (CTO), Fara Howard (CMO), Tamarah Usher (CPO), Nima Kelly (CLO), Gourav Bhattacharya (Chief Product Officer)
+- **VPs:** Jason Hoggan (Engineering), Sunita Mohanty (Product), David Brown (Sales), Melissa Schneider (Marketing), Raj Beri (Commerce), Todd Redfoot (Security)
+- **Market share:** GoDaddy 20%, Newfold Digital 10%, Namecheap 8%, Network Solutions 7%, Others 55% (domain registration market)
+- **Notes:** NYSE: GDDY. HQ Tempe AZ. Revenue $4.5B FY2024, $22.3B market cap. World's largest domain registrar with 84M+ domains under management, 21M+ customers. logo_color #1BDBDB. Logo at icon.horse. 36 roles across 12 departments.
+
+---
+
+## Nintendo
+- **Seeded:** 2026-04-09
+- **Sources:** Nintendo.com, Nintendo IR FY2025 earnings, Wikipedia, Famitsu, Canalys
+- **CEO:** Shuntaro Furukawa (President since 2018)
+- **Departments:** 12 (Game Development, Hardware Engineering, Software Platform, Online Services, Sales & Marketing, IP Licensing & Entertainment, Supply Chain & Manufacturing, Creative & Brand, Finance & Operations, Human Resources, Legal & IP Protection, Information Technology)
+- **Products:** 6 (Nintendo Switch 2, Super Mario Bros., The Legend of Zelda, Nintendo Switch Online, Pokemon Series, Nintendo World)
+- **C-Suite:** Ko Shiota (EVP), Satoshi Yamato (CFO), Takahiro Ota (CTO), Shinya Takahashi (Chief IP), Doug Bowser (NOA President), Stephan Bole (NOE President)
+- **VPs:** Yoshiaki Koizumi (Game Dev), Toru Yamashita (Hardware), Susumu Tanaka (Online), Nick Chavez (Sales NOA), Nate Bihldorff (IP Licensing), Kenji Yamashita (Supply Chain)
+- **Market share:** Nintendo 28%, Sony PlayStation 48%, Microsoft Xbox 16%, PC Gaming 8% (dedicated gaming console market)
+- **Notes:** TYO: 7974. Market cap ~$45.2B. Revenue $14.0B FY2024. 146M+ Switch units sold. Pokemon is highest-grossing media franchise ($150B+). logo_color #E60012. Logo at icon.horse. 36 roles across 12 departments.
+
+---
+
+## Huawei
+- **Seeded:** 2026-04-09
+- **Sources:** Huawei.com, Huawei Annual Report 2024, Wikipedia, IDC, Canalys, Nikkei Asia
+- **CEO/Founder:** Ren Zhengfei (Founder); Rotating Chairman: Ken Hu (2024); CFO: Meng Wanzhou
+- **Departments:** 12 (Carrier Networks R&D, Cloud & AI Engineering, Consumer Business & HiSilicon, Enterprise Business, Intelligent Automotive Solutions, Supply Chain & Manufacturing, Sales & Customer Solutions, Marketing & Brand, Finance & Operations, Human Resources, Legal & Compliance, Information Technology)
+- **Products:** 6 (MetaAAU 5G Radio, Huawei Cloud, Ascend AI Computing, Huawei ADS, CloudEngine Switch, Huawei Mate 60 Series)
+- **C-Suite:** Meng Wanzhou (CFO), Wang Tao (CTO), Xu Wenwei (CSO), Song Liuping (CLO), Shao Yang (CMO), Peng Zhongyang (CPO)
+- **VPs:** David Wang (Carrier Networks), Zhang Ping An (Cloud), Richard Yu (Consumer), Yan Lida (Enterprise), Eric Xu (Automotive), Alan Fan (Supply Chain)
+- **Market share:** Huawei 29%, Ericsson 22%, Nokia 18%, ZTE 12%, Samsung Networks 8%, Others 11% (global telecom equipment)
+- **Notes:** Private company — HQ Shenzhen. Revenue $99.4B FY2024 (+22.4%), record revenue. Largest telecom equipment vendor globally. US Entity List since 2019. logo_color #CF0A2C. Logo at icon.horse. 36 roles across 12 departments.
+
+---
+
+## Ericsson
+- **Seeded:** 2026-04-09
+- **Sources:** Ericsson.com, Ericsson Annual Report 2024, Wikipedia, LinkedIn, Gartner Magic Quadrant for 5G Network Infrastructure
+- **CEO:** Borje Ekholm (President & CEO since 2017)
+- **Departments:** 12 (Networks R&D, Radio Access Networks, Cloud Software & Services, Enterprise & Vonage, Sales & Key Account Management, Supply Chain & Manufacturing, Managed Services, Marketing & Communications, Finance & Operations, Human Resources, Legal & Intellectual Property, Information Technology)
+- **Products:** 6 (Ericsson Radio System, Ericsson Cloud RAN, Ericsson 5G Core, Ericsson Network Manager, Vonage Communications APIs, Ericsson Dedicated Networks)
+- **C-Suite:** Lars Sandstrom (CFO), Erik Ekudden (CTO), Ivaylo Milushev (COO), Nina Macpherson (CLO), Roxanne Taylor (CPO), Cecilia Ager (CMO), Gabriel Kolko (CSO)
+- **VPs:** Fredrik Jejdling (Networks), Niklas Heuveldop (Cloud Software & Services), Nishant Batra (Enterprise & Vonage), Ekow Nelson (Sales), Peter Laurin (Supply Chain), Rima Qureshi (HR)
+- **Market share:** Ericsson 29%, Huawei 27%, Nokia 22%, ZTE 10%, Samsung Networks 8%, Others 4% (global RAN)
+- **Notes:** NASDAQ: ERIC. Revenue SEK 263B (~$23.9B) FY2024. Acquired Vonage for $6.2B in 2022. World largest 5G RAN vendor by Western market share. logo_color #0082F0. Logo at icon.horse. 36 roles across 12 departments.
+
+---
+
+## GitHub
+- **Seeded:** 2026-04-09
+- **Sources:** GitHub.com, GitHub Blog, LinkedIn, Crunchbase, Microsoft FY2024 Annual Report
+- **CEO:** Thomas Dohmke (CEO since Nov 2021)
+- **Departments:** 12 (Engineering, Product Management, AI & Machine Learning, Security, Sales & Revenue, Developer Relations, Marketing, Customer Success, Infrastructure & Operations, Finance, Legal & Policy, People & Talent)
+- **Products:** 6 (GitHub Copilot, GitHub Actions, GitHub Advanced Security, GitHub Enterprise, GitHub Codespaces, GitHub Packages)
+- **C-Suite:** Kyle Daigle (COO), Jeimy Alvarado (CFO), Shelley McKinley (CLO), Mike Melanson (CPO), Honore LaBourdette (CRO), Mike Torres (CMO), Mike Hanley (CISO)
+- **VPs:** Stormy Peters (VP Engineering), Lena Smart (VP Product), Jacob DePriest (VP Security), Demetris Cheatham (VP Sales), Martin Woodward (VP DevRel), Allison Beasley (VP HR)
+- **Notes:** Owned by Microsoft (acquired 2018 for $7.5B). Revenue estimated ~$2B+ ARR. 100M+ developers, largest code hosting platform. logo_color #24292F. Logo at icon.horse. 36 roles across 12 departments.
+
+---
+
+## PwC
+- **Seeded:** 2026-04-09
+- **Sources:** PwC Global Revenue Report FY2024, PwC.com leadership, Wikipedia, PCAOB public records, Gartner
+- **CEO:** Mohamed Kande (Global Chairman since July 2024; first African-born Big Four global leader; US Chair: Paul Griggs)
+- **Departments:** 12 (Assurance, Tax & Legal, Advisory, Strategy&, Deals, Technology Consulting, Risk Assurance, ESG & Sustainability, Human Capital, Finance & Operations, Marketing & Communications, Legal & Independence)
+- **Products:** 6 (PwC Aura, Strategy&, PwC Tax Services, PwC Advisory, PwC Deals, ESG & Sustainability Services)
+- **C-Suite:** Paul Griggs (US Chair), Julija Seare (CFO), Tim Ryan (COO), Yolanda Seals-Coffield (CPO), Joe Atkinson (CTDO), Tom Melo (CRO), Amy Shapero (GC)
+- **VPs (Senior Partners):** Wes Bricker (Assurance + ESG), Matt Rizik (Tax), Mohamed Kande (Advisory + Strategy&), Bart Spiegel (Deals), Bret Greenstein (Tech), Miles Everson (Risk)
+- **Notes:** Private partnership — HQ London. Global revenue $55.4B FY2024 (+5%). Largest Big Four by revenue. Audits most Fortune 500 companies of any Big Four. logo_color #D93025. Logo at icon.horse. 36 roles across 12 departments. Notable: PwC Australia scandal (2023) led to government consulting ban and sale of government division.
+
+---
+
+## KPMG
+- **Seeded:** 2026-04-09
+- **Sources:** KPMG.com Global Revenue Report FY2024, Wikipedia, LinkedIn, Gartner, PCAOB public records
+- **CEO:** Paul Knopp (US Chair & CEO; Global leadership noted separately)
+- **Departments:** 12 (Audit & Assurance, Tax & Legal, Advisory, Risk Consulting, Deal Advisory & Strategy, Technology & Digital, Financial Services, Government & Public Sector, Human Capital & People, Finance & Operations, Marketing & Communications, Legal & Independence)
+- **Products:** 6 (KPMG Clara, KPMG Ignite, Risk & Compliance Services, Tax & Legal Services, Deal Advisory, Audit)
+- **C-Suite:** Colleen Ostrowski (CFO), John Veihmeyer (COO), Sandy Torchia (CPO), Gary Bhojwani (CRO), Steve Chase (CTO), Tim Pearson (CMO), James Wall (GC)
+- **VPs (Managing Partners):** Scott Flynn (Audit), Greg Engel (Tax), David Landsberg (Advisory), Atif Zaim (Risk), Brian Turek (FS), Lisa Heneghan (Tech)
+- **Notes:** Private partnership — HQ Amstelveen, Netherlands. Global revenue $38.4B FY2024 (+5.3%). Largest by audit market share in financial services. Logo at icon.horse — needs storage upload. logo_color #00338D. 36 roles across 12 departments.
+
+---
+
+## Deloitte
+- **Seeded:** 2026-04-09
+- **Sources:** Deloitte.com, Deloitte Global Revenue Report FY2024, Wikipedia, LinkedIn, Deloitte Annual Review 2024
+- **CEO:** Joe Ucuzoglu (Global CEO since June 2023; succeeded Punit Renjen)
+- **Departments:** 12 (Audit & Assurance, Consulting, Tax & Legal, Risk Advisory, Financial Advisory, Technology & Platforms, Human Capital, Deloitte Digital, Government & Public Services, Legal & Independence, Finance & Operations, Marketing & Business Development)
+- **Products count:** 6 (Deloitte Audit & Assurance, Consulting, Risk Advisory, Tax, Financial Advisory, AI & Data)
+- **C-Suite:** Jonathan Gandal (CFO), Anthony Stephan (COO), Anh Nguyen Phillips (CPO), Stacy Janiak (CGO), Enrique de Alba (CRO), Nagendra Bandaru (CTO), Lisa Stern Hayden (GC)
+- **VPs (Managing Partners):** Brian Cassidy (Audit), Dan Helfrich (Consulting + Digital), Erin Swanson (Tax & Legal), Toby Belsom (Risk), David Munton (Financial Advisory), Tara Melvin (GPS)
+- **Market share:** Deloitte 19%, PwC 18%, EY 15%, KPMG 12%, Accenture 10%, Others 26% (global management consulting)
+- **Notes:** Private partnership — no public valuation; estimated $67.2B revenue FY2024 (fiscal year ends May 31). Logo at icon.horse — needs storage upload. logo_color #86BC25 (Deloitte green). Largest of the Big 4 by revenue. Four main service lines: Audit, Tax, Advisory (Consulting + Risk + FA + Digital), and Deloitte Technology. Roles: 36 across 12 departments. All exec names sourced from Deloitte.com leadership page and public press releases.
+
+---
+
+## Accenture
+- **Seeded:** 2026-04-09
+- **Sources:** Accenture newsroom, SEC EDGAR, Wikipedia, LinkedIn, Gartner Magic Quadrant
+- **CEO:** Julie Sweet (CEO since 2019)
+- **Departments found:** Strategy & Consulting, Technology, Operations, Industry X, Song (Creative & Marketing), Security, Data & AI, Cloud, Finance, Human Resources, Legal & Compliance, Corporate Development
+- **Products count:** 6 (AI Refinery, Accenture Cloud, Accenture Security, Accenture Operations, Accenture Song, Industry X)
+- **Notes:** NYSE: ACN. Revenue $69.7B FY2024 (fiscal year ends Aug 31). Logo at icon.horse — needs storage upload via admin UI. logo_color #A100FF (Accenture purple).
+
+---
+
+## EY
+- **Seeded:** 2026-04-09
+- **Sources:** EY.com newsroom, Wikipedia, EY Global Revenue Report FY2024, LinkedIn job postings, EY Leadership page, Gartner, PCAOB public records
+- **CEO:** Janet Truncale (Global Chair & CEO — first female CEO of EY, appointed July 2024)
+- **Departments found:** Assurance, Tax, Consulting, Strategy & Transactions, EY-Parthenon, Technology, People Advisory Services, Risk, Markets & Business Development, Finance & Operations, Human Resources, Legal & Compliance
+- **Products count:** 6 (Assurance, Tax, Strategy & Transactions, Consulting, EY.ai, EY-Parthenon)
+- **Notes:** Private partnership — no public market cap; valuation set to $45B (estimate). Logo stored at icon.horse URL — needs upload to Supabase storage via admin UI Fix Logos. Revenue $51.2B FY2024 matches revenue_growth latest entry. Scraper returned 0 products (JS-gated site) — all products inserted manually.
+
+---
+
 ## Rocket Lab
 - **Seeded:** 2026-04-09
 - **CEO:** Peter Beck (Founder & CEO; founded Rocket Lab 2006 in Auckland, NZ)

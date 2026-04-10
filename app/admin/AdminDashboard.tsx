@@ -17,7 +17,10 @@ import {
   adminUpsertRole, adminDeleteRole,
   adminUpsertExecGroup, adminDeleteExecGroup,
   adminSeedCompanyContent,
+  adminGetCareerRoles, adminUpsertCareerRole, adminDeleteCareerRole,
+  type CareerRole,
 } from '@/app/actions/admin'
+import BlogAdmin from '@/app/admin/BlogAdmin'
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -42,7 +45,7 @@ interface Props {
   analytics: { views: { company_id: string; companies: { name: string } | { name: string }[] | null }[]; saves: { company_id: string; companies: { name: string } | { name: string }[] | null; created_at: string | null }[] }
 }
 
-type NavSection = 'companies' | 'content' | 'users' | 'analytics' | 'data'
+type NavSection = 'companies' | 'content' | 'users' | 'analytics' | 'data' | 'blog' | 'careers'
 type ContentTab = 'news' | 'milestones' | 'products' | 'financials' | 'standards' | 'departments' | 'roles' | 'exec_groups'
 
 const PLANS = ['Free', 'Pro', 'Admin', 'SuperAdmin']
@@ -265,7 +268,7 @@ function RoleCardList({
                 <div className="admin-form-grid-3" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 10, marginTop: 12 }}>
                   {/* Tools */}
                   <div style={{ padding: 10, borderRadius: 8, background: '#fff', border: '1px solid #E4E4E7' }}>
-                    <div style={{ fontSize: 9.5, fontWeight: 800, color: '#71717A', textTransform: 'uppercase', letterSpacing: '0.09em', marginBottom: 7 }}>🔧 Tools</div>
+                    <div style={{ fontSize: 9.5, fontWeight: 800, color: '#71717A', textTransform: 'uppercase', letterSpacing: '0.09em', marginBottom: 7, display: 'flex', alignItems: 'center', gap: 4 }}><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>Tools</div>
                     {tools.length > 0
                       ? <div style={{ display: 'flex', flexWrap: 'wrap', gap: 4 }}>
                           {tools.map(t => <span key={t} style={{ padding: '2px 7px', borderRadius: 4, background: '#F4F4F5', border: '1px solid #E4E4E7', color: '#374151', fontSize: 11 }}>{t}</span>)}
@@ -275,7 +278,7 @@ function RoleCardList({
                   </div>
                   {/* Key Skills */}
                   <div style={{ padding: 10, borderRadius: 8, background: '#fff', border: '1px solid #E4E4E7' }}>
-                    <div style={{ fontSize: 9.5, fontWeight: 800, color: '#71717A', textTransform: 'uppercase', letterSpacing: '0.09em', marginBottom: 7 }}>⚡ Key Skills</div>
+                    <div style={{ fontSize: 9.5, fontWeight: 800, color: '#71717A', textTransform: 'uppercase', letterSpacing: '0.09em', marginBottom: 7, display: 'flex', alignItems: 'center', gap: 4 }}><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>Key Skills</div>
                     {skills.length > 0
                       ? <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
                           {skills.map(s => <span key={s} style={{ padding: '2px 7px', borderRadius: 4, background: '#EFF6FF', border: '1px solid #BFDBFE', color: '#1D4ED8', fontSize: 11 }}>{s}</span>)}
@@ -285,7 +288,7 @@ function RoleCardList({
                   </div>
                   {/* Processes */}
                   <div style={{ padding: 10, borderRadius: 8, background: '#fff', border: '1px solid #E4E4E7' }}>
-                    <div style={{ fontSize: 9.5, fontWeight: 800, color: '#71717A', textTransform: 'uppercase', letterSpacing: '0.09em', marginBottom: 7 }}>⚙️ Processes</div>
+                    <div style={{ fontSize: 9.5, fontWeight: 800, color: '#71717A', textTransform: 'uppercase', letterSpacing: '0.09em', marginBottom: 7, display: 'flex', alignItems: 'center', gap: 4 }}><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/></svg>Processes</div>
                     {procs.length > 0
                       ? <div style={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
                           {procs.map(p => <div key={p} style={{ display: 'flex', gap: 5, alignItems: 'flex-start' }}>
@@ -300,7 +303,7 @@ function RoleCardList({
                 {/* Interview questions preview */}
                 {qs.length > 0 && (
                   <div style={{ marginTop: 10, padding: 10, borderRadius: 8, background: '#fff', border: '1px solid #E4E4E7' }}>
-                    <div style={{ fontSize: 9.5, fontWeight: 800, color: '#71717A', textTransform: 'uppercase', letterSpacing: '0.09em', marginBottom: 7 }}>🎯 Interview Questions ({qs.length})</div>
+                    <div style={{ fontSize: 9.5, fontWeight: 800, color: '#71717A', textTransform: 'uppercase', letterSpacing: '0.09em', marginBottom: 7, display: 'flex', alignItems: 'center', gap: 4 }}><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>Interview Questions ({qs.length})</div>
                     <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
                       {qs.slice(0, 3).map((q, qi) => (
                         <div key={qi} style={{ display: 'flex', gap: 7, alignItems: 'flex-start' }}>
@@ -463,7 +466,9 @@ function LogoField({
           </>
         ) : (
           <div style={{ textAlign: 'center' }}>
-            <div style={{ fontSize: 22, marginBottom: 4 }}>🖼</div>
+            <div style={{ marginBottom: 4, color: '#A1A1AA', display: 'flex', justifyContent: 'center' }}>
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+            </div>
             <div style={{ fontSize: 12, color: '#71717A' }}>{uploading ? 'Uploading…' : 'Click or drag an image'}</div>
             <div style={{ fontSize: 10.5, color: '#A1A1AA', marginTop: 2 }}>PNG · JPG · SVG · WebP · max 512 KB</div>
           </div>
@@ -814,7 +819,8 @@ function UsersSection({ profiles, onPlanUpdate }: { profiles: Profile[]; onPlanU
                 onMouseEnter={e => { if (!pending) (e.currentTarget as HTMLElement).style.background = '#dbeafa' }}
                 onMouseLeave={e => { if (!pending) (e.currentTarget as HTMLElement).style.background = '#eef4fb' }}
               >
-                🔄 Reset Monthly Token
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" style={{ display: 'inline', marginRight: 5, verticalAlign: 'middle' }}><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.51"/></svg>
+                Reset Monthly Token
               </button>
             </div>
           )}
@@ -1823,6 +1829,111 @@ function DataSection() {
           </div>
         )}
       </div>
+
+    </div>
+  )
+}
+
+// ─── Careers Section ─────────────────────────────────────────────────────────
+
+function CareersSection() {
+  const [roles, setRoles] = useState<CareerRole[]>([])
+  const [loading, setLoading] = useState(true)
+  const [isPending, startTransition] = useTransition()
+  const [editing, setEditing] = useState<Partial<CareerRole> | null>(null)
+  const [form, setForm] = useState({ title: '', team: '', type: 'Full-time · Hybrid', description: '', is_active: true })
+
+  useEffect(() => {
+    adminGetCareerRoles().then(res => { setRoles(res.data); setLoading(false) })
+  }, [])
+
+  function openNew() {
+    setEditing({})
+    setForm({ title: '', team: '', type: 'Full-time · Hybrid', description: '', is_active: true })
+  }
+
+  function openEdit(r: CareerRole) {
+    setEditing(r)
+    setForm({ title: r.title, team: r.team, type: r.type, description: r.description, is_active: r.is_active })
+  }
+
+  function handleSave() {
+    startTransition(async () => {
+      const { error } = await adminUpsertCareerRole({ ...(editing?.id ? { id: editing.id } : {}), ...form })
+      if (!error) { const res = await adminGetCareerRoles(); setRoles(res.data); setEditing(null) }
+    })
+  }
+
+  function handleDelete(id: string) {
+    if (!confirm('Delete this role?')) return
+    startTransition(async () => {
+      await adminDeleteCareerRole(id)
+      setRoles(prev => prev.filter(r => r.id !== id))
+    })
+  }
+
+  if (loading) return <div style={{ color: '#A1A1AA', fontSize: 13, padding: 24 }}>Loading…</div>
+
+  return (
+    <div>
+      <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: 16 }}>
+        <button onClick={openNew} style={{ padding: '8px 18px', borderRadius: 8, background: '#063f76', color: '#fff', border: 'none', fontSize: 13, fontWeight: 700, cursor: 'pointer' }}>
+          + Add Role
+        </button>
+      </div>
+
+      {roles.length === 0 && !editing && (
+        <div style={{ textAlign: 'center', padding: '60px 0', color: '#A1A1AA', fontSize: 13 }}>No roles yet. Click &quot;Add Role&quot; to create one.</div>
+      )}
+
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 10, marginBottom: editing ? 24 : 0 }}>
+        {roles.map(r => (
+          <div key={r.id} style={{ display: 'flex', alignItems: 'center', gap: 14, padding: '14px 18px', background: '#fff', borderRadius: 11, border: '1.5px solid #EBEBED', boxShadow: '0 1px 4px rgba(0,0,0,0.04)' }}>
+            <div style={{ flex: 1, minWidth: 0 }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 3 }}>
+                <span style={{ fontSize: 14, fontWeight: 700, color: '#09090B', letterSpacing: '-0.02em' }}>{r.title}</span>
+                <Badge label={r.team} color="#063f76" />
+                {!r.is_active && <Badge label="Hidden" color="#A1A1AA" />}
+              </div>
+              <div style={{ fontSize: 12, color: '#71717A' }}>{r.type} · {r.description.slice(0, 80)}{r.description.length > 80 ? '…' : ''}</div>
+            </div>
+            <div style={{ display: 'flex', gap: 8, flexShrink: 0 }}>
+              <button onClick={() => openEdit(r)} style={{ padding: '5px 12px', borderRadius: 7, border: '1px solid #E4E4E7', background: '#fff', fontSize: 12, fontWeight: 600, color: '#52525B', cursor: 'pointer' }}>Edit</button>
+              <button onClick={() => handleDelete(r.id)} style={{ padding: '5px 12px', borderRadius: 7, border: '1px solid #FCA5A5', background: '#FFF5F5', fontSize: 12, fontWeight: 600, color: '#DC2626', cursor: 'pointer' }}>Delete</button>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {editing !== null && (
+        <div style={{ background: '#fff', borderRadius: 13, border: '1.5px solid #a8cbe8', padding: '22px 24px', marginTop: 8 }}>
+          <div style={{ fontSize: 14, fontWeight: 800, color: '#063f76', marginBottom: 18 }}>{editing.id ? 'Edit Role' : 'New Role'}</div>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14, marginBottom: 14 }}>
+            {([['title', 'Job Title'], ['team', 'Team'], ['type', 'Employment Type']] as [keyof typeof form, string][]).map(([k, label]) => (
+              <div key={k} style={{ gridColumn: k === 'type' ? '1 / -1' : undefined }}>
+                <label style={{ display: 'block', fontSize: 11, fontWeight: 700, color: '#A1A1AA', marginBottom: 5, textTransform: 'uppercase', letterSpacing: '0.06em' }}>{label}</label>
+                <input value={form[k] as string} onChange={e => setForm(f => ({ ...f, [k]: e.target.value }))}
+                  style={{ width: '100%', boxSizing: 'border-box', padding: '8px 11px', border: '1.5px solid #E4E4E7', borderRadius: 8, fontSize: 13, color: '#09090B', outline: 'none' }} />
+              </div>
+            ))}
+          </div>
+          <div style={{ marginBottom: 14 }}>
+            <label style={{ display: 'block', fontSize: 11, fontWeight: 700, color: '#A1A1AA', marginBottom: 5, textTransform: 'uppercase', letterSpacing: '0.06em' }}>Description</label>
+            <textarea value={form.description} onChange={e => setForm(f => ({ ...f, description: e.target.value }))} rows={3}
+              style={{ width: '100%', boxSizing: 'border-box', padding: '8px 11px', border: '1.5px solid #E4E4E7', borderRadius: 8, fontSize: 13, color: '#09090B', outline: 'none', resize: 'vertical' }} />
+          </div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 18 }}>
+            <input type="checkbox" id="is_active" checked={form.is_active} onChange={e => setForm(f => ({ ...f, is_active: e.target.checked }))} />
+            <label htmlFor="is_active" style={{ fontSize: 13, color: '#52525B', cursor: 'pointer' }}>Visible on careers page</label>
+          </div>
+          <div style={{ display: 'flex', gap: 10 }}>
+            <button onClick={handleSave} disabled={isPending} style={{ padding: '8px 20px', borderRadius: 8, background: '#063f76', color: '#fff', border: 'none', fontSize: 13, fontWeight: 700, cursor: 'pointer' }}>
+              {isPending ? 'Saving…' : 'Save Role'}
+            </button>
+            <button onClick={() => setEditing(null)} style={{ padding: '8px 16px', borderRadius: 8, border: '1px solid #E4E4E7', background: '#fff', fontSize: 13, color: '#52525B', cursor: 'pointer' }}>Cancel</button>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
@@ -1890,6 +2001,10 @@ export default function AdminDashboard({ currentUser, initialCompanies, initialP
           <SectionTitle>Analytics</SectionTitle>
           <NavItem label="Views & Saves" active={nav === 'analytics'} onClick={() => { setNav('analytics'); setSidebarOpen(false) }} />
 
+          <SectionTitle>Content</SectionTitle>
+          <NavItem label="Blog Posts" active={nav === 'blog'} onClick={() => { setNav('blog'); setSidebarOpen(false) }} count={undefined} />
+          <NavItem label="Career Roles" active={nav === 'careers'} onClick={() => { setNav('careers'); setSidebarOpen(false) }} />
+
           <SectionTitle>Data Management</SectionTitle>
           <NavItem label="Data" active={nav === 'data'} onClick={() => { setNav('data'); setSidebarOpen(false) }} />
 
@@ -1915,7 +2030,7 @@ export default function AdminDashboard({ currentUser, initialCompanies, initialP
           {/* Page title */}
           <div style={{ marginBottom: 20 }}>
             <div style={{ fontSize: 20, fontWeight: 800, color: '#09090B', letterSpacing: '-0.04em' }}>
-              {nav === 'companies' ? 'Companies' : nav === 'content' ? 'Company Content' : nav === 'users' ? 'Users' : nav === 'data' ? 'Data Management' : 'Analytics'}
+              {nav === 'companies' ? 'Companies' : nav === 'content' ? 'Company Content' : nav === 'users' ? 'Users' : nav === 'data' ? 'Data Management' : nav === 'blog' ? 'Blog Posts' : nav === 'careers' ? 'Career Roles' : 'Analytics'}
             </div>
             <div style={{ fontSize: 12.5, color: '#A1A1AA', marginTop: 2 }}>
               {nav === 'companies' && `${companies.length} companies in the database`}
@@ -1923,6 +2038,8 @@ export default function AdminDashboard({ currentUser, initialCompanies, initialP
               {nav === 'users' && `${profiles.length} registered users`}
               {nav === 'analytics' && 'Company view and save activity'}
               {nav === 'data' && 'Run global seed or bulk-add companies via CSV'}
+              {nav === 'blog' && 'Create, edit, and publish blog posts'}
+              {nav === 'careers' && 'Manage open roles shown on the careers page'}
             </div>
           </div>
 
@@ -1931,6 +2048,8 @@ export default function AdminDashboard({ currentUser, initialCompanies, initialP
           {nav === 'users' && <UsersSection profiles={profiles} onPlanUpdate={handlePlanUpdate} />}
           {nav === 'analytics' && <AnalyticsSection analytics={analytics} />}
           {nav === 'data' && <DataSection />}
+          {nav === 'blog' && <BlogAdmin />}
+          {nav === 'careers' && <CareersSection />}
         </div>
       </div>
 
