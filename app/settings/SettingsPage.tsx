@@ -102,7 +102,7 @@ export default function SettingsPage({ user, profile, isPro }: Props) {
     setResetPending(true)
     const supabase = createClient()
     await supabase.auth.resetPasswordForEmail(user.email!, {
-      redirectTo: `${window.location.origin}/reset-password`,
+      redirectTo: `${(process.env.NEXT_PUBLIC_SITE_URL ?? window.location.origin)}/reset-password`,
     })
     setResetSent(true)
     setResetPending(false)
