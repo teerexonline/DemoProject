@@ -18,6 +18,7 @@ import {
   adminUpsertExecGroup, adminDeleteExecGroup,
   adminSeedCompanyContent,
   adminGetCareerRoles, adminUpsertCareerRole, adminDeleteCareerRole,
+  adminDeleteUser,
   type CareerRole,
 } from '@/app/actions/admin'
 import BlogAdmin from '@/app/admin/BlogAdmin'
@@ -706,9 +707,10 @@ function CompaniesSection({ companies, onRefresh, onViewContent }: { companies: 
 }
 
 // Users
-function UsersSection({ profiles, onPlanUpdate }: { profiles: Profile[]; onPlanUpdate: (id: string, fields: Partial<Profile>) => void }) {
+function UsersSection({ profiles, onPlanUpdate, onDelete }: { profiles: Profile[]; onPlanUpdate: (id: string, fields: Partial<Profile>) => void; onDelete: (id: string) => void }) {
   const [editing, setEditing] = useState<Profile | null>(null)
   const [form, setForm] = useState({ name: '', job_role: '', job_company: '', plan: 'Free' })
+  const [confirmDelete, setConfirmDelete] = useState(false)
   const [pending, startTx] = useTransition()
   const [msg, setMsg] = useState('')
 
@@ -824,6 +826,62 @@ function UsersSection({ profiles, onPlanUpdate }: { profiles: Profile[]; onPlanU
               </button>
             </div>
           )}
+          {/* Delete user */}
+          <div style={{ marginTop: 24, paddingTop: 16, borderTop: '1px solid #FEE2E2' }}>
+            {!confirmDelete ? (
+              <button
+                onClick={() => setConfirmDelete(true)}
+                style={{
+                  width: '100%', padding: '8px 12px', borderRadius: 8,
+                  border: '1px solid #FCA5A5', background: '#FFF5F5',
+                  color: '#EF4444', fontSize: 12.5, fontWeight: 600,
+                  cursor: 'pointer', transition: 'background 0.15s',
+                }}
+                onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = '#FEE2E2' }}
+                onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = '#FFF5F5' }}
+              >
+                Delete User
+              </button>
+            ) : (
+              <div>
+                <div style={{ fontSize: 12.5, color: '#EF4444', fontWeight: 600, marginBottom: 8 }}>
+                  Are you sure? This permanently deletes the account and cannot be undone.
+                </div>
+                <div style={{ display: 'flex', gap: 8 }}>
+                  <button
+                    onClick={() => setConfirmDelete(false)}
+                    style={{
+                      flex: 1, padding: '8px', borderRadius: 8,
+                      border: '1px solid #E4E4E7', background: '#F7F7F8',
+                      color: '#52525B', fontSize: 12.5, fontWeight: 600, cursor: 'pointer',
+                    }}
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    disabled={pending}
+                    onClick={() => {
+                      startTx(async () => {
+                        const res = await adminDeleteUser(editing!.id)
+                        if (res.error) { setMsg(res.error); setConfirmDelete(false); return }
+                        onDelete(editing!.id)
+                        setEditing(null)
+                        setConfirmDelete(false)
+                      })
+                    }}
+                    style={{
+                      flex: 1, padding: '8px', borderRadius: 8,
+                      border: '1px solid #EF4444', background: '#EF4444',
+                      color: '#fff', fontSize: 12.5, fontWeight: 600,
+                      cursor: pending ? 'not-allowed' : 'pointer',
+                    }}
+                  >
+                    {pending ? 'Deleting...' : 'Confirm Delete'}
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
         </SlideOver>
       )}
     </div>
@@ -1956,6 +2014,10 @@ export default function AdminDashboard({ currentUser, initialCompanies, initialP
     setProfiles(prev => prev.map(p => p.id === id ? { ...p, ...fields } : p))
   }
 
+  function handleDeleteUser(id: string) {
+    setProfiles(prev => prev.filter(p => p.id !== id))
+  }
+
   const isSuperAdmin = currentUser.plan === 'SuperAdmin'
 
   return (
@@ -2045,7 +2107,7 @@ export default function AdminDashboard({ currentUser, initialCompanies, initialP
 
           {nav === 'companies' && <CompaniesSection companies={companies} onRefresh={setCompanies} onViewContent={handleViewContent} />}
           {nav === 'content' && <ContentSection companies={companies} initialSelectedId={contentCompanyId} />}
-          {nav === 'users' && <UsersSection profiles={profiles} onPlanUpdate={handlePlanUpdate} />}
+          {nav === 'users' && <UsersSection profiles={profiles} onPlanUpdate={handlePlanUpdate} onDelete={handleDeleteUser} />}
           {nav === 'analytics' && <AnalyticsSection analytics={analytics} />}
           {nav === 'data' && <DataSection />}
           {nav === 'blog' && <BlogAdmin />}

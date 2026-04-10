@@ -2,6 +2,7 @@
 
 import { revalidatePath } from 'next/cache'
 import { createClient } from '@/lib/supabase/server'
+import { createAdminClient } from '@/lib/supabase/admin'
 
 // ─── Auth guard ───────────────────────────────────────────────────────────────
 
@@ -97,6 +98,15 @@ export async function adminResetUserToken(userId: string) {
     .from('profiles')
     .update({ free_token_reset_at: new Date().toISOString() })
     .eq('id', userId)
+  revalidatePath('/admin')
+  return error ? { error: error.message } : { error: null }
+}
+
+export async function adminDeleteUser(userId: string) {
+  await requireAdmin()
+  const adminClient = createAdminClient()
+  // Delete from auth.users — cascades to profiles via FK
+  const { error } = await adminClient.auth.admin.deleteUser(userId)
   revalidatePath('/admin')
   return error ? { error: error.message } : { error: null }
 }
