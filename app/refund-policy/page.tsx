@@ -13,40 +13,18 @@ const sections: LegalSection[] = [
     title: 'Overview',
     content: (
       <div className="legal-content">
-        <p>ResearchOrg offers a free plan with no payment required. Paid Pro subscriptions are processed through Paddle, our authorized reseller and Merchant of Record. This policy explains when refunds are available and how to request them.</p>
+        <p>ResearchOrg offers a free plan with no payment required. Paid Pro subscriptions are processed through Paddle, our authorized reseller and Merchant of Record. This policy explains our refund terms.</p>
         <p>By subscribing to a Pro plan, you agree to this Refund Policy as part of our <a href="/terms">Terms of Service</a>.</p>
       </div>
     ),
   },
   {
-    id: 'no-refund',
-    title: 'General No-Refund Policy',
+    id: 'refund-window',
+    title: 'Refund Window',
     content: (
       <div className="legal-content">
-        <p>All sales are final. We do not provide refunds or credits for:</p>
-        <ul>
-          <li>Partial billing periods after cancellation</li>
-          <li>Subscription periods where the account was used</li>
-          <li>Failure to cancel before a renewal date</li>
-          <li>Dissatisfaction with content or data that was accessible as described</li>
-        </ul>
-        <p>We encourage all users to take advantage of the free plan to evaluate ResearchOrg before subscribing to Pro.</p>
-      </div>
-    ),
-  },
-  {
-    id: 'exceptions',
-    title: 'Exceptions & Eligible Refunds',
-    content: (
-      <div className="legal-content">
-        <p>We will issue a full refund in the following circumstances:</p>
-        <ul>
-          <li><strong>Duplicate charges:</strong> If you were charged more than once for the same subscription period due to a billing error</li>
-          <li><strong>Unauthorized transaction:</strong> If a charge was made without your authorization and you notify us within 14 days</li>
-          <li><strong>Service unavailability:</strong> If the platform experienced extended, unplanned downtime (more than 72 consecutive hours) during a paid billing period</li>
-          <li><strong>Required by law:</strong> Where consumer protection laws in your jurisdiction mandate a right of withdrawal or cooling-off period</li>
-        </ul>
-        <p>Refunds for eligible cases will be issued to the original payment method within 5–10 business days.</p>
+        <p>You may request a full refund within <strong>30 days</strong> of your initial purchase or renewal. Refund requests made after 30 days will not be eligible.</p>
+        <p>To request a refund, email <strong>support@researchorg.com</strong> with your account email address and the date of the charge. We will process your request within 5–10 business days.</p>
       </div>
     ),
   },
@@ -55,23 +33,7 @@ const sections: LegalSection[] = [
     title: 'Cancellation',
     content: (
       <div className="legal-content">
-        <p>You may cancel your Pro subscription at any time from your <a href="/settings">Account Settings</a>. Cancellation takes effect at the end of the current billing period — you will retain full Pro access until that date and will not be charged again.</p>
-        <p>Cancelling does not trigger a refund for the current period. After cancellation, your account reverts to the free plan.</p>
-      </div>
-    ),
-  },
-  {
-    id: 'how-to-request',
-    title: 'How to Request a Refund',
-    content: (
-      <div className="legal-content">
-        <p>To request a refund for an eligible case, email us at <strong>support@researchorg.com</strong> with:</p>
-        <ul>
-          <li>Your account email address</li>
-          <li>The date and amount of the charge</li>
-          <li>A brief description of the reason for your request</li>
-        </ul>
-        <p>We will respond within 3 business days. If your refund is approved, it will be processed through Paddle and reflected in your original payment method within 5–10 business days depending on your bank or card issuer.</p>
+        <p>You may cancel your Pro subscription at any time from your <a href="/settings">Account Settings</a>. Cancellation takes effect at the end of the current billing period — you will retain full Pro access until that date and will not be charged again. After cancellation, your account reverts to the free plan.</p>
       </div>
     ),
   },

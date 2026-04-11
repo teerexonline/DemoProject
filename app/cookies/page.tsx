@@ -124,7 +124,7 @@ const sections: LegalSection[] = [
         <p>If you have questions about our use of cookies or this policy, please contact us:</p>
         <ul>
           <li><strong>Email:</strong> privacy@researchorg.com</li>
-          <li><strong>Address:</strong> ResearchOrg, Inc., 2967 Dundas St W #770d, Toronto, ON M6P 1Z2</li>
+          <li><strong>Address:</strong> ResearchOrg, 2967 Dundas St W #770d, Toronto, ON M6P 1Z2</li>
         </ul>
       </div>
     ),

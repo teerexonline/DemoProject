@@ -7,7 +7,7 @@ const sections: LegalSection[] = [
     title: 'Introduction',
     content: (
       <div className="legal-content">
-        <p>ResearchOrg, Inc. (&ldquo;ResearchOrg,&rdquo; &ldquo;we,&rdquo; &ldquo;us,&rdquo; or &ldquo;our&rdquo;) operates the ResearchOrg platform, accessible at researchorg.com (the &ldquo;Service&rdquo;). This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our Service.</p>
+        <p>ResearchOrg (&ldquo;ResearchOrg,&rdquo; &ldquo;we,&rdquo; &ldquo;us,&rdquo; or &ldquo;our&rdquo;) operates the ResearchOrg platform, accessible at researchorg.com (the &ldquo;Service&rdquo;). This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our Service.</p>
         <p>By creating an account or using the Service, you agree to the collection and use of information in accordance with this policy. If you do not agree, please do not use the Service.</p>
         <p>If you have questions, contact us at <strong>privacy@researchorg.com</strong>.</p>
       </div>
@@ -174,7 +174,7 @@ const sections: LegalSection[] = [
         <p>If you have questions, concerns, or requests regarding this Privacy Policy or your personal data, please contact us:</p>
         <ul>
           <li><strong>Email:</strong> privacy@researchorg.com</li>
-          <li><strong>Address:</strong> ResearchOrg, Inc., 2967 Dundas St W #770d, Toronto, ON M6P 1Z2</li>
+          <li><strong>Address:</strong> ResearchOrg, 2967 Dundas St W #770d, Toronto, ON M6P 1Z2</li>
         </ul>
         <p>We aim to respond to all privacy-related inquiries within 5 business days.</p>
       </div>

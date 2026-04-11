@@ -7,7 +7,7 @@ const sections: LegalSection[] = [
     title: 'Agreement to Terms',
     content: (
       <div className="legal-content">
-        <p>These Terms of Service (&ldquo;Terms&rdquo;) govern your access to and use of the ResearchOrg platform (&ldquo;Service&rdquo;) operated by ResearchOrg, Inc. (&ldquo;ResearchOrg,&rdquo; &ldquo;we,&rdquo; &ldquo;us,&rdquo; or &ldquo;our&rdquo;).</p>
+        <p>These Terms of Service (&ldquo;Terms&rdquo;) govern your access to and use of the ResearchOrg platform (&ldquo;Service&rdquo;) operated by ResearchOrg (&ldquo;ResearchOrg,&rdquo; &ldquo;we,&rdquo; &ldquo;us,&rdquo; or &ldquo;our&rdquo;).</p>
         <p>By creating an account or accessing the Service, you confirm that you are at least 16 years old, have read and understood these Terms, and agree to be bound by them. If you are using the Service on behalf of an organization, you represent that you have the authority to bind that organization to these Terms.</p>
         <p>If you do not agree to these Terms, do not use the Service.</p>
       </div>
@@ -80,7 +80,7 @@ const sections: LegalSection[] = [
     title: 'Intellectual Property',
     content: (
       <div className="legal-content">
-        <p><strong>Our content:</strong> The Service and its original content, features, design, and functionality are owned by ResearchOrg, Inc. and protected by copyright, trademark, and other intellectual property laws. You may not copy, modify, or create derivative works from our platform or content without express written permission.</p>
+        <p><strong>Our content:</strong> The Service and its original content, features, design, and functionality are owned by ResearchOrg and protected by copyright, trademark, and other intellectual property laws. You may not copy, modify, or create derivative works from our platform or content without express written permission.</p>
         <p><strong>Company data:</strong> Information about companies displayed on the Service is compiled from publicly available sources. ResearchOrg does not claim ownership of facts or public information, but does claim rights in the curation, structure, and presentation of that information.</p>
         <p><strong>Feedback:</strong> If you submit feedback, suggestions, or ideas about the Service, you grant us an irrevocable, perpetual, royalty-free license to use that feedback for any purpose without compensation to you.</p>
         <p><strong>Your content:</strong> You retain ownership of any content you submit to the Service. By submitting content, you grant us a non-exclusive, worldwide, royalty-free license to use, display, and distribute that content in connection with operating the Service.</p>
@@ -120,7 +120,7 @@ const sections: LegalSection[] = [
     title: 'Indemnification',
     content: (
       <div className="legal-content">
-        <p>You agree to indemnify, defend, and hold harmless ResearchOrg, Inc. and its officers, directors, employees, and agents from and against any claims, liabilities, damages, losses, and expenses (including reasonable legal fees) arising out of or in connection with:</p>
+        <p>You agree to indemnify, defend, and hold harmless ResearchOrg and its officers, directors, employees, and agents from and against any claims, liabilities, damages, losses, and expenses (including reasonable legal fees) arising out of or in connection with:</p>
         <ul>
           <li>Your use of the Service in violation of these Terms</li>
           <li>Your violation of any applicable law or third-party rights</li>
@@ -174,7 +174,7 @@ const sections: LegalSection[] = [
         <p>Questions about these Terms? Contact us:</p>
         <ul>
           <li><strong>Email:</strong> legal@researchorg.com</li>
-          <li><strong>Address:</strong> ResearchOrg, Inc., 2967 Dundas St W #770d, Toronto, ON M6P 1Z2</li>
+          <li><strong>Address:</strong> ResearchOrg, 2967 Dundas St W #770d, Toronto, ON M6P 1Z2</li>
         </ul>
       </div>
     ),
