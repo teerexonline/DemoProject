@@ -282,12 +282,44 @@ For each:
 - headline: exact headline from the press release or news article
 - summary: 1 sentence — specific, not generic. Mention numbers/outcomes where available.
 - published_date: 'YYYY-MM-DD' format ONLY (e.g. '2026-02-12') — must be within last 12 months
-- source_url: REQUIRED. Direct URL to the press release or article. Every news item MUST
-  have a real, verifiable source_url — no nulls, no placeholders. Search the company's
-  official newsroom, investor relations page, PRNewswire, BusinessWire, or GlobeNewswire.
-  Only insert a URL you have confirmed actually exists. If after 2–3 searches no real URL
-  is found, skip that item entirely and use a different news item that does have a URL.
-  Do not insert a row with source_url = NULL.
+- source_url: REQUIRED. Direct URL to a specific article or press release. Every news item
+  MUST have a real, verifiable source_url. Follow these rules strictly:
+
+  PREFERRED SOURCES (highest to lowest trust):
+    1. prnewswire.com, businesswire.com, globenewswire.com — official wire services
+    2. Company investor relations pages WITH specific article path
+       e.g. ir.company.com/news-releases/news-release-details/2026/Title/default.aspx ✓
+    3. Company official newsroom WITH specific article path
+       e.g. news.airbnb.com/airbnb-q4-2025-results/ ✓
+    4. Major tech/business press: techcrunch.com, reuters.com, bloomberg.com, wsj.com,
+       theverge.com, venturebeat.com, etc. — with full article URL
+
+  URL MUST BE A SPECIFIC ARTICLE — not a listing page. A valid URL has an article-specific
+  path after the domain. These patterns are ALWAYS WRONG and must never be inserted:
+    ✗ company.com/newsroom                  (index page)
+    ✗ company.com/blog                      (index page)
+    ✗ company.com/press-releases            (index page)
+    ✗ company.com/news                      (index page)
+    ✗ ir.company.com                        (IR homepage, no specific release)
+    ✗ investors.company.com/news-releases   (listing, not specific release)
+    ✗ stocktitan.net/news/TICKER/           (ticker page, not specific article)
+  These are not sources — they are the front door to sources. Find the actual article.
+
+  NEVER FABRICATE A URL. Do not invent a plausible-looking path on a company's domain
+  (e.g. company.com/news/product-launch-2025) unless you found that exact URL in a search
+  result snippet. Fabricated URLs (even ones that look real) are worse than NULL — they
+  mislead users and corrupt data audits. If you cannot find a real URL after 2–3 searches,
+  use NULL or skip that item and find a different one that has a real URL.
+
+  NO DUPLICATE URLs. Every URL must be unique within the company's 5 news items. If the
+  same article covers two different events, use it once and find a different source for
+  the second item. Duplicate URLs indicate copy-paste errors.
+
+  NULL IS ACCEPTABLE as a last resort only for companies with genuinely no online press
+  coverage (private companies, subsidiaries). Do not use NULL for public companies — they
+  always have IR pages or wire service releases. If after a thorough search (official site +
+  prnewswire + businesswire + globenewswire) no URL exists, skip that item entirely and
+  use fewer than 5 items rather than inserting a NULL or fabricated URL.
 - type: one of [Press Release, Partnership, Product Launch, Award, Funding, Acquisition] — match to the nature of the news
 - type_color / type_bg / dot_color: use the color mapping in referenceData.md Section 3
 - sort_order: integer 1–5, newest item = 1, oldest item = 5 (see SORT ORDER RULE above)
@@ -302,6 +334,30 @@ POST-INSERT VERIFICATION — MANDATORY: After inserting all news items, run this
   ORDER BY sort_order;
   Expected: all url_check = ✓, all date_check = ✓, all format_check = ✓, sort_orders 1–5 sequential.
   If any check fails, fix before proceeding.
+
+━━━ NEWS URL AUDIT (run periodically) ━━━
+Use these queries to find generic/listing URLs and duplicate URLs:
+
+  -- Generic listing page URLs (not specific articles):
+  SELECT c.name, cn.sort_order, cn.source_url
+  FROM company_news cn JOIN companies c ON c.id = cn.company_id
+  WHERE cn.source_url ~* '/(newsroom|blog|press-releases?|news|about/press|media-centre/press-releases|press-room|news-center|category/announcements|whats-new)(/?|\?.*)?$'
+    OR cn.source_url ~* 'stocktitan\.net/news/[A-Z]+/?$'
+    OR cn.source_url ~* '^https?://(ir|investors?)\.[^/]+\.[^/]+/?$'
+  ORDER BY c.name, cn.sort_order;
+
+  -- Duplicate URLs within same company:
+  SELECT c.name, cn.sort_order, cn.source_url
+  FROM company_news cn JOIN companies c ON c.id = cn.company_id
+  WHERE (cn.company_id, cn.source_url) IN (
+    SELECT company_id, source_url FROM company_news
+    WHERE source_url IS NOT NULL
+    GROUP BY company_id, source_url HAVING COUNT(*) > 1
+  )
+  ORDER BY c.name, cn.sort_order;
+
+Fix generic URLs: set source_url = NULL and research real article URL.
+Fix duplicates: keep lowest sort_order, NULL out the rest, research replacement URL for duplicate row.
 
 ━━━ NEWS SORT ORDER AUDIT (run periodically) ━━━
 Use this query to find ALL companies where sort_order 1 is not the newest item:
