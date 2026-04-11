@@ -14,7 +14,7 @@ async function getPaddleBilling(subscriptionId: string): Promise<BillingInfo> {
   if (!apiKey || !subscriptionId) return { nextBillingAt: null, interval: null, status: null }
 
   try {
-    const res = await fetch(`https://sandbox-api.paddle.com/subscriptions/${subscriptionId}`, {
+    const res = await fetch(`https://api.paddle.com/subscriptions/${subscriptionId}`, {
       headers: { Authorization: `Bearer ${apiKey}` },
       next: { revalidate: 0 },
     })
