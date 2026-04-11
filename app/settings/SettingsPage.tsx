@@ -108,7 +108,7 @@ export default function SettingsPage({ user, profile, isPro, billing }: Props) {
 
   function handleCancel() {
     startCancelTransition(async () => {
-      const { error } = await cancelSubscription()
+      const { error } = await cancelSubscription(cancelReason)
       if (error) { setCancelMsg(error); setCancelModalOpen(false) }
       else { setCancelModalOpen(false); router.refresh() }
     })

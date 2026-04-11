@@ -4,7 +4,7 @@ import { createClient } from '@/lib/supabase/server'
 
 // Cancel the user's active Paddle subscription via the Paddle API.
 // The webhook will fire subscription.canceled and downgrade the profile to Free.
-export async function cancelSubscription(): Promise<{ error: string | null }> {
+export async function cancelSubscription(reason?: string): Promise<{ error: string | null }> {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) return { error: 'Not authenticated' }
@@ -34,6 +34,10 @@ export async function cancelSubscription(): Promise<{ error: string | null }> {
   if (!res.ok) {
     const body = await res.json().catch(() => ({}))
     return { error: body?.error?.detail ?? 'Failed to cancel subscription' }
+  }
+
+  if (reason) {
+    await supabase.from('profiles').update({ cancel_reason: reason }).eq('id', user.id)
   }
 
   return { error: null }
