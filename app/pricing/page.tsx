@@ -26,7 +26,7 @@ const COMPARISON: { category: string; rows: { label: string; free: string | bool
       { label: 'Company overview',            free: true,            pro: true,              enterprise: true },
       { label: 'Full company profiles',       free: '1 per month',   pro: 'Unlimited',       enterprise: 'Unlimited' },
       { label: 'Org chart & headcount',       free: false,           pro: true,              enterprise: true },
-      { label: 'Internal tools & tech stack', free: false,           pro: true,              enterprise: true },
+      { label: 'Internal tools & processes', free: false,           pro: true,              enterprise: true },
       { label: 'Revenue & funding data',      free: false,           pro: true,              enterprise: true },
       { label: 'Interview prep content',      free: false,           pro: true,              enterprise: true },
       { label: 'Product use cases',           free: false,           pro: true,              enterprise: true },
@@ -178,7 +178,7 @@ export default function PricingPage() {
       desc: 'For serious job seekers and career changers.',
       cta: 'Get Started',
       href: '/signup?plan=pro',
-      features: ['Unlimited searches', 'Full view on all companies', 'Deep org charts & headcount', 'Internal tools & tech stack', 'Revenue & funding data', 'Interview prep content', 'Export to PDF'],
+      features: ['Unlimited searches', 'Full view on all companies', 'Deep org charts & headcount', 'Internal tools & processes', 'Revenue & funding data', 'Interview prep content', 'Export to PDF'],
       highlight: true,
     },
     {
