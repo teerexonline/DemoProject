@@ -110,7 +110,7 @@ export default function UpgradeButton({ label = 'Upgrade to Pro', style, classNa
             onMouseLeave={e => (e.currentTarget as HTMLElement).style.background = 'none'}
           >
             <span style={{ fontWeight: 600 }}>Monthly</span>
-            <span style={{ color: '#63636e', fontSize: 12 }}>$7.99 / mo</span>
+            <span style={{ color: '#63636e', fontSize: 12 }}>$4.99 / mo</span>
           </button>
           <button
             onClick={() => openCheckout(process.env.NEXT_PUBLIC_PADDLE_PRICE_YEARLY!)}
@@ -124,7 +124,7 @@ export default function UpgradeButton({ label = 'Upgrade to Pro', style, classNa
             onMouseLeave={e => (e.currentTarget as HTMLElement).style.background = 'none'}
           >
             <span style={{ fontWeight: 600 }}>Yearly</span>
-            <span style={{ color: '#16A34A', fontSize: 12, fontWeight: 600 }}>$79.99 / yr · Save 17%</span>
+            <span style={{ color: '#16A34A', fontSize: 12, fontWeight: 600 }}>$49.99 / yr · Save 17%</span>
           </button>
         </div>
       )}

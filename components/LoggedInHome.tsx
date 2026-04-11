@@ -646,7 +646,7 @@ export default function LoggedInHome({ user, plan, companies, recentlyAdded, isP
                   </div>
                 ))}
               </div>
-              <UpgradeButton label="From $7.99 / month →" style={{ width: '100%', padding: '9px', borderRadius: 9, fontSize: 12.5, boxShadow: '0 4px 14px rgba(6,63,118,0.45)' }} />
+              <UpgradeButton label="From $4.99 / month →" style={{ width: '100%', padding: '9px', borderRadius: 9, fontSize: 12.5, boxShadow: '0 4px 14px rgba(6,63,118,0.45)' }} />
             </div>
           ) : (
             <div style={{ borderRadius: 14, background: '#fff', border: '1px solid #EBEBED', padding: '14px 16px', boxShadow: '0 1px 5px rgba(0,0,0,0.04)' }}>

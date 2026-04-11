@@ -59,7 +59,7 @@ export default function CompanyBlurred({ company }: { company: Company }) {
                 Your free plan includes 1 full company view per month. Upgrade to Pro for unlimited access to all {company.name} research and more.
               </p>
               <UpgradeButton
-                label="Upgrade to Pro — $7.99/mo"
+                label="Upgrade to Pro — $4.99/mo"
                 style={{ width: '100%', padding: '12px', borderRadius: '10px', fontSize: '14px', marginBottom: '10px', boxShadow: '0 4px 12px rgba(6,63,118,0.3)' }}
               />
               <Link

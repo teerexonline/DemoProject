@@ -179,7 +179,7 @@ function ProGatePanel({
 
         {/* Upgrade to Pro */}
         <UpgradeButton
-          label="Upgrade to Pro — $7.99/mo"
+          label="Upgrade to Pro — $4.99/mo"
           style={{
             display: 'block', width: '100%', padding: '11px',
             background: hasToken ? '#09090B' : '#063f76',

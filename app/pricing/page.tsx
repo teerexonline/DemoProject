@@ -9,8 +9,8 @@ import { getPaddleInstance } from '@paddle/paddle-js'
 type BillingPeriod = 'monthly' | 'yearly'
 
 const PRO_PRICING: Record<BillingPeriod, { price: string; period: string; savings: string | null }> = {
-  monthly: { price: '$7.99',  period: 'per month', savings: null },
-  yearly:  { price: '$79.99', period: 'per year',  savings: 'Save 17%' },
+  monthly: { price: '$4.99',  period: 'per month', savings: null },
+  yearly:  { price: '$49.99', period: 'per year',  savings: 'Save 17%' },
 }
 
 const TOGGLE_OPTIONS: { key: BillingPeriod; label: string; badge?: string }[] = [

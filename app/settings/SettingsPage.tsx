@@ -184,12 +184,12 @@ export default function SettingsPage({ user, profile, isPro, billing }: Props) {
                   <PaddleCheckoutButton
                     priceId={process.env.NEXT_PUBLIC_PADDLE_PRICE_MONTHLY!}
                     userEmail={user.email!}
-                    label="Monthly — $7.99"
+                    label="Monthly — $4.99"
                   />
                   <PaddleCheckoutButton
                     priceId={process.env.NEXT_PUBLIC_PADDLE_PRICE_YEARLY!}
                     userEmail={user.email!}
-                    label="Yearly — $79.99"
+                    label="Yearly — $49.99"
                     style={{ background: '#04294f' }}
                   />
                 </div>
@@ -245,7 +245,7 @@ export default function SettingsPage({ user, profile, isPro, billing }: Props) {
                 {billing.interval && (
                   <div>
                     <div style={{ fontSize: 11, fontWeight: 700, color: '#A1A1AA', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 3 }}>Amount</div>
-                    <div style={{ fontSize: 13.5, fontWeight: 600, color: '#09090B' }}>{billing.interval === 'month' ? '$7.99 / month' : '$79.99 / year'}</div>
+                    <div style={{ fontSize: 13.5, fontWeight: 600, color: '#09090B' }}>{billing.interval === 'month' ? '$4.99 / month' : '$49.99 / year'}</div>
                   </div>
                 )}
               </div>
