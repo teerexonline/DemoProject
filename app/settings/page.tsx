@@ -4,9 +4,10 @@ import { getUserTier, isPaidTier } from '@/lib/access'
 import SettingsPage from './SettingsPage'
 
 export interface BillingInfo {
-  nextBillingAt: string | null   // ISO date string
+  nextBillingAt: string | null
   interval: 'month' | 'year' | null
-  status: string | null          // active, canceled, past_due, etc.
+  status: string | null
+  scheduledCancelAt: string | null  // set when cancellation is pending but not yet effective
 }
 
 async function getPaddleBilling(subscriptionId: string): Promise<BillingInfo> {
@@ -21,13 +22,16 @@ async function getPaddleBilling(subscriptionId: string): Promise<BillingInfo> {
     if (!res.ok) return { nextBillingAt: null, interval: null, status: null }
     const body = await res.json()
     const sub = body.data
+    const scheduledChange = sub?.scheduled_change
+    const scheduledCancelAt = scheduledChange?.action === 'cancel' ? scheduledChange.effective_at : null
     return {
       nextBillingAt: sub?.next_billed_at ?? null,
       interval: sub?.items?.[0]?.price?.billing_cycle?.interval ?? null,
       status: sub?.status ?? null,
+      scheduledCancelAt,
     }
   } catch {
-    return { nextBillingAt: null, interval: null, status: null }
+    return { nextBillingAt: null, interval: null, status: null, scheduledCancelAt: null }
   }
 }
 
@@ -45,7 +49,7 @@ export default async function Page() {
   const tier = getUserTier(user, profile?.plan)
   const billing = profile?.paddle_subscription_id
     ? await getPaddleBilling(profile.paddle_subscription_id)
-    : { nextBillingAt: null, interval: null, status: null }
+    : { nextBillingAt: null, interval: null, status: null, scheduledCancelAt: null }
 
   return (
     <SettingsPage

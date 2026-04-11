@@ -199,11 +199,16 @@ export default function SettingsPage({ user, profile, isPro, billing }: Props) {
                   <div style={{ padding: '6px 14px', borderRadius: 8, background: '#F0FDF4', border: '1px solid #BBF7D0', color: '#16A34A', fontSize: 12.5, fontWeight: 600 }}>
                     Active ✓
                   </div>
-                  {!cancelMsg && (
+                  {!cancelMsg && !billing?.scheduledCancelAt && (
                     <button
                       onClick={() => setCancelModalOpen(true)}
                       style={{ background: 'none', border: 'none', color: '#A1A1AA', fontSize: 12, cursor: 'pointer', textDecoration: 'underline', padding: 0 }}
                     >Cancel subscription</button>
+                  )}
+                  {billing?.scheduledCancelAt && (
+                    <span style={{ fontSize: 12, color: '#71717A' }}>
+                      Cancels {new Date(billing.scheduledCancelAt).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
+                    </span>
                   )}
                   {cancelMsg && <span style={{ fontSize: 12, color: '#52525B' }}>{cancelMsg}</span>}
                 </div>
@@ -217,20 +222,26 @@ export default function SettingsPage({ user, profile, isPro, billing }: Props) {
                     <div style={{ fontSize: 13.5, fontWeight: 600, color: '#09090B' }}>{billing.interval === 'month' ? 'Monthly' : 'Yearly'}</div>
                   </div>
                 )}
-                {billing.nextBillingAt && billing.status !== 'canceled' && (
+                {billing.scheduledCancelAt ? (
+                  <div>
+                    <div style={{ fontSize: 11, fontWeight: 700, color: '#A1A1AA', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 3 }}>Access until</div>
+                    <div style={{ fontSize: 13.5, fontWeight: 600, color: '#D97706' }}>
+                      {new Date(billing.scheduledCancelAt).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
+                    </div>
+                  </div>
+                ) : billing.nextBillingAt && billing.status !== 'canceled' ? (
                   <div>
                     <div style={{ fontSize: 11, fontWeight: 700, color: '#A1A1AA', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 3 }}>Next billing date</div>
                     <div style={{ fontSize: 13.5, fontWeight: 600, color: '#09090B' }}>
                       {new Date(billing.nextBillingAt).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
                     </div>
                   </div>
-                )}
-                {billing.status === 'canceled' && (
+                ) : billing.status === 'canceled' ? (
                   <div>
                     <div style={{ fontSize: 11, fontWeight: 700, color: '#A1A1AA', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 3 }}>Status</div>
                     <div style={{ fontSize: 13.5, fontWeight: 600, color: '#DC2626' }}>Cancelled — access until end of period</div>
                   </div>
-                )}
+                ) : null}
                 {billing.interval && (
                   <div>
                     <div style={{ fontSize: 11, fontWeight: 700, color: '#A1A1AA', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 3 }}>Amount</div>
