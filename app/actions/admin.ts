@@ -71,11 +71,12 @@ export async function adminGetProfiles() {
 }
 
 export async function adminUpdateUserPlan(userId: string, plan: string) {
-  const { supabase } = await requireAdmin()
+  await requireAdmin()
+  const adminClient = createAdminClient()
   const update: Record<string, unknown> = { plan }
   // Downgrading to Free → give a fresh token immediately
   if (plan === 'Free') update.free_token_reset_at = new Date().toISOString()
-  const { error } = await supabase.from('profiles').update(update).eq('id', userId)
+  const { error } = await adminClient.from('profiles').update(update).eq('id', userId)
   revalidatePath('/admin')
   return error ? { error: error.message } : { error: null }
 }
@@ -83,11 +84,12 @@ export async function adminUpdateUserPlan(userId: string, plan: string) {
 export async function adminUpdateUserProfile(userId: string, fields: {
   name?: string; job_role?: string; job_company?: string; plan?: string; email?: string
 }) {
-  const { supabase } = await requireAdmin()
+  await requireAdmin()
+  const adminClient = createAdminClient()
   const update: Record<string, unknown> = { ...fields }
   // Downgrading to Free → give a fresh token immediately
   if (fields.plan === 'Free') update.free_token_reset_at = new Date().toISOString()
-  const { error } = await supabase.from('profiles').update(update).eq('id', userId)
+  const { error } = await adminClient.from('profiles').update(update).eq('id', userId)
   revalidatePath('/admin')
   return error ? { error: error.message } : { error: null }
 }
