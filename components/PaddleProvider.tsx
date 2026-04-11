@@ -13,6 +13,9 @@ export default function PaddleProvider() {
     initializePaddle({
       environment: 'sandbox',
       token,
+      eventCallback(event) {
+        console.log('[Paddle event]', event.name, event)
+      },
     })
   }, [])
 
