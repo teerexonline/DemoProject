@@ -89,15 +89,25 @@ export default function SettingsPage({ user, profile, isPro, billing }: Props) {
   const [resetPending, setResetPending] = useState(false)
 
   // Subscription cancel
-  const [cancelConfirm, setCancelConfirm] = useState(false)
+  const [cancelModalOpen, setCancelModalOpen] = useState(false)
+  const [cancelReason, setCancelReason] = useState('')
   const [cancelMsg, setCancelMsg] = useState('')
   const [cancelPending, startCancelTransition] = useTransition()
+
+  const cancelReasons = [
+    "It's too expensive",
+    "I'm not using it enough",
+    "I found a better alternative",
+    "Missing features I need",
+    "Just taking a break",
+    "Other",
+  ]
 
   function handleCancel() {
     startCancelTransition(async () => {
       const { error } = await cancelSubscription()
-      if (error) { setCancelMsg(error); setCancelConfirm(false) }
-      else { setCancelMsg('Subscription cancelled. You keep Pro access until the end of your billing period.'); setCancelConfirm(false) }
+      if (error) { setCancelMsg(error); setCancelModalOpen(false) }
+      else { setCancelMsg('Subscription cancelled. You keep Pro access until the end of your billing period.'); setCancelModalOpen(false) }
     })
   }
 
@@ -186,24 +196,11 @@ export default function SettingsPage({ user, profile, isPro, billing }: Props) {
                   <div style={{ padding: '6px 14px', borderRadius: 8, background: '#F0FDF4', border: '1px solid #BBF7D0', color: '#16A34A', fontSize: 12.5, fontWeight: 600 }}>
                     Active ✓
                   </div>
-                  {!cancelConfirm && !cancelMsg && (
+                  {!cancelMsg && (
                     <button
-                      onClick={() => setCancelConfirm(true)}
+                      onClick={() => setCancelModalOpen(true)}
                       style={{ background: 'none', border: 'none', color: '#A1A1AA', fontSize: 12, cursor: 'pointer', textDecoration: 'underline', padding: 0 }}
                     >Cancel subscription</button>
-                  )}
-                  {cancelConfirm && (
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                      <span style={{ fontSize: 12, color: '#52525B' }}>Are you sure?</span>
-                      <button onClick={handleCancel} disabled={cancelPending}
-                        style={{ fontSize: 12, fontWeight: 600, color: '#DC2626', background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}>
-                        {cancelPending ? 'Cancelling…' : 'Yes, cancel'}
-                      </button>
-                      <button onClick={() => setCancelConfirm(false)}
-                        style={{ fontSize: 12, color: '#71717A', background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}>
-                        Never mind
-                      </button>
-                    </div>
                   )}
                   {cancelMsg && <span style={{ fontSize: 12, color: '#52525B' }}>{cancelMsg}</span>}
                 </div>
@@ -300,6 +297,64 @@ export default function SettingsPage({ user, profile, isPro, billing }: Props) {
 
         </div>
       </div>
+
+      {/* Cancel subscription modal */}
+      {cancelModalOpen && (
+        <div
+          onClick={() => { if (!cancelPending) setCancelModalOpen(false) }}
+          style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.45)', zIndex: 100, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 24 }}
+        >
+          <div
+            onClick={e => e.stopPropagation()}
+            style={{ background: '#fff', borderRadius: 18, padding: '28px 28px 24px', maxWidth: 440, width: '100%', boxShadow: '0 20px 60px rgba(0,0,0,0.18)' }}
+          >
+            <div style={{ fontSize: 17, fontWeight: 800, color: '#09090B', letterSpacing: '-0.03em', marginBottom: 4 }}>Before you go…</div>
+            <div style={{ fontSize: 13, color: '#71717A', marginBottom: 20 }}>What's the main reason you're cancelling?</div>
+
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 8, marginBottom: 24 }}>
+              {cancelReasons.map(reason => (
+                <button
+                  key={reason}
+                  onClick={() => setCancelReason(reason)}
+                  style={{
+                    textAlign: 'left', padding: '10px 14px', borderRadius: 10,
+                    border: `1.5px solid ${cancelReason === reason ? '#063f76' : '#E4E4E7'}`,
+                    background: cancelReason === reason ? '#EFF6FF' : '#fff',
+                    color: cancelReason === reason ? '#063f76' : '#52525B',
+                    fontSize: 13, fontWeight: cancelReason === reason ? 600 : 400,
+                    cursor: 'pointer', transition: 'border-color 0.15s, background 0.15s',
+                  }}
+                >
+                  {reason}
+                </button>
+              ))}
+            </div>
+
+            <div style={{ display: 'flex', gap: 10, justifyContent: 'flex-end' }}>
+              <button
+                onClick={() => setCancelModalOpen(false)}
+                disabled={cancelPending}
+                style={{ padding: '9px 18px', borderRadius: 9, border: '1.5px solid #E4E4E7', background: '#fff', fontSize: 13, fontWeight: 600, color: '#52525B', cursor: 'pointer' }}
+              >
+                Keep my plan
+              </button>
+              <button
+                onClick={handleCancel}
+                disabled={cancelPending || !cancelReason}
+                style={{
+                  padding: '9px 18px', borderRadius: 9, border: 'none',
+                  background: cancelPending || !cancelReason ? '#FECACA' : '#DC2626',
+                  color: '#fff', fontSize: 13, fontWeight: 600,
+                  cursor: cancelPending || !cancelReason ? 'not-allowed' : 'pointer',
+                  transition: 'background 0.15s',
+                }}
+              >
+                {cancelPending ? 'Cancelling…' : 'Confirm cancellation'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
