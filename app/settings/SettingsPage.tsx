@@ -5,6 +5,8 @@ import Link from 'next/link'
 import type { User } from '@supabase/supabase-js'
 import { createClient } from '@/lib/supabase/client'
 import { changePassword } from '@/app/actions/profile'
+import { cancelSubscription } from '@/app/actions/paddle'
+import PaddleCheckoutButton from '@/components/PaddleCheckoutButton'
 
 interface Props {
   user: User
@@ -82,6 +84,19 @@ export default function SettingsPage({ user, profile, isPro }: Props) {
   const [resetSent, setResetSent] = useState(false)
   const [resetPending, setResetPending] = useState(false)
 
+  // Subscription cancel
+  const [cancelConfirm, setCancelConfirm] = useState(false)
+  const [cancelMsg, setCancelMsg] = useState('')
+  const [cancelPending, startCancelTransition] = useTransition()
+
+  function handleCancel() {
+    startCancelTransition(async () => {
+      const { error } = await cancelSubscription()
+      if (error) { setCancelMsg(error); setCancelConfirm(false) }
+      else { setCancelMsg('Subscription cancelled. You keep Pro access until the end of your billing period.'); setCancelConfirm(false) }
+    })
+  }
+
   function handleChangePassword() {
     setPwError('')
     if (newPw.length < 8) { setPwError('Password must be at least 8 characters'); return }
@@ -148,16 +163,45 @@ export default function SettingsPage({ user, profile, isPro }: Props) {
                 </div>
               </div>
               {!isPro && (
-                <Link href="/signup?plan=pro" style={{ padding: '9px 20px', borderRadius: 9, background: '#063f76', color: '#fff', textDecoration: 'none', fontSize: 13, fontWeight: 700, boxShadow: '0 4px 14px rgba(6,63,118,0.3)', transition: 'background 0.15s', whiteSpace: 'nowrap' }}
-                  onMouseEnter={e => (e.currentTarget as HTMLElement).style.background = '#04294f'}
-                  onMouseLeave={e => (e.currentTarget as HTMLElement).style.background = '#063f76'}
-                >
-                  Upgrade to Pro →
-                </Link>
+                <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+                  <PaddleCheckoutButton
+                    priceId={process.env.NEXT_PUBLIC_PADDLE_PRICE_MONTHLY!}
+                    userEmail={user.email!}
+                    label="Monthly — $7.99"
+                  />
+                  <PaddleCheckoutButton
+                    priceId={process.env.NEXT_PUBLIC_PADDLE_PRICE_YEARLY!}
+                    userEmail={user.email!}
+                    label="Yearly — $79.99"
+                    style={{ background: '#04294f' }}
+                  />
+                </div>
               )}
               {isPro && (
-                <div style={{ padding: '6px 14px', borderRadius: 8, background: '#F0FDF4', border: '1px solid #BBF7D0', color: '#16A34A', fontSize: 12.5, fontWeight: 600 }}>
-                  Active ✓
+                <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>
+                  <div style={{ padding: '6px 14px', borderRadius: 8, background: '#F0FDF4', border: '1px solid #BBF7D0', color: '#16A34A', fontSize: 12.5, fontWeight: 600 }}>
+                    Active ✓
+                  </div>
+                  {!cancelConfirm && !cancelMsg && (
+                    <button
+                      onClick={() => setCancelConfirm(true)}
+                      style={{ background: 'none', border: 'none', color: '#A1A1AA', fontSize: 12, cursor: 'pointer', textDecoration: 'underline', padding: 0 }}
+                    >Cancel subscription</button>
+                  )}
+                  {cancelConfirm && (
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                      <span style={{ fontSize: 12, color: '#52525B' }}>Are you sure?</span>
+                      <button onClick={handleCancel} disabled={cancelPending}
+                        style={{ fontSize: 12, fontWeight: 600, color: '#DC2626', background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}>
+                        {cancelPending ? 'Cancelling…' : 'Yes, cancel'}
+                      </button>
+                      <button onClick={() => setCancelConfirm(false)}
+                        style={{ fontSize: 12, color: '#71717A', background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}>
+                        Never mind
+                      </button>
+                    </div>
+                  )}
+                  {cancelMsg && <span style={{ fontSize: 12, color: '#52525B' }}>{cancelMsg}</span>}
                 </div>
               )}
             </div>
