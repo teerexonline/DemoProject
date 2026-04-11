@@ -24,6 +24,7 @@ interface Company {
   valuation: string | null
   revenue: string | null
   website: string | null
+  tags: string[] | null
 }
 
 const NAV: { id: string; label: string; color: string; icon: LucideIcon; pro: boolean }[] = [
