@@ -30,6 +30,7 @@ export async function POST(request: NextRequest) {
   const rawBody = await request.text()
 
   const valid = await verifyPaddleSignature(request, rawBody)
+  console.log('[Paddle webhook] signature valid:', valid)
   if (!valid) {
     return NextResponse.json({ error: 'Invalid signature' }, { status: 401 })
   }
@@ -40,19 +41,27 @@ export async function POST(request: NextRequest) {
   const eventType: string = event.event_type
   const data = event.data
 
+  console.log('[Paddle webhook] event_type:', eventType)
+  console.log('[Paddle webhook] customer email:', data?.customer?.email)
+  console.log('[Paddle webhook] subscription id:', data?.id)
+
   // Helper: look up user by email directly and update their plan + subscription ID
   async function setPlan(email: string, plan: 'Pro' | 'Free', subscriptionId?: string) {
-    const { data: { users } } = await supabase.auth.admin.listUsers({ perPage: 1000 })
+    console.log('[Paddle webhook] setPlan called:', email, plan)
+    const { data: { users }, error: listError } = await supabase.auth.admin.listUsers({ perPage: 1000 })
+    console.log('[Paddle webhook] listUsers error:', listError, 'count:', users?.length)
     const user = users.find(u => u.email?.toLowerCase() === email.toLowerCase())
+    console.log('[Paddle webhook] user found:', user?.id, user?.email)
     if (!user) return
 
     const update: Record<string, string | null> = { plan }
     if (subscriptionId !== undefined) update.paddle_subscription_id = subscriptionId
 
-    await supabase
+    const { error: updateError } = await supabase
       .from('profiles')
       .update(update)
       .eq('id', user.id)
+    console.log('[Paddle webhook] profile update error:', updateError)
   }
 
   switch (eventType) {
