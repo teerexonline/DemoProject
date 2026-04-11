@@ -4,12 +4,50 @@ import { getUserTier, isPaidTier } from '@/lib/access'
 import { getMonthlyViewCount, hasViewedThisMonth, getNextResetAt } from '@/lib/quota'
 import CompanyFull from './CompanyFull'
 import CompanyFreeGated from './CompanyFreeGated'
+import type { Metadata } from 'next'
 
 // Always fetch fresh data — never serve a cached version of a company profile
 export const dynamic = 'force-dynamic'
 
 interface Props {
   params: Promise<{ slug: string }>
+}
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { slug } = await params
+  const supabase = await createClient()
+
+  const { data: company } = await supabase
+    .from('companies')
+    .select('name, description, logo_url, hq, revenue, employees')
+    .eq('slug', slug)
+    .single()
+
+  if (!company) return { title: 'Company — ResearchOrg' }
+
+  const title = `${company.name} — ResearchOrg`
+  const description = company.description
+    ? company.description.slice(0, 160)
+    : `Research ${company.name} on ResearchOrg — org charts, financials, tech stack, and more.`
+
+  return {
+    title,
+    description,
+    openGraph: {
+      title,
+      description,
+      url: `https://researchorg.com/company/${slug}`,
+      siteName: 'ResearchOrg',
+      images: company.logo_url ? [{ url: company.logo_url, width: 256, height: 256, alt: company.name }] : [],
+      type: 'website',
+    },
+    twitter: {
+      card: 'summary',
+      title,
+      description,
+      images: company.logo_url ? [company.logo_url] : [],
+    },
+  }
 }
 
 export default async function CompanyPage({ params }: Props) {
