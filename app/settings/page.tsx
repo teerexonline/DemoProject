@@ -19,7 +19,7 @@ async function getPaddleBilling(subscriptionId: string): Promise<BillingInfo> {
       headers: { Authorization: `Bearer ${apiKey}` },
       next: { revalidate: 0 },
     })
-    if (!res.ok) return { nextBillingAt: null, interval: null, status: null }
+    if (!res.ok) return { nextBillingAt: null, interval: null, status: null, scheduledCancelAt: null }
     const body = await res.json()
     const sub = body.data
     const scheduledChange = sub?.scheduled_change
