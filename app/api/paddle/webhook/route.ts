@@ -38,8 +38,25 @@ export async function POST(request: NextRequest) {
 
   const eventType: string = event.event_type
   const data = event.data
-  const email: string | undefined = data?.customer?.email
   const subscriptionId: string | undefined = data?.id
+
+  // subscription events only include customer_id — fetch email from Paddle API
+  async function getEmailFromCustomerId(customerId: string): Promise<string | null> {
+    const apiKey = process.env.PADDLE_API_KEY
+    if (!apiKey) return null
+    try {
+      const res = await fetch(`https://sandbox-api.paddle.com/customers/${customerId}`, {
+        headers: { Authorization: `Bearer ${apiKey}` },
+      })
+      if (!res.ok) return null
+      const body = await res.json()
+      return body?.data?.email ?? null
+    } catch { return null }
+  }
+
+  const customerId: string | undefined = data?.customer_id ?? data?.customer?.id
+  const email: string | null = data?.customer?.email
+    ?? (customerId ? await getEmailFromCustomerId(customerId) : null)
 
   const debug: Record<string, unknown> = {
     eventType,
