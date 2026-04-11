@@ -29,6 +29,7 @@ export default function TurnstileWidget({ onVerify, onExpire }: Props) {
       widgetIdRef.current = window.turnstile.render(containerRef.current, {
         sitekey,
         theme: 'light',
+        size: 'flexible',
         callback: onVerify,
         'expired-callback': onExpire,
       })
@@ -58,9 +59,5 @@ export default function TurnstileWidget({ onVerify, onExpire }: Props) {
     }
   }, [onVerify, onExpire])
 
-  return (
-    <div style={{ display: 'flex', justifyContent: 'center' }}>
-      <div ref={containerRef} style={{ width: '100%' }} />
-    </div>
-  )
+  return <div ref={containerRef} style={{ width: '100%' }} />
 }

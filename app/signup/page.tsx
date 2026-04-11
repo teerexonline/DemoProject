@@ -98,7 +98,7 @@ export default function SignupPage() {
         position: 'relative',
         boxShadow: '0 4px 24px rgba(0,0,0,0.08)',
       }}>
-        <Link href="/" style={{ textDecoration: 'none', display: 'block', marginBottom: '32px' }}>
+        <Link href="/" style={{ textDecoration: 'none', display: 'flex', justifyContent: 'center', marginBottom: '32px' }}>
           <LogoFull height={44} />
         </Link>
 
