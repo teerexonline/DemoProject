@@ -100,7 +100,7 @@ export default function Pricing() {
                     borderRadius: '4px',
                     transition: 'all 0.15s',
                   }}>
-                    {key === 'yearly' ? '33% off' : '55% off'}
+                    {key === 'yearly' ? '17% off' : ''}
                   </span>
                 )}
               </button>
