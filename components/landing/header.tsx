@@ -7,6 +7,8 @@ import { createClient } from '@/lib/supabase/client'
 import type { User } from '@supabase/supabase-js'
 import SearchAutocomplete from '@/components/SearchAutocomplete'
 import { LogoFull, LogoIcon } from '@/components/Logo'
+import dynamic from 'next/dynamic'
+const UpgradeButton = dynamic(() => import('@/components/UpgradeButton'), { ssr: false })
 
 export default function Header() {
   const [user, setUser] = useState<User | null>(null)
@@ -213,14 +215,13 @@ export default function Header() {
                       </Link>
                     )}
                     {!isPro && (
-                      <Link href="/signup?plan=pro" onClick={() => setDropdownOpen(false)}
-                        style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '9px 10px', borderRadius: 8, textDecoration: 'none', color: '#063f76', fontSize: 13, fontWeight: 600, transition: 'background 0.12s' }}
-                        onMouseEnter={e => (e.currentTarget as HTMLElement).style.background = '#eef4fb'}
-                        onMouseLeave={e => (e.currentTarget as HTMLElement).style.background = 'transparent'}
-                      >
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="#063f76"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                        Upgrade to Pro
-                      </Link>
+                      <div style={{ padding: '4px 6px' }}>
+                        <UpgradeButton
+                          label="Upgrade to Pro"
+                          onClick={() => setDropdownOpen(false)}
+                          style={{ width: '100%', padding: '9px 10px', borderRadius: 8, fontSize: 13, justifyContent: 'flex-start', boxShadow: 'none' }}
+                        />
+                      </div>
                     )}
                   </div>
 

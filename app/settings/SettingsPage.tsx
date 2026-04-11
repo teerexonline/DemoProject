@@ -1,17 +1,21 @@
 'use client'
 
 import { useState, useTransition } from 'react'
+import dynamic from 'next/dynamic'
 import Link from 'next/link'
 import type { User } from '@supabase/supabase-js'
 import { createClient } from '@/lib/supabase/client'
 import { changePassword } from '@/app/actions/profile'
 import { cancelSubscription } from '@/app/actions/paddle'
-import PaddleCheckoutButton from '@/components/PaddleCheckoutButton'
+import type { BillingInfo } from './page'
+
+const PaddleCheckoutButton = dynamic(() => import('@/components/PaddleCheckoutButton'), { ssr: false })
 
 interface Props {
   user: User
   profile: { plan: string }
   isPro: boolean
+  billing?: BillingInfo
 }
 
 function Field({ label, children }: { label: string; children: React.ReactNode }) {
@@ -71,7 +75,7 @@ function SaveBtn({ onClick, pending, label = 'Save changes' }: { onClick: () => 
   )
 }
 
-export default function SettingsPage({ user, profile, isPro }: Props) {
+export default function SettingsPage({ user, profile, isPro, billing }: Props) {
   // Password section state
   const [currentPw, setCurrentPw] = useState('')
   const [newPw, setNewPw]         = useState('')
@@ -205,6 +209,36 @@ export default function SettingsPage({ user, profile, isPro }: Props) {
                 </div>
               )}
             </div>
+            {isPro && billing && (billing.nextBillingAt || billing.interval || billing.status) && (
+              <div style={{ marginTop: 16, padding: '14px 16px', borderRadius: 10, background: '#F8FBFE', border: '1px solid #e2eaf2', display: 'flex', gap: 32, flexWrap: 'wrap' }}>
+                {billing.interval && (
+                  <div>
+                    <div style={{ fontSize: 11, fontWeight: 700, color: '#A1A1AA', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 3 }}>Billing cycle</div>
+                    <div style={{ fontSize: 13.5, fontWeight: 600, color: '#09090B' }}>{billing.interval === 'month' ? 'Monthly' : 'Yearly'}</div>
+                  </div>
+                )}
+                {billing.nextBillingAt && billing.status !== 'canceled' && (
+                  <div>
+                    <div style={{ fontSize: 11, fontWeight: 700, color: '#A1A1AA', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 3 }}>Next billing date</div>
+                    <div style={{ fontSize: 13.5, fontWeight: 600, color: '#09090B' }}>
+                      {new Date(billing.nextBillingAt).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
+                    </div>
+                  </div>
+                )}
+                {billing.status === 'canceled' && (
+                  <div>
+                    <div style={{ fontSize: 11, fontWeight: 700, color: '#A1A1AA', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 3 }}>Status</div>
+                    <div style={{ fontSize: 13.5, fontWeight: 600, color: '#DC2626' }}>Cancelled — access until end of period</div>
+                  </div>
+                )}
+                {billing.interval && (
+                  <div>
+                    <div style={{ fontSize: 11, fontWeight: 700, color: '#A1A1AA', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 3 }}>Amount</div>
+                    <div style={{ fontSize: 13.5, fontWeight: 600, color: '#09090B' }}>{billing.interval === 'month' ? '$7.99 / month' : '$79.99 / year'}</div>
+                  </div>
+                )}
+              </div>
+            )}
             {!isPro && (
               <div style={{ marginTop: 16, padding: '12px 16px', borderRadius: 10, background: '#FAFAFA', border: '1px solid #F0F0F2' }}>
                 <div style={{ display: 'flex', gap: 20, flexWrap: 'wrap' }}>

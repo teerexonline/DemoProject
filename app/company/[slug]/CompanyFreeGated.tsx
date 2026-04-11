@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useTransition } from 'react'
+import dynamic from 'next/dynamic'
 import Link from 'next/link'
 import { useMonthlyToken } from './actions'
 import CompanyOverview from './CompanyOverview'
@@ -8,6 +9,7 @@ import SaveButton from '@/components/SaveButton'
 import CompanyLogo from '@/components/CompanyLogo'
 import RelatedCompanies from '@/components/RelatedCompanies'
 import { Building2, Network, TrendingUp, Settings, Target, Package, Lock, Gift, RotateCcw } from 'lucide-react'
+const UpgradeButton = dynamic(() => import('@/components/UpgradeButton'), { ssr: false })
 import type { LucideIcon } from 'lucide-react'
 
 interface Company {
@@ -176,20 +178,15 @@ function ProGatePanel({
         )}
 
         {/* Upgrade to Pro */}
-        <Link
-          href="/signup?plan=pro"
+        <UpgradeButton
+          label="Upgrade to Pro — $7.99/mo"
           style={{
-            display: 'block', padding: '11px', background: hasToken ? '#09090B' : '#063f76',
-            color: '#fff', textDecoration: 'none', borderRadius: '10px',
-            fontWeight: 600, fontSize: '14px', marginBottom: '10px',
+            display: 'block', width: '100%', padding: '11px',
+            background: hasToken ? '#09090B' : '#063f76',
+            borderRadius: '10px', fontSize: '14px', marginBottom: '10px',
             boxShadow: hasToken ? '0 2px 8px rgba(0,0,0,0.15)' : '0 4px 12px rgba(6,63,118,0.3)',
-            transition: 'background 0.15s',
           }}
-          onMouseEnter={e => (e.currentTarget as HTMLElement).style.background = hasToken ? '#18181B' : '#04294f'}
-          onMouseLeave={e => (e.currentTarget as HTMLElement).style.background = hasToken ? '#09090B' : '#063f76'}
-        >
-          Upgrade to Pro — from $4.99/mo
-        </Link>
+        />
 
         <Link href="/pricing" style={{ display: 'block', color: '#A1A1AA', fontSize: '12px', textDecoration: 'none' }}>
           View all plans →
@@ -358,12 +355,10 @@ export default function CompanyFreeGated({ company, hasToken, initialSaved, isGu
                 <div style={{ color: '#063f76', fontSize: '11px', lineHeight: 1.5, marginBottom: '10px', opacity: 0.85 }}>
                   Get access to all sections for every company.
                 </div>
-                <Link
-                  href="/signup?plan=pro"
-                  style={{ display: 'block', textAlign: 'center', background: '#063f76', color: '#fff', textDecoration: 'none', borderRadius: '8px', padding: '8px', fontSize: '12px', fontWeight: 600, transition: 'background 0.15s' }}
-                  onMouseEnter={e => (e.currentTarget as HTMLElement).style.background = '#04294f'}
-                  onMouseLeave={e => (e.currentTarget as HTMLElement).style.background = '#063f76'}
-                >Upgrade to Pro</Link>
+                <UpgradeButton
+                  label="Upgrade to Pro"
+                  style={{ width: '100%', padding: '8px', borderRadius: '8px', fontSize: '12px', boxShadow: 'none' }}
+                />
               </>
             )}
           </div>

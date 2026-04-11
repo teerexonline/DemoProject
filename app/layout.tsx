@@ -3,9 +3,11 @@ import { Plus_Jakarta_Sans } from "next/font/google"
 
 import "./globals.css"
 import { cn } from "@/lib/utils"
+import dynamic from 'next/dynamic'
 import Header from "@/components/landing/header"
 import Footer from "@/components/landing/footer"
-import PaddleProvider from "@/components/PaddleProvider"
+
+const PaddleProvider = dynamic(() => import('@/components/PaddleProvider'), { ssr: false })
 
 export const metadata: Metadata = {
   title: 'ResearchOrg — Company Research for Job Seekers',

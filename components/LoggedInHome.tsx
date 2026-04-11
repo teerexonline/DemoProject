@@ -1,11 +1,13 @@
 'use client'
 
 import { useState, useEffect, useCallback } from 'react'
+import dynamic from 'next/dynamic'
 import Link from 'next/link'
 import type { User } from '@supabase/supabase-js'
 import SearchAutocomplete from '@/components/SearchAutocomplete'
 import SaveButton from '@/components/SaveButton'
 import CompanyLogo from '@/components/CompanyLogo'
+const UpgradeButton = dynamic(() => import('@/components/UpgradeButton'), { ssr: false })
 
 interface Company {
   id: string
@@ -521,12 +523,7 @@ export default function LoggedInHome({ user, plan, companies, isPro, savedIds }:
             ) : (
               <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                 <span style={{ color: '#3F3F46', fontSize: 11.5 }}>Free plan</span>
-                <Link href="/signup?plan=pro" style={{ padding: '5px 13px', borderRadius: 7, background: '#063f76', color: '#fff', fontSize: 11.5, fontWeight: 600, textDecoration: 'none', boxShadow: '0 2px 10px rgba(6,63,118,0.4)', transition: 'background 0.15s' }}
-                  onMouseEnter={e => (e.currentTarget as HTMLElement).style.background = '#04294f'}
-                  onMouseLeave={e => (e.currentTarget as HTMLElement).style.background = '#063f76'}
-                >
-                  Upgrade →
-                </Link>
+                <UpgradeButton label="Upgrade →" style={{ padding: '5px 13px', borderRadius: 7, fontSize: 11.5, boxShadow: '0 2px 10px rgba(6,63,118,0.4)' }} />
               </div>
             )}
           </div>
@@ -644,12 +641,7 @@ export default function LoggedInHome({ user, plan, companies, isPro, savedIds }:
                   </div>
                 ))}
               </div>
-              <Link href="/signup?plan=pro" style={{ display: 'block', textAlign: 'center', padding: '9px', borderRadius: 9, background: '#063f76', color: '#fff', textDecoration: 'none', fontSize: 12.5, fontWeight: 700, boxShadow: '0 4px 14px rgba(6,63,118,0.45)', transition: 'background 0.15s' }}
-                onMouseEnter={e => (e.currentTarget as HTMLElement).style.background = '#04294f'}
-                onMouseLeave={e => (e.currentTarget as HTMLElement).style.background = '#063f76'}
-              >
-                From $4.99 / month →
-              </Link>
+              <UpgradeButton label="From $7.99 / month →" style={{ width: '100%', padding: '9px', borderRadius: 9, fontSize: 12.5, boxShadow: '0 4px 14px rgba(6,63,118,0.45)' }} />
             </div>
           ) : (
             <div style={{ borderRadius: 14, background: '#fff', border: '1px solid #EBEBED', padding: '14px 16px', boxShadow: '0 1px 5px rgba(0,0,0,0.04)' }}>

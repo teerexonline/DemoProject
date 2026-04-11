@@ -1,7 +1,9 @@
 'use client'
 
+import dynamic from 'next/dynamic'
 import Link from 'next/link'
 import CompanyLogo from '@/components/CompanyLogo'
+const UpgradeButton = dynamic(() => import('@/components/UpgradeButton'), { ssr: false })
 
 interface Company {
   id: string
@@ -56,14 +58,10 @@ export default function CompanyBlurred({ company }: { company: Company }) {
               <p style={{ color: '#71717A', fontSize: '13.5px', lineHeight: 1.6, margin: '0 0 24px' }}>
                 Your free plan includes 1 full company view per month. Upgrade to Pro for unlimited access to all {company.name} research and more.
               </p>
-              <Link
-                href="/signup?plan=pro"
-                style={{ display: 'block', padding: '12px', background: '#063f76', color: '#fff', textDecoration: 'none', borderRadius: '10px', fontWeight: 600, fontSize: '14px', marginBottom: '10px', boxShadow: '0 4px 12px rgba(6,63,118,0.3)', transition: 'background 0.15s' }}
-                onMouseEnter={e => (e.currentTarget as HTMLElement).style.background = '#04294f'}
-                onMouseLeave={e => (e.currentTarget as HTMLElement).style.background = '#063f76'}
-              >
-                Upgrade to Pro — from $4.99/mo
-              </Link>
+              <UpgradeButton
+                label="Upgrade to Pro — $7.99/mo"
+                style={{ width: '100%', padding: '12px', borderRadius: '10px', fontSize: '14px', marginBottom: '10px', boxShadow: '0 4px 12px rgba(6,63,118,0.3)' }}
+              />
               <Link
                 href="/"
                 style={{ display: 'block', color: '#71717A', fontSize: '13px', textDecoration: 'none' }}
