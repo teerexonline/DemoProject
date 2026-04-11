@@ -60,6 +60,7 @@ interface Company {
   valuation: string | null
   revenue: string | null
   website: string | null
+  tags: string[] | null
 }
 
 // DB-driven content (from company_* tables). Empty arrays = fall back to hardcoded.

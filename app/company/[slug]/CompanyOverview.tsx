@@ -18,6 +18,7 @@ interface Company {
   valuation: string | null
   revenue: string | null
   website: string | null
+  tags: string[] | null
 }
 
 type DbNewsItem = { type: string; headline: string; summary: string | null; published_date: string | null; type_color: string; type_bg: string; dot_color: string; source_url?: string | null }
@@ -504,7 +505,7 @@ export default function CompanyOverview({ company, showProTeaser = false, dbNews
           </div>
           {/* Tags */}
           <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
-            {[company.category, 'B2B', 'SaaS', 'Developer-first'].filter(Boolean).map(t => (
+            {(company.tags && company.tags.length > 0 ? company.tags : [company.category]).filter(Boolean).map(t => (
               <span key={t} style={{
                 padding: '3px 10px', borderRadius: '5px',
                 background: '#eef4fb', border: '1px solid #a8cbe8',
