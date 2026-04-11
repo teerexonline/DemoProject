@@ -16,11 +16,11 @@ export default async function Page() {
     supabase.from('profiles').select('plan').eq('id', user.id).single(),
     supabase
       .from('companies')
-      .select('id, name, slug, category, description, logo_color, logo_url, employees, founded, hq, valuation')
+      .select('id, name, slug, category, description, logo_color, logo_url, employees, founded, hq, valuation, trending_rank')
       .order('name'),
     supabase
       .from('companies')
-      .select('id, name, slug, category, description, logo_color, logo_url, employees, founded, hq, valuation')
+      .select('id, name, slug, category, description, logo_color, logo_url, employees, founded, hq, valuation, trending_rank')
       .order('created_at', { ascending: false })
       .limit(6),
     supabase.from('saved_companies').select('company_id').eq('user_id', user.id),

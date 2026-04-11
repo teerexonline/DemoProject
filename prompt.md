@@ -252,15 +252,36 @@ Fields reference (for manual fallback only):
 ━━━ 3. NEWS (INSERT into company_news) ━━━
 GOLD STANDARD: See referenceData.md Section 3 for type→color mapping and depth.
 5 most recent press releases — real, dated, sourced events only.
+
 TYPE RULE: Use the most accurate type for each item. Valid types: Press Release, Partnership, Product Launch, Award, Funding, Acquisition. Match the type to the nature of the news — acquisitions get "Acquisition", product launches get "Product Launch", etc.
+
 DATE RULE: Every item must have published_date within the last 12 months relative to
 today's date (from SESSION DATE ANCHOR). Do not insert items older than 12 months.
 If fewer than 5 genuinely recent items exist, insert only what is recent — do not
 pad with older items to reach 5. Inserting stale news is worse than inserting fewer items.
+
+DATE FORMAT RULE — CRITICAL: published_date MUST be stored as 'YYYY-MM-DD' (ISO 8601).
+  CORRECT:   '2026-02-12'
+  INCORRECT: 'Feb 12, 2026' or 'February 12, 2026' or '02/12/2026'
+  WHY: Text-format dates ('Feb 12, 2026') break all SQL date comparison queries. The
+  staleness check (published_date < '[threshold]') silently produces wrong results
+  when the column contains mixed-format strings. ISO format is the only safe format.
+
+SORT ORDER RULE — CRITICAL: sort_order determines display order. Newest item = sort_order 1.
+  sort_order 1 = most recent item (highest published_date)
+  sort_order 2 = second most recent
+  sort_order 3 = third most recent
+  sort_order 4 = fourth most recent
+  sort_order 5 = oldest item (lowest published_date)
+  Always assign sequential integers starting at 1. NEVER use sort_order = 0.
+  NEVER leave all items at sort_order 0 or duplicate sort_orders.
+  When inserting 5 items: the item with the most recent published_date gets sort_order 1,
+  the item with the oldest published_date gets sort_order 5.
+
 For each:
 - headline: exact headline from the press release or news article
 - summary: 1 sentence — specific, not generic. Mention numbers/outcomes where available.
-- published_date: "MMM DD, YYYY" (e.g. "Feb 12, 2026") — must be within last 12 months
+- published_date: 'YYYY-MM-DD' format ONLY (e.g. '2026-02-12') — must be within last 12 months
 - source_url: REQUIRED. Direct URL to the press release or article. Every news item MUST
   have a real, verifiable source_url — no nulls, no placeholders. Search the company's
   official newsroom, investor relations page, PRNewswire, BusinessWire, or GlobeNewswire.
@@ -269,6 +290,45 @@ For each:
   Do not insert a row with source_url = NULL.
 - type: one of [Press Release, Partnership, Product Launch, Award, Funding, Acquisition] — match to the nature of the news
 - type_color / type_bg / dot_color: use the color mapping in referenceData.md Section 3
+- sort_order: integer 1–5, newest item = 1, oldest item = 5 (see SORT ORDER RULE above)
+
+POST-INSERT VERIFICATION — MANDATORY: After inserting all news items, run this query:
+  SELECT sort_order, published_date, headline,
+    CASE WHEN source_url IS NULL THEN '❌ MISSING URL' ELSE '✓' END AS url_check,
+    CASE WHEN published_date < '[today minus 12 months]' THEN '❌ STALE' ELSE '✓' END AS date_check,
+    CASE WHEN published_date !~ '^\d{4}-\d{2}-\d{2}$' THEN '❌ WRONG FORMAT' ELSE '✓' END AS format_check
+  FROM company_news
+  WHERE company_id = '[company_id]'
+  ORDER BY sort_order;
+  Expected: all url_check = ✓, all date_check = ✓, all format_check = ✓, sort_orders 1–5 sequential.
+  If any check fails, fix before proceeding.
+
+━━━ NEWS SORT ORDER AUDIT (run periodically) ━━━
+Use this query to find ALL companies where sort_order 1 is not the newest item:
+  WITH company_sort1 AS (
+    SELECT company_id, published_date::date AS sort1_date
+    FROM company_news WHERE sort_order = 1
+      AND published_date ~ '^\d{4}-\d{2}-\d{2}$'
+  ),
+  company_max AS (
+    SELECT company_id, MAX(published_date::date) AS max_date
+    FROM company_news WHERE published_date ~ '^\d{4}-\d{2}-\d{2}$'
+    GROUP BY company_id
+  )
+  SELECT c.name, s.sort1_date, m.max_date
+  FROM company_sort1 s
+  JOIN company_max m ON m.company_id = s.company_id
+  JOIN companies c ON c.id = s.company_id
+  WHERE s.sort1_date < m.max_date
+  ORDER BY c.name;
+Fix with:
+  WITH ranked AS (
+    SELECT id,
+      ROW_NUMBER() OVER (PARTITION BY company_id ORDER BY published_date::date DESC) AS new_sort_order
+    FROM company_news WHERE published_date ~ '^\d{4}-\d{2}-\d{2}$'
+  )
+  UPDATE company_news cn SET sort_order = r.new_sort_order
+  FROM ranked r WHERE cn.id = r.id AND cn.sort_order != r.new_sort_order;
 
 ━━━ 4. MILESTONES (INSERT into company_milestones) ━━━
 GOLD STANDARD: See referenceData.md Section 4 for type→icon mapping and badge style.

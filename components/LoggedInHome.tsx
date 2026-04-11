@@ -21,6 +21,7 @@ interface Company {
   founded: number | null
   hq: string | null
   valuation: string | null
+  trending_rank: number | null
 }
 
 interface Props {
@@ -464,7 +465,10 @@ export default function LoggedInHome({ user, plan, companies, recentlyAdded, isP
   const name = user.email?.split('@')[0] ?? 'there'
 
   // Section slices (deterministic)
-  const trending     = all.slice(0, 6)
+  const trending     = [...all]
+    .filter(c => c.trending_rank != null)
+    .sort((a, b) => (a.trending_rank ?? 999) - (b.trending_rank ?? 999))
+    .slice(0, 6)
   const featuredList  = all.length >= 11 ? all.slice(6, 11) : all.slice(0, 5)
   const recent       = recentlyAdded.length > 0 ? recentlyAdded : all.slice(7, 13)
   const editorPicks = (() => {
