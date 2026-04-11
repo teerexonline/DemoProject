@@ -38,13 +38,13 @@ export default function UpgradeButton({ label = 'Upgrade to Pro', style, classNa
   }, [showPicker])
 
   function handleClick() {
-    onClick?.()
-    if (!email) { router.push('/signup?plan=pro'); return }
+    if (!email) { onClick?.(); router.push('/signup?plan=pro'); return }
     setShowPicker(prev => !prev)
   }
 
   async function openCheckout(priceId: string) {
     setShowPicker(false)
+    onClick?.()
     setLoading(true)
     try {
       const paddle = getPaddleInstance()
