@@ -58,5 +58,9 @@ export default function TurnstileWidget({ onVerify, onExpire }: Props) {
     }
   }, [onVerify, onExpire])
 
-  return <div ref={containerRef} />
+  return (
+    <div style={{ display: 'flex', justifyContent: 'center' }}>
+      <div ref={containerRef} style={{ width: '100%' }} />
+    </div>
+  )
 }

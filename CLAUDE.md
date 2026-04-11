@@ -12,7 +12,7 @@ You are an expert full-stack developer specializing in Next.js 16 (App Router), 
 - It's main user group are job seekers, which includes students. For reseaching about a company before they apply or interview
 
 ## Frontend workflow
-- Invoke the `frontend-design` skill before writing frontend code when that skill is available.
+- ALWAYS invoke the `frontend-design` skill before writing ANY frontend code, every session, no exceptions. This includes components, pages, UI fixes, and styling changes — no matter how small.
 - Build mobile-first, production-quality UI.
 - Do not add extra sections, features, or content beyond the request or reference.
 - If a reference image is provided, match layout, spacing, typography, colors, border radius, shadows, and image sizing as closely as possible.
