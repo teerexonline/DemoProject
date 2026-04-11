@@ -35,16 +35,12 @@ export default function LoginPage() {
     if (!turnstileToken) { setError('Please wait for the security check to complete.'); return }
     setLoading(true)
 
-    const verify = await fetch('/api/turnstile/verify', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ token: turnstileToken }),
-    })
-    const { success } = await verify.json()
-    if (!success) { setError('Security check failed. Please refresh and try again.'); setLoading(false); return }
-
     const supabase = createClient()
-    const { error } = await supabase.auth.signInWithPassword({ email, password })
+    const { error } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+      options: { captchaToken: turnstileToken },
+    })
     if (error) {
       setError(error.message)
       setLoading(false)
