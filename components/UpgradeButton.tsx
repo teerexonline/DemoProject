@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import { getPaddleInstance } from '@paddle/paddle-js'
 import { createClient } from '@/lib/supabase/client'
@@ -17,7 +17,9 @@ export default function UpgradeButton({ label = 'Upgrade to Pro', style, classNa
   const [email, setEmail] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
   const [showPicker, setShowPicker] = useState(false)
+  const [pickerPos, setPickerPos] = useState<{ top: number; left: number } | null>(null)
   const wrapperRef = useRef<HTMLDivElement>(null)
+  const buttonRef = useRef<HTMLButtonElement>(null)
 
   useEffect(() => {
     const supabase = createClient()
@@ -39,6 +41,10 @@ export default function UpgradeButton({ label = 'Upgrade to Pro', style, classNa
 
   function handleClick() {
     if (!email) { onClick?.(); router.push('/signup?plan=pro'); return }
+    if (buttonRef.current) {
+      const rect = buttonRef.current.getBoundingClientRect()
+      setPickerPos({ top: rect.bottom + 8, left: rect.left })
+    }
     setShowPicker(prev => !prev)
   }
 
@@ -63,6 +69,7 @@ export default function UpgradeButton({ label = 'Upgrade to Pro', style, classNa
     <div ref={wrapperRef} style={{ position: 'relative', display: 'inline-block' }}>
       <button
         onClick={handleClick}
+        ref={buttonRef}
         disabled={loading}
         className={className}
         style={{
@@ -84,12 +91,12 @@ export default function UpgradeButton({ label = 'Upgrade to Pro', style, classNa
         {loading ? 'Opening…' : label}
       </button>
 
-      {showPicker && (
+      {showPicker && pickerPos && (
         <div style={{
-          position: 'absolute', top: 'calc(100% + 8px)', left: 0,
+          position: 'fixed', top: pickerPos.top, left: pickerPos.left,
           background: '#fff', borderRadius: 12, border: '1px solid #E4E4E7',
           boxShadow: '0 8px 30px rgba(0,0,0,0.12)', padding: 6,
-          minWidth: 200, zIndex: 200,
+          minWidth: 200, zIndex: 9999,
         }}>
           <button
             onClick={() => openCheckout(process.env.NEXT_PUBLIC_PADDLE_PRICE_MONTHLY!)}
