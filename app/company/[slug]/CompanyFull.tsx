@@ -6,6 +6,7 @@ import CompanyOverview from './CompanyOverview'
 import OrgChart from './OrgChart'
 import { DEPARTMENTS, LEVEL_COLORS, type Dept } from './jobData'
 import SaveButton from '@/components/SaveButton'
+import ShareButton from '@/components/ShareButton'
 import CompanyLogo from '@/components/CompanyLogo'
 import { Building2, Network, TrendingUp, Settings, Target, Package } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
@@ -1012,7 +1013,8 @@ export default function CompanyFull({ company, initialSaved, dbContent, relatedC
           <span style={{ color: '#A1A1AA', fontSize: '13px' }}>{company.category}</span>
           <span style={{ color: '#D4D4D8', fontSize: '13px' }}>›</span>
           <span style={{ color: '#09090B', fontSize: '13px', fontWeight: 600 }}>{company.name}</span>
-          <div style={{ marginLeft: 'auto' }}>
+          <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: 8 }}>
+            <ShareButton url={`https://researchorg.com/company/${company.slug}`} title={`${company.name} — ResearchOrg`} />
             <SaveButton companyId={company.id} companyName={company.name} initialSaved={initialSaved} logoColor={color} />
           </div>
         </div>
