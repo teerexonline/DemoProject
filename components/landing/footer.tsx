@@ -7,7 +7,7 @@ export default function Footer() {
   const cols: { title: string; links: { label: string; href: string }[] }[] = [
     { title: 'Platform', links: [{ label: 'Explore', href: '/explore' }, { label: 'Features', href: '/features' }, { label: 'Pricing', href: '/pricing' }] },
     { title: 'Company',  links: [{ label: 'About', href: '/about' }, { label: 'Blog', href: '/blog' }, { label: 'Careers', href: '/careers' }] },
-    { title: 'Legal',    links: [{ label: 'Privacy Policy', href: '/privacy' }, { label: 'Terms of Service', href: '/terms' }, { label: 'Cookie Policy', href: '/cookies' }] },
+    { title: 'Legal',    links: [{ label: 'Privacy Policy', href: '/privacy' }, { label: 'Terms of Service', href: '/terms' }, { label: 'Refund Policy', href: '/refund-policy' }, { label: 'Cookie Policy', href: '/cookies' }] },
   ]
 
   return (

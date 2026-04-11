@@ -4,18 +4,16 @@ import { useState } from 'react'
 import Link from 'next/link'
 import { Check, Minus, HelpCircle } from 'lucide-react'
 
-type BillingPeriod = 'monthly' | 'yearly' | '3years'
+type BillingPeriod = 'monthly' | 'yearly'
 
 const PRO_PRICING: Record<BillingPeriod, { price: string; period: string; savings: string | null }> = {
-  monthly: { price: '$4.99',  period: 'per month',    savings: null },
-  yearly:  { price: '$39.99', period: 'per year',     savings: 'Save 33%' },
-  '3years':{ price: '$79.99', period: 'per 3 years',  savings: 'Save 55%' },
+  monthly: { price: '$7.99',  period: 'per month', savings: null },
+  yearly:  { price: '$79.99', period: 'per year',  savings: 'Save 17%' },
 }
 
 const TOGGLE_OPTIONS: { key: BillingPeriod; label: string; badge?: string }[] = [
   { key: 'monthly', label: 'Monthly' },
-  { key: 'yearly',  label: 'Yearly',  badge: '33% off' },
-  { key: '3years',  label: '3 Years', badge: '55% off' },
+  { key: 'yearly',  label: 'Yearly',  badge: '17% off' },
 ]
 
 const COMPARISON: { category: string; rows: { label: string; free: string | boolean; pro: string | boolean; enterprise: string | boolean }[] }[] = [
@@ -68,7 +66,7 @@ const FAQ = [
   },
   {
     q: 'What payment methods do you accept?',
-    a: 'We accept all major credit and debit cards via Stripe. Annual and 3-year plans can also be invoiced on request.',
+    a: 'We accept all major credit and debit cards. Payments are processed securely by Paddle.',
   },
   {
     q: 'What is the Enterprise plan?',

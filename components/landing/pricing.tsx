@@ -3,12 +3,11 @@
 import { useState } from 'react'
 import Link from 'next/link'
 
-type BillingPeriod = 'monthly' | 'yearly' | '3years'
+type BillingPeriod = 'monthly' | 'yearly'
 
 const PRO_PRICING: Record<BillingPeriod, { price: string; period: string; savings: string | null }> = {
-  monthly: { price: '$4.99', period: 'per month',    savings: null },
-  yearly:  { price: '$39.99', period: 'per year',    savings: 'Save 33%' },
-  '3years':{ price: '$79.99', period: 'per 3 years', savings: 'Save 55%' },
+  monthly: { price: '$7.99',  period: 'per month', savings: null },
+  yearly:  { price: '$79.99', period: 'per year',  savings: 'Save 17%' },
 }
 
 export default function Pricing() {
@@ -53,7 +52,6 @@ export default function Pricing() {
   const toggleOptions: { key: BillingPeriod; label: string }[] = [
     { key: 'monthly', label: 'Monthly' },
     { key: 'yearly',  label: 'Yearly' },
-    { key: '3years',  label: '3 Years' },
   ]
 
   return (

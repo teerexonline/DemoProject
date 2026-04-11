@@ -48,8 +48,8 @@ const sections: LegalSection[] = [
       <div className="legal-content">
         <p><strong>Free Plan:</strong> All users have access to a free plan that includes one full company profile view per month and limited previews for all other companies. The monthly allowance resets on a rolling 30-day basis from your account creation date.</p>
         <p><strong>Pro Plan:</strong> Paid subscriptions are billed in advance on a monthly, annual, or multi-year basis as selected. Pro plans provide unlimited access to all company profiles and premium features.</p>
-        <p><strong>Billing:</strong> Payments are processed by Stripe. By providing payment information, you authorize us to charge the selected payment method for the applicable subscription fee. All prices are in USD and exclusive of any applicable taxes.</p>
-        <p><strong>Cancellation:</strong> You may cancel your subscription at any time from your Account Settings. Cancellation takes effect at the end of the current billing period. We do not provide refunds for partial billing periods except where required by law.</p>
+        <p><strong>Billing:</strong> Payments are processed by Paddle.com Market Limited, which acts as Merchant of Record. By providing payment information, you authorize Paddle to charge the selected payment method for the applicable subscription fee. All prices are in USD and exclusive of any applicable taxes.</p>
+        <p><strong>Cancellation & Refunds:</strong> You may cancel your subscription at any time from your Account Settings. Cancellation takes effect at the end of the current billing period. Refunds are governed by our <a href="/refund-policy">Refund Policy</a>.</p>
         <p><strong>Price changes:</strong> We will provide at least 30 days&apos; notice before any price changes take effect for existing subscribers.</p>
         <p><strong>Failed payments:</strong> If a payment fails, we will attempt to retry the charge. After three failed attempts, your account will be downgraded to the Free plan and access to Pro features will be suspended until payment is resolved.</p>
       </div>

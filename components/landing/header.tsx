@@ -361,9 +361,18 @@ export default function Header() {
         </div>
       )}
 
+      {/* Mobile dropdown backdrop */}
+      {mobileMenuOpen && (
+        <div
+          style={{ position: 'fixed', inset: 0, zIndex: 40 }}
+          onClick={() => setMobileMenuOpen(false)}
+          aria-hidden="true"
+        />
+      )}
+
       {/* Mobile dropdown */}
       {mobileMenuOpen && (
-        <div className="header-mobile-menu" style={{ borderTop: '1px solid #f0f6fc', background: '#fff', padding: '12px 16px 16px', display: 'flex', flexDirection: 'column', gap: '4px' }}>
+        <div className="header-mobile-menu" style={{ borderTop: '1px solid #f0f6fc', background: '#fff', padding: '12px 16px 16px', display: 'flex', flexDirection: 'column', gap: '4px', position: 'relative', zIndex: 41 }}>
           {([{ label: 'Features', href: '/features' }, { label: 'Explore', href: '/explore' }, { label: 'Pricing', href: '/pricing' }] as { label: string; href: string }[]).map(item => (
             <Link key={item.label} href={item.href} onClick={() => setMobileMenuOpen(false)}
               style={{ color: '#52525B', textDecoration: 'none', fontSize: '14px', fontWeight: 500, padding: '10px 12px', borderRadius: '8px', background: '#f8fbfe' }}
