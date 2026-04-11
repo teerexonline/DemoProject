@@ -22,7 +22,7 @@ export async function cancelSubscription(): Promise<{ error: string | null }> {
   if (!apiKey) return { error: 'Paddle not configured' }
 
   // Cancel at end of billing period (effective_from: 'next_billing_period')
-  const res = await fetch(`https://sandbox-api.paddle.com/subscriptions/${profile.paddle_subscription_id}/cancel`, {
+  const res = await fetch(`https://api.paddle.com/subscriptions/${profile.paddle_subscription_id}/cancel`, {
     method: 'POST',
     headers: {
       'Authorization': `Bearer ${apiKey}`,

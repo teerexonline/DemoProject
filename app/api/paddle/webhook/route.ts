@@ -24,14 +24,26 @@ async function verifyPaddleSignature(request: NextRequest, rawBody: string): Pro
   return computed === h1
 }
 
+async function getEmailFromCustomerId(customerId: string): Promise<string | null> {
+  const apiKey = process.env.PADDLE_API_KEY
+  if (!apiKey) return null
+  try {
+    const res = await fetch(`https://api.paddle.com/customers/${customerId}`, {
+      headers: { Authorization: `Bearer ${apiKey}` },
+    })
+    if (!res.ok) return null
+    const body = await res.json()
+    return body?.data?.email ?? null
+  } catch { return null }
+}
+
 export async function POST(request: NextRequest) {
   const rawBody = await request.text()
 
-  // Signature check temporarily disabled for debugging — re-enable before go-live
-  // const valid = await verifyPaddleSignature(request, rawBody)
-  // if (!valid) {
-  //   return NextResponse.json({ error: 'Invalid signature' }, { status: 401 })
-  // }
+  const valid = await verifyPaddleSignature(request, rawBody)
+  if (!valid) {
+    return NextResponse.json({ error: 'Invalid signature' }, { status: 401 })
+  }
 
   const event = JSON.parse(rawBody)
   const supabase = createAdminClient()
@@ -39,64 +51,35 @@ export async function POST(request: NextRequest) {
   const eventType: string = event.event_type
   const data = event.data
   const subscriptionId: string | undefined = data?.id
-
-  // subscription events only include customer_id — fetch email from Paddle API
-  async function getEmailFromCustomerId(customerId: string): Promise<string | null> {
-    const apiKey = process.env.PADDLE_API_KEY
-    if (!apiKey) return null
-    try {
-      const res = await fetch(`https://sandbox-api.paddle.com/customers/${customerId}`, {
-        headers: { Authorization: `Bearer ${apiKey}` },
-      })
-      if (!res.ok) return null
-      const body = await res.json()
-      return body?.data?.email ?? null
-    } catch { return null }
-  }
-
   const customerId: string | undefined = data?.customer_id ?? data?.customer?.id
   const email: string | null = data?.customer?.email
     ?? (customerId ? await getEmailFromCustomerId(customerId) : null)
 
-  const debug: Record<string, unknown> = {
-    eventType,
-    email: email ?? null,
-    subscriptionId: subscriptionId ?? null,
-    dataKeys: Object.keys(data ?? {}),
-    customerRaw: data?.customer ?? null,
-    customDataRaw: data?.custom_data ?? null,
-    itemsRaw: data?.items?.[0] ?? null,
-  }
-
-  if (email && (eventType === 'subscription.activated' || eventType === 'subscription.updated' || eventType === 'transaction.completed')) {
-    const plan = 'Pro'
-    const { data: { users }, error: listError } = await supabase.auth.admin.listUsers({ perPage: 1000 })
-    debug.listError = listError?.message ?? null
-    debug.userCount = users?.length ?? 0
-
-    const user = users?.find(u => u.email?.toLowerCase() === email.toLowerCase())
-    debug.userFound = user ? { id: user.id, email: user.email } : null
-
-    if (user) {
-      const update: Record<string, string | null> = { plan }
-      if (eventType !== 'transaction.completed') update.paddle_subscription_id = subscriptionId ?? null
-
-      const { error: updateError } = await supabase
-        .from('profiles')
-        .update(update)
-        .eq('id', user.id)
-      debug.updateError = updateError?.message ?? null
-      debug.updated = !updateError
-    }
-  }
-
-  if (email && eventType === 'subscription.canceled') {
+  async function setPlan(userEmail: string, plan: 'Pro' | 'Free', subId?: string) {
     const { data: { users } } = await supabase.auth.admin.listUsers({ perPage: 1000 })
-    const user = users?.find(u => u.email?.toLowerCase() === email.toLowerCase())
-    if (user) {
-      await supabase.from('profiles').update({ plan: 'Free', paddle_subscription_id: subscriptionId ?? null }).eq('id', user.id)
+    const user = users?.find(u => u.email?.toLowerCase() === userEmail.toLowerCase())
+    if (!user) return
+
+    const update: Record<string, string | null> = { plan }
+    if (subId !== undefined) update.paddle_subscription_id = subId
+
+    await supabase.from('profiles').update(update).eq('id', user.id)
+  }
+
+  if (email) {
+    switch (eventType) {
+      case 'subscription.activated':
+      case 'subscription.updated':
+        await setPlan(email, 'Pro', subscriptionId)
+        break
+      case 'subscription.canceled':
+        await setPlan(email, 'Free', subscriptionId)
+        break
+      case 'transaction.completed':
+        await setPlan(email, 'Pro')
+        break
     }
   }
 
-  return NextResponse.json({ received: true, debug })
+  return NextResponse.json({ received: true })
 }
