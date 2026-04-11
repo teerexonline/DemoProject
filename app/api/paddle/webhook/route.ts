@@ -45,6 +45,10 @@ export async function POST(request: NextRequest) {
     eventType,
     email: email ?? null,
     subscriptionId: subscriptionId ?? null,
+    dataKeys: Object.keys(data ?? {}),
+    customerRaw: data?.customer ?? null,
+    customDataRaw: data?.custom_data ?? null,
+    itemsRaw: data?.items?.[0] ?? null,
   }
 
   if (email && (eventType === 'subscription.activated' || eventType === 'subscription.updated' || eventType === 'transaction.completed')) {
