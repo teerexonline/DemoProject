@@ -43,7 +43,7 @@ export default function Pricing() {
       savings: null,
       desc: 'For recruiting teams and career services.',
       cta: 'Contact Sales',
-      href: '/contact',
+      href: 'mailto:sales@researchorg.com?subject=ResearchOrg%20Enterprise%20Plan&body=Hi%2C%20I%27m%20interested%20in%20the%20Enterprise%20plan%20for%20my%20team.',
       features: ['Everything in Pro', 'SSO & team management', 'API access', 'Bulk exports', 'Dedicated account manager', 'SLA & uptime guarantee'],
       highlight: false,
     },

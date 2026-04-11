@@ -1,8 +1,10 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import Link from 'next/link'
 import { Check, Minus, HelpCircle } from 'lucide-react'
+import { createClient } from '@/lib/supabase/client'
+import { getPaddleInstance } from '@paddle/paddle-js'
 
 type BillingPeriod = 'monthly' | 'yearly'
 
@@ -87,9 +89,74 @@ function CellValue({ value, highlight }: { value: string | boolean; highlight?: 
   )
 }
 
+const ENTERPRISE_MAILTO = 'mailto:sales@researchorg.com?subject=ResearchOrg%20Enterprise%20Plan&body=Hi%2C%20I%27m%20interested%20in%20the%20Enterprise%20plan%20for%20my%20team.'
+
+function ctaStyle(variant: 'primary' | 'secondary' | 'ghost' | 'disabled' | 'danger', highlight: boolean): React.CSSProperties {
+  if (variant === 'disabled') return {
+    display: 'block', textAlign: 'center', textDecoration: 'none',
+    fontSize: '14px', fontWeight: 600, padding: '11px', borderRadius: '9px', marginBottom: '28px',
+    background: highlight ? 'rgba(255,255,255,0.12)' : '#F4F4F5',
+    color: highlight ? 'rgba(255,255,255,0.35)' : '#A1A1AA',
+    border: 'none', cursor: 'default', letterSpacing: '-0.01em',
+  }
+  if (variant === 'danger') return {
+    display: 'block', textAlign: 'center', textDecoration: 'none',
+    fontSize: '14px', fontWeight: 600, padding: '11px', borderRadius: '9px', marginBottom: '28px',
+    background: 'transparent', color: '#71717A',
+    border: '1.5px solid #D4D4D8', cursor: 'pointer', letterSpacing: '-0.01em',
+  }
+  if (variant === 'ghost') return {
+    display: 'block', textAlign: 'center', textDecoration: 'none',
+    fontSize: '14px', fontWeight: 600, padding: '11px', borderRadius: '9px', marginBottom: '28px',
+    background: 'transparent', color: '#09090B',
+    border: '1.5px solid #D4D4D8', cursor: 'pointer', letterSpacing: '-0.01em',
+  }
+  if (variant === 'secondary') return {
+    display: 'block', textAlign: 'center', textDecoration: 'none',
+    fontSize: '14px', fontWeight: 600, padding: '11px', borderRadius: '9px', marginBottom: '28px',
+    background: '#063f76', color: '#fff', border: 'none', cursor: 'pointer',
+    letterSpacing: '-0.01em', boxShadow: '0 4px 12px rgba(6,63,118,0.25)',
+  }
+  // primary
+  return {
+    display: 'block', textAlign: 'center', textDecoration: 'none',
+    fontSize: '14px', fontWeight: 600, padding: '11px', borderRadius: '9px', marginBottom: '28px',
+    background: highlight ? '#fff' : '#063f76',
+    color: highlight ? '#063f76' : '#fff',
+    border: 'none', cursor: 'pointer', letterSpacing: '-0.01em',
+    boxShadow: highlight ? '0 4px 12px rgba(255,255,255,0.25)' : '0 4px 12px rgba(6,63,118,0.25)',
+  }
+}
+
 export default function PricingPage() {
   const [billing, setBilling] = useState<BillingPeriod>('monthly')
   const [openFaq, setOpenFaq] = useState<number | null>(null)
+  const [userPlan, setUserPlan] = useState<string>('') // '' = loading
+  const [userEmail, setUserEmail] = useState<string | null>(null)
+
+  useEffect(() => {
+    const supabase = createClient()
+    supabase.auth.getUser().then(async ({ data: { user } }) => {
+      if (!user) { setUserPlan('anonymous'); return }
+      setUserEmail(user.email ?? null)
+      const { data: profile } = await supabase.from('profiles').select('plan').eq('id', user.id).single()
+      setUserPlan(profile?.plan ?? 'Free')
+    })
+  }, [])
+
+  const isPro = ['Pro', 'Admin', 'SuperAdmin'].includes(userPlan)
+  const isFree = userPlan === 'Free'
+  const isAnonymous = userPlan === 'anonymous'
+
+  function openCheckout(priceId: string) {
+    const paddle = getPaddleInstance()
+    if (!paddle || !userEmail) return
+    paddle.Checkout.open({
+      items: [{ priceId, quantity: 1 }],
+      customer: { email: userEmail },
+      settings: { displayMode: 'overlay', theme: 'light', locale: 'en' },
+    })
+  }
 
   const tiers = [
     {
@@ -121,7 +188,7 @@ export default function PricingPage() {
       savings: null,
       desc: 'For recruiting teams and career services.',
       cta: 'Contact Sales',
-      href: '/contact',
+      href: 'mailto:sales@researchorg.com?subject=ResearchOrg%20Enterprise%20Plan&body=Hi%2C%20I%27m%20interested%20in%20the%20Enterprise%20plan%20for%20my%20team.',
       features: ['Everything in Pro', 'SSO & team management', 'API access', 'Bulk exports', 'Dedicated account manager', 'SLA & uptime guarantee'],
       highlight: false,
     },
@@ -289,31 +356,29 @@ export default function PricingPage() {
                 <p style={{ color: tier.highlight ? 'rgba(255,255,255,0.6)' : '#71717A', fontSize: '13px', margin: 0, lineHeight: 1.5 }}>{tier.desc}</p>
               </div>
 
-              <Link
-                href={tier.href}
-                style={{
-                  display: 'block', textAlign: 'center', textDecoration: 'none',
-                  color: tier.highlight ? '#063f76' : tier.name === 'Enterprise' ? '#09090B' : '#fff',
-                  fontSize: '14px', fontWeight: 600, padding: '11px',
-                  borderRadius: '9px',
-                  background: tier.highlight ? '#fff' : tier.name === 'Enterprise' ? 'transparent' : '#063f76',
-                  border: tier.name === 'Enterprise' ? '1.5px solid #D4D4D8' : 'none',
-                  marginBottom: '28px',
-                  transition: 'opacity 0.15s, transform 0.1s',
-                  letterSpacing: '-0.01em',
-                  boxShadow: tier.highlight ? '0 4px 12px rgba(255,255,255,0.25)' : 'none',
-                }}
-                onMouseEnter={e => {
-                  const el = e.currentTarget as HTMLElement
-                  el.style.opacity = '0.88'
-                  el.style.transform = 'translateY(-1px)'
-                }}
-                onMouseLeave={e => {
-                  const el = e.currentTarget as HTMLElement
-                  el.style.opacity = '1'
-                  el.style.transform = 'translateY(0)'
-                }}
-              >{tier.cta}</Link>
+              {/* CTA Button */}
+              {tier.name === 'Enterprise' ? (
+                <a href={tier.href} style={ctaStyle('ghost', false)}>Contact Sales</a>
+              ) : tier.name === 'Free' ? (
+                isPro ? (
+                  <Link href="/settings" style={ctaStyle('danger', false)}>Downgrade</Link>
+                ) : isFree ? (
+                  <span style={ctaStyle('disabled', false)}>Current Plan</span>
+                ) : (
+                  <Link href="/signup" style={ctaStyle('primary', false)}>Get Started</Link>
+                )
+              ) : tier.name === 'Pro' ? (
+                isPro ? (
+                  <span style={ctaStyle('disabled', true)}>Current Plan</span>
+                ) : isFree ? (
+                  <button
+                    onClick={() => openCheckout(billing === 'monthly' ? process.env.NEXT_PUBLIC_PADDLE_PRICE_MONTHLY! : process.env.NEXT_PUBLIC_PADDLE_PRICE_YEARLY!)}
+                    style={ctaStyle('primary', true)}
+                  >Upgrade to Pro</button>
+                ) : (
+                  <Link href="/signup?plan=pro" style={ctaStyle('primary', true)}>Get Started</Link>
+                )
+              ) : null}
 
               <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '11px' }}>
                 {tier.features.map((feat) => (
@@ -355,21 +420,25 @@ export default function PricingPage() {
                 {name === 'Pro' && PRO_PRICING[billing].savings && (
                   <div style={{ fontSize: '10px', fontWeight: 700, color: 'rgba(255,255,255,0.55)', marginTop: '2px' }}>{PRO_PRICING[billing].savings}</div>
                 )}
-                <Link
-                  href={name === 'Free' ? '/signup' : name === 'Pro' ? '/signup?plan=pro' : '/contact'}
-                  style={{
-                    display: 'inline-block', marginTop: '10px',
-                    padding: '6px 16px', borderRadius: '7px',
-                    fontSize: '11.5px', fontWeight: 600,
-                    textDecoration: 'none',
-                    background: name === 'Pro' ? '#fff' : name === 'Enterprise' ? 'transparent' : '#063f76',
-                    color: name === 'Pro' ? '#063f76' : name === 'Enterprise' ? '#52525B' : '#fff',
-                    border: name === 'Enterprise' ? '1px solid #D4D4D8' : 'none',
-                    transition: 'opacity 0.15s',
-                  }}
-                  onMouseEnter={e => (e.currentTarget as HTMLElement).style.opacity = '0.75'}
-                  onMouseLeave={e => (e.currentTarget as HTMLElement).style.opacity = '1'}
-                >{name === 'Enterprise' ? 'Contact Sales' : 'Get Started'}</Link>
+                {name === 'Enterprise' ? (
+                  <a href={ENTERPRISE_MAILTO} style={{ display: 'inline-block', marginTop: '10px', padding: '6px 16px', borderRadius: '7px', fontSize: '11.5px', fontWeight: 600, textDecoration: 'none', background: 'transparent', color: '#52525B', border: '1px solid #D4D4D8' }}>Contact Sales</a>
+                ) : name === 'Free' ? (
+                  isPro ? (
+                    <Link href="/settings" style={{ display: 'inline-block', marginTop: '10px', padding: '6px 16px', borderRadius: '7px', fontSize: '11.5px', fontWeight: 600, textDecoration: 'none', background: 'transparent', color: '#71717A', border: '1px solid #D4D4D8' }}>Downgrade</Link>
+                  ) : isFree ? (
+                    <span style={{ display: 'inline-block', marginTop: '10px', padding: '6px 16px', borderRadius: '7px', fontSize: '11.5px', fontWeight: 600, background: '#F4F4F5', color: '#A1A1AA' }}>Current Plan</span>
+                  ) : (
+                    <Link href="/signup" style={{ display: 'inline-block', marginTop: '10px', padding: '6px 16px', borderRadius: '7px', fontSize: '11.5px', fontWeight: 600, textDecoration: 'none', background: '#063f76', color: '#fff' }}>Get Started</Link>
+                  )
+                ) : name === 'Pro' ? (
+                  isPro ? (
+                    <span style={{ display: 'inline-block', marginTop: '10px', padding: '6px 16px', borderRadius: '7px', fontSize: '11.5px', fontWeight: 600, background: 'rgba(255,255,255,0.15)', color: 'rgba(255,255,255,0.4)' }}>Current Plan</span>
+                  ) : isFree ? (
+                    <button onClick={() => openCheckout(billing === 'monthly' ? process.env.NEXT_PUBLIC_PADDLE_PRICE_MONTHLY! : process.env.NEXT_PUBLIC_PADDLE_PRICE_YEARLY!)} style={{ display: 'inline-block', marginTop: '10px', padding: '6px 16px', borderRadius: '7px', fontSize: '11.5px', fontWeight: 600, background: '#fff', color: '#063f76', border: 'none', cursor: 'pointer' }}>Upgrade to Pro</button>
+                  ) : (
+                    <Link href="/signup?plan=pro" style={{ display: 'inline-block', marginTop: '10px', padding: '6px 16px', borderRadius: '7px', fontSize: '11.5px', fontWeight: 600, textDecoration: 'none', background: '#fff', color: '#063f76' }}>Get Started</Link>
+                  )
+                ) : null}
               </div>
             ))}
           </div>
