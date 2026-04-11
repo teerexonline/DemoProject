@@ -6,12 +6,12 @@ import Testimonials from '@/components/landing/testimonials'
 import Trending from '@/components/landing/trending'
 import Pricing from '@/components/landing/pricing'
 const EXPLORE_SECTORS = [
-  { id: 'tech',       label: 'Technology',           desc: 'Software, AI, Cloud & Dev Tools',     accent: '#2563EB', img: 'https://images.unsplash.com/photo-1518770660439-4636190af475?w=480&h=260&fit=crop&auto=format&q=75' },
-  { id: 'finance',    label: 'Finance',              desc: 'Banking, Fintech & Capital Markets',  accent: '#059669', img: 'https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=480&h=260&fit=crop&auto=format&q=75' },
+  { id: 'tech',       label: 'Technology',           desc: 'Software, AI, Cloud & Dev Tools',     accent: '#2563EB', img: 'https://images.unsplash.com/photo-1587620962725-abab7fe55159?w=480&h=260&fit=crop&auto=format&q=75' },
+  { id: 'finance',    label: 'Finance',              desc: 'Banking, Fintech & Capital Markets',  accent: '#059669', img: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=480&h=260&fit=crop&auto=format&q=75' },
   { id: 'defense',    label: 'Aerospace & Defense',  desc: 'Aviation, Space & Defense Systems',   accent: '#7C3AED', img: 'https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=480&h=260&fit=crop&auto=format&q=75' },
-  { id: 'security',   label: 'Security',             desc: 'Cybersecurity & Physical Security',   accent: '#DC2626', img: 'https://images.unsplash.com/photo-1563986768609-322da13575f3?w=480&h=260&fit=crop&auto=format&q=75' },
-  { id: 'consumer',   label: 'Consumer & Retail',    desc: 'E-commerce, CPG & Retail Brands',     accent: '#D97706', img: 'https://images.unsplash.com/photo-1483985988355-763728e1935b?w=480&h=260&fit=crop&auto=format&q=75' },
-  { id: 'services',   label: 'Services',             desc: 'Consulting, Staffing & Professional', accent: '#0891B2', img: 'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=480&h=260&fit=crop&auto=format&q=75' },
+  { id: 'security',   label: 'Security',             desc: 'Cybersecurity & Physical Security',   accent: '#DC2626', img: 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=480&h=260&fit=crop&auto=format&q=75' },
+  { id: 'consumer',   label: 'Consumer & Retail',    desc: 'E-commerce, CPG & Retail Brands',     accent: '#D97706', img: 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=480&h=260&fit=crop&auto=format&q=75' },
+  { id: 'services',   label: 'Services',             desc: 'Consulting, Staffing & Professional', accent: '#0891B2', img: 'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=480&h=260&fit=crop&auto=format&q=75' },
   { id: 'industrial', label: 'Industrial',           desc: 'Manufacturing, Energy & Utilities',   accent: '#92400E', img: 'https://images.unsplash.com/photo-1565193566173-7a0ee3dbe261?w=480&h=260&fit=crop&auto=format&q=75' },
   { id: 'health',     label: 'Healthcare',           desc: 'MedTech, Pharma & Health Systems',    accent: '#BE185D', img: 'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=480&h=260&fit=crop&auto=format&q=75' },
   { id: 'energy',     label: 'Energy',               desc: 'Oil & Gas, Renewables & Utilities',   accent: '#CA8A04', img: 'https://images.unsplash.com/photo-1466611653911-95081537e5b7?w=480&h=260&fit=crop&auto=format&q=75' },
