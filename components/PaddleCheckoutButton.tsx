@@ -1,6 +1,6 @@
 'use client'
 
-import { getPaddle } from '@paddle/paddle-js'
+import { getPaddleInstance } from '@paddle/paddle-js'
 import { useState } from 'react'
 
 interface Props {
@@ -16,7 +16,7 @@ export default function PaddleCheckoutButton({ priceId, userEmail, label = 'Upgr
   async function handleClick() {
     setLoading(true)
     try {
-      const paddle = await getPaddle()
+      const paddle = getPaddleInstance()
       if (!paddle) { setLoading(false); return }
 
       paddle.Checkout.open({

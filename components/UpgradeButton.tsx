@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
-import { getPaddle } from '@paddle/paddle-js'
+import { getPaddleInstance } from '@paddle/paddle-js'
 import { createClient } from '@/lib/supabase/client'
 
 interface Props {
@@ -32,7 +32,7 @@ export default function UpgradeButton({ label = 'Upgrade to Pro', style, classNa
     }
     setLoading(true)
     try {
-      const paddle = await getPaddle()
+      const paddle = getPaddleInstance()
       if (!paddle) { router.push('/pricing'); return }
       paddle.Checkout.open({
         items: [{ priceId: process.env.NEXT_PUBLIC_PADDLE_PRICE_MONTHLY!, quantity: 1 }],
