@@ -71,24 +71,7 @@ export default function SupportPage() {
           {/* Email CTA */}
           <a
             href="mailto:support@researchorg.com"
-            style={{
-              display: 'inline-flex', alignItems: 'center', gap: 10,
-              padding: '13px 24px', borderRadius: 11,
-              background: '#063f76', color: '#fff',
-              textDecoration: 'none', fontSize: 14, fontWeight: 600,
-              boxShadow: '0 4px 16px rgba(6,63,118,0.25)',
-              transition: 'background 0.15s, transform 0.1s',
-            }}
-            onMouseEnter={e => {
-              const el = e.currentTarget as HTMLElement
-              el.style.background = '#04294f'
-              el.style.transform = 'translateY(-1px)'
-            }}
-            onMouseLeave={e => {
-              const el = e.currentTarget as HTMLElement
-              el.style.background = '#063f76'
-              el.style.transform = 'translateY(0)'
-            }}
+            className="support-cta-primary"
           >
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <rect x="2" y="4" width="20" height="16" rx="2"/>
@@ -141,29 +124,51 @@ export default function SupportPage() {
           </div>
           <a
             href="mailto:support@researchorg.com"
-            style={{
-              display: 'inline-flex', alignItems: 'center', gap: 8,
-              padding: '10px 20px', borderRadius: 9,
-              border: '1.5px solid #e2eaf2', background: '#fff',
-              color: '#063f76', textDecoration: 'none',
-              fontSize: 13.5, fontWeight: 600,
-              transition: 'border-color 0.15s, background 0.15s',
-            }}
-            onMouseEnter={e => {
-              const el = e.currentTarget as HTMLElement
-              el.style.borderColor = '#a8cbe8'
-              el.style.background = '#eef4fb'
-            }}
-            onMouseLeave={e => {
-              const el = e.currentTarget as HTMLElement
-              el.style.borderColor = '#e2eaf2'
-              el.style.background = '#fff'
-            }}
+            className="support-cta-secondary"
           >
             support@researchorg.com
           </a>
         </div>
       </div>
+
+      <style>{`
+        .support-cta-primary {
+          display: inline-flex;
+          align-items: center;
+          gap: 10px;
+          padding: 13px 24px;
+          border-radius: 11px;
+          background: #063f76;
+          color: #fff;
+          text-decoration: none;
+          font-size: 14px;
+          font-weight: 600;
+          box-shadow: 0 4px 16px rgba(6,63,118,0.25);
+          transition: background 0.15s, transform 0.1s;
+        }
+        .support-cta-primary:hover {
+          background: #04294f;
+          transform: translateY(-1px);
+        }
+        .support-cta-secondary {
+          display: inline-flex;
+          align-items: center;
+          gap: 8px;
+          padding: 10px 20px;
+          border-radius: 9px;
+          border: 1.5px solid #e2eaf2;
+          background: #fff;
+          color: #063f76;
+          text-decoration: none;
+          font-size: 13.5px;
+          font-weight: 600;
+          transition: border-color 0.15s, background 0.15s;
+        }
+        .support-cta-secondary:hover {
+          border-color: #a8cbe8;
+          background: #eef4fb;
+        }
+      `}</style>
     </div>
   )
 }
