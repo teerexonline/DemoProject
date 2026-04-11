@@ -12,7 +12,7 @@ export interface BillingInfo {
 
 async function getPaddleBilling(subscriptionId: string): Promise<BillingInfo> {
   const apiKey = process.env.PADDLE_API_KEY
-  if (!apiKey || !subscriptionId) return { nextBillingAt: null, interval: null, status: null }
+  if (!apiKey || !subscriptionId) return { nextBillingAt: null, interval: null, status: null, scheduledCancelAt: null }
 
   try {
     const res = await fetch(`https://api.paddle.com/subscriptions/${subscriptionId}`, {
