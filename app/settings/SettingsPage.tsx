@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useTransition } from 'react'
+import { useRouter } from 'next/navigation'
 import dynamic from 'next/dynamic'
 import Link from 'next/link'
 import type { User } from '@supabase/supabase-js'
@@ -76,6 +77,8 @@ function SaveBtn({ onClick, pending, label = 'Save changes' }: { onClick: () => 
 }
 
 export default function SettingsPage({ user, profile, isPro, billing }: Props) {
+  const router = useRouter()
+
   // Password section state
   const [currentPw, setCurrentPw] = useState('')
   const [newPw, setNewPw]         = useState('')
@@ -107,7 +110,7 @@ export default function SettingsPage({ user, profile, isPro, billing }: Props) {
     startCancelTransition(async () => {
       const { error } = await cancelSubscription()
       if (error) { setCancelMsg(error); setCancelModalOpen(false) }
-      else { setCancelMsg('Subscription cancelled. You keep Pro access until the end of your billing period.'); setCancelModalOpen(false) }
+      else { setCancelModalOpen(false); router.refresh() }
     })
   }
 
