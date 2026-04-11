@@ -18,7 +18,7 @@ interface Company {
   valuation: string | null
   revenue: string | null
   website: string | null
-  tags: string[] | null
+  tags?: string[] | null
 }
 
 type DbNewsItem = { type: string; headline: string; summary: string | null; published_date: string | null; type_color: string; type_bg: string; dot_color: string; source_url?: string | null }
