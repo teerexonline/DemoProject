@@ -261,7 +261,12 @@ For each:
 - headline: exact headline from the press release or news article
 - summary: 1 sentence — specific, not generic. Mention numbers/outcomes where available.
 - published_date: "MMM DD, YYYY" (e.g. "Feb 12, 2026") — must be within last 12 months
-- source_url: direct URL to the press release or article
+- source_url: REQUIRED. Direct URL to the press release or article. Every news item MUST
+  have a real, verifiable source_url — no nulls, no placeholders. Search the company's
+  official newsroom, investor relations page, PRNewswire, BusinessWire, or GlobeNewswire.
+  Only insert a URL you have confirmed actually exists. If after 2–3 searches no real URL
+  is found, skip that item entirely and use a different news item that does have a URL.
+  Do not insert a row with source_url = NULL.
 - type: one of [Press Release, Partnership, Product Launch, Award, Funding, Acquisition] — match to the nature of the news
 - type_color / type_bg / dot_color: use the color mapping in referenceData.md Section 3
 
