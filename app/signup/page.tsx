@@ -1,9 +1,12 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useCallback } from 'react'
 import Link from 'next/link'
+import dynamic from 'next/dynamic'
 import { createClient } from '@/lib/supabase/client'
 import { LogoFull } from '@/components/Logo'
+
+const TurnstileWidget = dynamic(() => import('@/components/TurnstileWidget'), { ssr: false })
 
 export default function SignupPage() {
   const [email, setEmail] = useState('')
@@ -12,6 +15,9 @@ export default function SignupPage() {
   const [loading, setLoading] = useState(false)
   const [googleLoading, setGoogleLoading] = useState(false)
   const [sent, setSent] = useState(false)
+  const [turnstileToken, setTurnstileToken] = useState('')
+  const handleTurnstile = useCallback((token: string) => setTurnstileToken(token), [])
+  const handleTurnstileExpire = useCallback(() => setTurnstileToken(''), [])
 
   async function handleGoogleSignIn() {
     setGoogleLoading(true)
@@ -25,7 +31,17 @@ export default function SignupPage() {
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
     setError('')
+    if (!turnstileToken) { setError('Please wait for the security check to complete.'); return }
     setLoading(true)
+
+    const verify = await fetch('/api/turnstile/verify', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ token: turnstileToken }),
+    })
+    const { success } = await verify.json()
+    if (!success) { setError('Security check failed. Please refresh and try again.'); setLoading(false); return }
+
     const supabase = createClient()
     const { error } = await supabase.auth.signUp({
       email,
@@ -156,6 +172,8 @@ export default function SignupPage() {
                   onBlur={e => (e.target as HTMLInputElement).style.borderColor = '#E4E4E7'}
                 />
               </div>
+
+              <TurnstileWidget onVerify={handleTurnstile} onExpire={handleTurnstileExpire} />
 
               {error && (
                 <div style={{

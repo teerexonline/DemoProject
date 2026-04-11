@@ -1,9 +1,26 @@
 import { NextRequest } from 'next/server'
 import { spawn } from 'child_process'
+import { createClient } from '@/lib/supabase/server'
 
 export const maxDuration = 300
 
+async function isAdmin(): Promise<boolean> {
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) return false
+  const { data: profile } = await supabase
+    .from('profiles')
+    .select('plan')
+    .eq('id', user.id)
+    .single()
+  return ['Admin', 'SuperAdmin'].includes(profile?.plan ?? '')
+}
+
 export async function POST(req: NextRequest) {
+  if (!await isAdmin()) {
+    return new Response('Unauthorized', { status: 401 })
+  }
+
   const { prompt } = await req.json()
   if (!prompt) return new Response('prompt required', { status: 400 })
 
