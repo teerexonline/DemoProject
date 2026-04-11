@@ -174,7 +174,7 @@ const sections: LegalSection[] = [
         <p>Questions about these Terms? Contact us:</p>
         <ul>
           <li><strong>Email:</strong> legal@researchorg.com</li>
-          <li><strong>Address:</strong> ResearchOrg, Inc., 548 Market St, San Francisco, CA 94104</li>
+          <li><strong>Address:</strong> ResearchOrg, Inc., 2967 Dundas St W #770d, Toronto, ON M6P 1Z2</li>
         </ul>
       </div>
     ),
