@@ -537,6 +537,17 @@ GOLD STANDARD: Zebra Technologies. See referenceData.md for the exact structure.
 Three tiers — always use real names sourced from the company's official Leadership
 page, LinkedIn, or reliable news. Never leave name as null.
 
+⚠️ LEADERSHIP RECENCY CHECK — MANDATORY BEFORE INSERTING ANY EXEC:
+Executive turnover is common and LinkedIn/company pages often lag weeks or months
+behind actual changes. Before inserting ANY name (CEO, C-Suite, or VP), you MUST:
+  1. Web search "[Company Name] CEO 2025" or "[Name] leaves [Company]" to check for
+     recent departures, replacements, or role changes in the last 12 months.
+  2. Check the company's official newsroom or press releases for leadership announcements.
+  3. Only insert a name after confirming it is current via a source dated within the
+     last 6 months. If no recent confirmation is found, note it as "unverified" in
+     the company.md log — do not fabricate or assume the role is unchanged.
+This check is non-negotiable. Inserting a departed executive is a data quality error.
+
 Tier 1 — CEO (1 row):
   - title: full title e.g. "Chief Executive Officer"
   - short_title: "CEO"
