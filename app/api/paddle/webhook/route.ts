@@ -42,8 +42,8 @@ export async function POST(request: NextRequest) {
 
   // Helper: look up user by email directly and update their plan + subscription ID
   async function setPlan(email: string, plan: 'Pro' | 'Free', subscriptionId?: string) {
-    const { data } = await supabase.auth.admin.getUserByEmail(email)
-    const user = data?.user
+    const { data: { users } } = await supabase.auth.admin.listUsers({ perPage: 1000 })
+    const user = users.find(u => u.email?.toLowerCase() === email.toLowerCase())
     if (!user) return
 
     const update: Record<string, string | null> = { plan }
