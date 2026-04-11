@@ -27,6 +27,7 @@ interface Props {
   user: User
   plan: string
   companies: Company[]
+  recentlyAdded: Company[]
   isPro: boolean
   savedIds: string[]
 }
@@ -458,14 +459,14 @@ function PickRow({ c, note, rank, initialSaved }: { c: Company; note: string; ra
 
 // ─── Main component ───────────────────────────────────────────────────────────
 
-export default function LoggedInHome({ user, plan, companies, isPro, savedIds }: Props) {
+export default function LoggedInHome({ user, plan, companies, recentlyAdded, isPro, savedIds }: Props) {
   const all = companies.length > 0 ? companies : FALLBACK
   const name = user.email?.split('@')[0] ?? 'there'
 
   // Section slices (deterministic)
   const trending     = all.slice(0, 6)
   const featuredList  = all.length >= 11 ? all.slice(6, 11) : all.slice(0, 5)
-  const recentlyAdded = all.slice(7, 13)
+  const recent       = recentlyAdded.length > 0 ? recentlyAdded : all.slice(7, 13)
   const editorPicks = (() => {
     const named = EDITOR_PICKS
       .map(ep => ({ ...ep, c: all.find(x => x.slug === ep.slug) ?? null }))
@@ -537,7 +538,7 @@ export default function LoggedInHome({ user, plan, companies, isPro, savedIds }:
             Research any company, inside out.
           </h1>
           <p style={{ color: '#A1A1AA', fontSize: 13, margin: '0 0 16px' }}>
-            {all.length}+ companies · org charts, financials, internal tools &amp; more
+            Org charts, financials, internal tools &amp; more
           </p>
           <SearchAutocomplete placeholder="Search any company — Stripe, Airbnb, Google..." size="lg" />
         </div>
@@ -567,7 +568,7 @@ export default function LoggedInHome({ user, plan, companies, isPro, savedIds }:
           <section>
             <SLabel title="Recently Added" sub="New companies on ResearchOrg" accent="#10B981" action="View all" href="/explore?sort=recent" />
             <div className="lh-recent-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 10 }}>
-              {recentlyAdded.map((c, i) => (
+              {recent.map((c, i) => (
                 <RecentCard key={c.id} c={c} daysAgo={[2, 3, 4, 5, 6, 7][i] ?? 8} initialSaved={savedIds.includes(c.id)} />
               ))}
             </div>

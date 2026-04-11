@@ -12,19 +12,24 @@ export default async function Page() {
     return <MarketingPage />
   }
 
-  const [profileResult, companiesResult, savedResult] = await Promise.all([
+  const [profileResult, companiesResult, recentResult, savedResult] = await Promise.all([
     supabase.from('profiles').select('plan').eq('id', user.id).single(),
     supabase
       .from('companies')
       .select('id, name, slug, category, description, logo_color, logo_url, employees, founded, hq, valuation')
-      .order('name')
-      .limit(24),
+      .order('name'),
+    supabase
+      .from('companies')
+      .select('id, name, slug, category, description, logo_color, logo_url, employees, founded, hq, valuation')
+      .order('created_at', { ascending: false })
+      .limit(6),
     supabase.from('saved_companies').select('company_id').eq('user_id', user.id),
   ])
 
   const plan = profileResult.data?.plan ?? 'Free'
   const tier = getUserTier(user, plan)
   const companies = companiesResult.data ?? []
+  const recentlyAdded = recentResult.data ?? []
   const savedIds = (savedResult.data ?? []).map(r => r.company_id as string)
 
   return (
@@ -32,6 +37,7 @@ export default async function Page() {
       user={user}
       plan={plan}
       companies={companies}
+      recentlyAdded={recentlyAdded}
       isPro={isPaidTier(tier)}
       savedIds={savedIds}
     />
