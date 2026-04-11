@@ -371,7 +371,7 @@ export default function ProfileShowcase() {
         }}>
           <div>
             <p style={{ color: '#fff', fontSize: '16px', fontWeight: 700, margin: '0 0 4px', letterSpacing: '-0.02em' }}>All of this. For every company in the database.</p>
-            <p style={{ color: 'rgba(255,255,255,0.38)', fontSize: '13.5px', margin: 0 }}>60+ companies and growing — including SpaceX, Stripe, Google, Anthropic, and more.</p>
+            <p style={{ color: 'rgba(255,255,255,0.38)', fontSize: '13.5px', margin: 0 }}>Including SpaceX, Stripe, Google, Anthropic, and more.</p>
           </div>
           <a
             href="/signup"

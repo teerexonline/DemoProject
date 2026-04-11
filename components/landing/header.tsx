@@ -14,6 +14,7 @@ export default function Header() {
   const [profileLoaded, setProfileLoaded] = useState(false)
   const [scrolled, setScrolled] = useState(false)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const [mobileSearchOpen, setMobileSearchOpen] = useState(false)
   const [dropdownOpen, setDropdownOpen] = useState(false)
   const pathname = usePathname()
   const dropdownRef = useRef<HTMLDivElement>(null)
@@ -53,10 +54,19 @@ export default function Header() {
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
-  // Close mobile menu on route change
+  // Close mobile menu/search on route change
   useEffect(() => {
     setMobileMenuOpen(false)
+    setMobileSearchOpen(false)
   }, [pathname])
+
+  // Close mobile search on Escape
+  useEffect(() => {
+    if (!mobileSearchOpen) return
+    const handler = (e: KeyboardEvent) => { if (e.key === 'Escape') setMobileSearchOpen(false) }
+    document.addEventListener('keydown', handler)
+    return () => document.removeEventListener('keydown', handler)
+  }, [mobileSearchOpen])
 
   useEffect(() => {
     function handleClickOutside(e: MouseEvent) {
@@ -244,6 +254,23 @@ export default function Header() {
           )}
         </div>
 
+        {/* Mobile search icon — always visible on mobile */}
+        <button
+          className="header-mobile-search-btn"
+          onClick={() => { setMobileSearchOpen(true); setMobileMenuOpen(false) }}
+          style={{
+            display: 'none', alignItems: 'center', justifyContent: 'center',
+            width: 36, height: 36, borderRadius: '9px',
+            border: '1px solid #e2eaf2', background: '#F4F4F5',
+            cursor: 'pointer', flexShrink: 0, color: '#52525B',
+          }}
+          aria-label="Search"
+        >
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+            <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+          </svg>
+        </button>
+
         {/* Mobile avatar (logged-in only) — replaces hamburger */}
         {user && (
           <button
@@ -283,12 +310,60 @@ export default function Header() {
         )}
       </div>
 
+      {/* Mobile search overlay */}
+      {mobileSearchOpen && (
+        <div
+          style={{
+            position: 'fixed', inset: 0, zIndex: 200,
+            background: 'rgba(9,9,11,0.55)',
+            backdropFilter: 'blur(4px)',
+            WebkitBackdropFilter: 'blur(4px)',
+            animation: 'fadeInOverlay 0.15s ease',
+          }}
+          onClick={() => setMobileSearchOpen(false)}
+        >
+          <div
+            style={{
+              position: 'absolute', top: 0, left: 0, right: 0,
+              background: '#fff',
+              borderBottom: '1px solid #e2eaf2',
+              padding: '10px 16px 14px',
+              boxShadow: '0 8px 32px rgba(6,63,118,0.10)',
+              animation: 'slideDownSearch 0.18s ease',
+            }}
+            onClick={e => e.stopPropagation()}
+          >
+            <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+              <div style={{ flex: 1 }}>
+                <SearchAutocomplete
+                  placeholder="Search any company..."
+                  size="sm"
+                  autoFocus
+                  onSelect={() => setMobileSearchOpen(false)}
+                />
+              </div>
+              <button
+                onClick={() => setMobileSearchOpen(false)}
+                style={{
+                  flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  width: 34, height: 34, borderRadius: '8px',
+                  border: '1px solid #e2eaf2', background: '#F4F4F5',
+                  cursor: 'pointer', color: '#71717A',
+                }}
+                aria-label="Close search"
+              >
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M18 6 6 18M6 6l12 12"/>
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Mobile dropdown */}
       {mobileMenuOpen && (
         <div className="header-mobile-menu" style={{ borderTop: '1px solid #f0f6fc', background: '#fff', padding: '12px 16px 16px', display: 'flex', flexDirection: 'column', gap: '4px' }}>
-          <div style={{ marginBottom: '8px' }}>
-            <SearchAutocomplete placeholder="Search any company..." size="sm" onSelect={() => setMobileMenuOpen(false)} />
-          </div>
           {([{ label: 'Features', href: '/features' }, { label: 'Explore', href: '/explore' }, { label: 'Pricing', href: '/pricing' }] as { label: string; href: string }[]).map(item => (
             <Link key={item.label} href={item.href} onClick={() => setMobileMenuOpen(false)}
               style={{ color: '#52525B', textDecoration: 'none', fontSize: '14px', fontWeight: 500, padding: '10px 12px', borderRadius: '8px', background: '#f8fbfe' }}
@@ -317,9 +392,18 @@ export default function Header() {
           from { opacity: 0; transform: translateY(-6px) scale(0.97); }
           to   { opacity: 1; transform: translateY(0)     scale(1);    }
         }
+        @keyframes fadeInOverlay {
+          from { opacity: 0; }
+          to   { opacity: 1; }
+        }
+        @keyframes slideDownSearch {
+          from { opacity: 0; transform: translateY(-8px); }
+          to   { opacity: 1; transform: translateY(0); }
+        }
         @media (max-width: 768px) {
           .header-hamburger { display: flex !important; align-items: center; }
           .header-mobile-avatar { display: flex !important; align-items: center; }
+          .header-mobile-search-btn { display: flex !important; }
           .header-user-desktop { display: none !important; }
           .header-signin-link, .header-cta-link { display: none !important; }
           .header-nav, .header-search { display: none !important; }
