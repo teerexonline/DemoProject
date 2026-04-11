@@ -40,10 +40,10 @@ export async function POST(request: NextRequest) {
   const eventType: string = event.event_type
   const data = event.data
 
-  // Helper: look up user by email and update their plan + subscription ID
+  // Helper: look up user by email directly and update their plan + subscription ID
   async function setPlan(email: string, plan: 'Pro' | 'Free', subscriptionId?: string) {
-    const { data: { users } } = await supabase.auth.admin.listUsers()
-    const user = users.find(u => u.email?.toLowerCase() === email.toLowerCase())
+    const { data } = await supabase.auth.admin.getUserByEmail(email)
+    const user = data?.user
     if (!user) return
 
     const update: Record<string, string | null> = { plan }
