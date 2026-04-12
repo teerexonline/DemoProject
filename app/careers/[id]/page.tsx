@@ -50,16 +50,17 @@ export default async function JobDetailPage({ params }: Props) {
 
   if (!role) notFound()
 
+  const applyHref = `mailto:careers@researchorg.com?subject=Application: ${encodeURIComponent(role.title)}`
+
   return (
     <main style={{ background: '#f8fbfe', minHeight: '100vh' }}>
 
-      {/* Header */}
+      {/* Breadcrumb */}
       <div style={{ background: '#fff', borderBottom: '1px solid #e2eaf2', padding: '0 24px' }}>
         <div style={{ maxWidth: 780, margin: '0 auto', height: 48, display: 'flex', alignItems: 'center', gap: 8 }}>
-          <Link href="/careers" style={{ color: '#A1A1AA', textDecoration: 'none', fontSize: 13, transition: 'color 0.15s' }}
-            onMouseEnter={e => (e.currentTarget as HTMLElement).style.color = '#063f76'}
-            onMouseLeave={e => (e.currentTarget as HTMLElement).style.color = '#A1A1AA'}
-          >Careers</Link>
+          <Link href="/careers" className="job-breadcrumb-link" style={{ color: '#A1A1AA', textDecoration: 'none', fontSize: 13 }}>
+            Careers
+          </Link>
           <span style={{ color: '#D4D4D8', fontSize: 13 }}>›</span>
           <span style={{ color: '#09090B', fontSize: 13, fontWeight: 600 }}>{role.title}</span>
         </div>
@@ -69,38 +70,19 @@ export default async function JobDetailPage({ params }: Props) {
 
         {/* Title block */}
         <div style={{ marginBottom: 40 }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 12, flexWrap: 'wrap' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 16, flexWrap: 'wrap' }}>
             <span style={{ fontSize: 11, fontWeight: 700, color: '#063f76', background: '#eef4fb', border: '1px solid #a8cbe8', padding: '3px 10px', borderRadius: 6 }}>{role.team}</span>
-            <span style={{ fontSize: 11, color: '#A1A1AA', fontWeight: 500 }}>{role.type}</span>
+            <span style={{ color: '#D4D4D8', fontSize: 12 }}>·</span>
+            <span style={{ fontSize: 12, color: '#71717A', fontWeight: 500 }}>{role.type}</span>
           </div>
           <h1 style={{
-            fontSize: 'clamp(28px, 4vw, 40px)', fontWeight: 900,
-            letterSpacing: '-0.04em', color: '#063f76', lineHeight: 1.1,
-            margin: '0 0 24px',
+            fontSize: 'clamp(28px, 4vw, 42px)', fontWeight: 900,
+            letterSpacing: '-0.04em', color: '#09090B', lineHeight: 1.1,
+            margin: '0 0 28px',
           }}>
             {role.title}
           </h1>
-          <a
-            href={`mailto:careers@researchorg.com?subject=Application: ${encodeURIComponent(role.title)}`}
-            style={{
-              display: 'inline-flex', alignItems: 'center', gap: 8,
-              padding: '12px 28px', borderRadius: 10,
-              background: '#063f76', color: '#fff',
-              textDecoration: 'none', fontSize: 14, fontWeight: 700,
-              boxShadow: '0 4px 16px rgba(6,63,118,0.28)',
-              transition: 'background 0.15s, transform 0.1s',
-            }}
-            onMouseEnter={e => {
-              const el = e.currentTarget as HTMLElement
-              el.style.background = '#04294f'
-              el.style.transform = 'translateY(-1px)'
-            }}
-            onMouseLeave={e => {
-              const el = e.currentTarget as HTMLElement
-              el.style.background = '#063f76'
-              el.style.transform = 'translateY(0)'
-            }}
-          >
+          <a href={applyHref} className="job-apply-btn">
             Apply for this role →
           </a>
         </div>
@@ -109,8 +91,9 @@ export default async function JobDetailPage({ params }: Props) {
         <div style={{
           background: '#fff', borderRadius: 16, border: '1px solid #e2eaf2',
           padding: '36px 40px', boxShadow: '0 1px 6px rgba(6,63,118,0.04)',
+          marginBottom: 24,
         }}>
-          <h2 style={{ fontSize: 13, fontWeight: 700, color: '#A1A1AA', textTransform: 'uppercase', letterSpacing: '0.08em', margin: '0 0 20px' }}>
+          <h2 style={{ fontSize: 12, fontWeight: 700, color: '#A1A1AA', textTransform: 'uppercase', letterSpacing: '0.1em', margin: '0 0 24px' }}>
             About the role
           </h2>
           <div>{renderDescription(role.description)}</div>
@@ -118,31 +101,52 @@ export default async function JobDetailPage({ params }: Props) {
 
         {/* Bottom CTA */}
         <div style={{
-          marginTop: 32, padding: '28px 32px', borderRadius: 14,
+          padding: '28px 32px', borderRadius: 14,
           background: '#063f76', textAlign: 'center',
         }}>
           <div style={{ fontSize: 16, fontWeight: 800, color: '#fff', letterSpacing: '-0.03em', marginBottom: 6 }}>
             Ready to apply?
           </div>
-          <div style={{ fontSize: 13.5, color: 'rgba(255,255,255,0.7)', marginBottom: 18 }}>
+          <div style={{ fontSize: 13.5, color: 'rgba(255,255,255,0.7)', marginBottom: 20 }}>
             Send your resume and a short note about why you&apos;d be a great fit.
           </div>
-          <a
-            href={`mailto:careers@researchorg.com?subject=Application: ${encodeURIComponent(role.title)}`}
-            style={{
-              display: 'inline-flex', alignItems: 'center', gap: 8,
-              padding: '10px 24px', borderRadius: 9,
-              background: '#fff', color: '#063f76',
-              textDecoration: 'none', fontSize: 13.5, fontWeight: 700,
-              transition: 'opacity 0.15s',
-            }}
-            onMouseEnter={e => (e.currentTarget as HTMLElement).style.opacity = '0.88'}
-            onMouseLeave={e => (e.currentTarget as HTMLElement).style.opacity = '1'}
-          >
+          <a href={applyHref} className="job-apply-btn-secondary">
             careers@researchorg.com
           </a>
         </div>
       </div>
+
+      <style>{`
+        .job-breadcrumb-link:hover { color: #063f76 !important; }
+        .job-apply-btn {
+          display: inline-flex;
+          align-items: center;
+          gap: 8px;
+          padding: 12px 28px;
+          border-radius: 10px;
+          background: #063f76;
+          color: #fff;
+          text-decoration: none;
+          font-size: 14px;
+          font-weight: 700;
+          box-shadow: 0 4px 16px rgba(6,63,118,0.28);
+          transition: background 0.15s, transform 0.1s;
+        }
+        .job-apply-btn:hover { background: #04294f; transform: translateY(-1px); }
+        .job-apply-btn-secondary {
+          display: inline-flex;
+          align-items: center;
+          padding: 10px 24px;
+          border-radius: 9px;
+          background: #fff;
+          color: #063f76;
+          text-decoration: none;
+          font-size: 13.5px;
+          font-weight: 700;
+          transition: opacity 0.15s;
+        }
+        .job-apply-btn-secondary:hover { opacity: 0.85; }
+      `}</style>
     </main>
   )
 }

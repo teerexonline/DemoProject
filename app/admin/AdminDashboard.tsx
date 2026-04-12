@@ -1998,9 +1998,14 @@ function CareersSection() {
   }
 
   function handleSave() {
+    if (!form.title.trim() || !form.team.trim() || !form.description.trim()) {
+      alert('Title, Team, and Description are required.')
+      return
+    }
     startTransition(async () => {
       const { error } = await adminUpsertCareerRole({ ...(editing?.id ? { id: editing.id } : {}), ...form })
       if (!error) { const res = await adminGetCareerRoles(); setRoles(res.data); setEditing(null) }
+      else alert('Error saving: ' + error)
     })
   }
 
