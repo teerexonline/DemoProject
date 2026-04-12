@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
-import { adminGetCareerRoles } from '@/app/actions/admin'
+import { createClient } from '@/lib/supabase/server'
 
 export const metadata: Metadata = {
   title: 'Careers — ResearchOrg',
@@ -10,8 +10,13 @@ export const metadata: Metadata = {
 export const revalidate = 60
 
 export default async function CareersPage() {
-  const { data: roles } = await adminGetCareerRoles()
-  const activeRoles = roles.filter(r => r.is_active)
+  const supabase = await createClient()
+  const { data: activeRoles } = await supabase
+    .from('career_roles')
+    .select('id, title, team, type')
+    .eq('is_active', true)
+    .order('created_at', { ascending: false })
+  const roles = activeRoles ?? []
 
   return (
     <main style={{ background: '#fff', minHeight: '100vh' }}>
@@ -66,56 +71,29 @@ export default async function CareersPage() {
             Open roles
           </h2>
           <p style={{ fontSize: 14, color: '#A1A1AA', margin: '0 0 36px' }}>
-            {activeRoles.length > 0 ? `${activeRoles.length} open position${activeRoles.length !== 1 ? 's' : ''}` : 'No open positions right now — check back soon.'}
+            {roles.length > 0 ? `${roles.length} open position${roles.length !== 1 ? 's' : ''}` : 'No open positions right now — check back soon.'}
           </p>
 
-          {activeRoles.length > 0 && (
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-              {activeRoles.map(role => (
-                <div key={role.id} className="career-role-card" style={{
+          {roles.length > 0 && (
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+              {roles.map(role => (
+                <Link key={role.id} href={`/careers/${role.id}`} className="career-role-card" style={{
                   display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-                  gap: 24, padding: '22px 24px',
+                  gap: 20, padding: '20px 24px',
                   background: '#fff', borderRadius: 13, border: '1.5px solid #e2eaf2',
                   boxShadow: '0 1px 6px rgba(6,63,118,0.04)',
+                  textDecoration: 'none',
+                  transition: 'border-color 0.15s, box-shadow 0.15s, transform 0.15s',
                 }}>
                   <div style={{ flex: 1, minWidth: 0 }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 6, flexWrap: 'wrap' }}>
                       <span style={{ fontSize: 15, fontWeight: 800, color: '#09090B', letterSpacing: '-0.03em' }}>{role.title}</span>
                       <span style={{ fontSize: 11, fontWeight: 600, color: '#063f76', background: '#eef4fb', border: '1px solid #a8cbe8', padding: '2px 8px', borderRadius: 5 }}>{role.team}</span>
                     </div>
-                    <div style={{ fontSize: 13.5, color: '#71717A', lineHeight: 1.7, margin: '0 0 6px' }}>
-                      {role.description?.split('\n').map((line, li) => {
-                        const isBullet = /^[•\-]\s/.test(line.trim())
-                        const raw = isBullet ? line.trim().replace(/^[•\-]\s/, '') : line
-                        if (!raw.trim()) return <div key={li} style={{ height: 6 }} />
-                        // Render **bold** inline
-                        const parts = raw.split(/\*\*(.+?)\*\*/g).map((part, pi) =>
-                          pi % 2 === 1 ? <strong key={pi} style={{ color: '#09090B', fontWeight: 700 }}>{part}</strong> : part
-                        )
-                        return isBullet ? (
-                          <div key={li} style={{ display: 'flex', gap: 8, alignItems: 'flex-start', marginBottom: 4 }}>
-                            <span style={{ color: '#063f76', fontSize: 14, lineHeight: '20px', flexShrink: 0 }}>·</span>
-                            <span>{parts}</span>
-                          </div>
-                        ) : (
-                          <p key={li} style={{ margin: '0 0 6px' }}>{parts}</p>
-                        )
-                      })}
-                    </div>
-                    <span style={{ fontSize: 12, color: '#A1A1AA' }}>{role.type}</span>
+                    <span style={{ fontSize: 12.5, color: '#A1A1AA' }}>{role.type}</span>
                   </div>
-                  <a
-                    href={`mailto:careers@researchorg.com?subject=Application: ${role.title}`}
-                    style={{
-                      flexShrink: 0, padding: '9px 20px', borderRadius: 9,
-                      background: '#063f76', color: '#fff', fontSize: 13, fontWeight: 700,
-                      textDecoration: 'none', whiteSpace: 'nowrap',
-                      boxShadow: '0 2px 10px rgba(6,63,118,0.25)',
-                    }}
-                  >
-                    Apply →
-                  </a>
-                </div>
+                  <span style={{ color: '#063f76', fontSize: 18, fontWeight: 300, flexShrink: 0 }}>→</span>
+                </Link>
               ))}
             </div>
           )}
@@ -147,14 +125,11 @@ export default async function CareersPage() {
       <style>{`
         @media (max-width: 768px) {
           section > div > div[style*="repeat(3"] { grid-template-columns: 1fr !important; }
-          .career-role-card {
-            flex-direction: column !important;
-            align-items: flex-start !important;
-          }
-          .career-role-card a {
-            width: 100% !important;
-            text-align: center !important;
-          }
+        }
+        .career-role-card:hover {
+          border-color: #a8cbe8 !important;
+          box-shadow: 0 4px 20px rgba(6,63,118,0.10) !important;
+          transform: translateY(-1px);
         }
       `}</style>
     </main>
