@@ -505,8 +505,9 @@ export interface CareerRole {
 }
 
 export async function adminGetCareerRoles(): Promise<{ data: CareerRole[]; error: string | null }> {
-  const supabase = await createClient()
-  const { data, error } = await supabase
+  await requireAdmin()
+  const adminClient = createAdminClient()
+  const { data, error } = await adminClient
     .from('career_roles')
     .select('*')
     .order('created_at', { ascending: false })
@@ -514,8 +515,9 @@ export async function adminGetCareerRoles(): Promise<{ data: CareerRole[]; error
 }
 
 export async function adminUpsertCareerRole(role: Partial<CareerRole> & { title: string; team: string; description: string }): Promise<{ error: string | null }> {
-  const supabase = await createClient()
-  const { error } = await supabase.from('career_roles').upsert({
+  await requireAdmin()
+  const adminClient = createAdminClient()
+  const { error } = await adminClient.from('career_roles').upsert({
     ...(role.id ? { id: role.id } : {}),
     title: role.title,
     team: role.team,
@@ -529,8 +531,9 @@ export async function adminUpsertCareerRole(role: Partial<CareerRole> & { title:
 }
 
 export async function adminDeleteCareerRole(id: string): Promise<{ error: string | null }> {
-  const supabase = await createClient()
-  const { error } = await supabase.from('career_roles').delete().eq('id', id)
+  await requireAdmin()
+  const adminClient = createAdminClient()
+  const { error } = await adminClient.from('career_roles').delete().eq('id', id)
   revalidatePath('/careers')
   revalidatePath('/admin')
   return { error: error?.message ?? null }
