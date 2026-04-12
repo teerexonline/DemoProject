@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { Plus_Jakarta_Sans } from "next/font/google"
+import { Analytics } from '@vercel/analytics/next'
 
 import "./globals.css"
 import { cn } from "@/lib/utils"
@@ -39,6 +40,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={cn(jakarta.variable)}>
       <body style={{ fontFamily: 'var(--font-sans), sans-serif', background: '#FFFFFF', color: '#09090B', margin: 0 }}>
+        <Analytics />
         <PaddleProviderWrapper />
         <Header />
         <div style={{ paddingTop: '60px', display: 'flex', flexDirection: 'column', minHeight: 'calc(100vh - 60px)' }}>
