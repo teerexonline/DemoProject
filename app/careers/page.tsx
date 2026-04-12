@@ -85,16 +85,20 @@ export default async function CareersPage() {
                     </div>
                     <div style={{ fontSize: 13.5, color: '#71717A', lineHeight: 1.7, margin: '0 0 6px' }}>
                       {role.description?.split('\n').map((line, li) => {
-                        const isBullet = /^[-•*]\s/.test(line.trim())
-                        const text = isBullet ? line.trim().replace(/^[-•*]\s/, '') : line
-                        if (!text.trim()) return <div key={li} style={{ height: 6 }} />
+                        const isBullet = /^[•\-]\s/.test(line.trim())
+                        const raw = isBullet ? line.trim().replace(/^[•\-]\s/, '') : line
+                        if (!raw.trim()) return <div key={li} style={{ height: 6 }} />
+                        // Render **bold** inline
+                        const parts = raw.split(/\*\*(.+?)\*\*/g).map((part, pi) =>
+                          pi % 2 === 1 ? <strong key={pi} style={{ color: '#09090B', fontWeight: 700 }}>{part}</strong> : part
+                        )
                         return isBullet ? (
                           <div key={li} style={{ display: 'flex', gap: 8, alignItems: 'flex-start', marginBottom: 4 }}>
                             <span style={{ color: '#063f76', fontSize: 14, lineHeight: '20px', flexShrink: 0 }}>·</span>
-                            <span>{text}</span>
+                            <span>{parts}</span>
                           </div>
                         ) : (
-                          <p key={li} style={{ margin: '0 0 6px' }}>{text}</p>
+                          <p key={li} style={{ margin: '0 0 6px' }}>{parts}</p>
                         )
                       })}
                     </div>

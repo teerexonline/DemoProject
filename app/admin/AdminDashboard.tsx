@@ -1892,6 +1892,88 @@ function DataSection() {
   )
 }
 
+// ─── Rich description editor with toolbar ────────────────────────────────────
+
+function RichDescriptionEditor({ value, onChange }: { value: string; onChange: (v: string) => void }) {
+  const ref = useRef<HTMLTextAreaElement>(null)
+
+  function insert(before: string, after = '', placeholder = '') {
+    const el = ref.current
+    if (!el) return
+    const start = el.selectionStart
+    const end = el.selectionEnd
+    const selected = value.slice(start, end) || placeholder
+    const newVal = value.slice(0, start) + before + selected + after + value.slice(end)
+    onChange(newVal)
+    setTimeout(() => {
+      el.focus()
+      el.setSelectionRange(start + before.length, start + before.length + selected.length)
+    }, 0)
+  }
+
+  function insertBullet() {
+    const el = ref.current
+    if (!el) return
+    const start = el.selectionStart
+    const lineStart = value.lastIndexOf('\n', start - 1) + 1
+    const prefix = '• '
+    const newVal = value.slice(0, lineStart) + prefix + value.slice(lineStart)
+    onChange(newVal)
+    setTimeout(() => { el.focus(); el.setSelectionRange(start + prefix.length, start + prefix.length) }, 0)
+  }
+
+  function insertLineBreak() {
+    const el = ref.current
+    if (!el) return
+    const start = el.selectionStart
+    const newVal = value.slice(0, start) + '\n' + value.slice(start)
+    onChange(newVal)
+    setTimeout(() => { el.focus(); el.setSelectionRange(start + 1, start + 1) }, 0)
+  }
+
+  const btnStyle: React.CSSProperties = {
+    padding: '4px 10px', borderRadius: 6, border: '1px solid #E4E4E7',
+    background: '#fff', fontSize: 12, fontWeight: 600, cursor: 'pointer',
+    color: '#52525B', transition: 'background 0.1s, border-color 0.1s',
+  }
+
+  return (
+    <div>
+      {/* Toolbar */}
+      <div style={{ display: 'flex', gap: 6, marginBottom: 6, flexWrap: 'wrap' }}>
+        <button type="button" style={btnStyle} title="Bold"
+          onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = '#F4F4F5' }}
+          onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = '#fff' }}
+          onClick={() => insert('**', '**', 'bold text')}>
+          <strong>B</strong>
+        </button>
+        <button type="button" style={btnStyle} title="Bullet point"
+          onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = '#F4F4F5' }}
+          onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = '#fff' }}
+          onClick={insertBullet}>
+          • Bullet
+        </button>
+        <button type="button" style={btnStyle} title="New line"
+          onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = '#F4F4F5' }}
+          onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = '#fff' }}
+          onClick={insertLineBreak}>
+          ↵ Line break
+        </button>
+        <span style={{ fontSize: 11, color: '#A1A1AA', alignSelf: 'center', marginLeft: 4 }}>
+          Use **text** for bold
+        </span>
+      </div>
+      <textarea
+        ref={ref}
+        value={value}
+        onChange={e => onChange(e.target.value)}
+        rows={5}
+        style={{ width: '100%', boxSizing: 'border-box', padding: '8px 11px', border: '1.5px solid #E4E4E7', borderRadius: 8, fontSize: 13, color: '#09090B', outline: 'none', resize: 'vertical', fontFamily: 'monospace', lineHeight: 1.6 }}
+      />
+    </div>
+  )
+}
+
 // ─── Careers Section ─────────────────────────────────────────────────────────
 
 function CareersSection() {
@@ -1977,8 +2059,7 @@ function CareersSection() {
           </div>
           <div style={{ marginBottom: 14 }}>
             <label style={{ display: 'block', fontSize: 11, fontWeight: 700, color: '#A1A1AA', marginBottom: 5, textTransform: 'uppercase', letterSpacing: '0.06em' }}>Description</label>
-            <textarea value={form.description} onChange={e => setForm(f => ({ ...f, description: e.target.value }))} rows={3}
-              style={{ width: '100%', boxSizing: 'border-box', padding: '8px 11px', border: '1.5px solid #E4E4E7', borderRadius: 8, fontSize: 13, color: '#09090B', outline: 'none', resize: 'vertical' }} />
+            <RichDescriptionEditor value={form.description} onChange={v => setForm(f => ({ ...f, description: v }))} />
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 18 }}>
             <input type="checkbox" id="is_active" checked={form.is_active} onChange={e => setForm(f => ({ ...f, is_active: e.target.checked }))} />
