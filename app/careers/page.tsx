@@ -83,7 +83,21 @@ export default async function CareersPage() {
                       <span style={{ fontSize: 15, fontWeight: 800, color: '#09090B', letterSpacing: '-0.03em' }}>{role.title}</span>
                       <span style={{ fontSize: 11, fontWeight: 600, color: '#063f76', background: '#eef4fb', border: '1px solid #a8cbe8', padding: '2px 8px', borderRadius: 5 }}>{role.team}</span>
                     </div>
-                    <p style={{ fontSize: 13.5, color: '#71717A', lineHeight: 1.6, margin: '0 0 6px' }}>{role.description}</p>
+                    <div style={{ fontSize: 13.5, color: '#71717A', lineHeight: 1.7, margin: '0 0 6px' }}>
+                      {role.description?.split('\n').map((line, li) => {
+                        const isBullet = /^[-•*]\s/.test(line.trim())
+                        const text = isBullet ? line.trim().replace(/^[-•*]\s/, '') : line
+                        if (!text.trim()) return <div key={li} style={{ height: 6 }} />
+                        return isBullet ? (
+                          <div key={li} style={{ display: 'flex', gap: 8, alignItems: 'flex-start', marginBottom: 4 }}>
+                            <span style={{ color: '#063f76', fontSize: 14, lineHeight: '20px', flexShrink: 0 }}>·</span>
+                            <span>{text}</span>
+                          </div>
+                        ) : (
+                          <p key={li} style={{ margin: '0 0 6px' }}>{text}</p>
+                        )
+                      })}
+                    </div>
                     <span style={{ fontSize: 12, color: '#A1A1AA' }}>{role.type}</span>
                   </div>
                   <a
