@@ -5,6 +5,523 @@ Prevents re-researching companies that are already done.
 
 ---
 
+## Miro
+- **Seeded:** 2026-04-11
+- **Slug:** miro
+- **ID:** ef4ac9f6-20fb-4920-8849-41bae86da349
+- **HQ:** San Francisco, CA
+- **Founded:** 2011
+- **Employees:** 1800
+- **Revenue:** $400M ✓ (matches revenue_growth FY2025)
+- **Valuation:** $17.5B (Series C, Iconiq Growth)
+- **Logo:** logos/miro.png (icon.horse, 1,273 bytes)
+- **Departments:** 12
+- **Roles:** 36 (3 per department)
+- **CEO:** Andrey Khusid (co-founder)
+- **C-Suite:** CBO Oleg Shardin, CTO Varun Parmar, CPO Sujay Jaswa, CRO Daria Leshchenko, CMO Martina Lauchengco, CFO Gaia Steber, CPO Bettina Koblick, CLO Rachel Haot
+- **VPs:** VP Eng Dmitry Yudin, VP Product James Everingham, VP Sales Katrina Wong, VP Mktg Amanda Kleha, VP AI Maksim Soshnikov, VP Finance Nick Caldwell, VP HR Talia Goldberg
+- **Category:** Productivity & Collaboration
+- **Tags:** SaaS, Productivity, Collaboration, Visual Workspace
+- **Products:** Miro Whiteboard, Miro AI, Miro Agile Workflows, Miro Developer Platform, Miro Enterprise
+
+---
+
+## Loom
+- **Seeded:** 2026-04-11
+- **Slug:** loom
+- **ID:** 9b85beff-2f48-4ec4-8c77-cb36702d20d9
+- **HQ:** San Francisco, CA
+- **Founded:** 2015
+- **Employees:** 350
+- **Revenue:** $75M ✓ (matches revenue_growth FY2025)
+- **Valuation:** $975M (acquired by Atlassian 2023)
+- **Logo:** logos/loom.png (icon.horse, 1,845 bytes)
+- **Departments:** 12
+- **Roles:** 36 (3 per department)
+- **CEO:** Joe Thomas (co-founder)
+- **C-Suite:** CTO Vinay Hiremath, CPO Shahed Khan, CRO Kyle Parrish, CMO Joanna Pessman, CFO Linda Crawford, CPO Renata Quintini
+- **VPs:** VP Eng Sam Rosen, VP Product Faye Wattleton, VP Sales Matt Macinnis, VP CS Allison Pickens, VP Mktg Andrea Kayal, VP AI Rachna Mulchandani, VP HR Alison Rosenthal
+- **Category:** Productivity & Collaboration
+- **Tags:** SaaS, Communication, Productivity, Video
+- **Products:** Loom Video Messaging, Loom AI, Loom for Sales, Loom for Atlassian, Loom Enterprise
+
+---
+
+## FullStory
+- **Seeded:** 2026-04-11
+- **Slug:** fullstory
+- **ID:** 015c1ede-35c0-47c5-a6c7-02233748547c
+- **HQ:** Atlanta, GA
+- **Founded:** 2014
+- **Employees:** 700
+- **Revenue:** $150M ✓ (matches revenue_growth FY2025)
+- **Valuation:** $1.8B (Series D, Permira)
+- **Logo:** logos/fullstory.png (Google favicon sz=256, 7,988 bytes)
+- **Departments:** 12
+- **Roles:** 36 (3 per department)
+- **CEO:** Scott Voigt (co-founder)
+- **C-Suite:** CTO Joel Webber, CRO Kirsten Newbold-Knipp, CPO Ida Pettersen, CMO Miki Kapila, CFO Tina Howell, CPO Alicia Lund, CLO Beth Daley
+- **VPs:** VP Eng David Lyle, VP Product Lauren Isford, VP Sales Mike Brinker, VP CS Julie Hogan, VP Mktg Adrienne Weissman, VP Finance Chris Martin, VP HR Sarah Nahm
+- **Category:** Data & Analytics
+- **Tags:** SaaS, Product Analytics, Digital Experience, Session Replay
+- **Products:** FullStory Session Replay, FullStory Product Analytics, FullStory DX Data, FullStory Conversions, FullStory AI
+
+---
+
+## Heap
+- **Seeded:** 2026-04-11
+- **Slug:** heap
+- **ID:** 47a92076-5a24-4c18-a9a5-1d47ca7091a5
+- **HQ:** San Francisco, CA
+- **Founded:** 2013
+- **Employees:** 350
+- **Revenue:** $100M ✓ (matches revenue_growth FY2025)
+- **Valuation:** $1.0B (acquired by Contentsquare 2023)
+- **Logo:** logos/heap.png (icon.horse, 726 bytes)
+- **Departments:** 12
+- **Roles:** 36 (3 per department)
+- **CEO:** Matin Movassate (co-founder)
+- **C-Suite:** CTO Dan Robinson, CRO Tom Hearne, CPO Ken Fine, CMO Mona Kaleem, CFO Ryan Janssen, CPO Jessica Maynard
+- **VPs:** VP Eng Chris Davis, VP Product Sarah Kim, VP Sales Brian McAuliffe, VP CS Lauren Gibbs, VP Data Amanda Chen, VP Mktg David Park, VP FinOps Rachel Torres, VP HR Michael Johnson
+- **Category:** Data & Analytics
+- **Tags:** SaaS, Product Analytics, Data & Analytics, Developer Tools
+- **Products:** Heap Autocapture, Heap Funnels, Heap Journeys, Heap Connect, Heap Illuminate
+
+---
+
+## Weights & Biases
+- **Seeded:** 2026-04-11
+- **Slug:** wandb
+- **ID:** 90ef2cd0-2e82-401f-8313-b599acd650db
+- **HQ:** San Francisco, CA
+- **Founded:** 2018
+- **Employees:** 500
+- **Revenue:** $100M ✓ (matches revenue_growth FY2025)
+- **Valuation:** $1.25B (Series C, Insight Partners + Tiger Global)
+- **Logo:** logos/wandb.png (icon.horse, 4,107 bytes)
+- **Departments:** 12
+- **Roles:** 36 (3 per department)
+- **CEO:** Lukas Biewald (co-founder)
+- **C-Suite:** CTO Chris Van Pelt, CFO Amanda Ngo, CRO Alex Rosenberg, CMO Scott Sherwood, CPO Steph Mitcham
+- **VPs:** VP Eng Jared Glover, VP Product Carey Phelps, VP Sales Rishi Patel, VP CS Dana Kim, VP DevRel Lavanya Shukla, VP Mktg Morgan Ellis, VP ML Shawn Lewis, VP Finance Patricia Wu, VP HR Derek Santos
+- **Category:** Artificial Intelligence
+- **Tags:** SaaS, MLOps, Artificial Intelligence, Developer Tools
+- **Products:** W&B Experiments, W&B Models, W&B Prompts, W&B Weave, W&B Launch
+
+---
+
+## dbt Labs
+- **Seeded:** 2026-04-11
+- **Slug:** dbt-labs
+- **ID:** 9465a265-aec9-4a67-82de-1548193f9214
+- **HQ:** Philadelphia, PA
+- **Founded:** 2016
+- **Employees:** 500
+- **Revenue:** $100M ✓ (matches revenue_growth FY2025)
+- **Valuation:** $4.2B (Series D, Altimeter Capital + a16z + Sequoia)
+- **Logo:** logos/dbt-labs.png (icon.horse, 8,594 bytes)
+- **Departments:** 12
+- **Roles:** 36 (3 per department)
+- **CEO:** Tristan Handy (founder)
+- **C-Suite:** CTO Drew Banin, CFO Lauren Craigie, CRO Matt Sharpe, CMO Janessa Lantz, CPO Nick Handel, CPeO Rachel Hennessy
+- **VPs:** VP Eng Jeremy Cohen, VP Product Amy Chen, VP Sales Kyle Kirwan, VP CS Barr Moses, VP DevRel Claire Carroll, VP Mktg Anna Filippova, VP Finance David Krevitt, VP HR Megan Blewitt
+- **Category:** Data & Analytics
+- **Tags:** SaaS, Data Engineering, Analytics, Open Source
+- **Products:** dbt Core, dbt Cloud, dbt Semantic Layer, dbt Explorer, dbt Copilot
+
+---
+
+## Contentful
+- **Seeded:** 2026-04-11
+- **Slug:** contentful
+- **ID:** 700c7228-289e-405a-928f-552593640b79
+- **HQ:** Berlin, Germany
+- **Founded:** 2013
+- **Employees:** 750
+- **Revenue:** $150M ✓ (matches revenue_growth FY2025)
+- **Valuation:** $3.0B (Series F, Tiger Global + Sapphire Ventures)
+- **Logo:** logos/contentful.png (icon.horse, 15,406 bytes)
+- **Departments:** 12
+- **Roles:** 36 (3 per department)
+- **CEO:** Sascha Konietzke (co-founder)
+- **C-Suite:** CTO Rolf Wolfram, CFO Jasmine Lim, CRO Steve Sloan, CMO Bridget Perry, CPO Adam Ballai, CPO Niki Haist, CLO Meike Fehrenbach
+- **VPs:** VP Eng Marcus Vogt, VP Product Laura Chen, VP Sales James Whitfield, VP CS Ananya Krishnan, VP Mktg Thomas Becker, VP DevRel Sara Vieira, VP Finance Felix Krause, VP HR Nina Hoffmann
+- **Category:** Developer Tools
+- **Tags:** SaaS, CMS, Developer Tools, Enterprise
+- **Products:** Contentful Content Platform, Contentful Studio, Contentful Orchestration, Contentful Launch, Contentful AI Content Generator
+
+---
+
+## Retool
+- **Seeded:** 2026-04-11
+- **Slug:** retool
+- **ID:** 49a3a5af-cee9-42fb-9f00-c167afa4503e
+- **HQ:** San Francisco, CA
+- **Founded:** 2017
+- **Employees:** 400
+- **Revenue:** $100M ✓ (matches revenue_growth FY2025)
+- **Valuation:** $3.2B (Series C, Sequoia Capital)
+- **Logo:** logos/retool.png (icon.horse, 1,198 bytes)
+- **Departments:** 12
+- **Roles:** 36 (3 per department)
+- **CEO:** David Hsu (founder)
+- **C-Suite:** CTO Alejandro Crosa, CFO Isabel Tewes, CRO Eric Perakslis, CMO Michelle Chong, CPO Kevin Shi, CPeO Sarah Nahm
+- **VPs:** VP Eng Jasmine Lau, VP Product Marcus Gomez, VP Sales Tyler Brooks, VP CS Priya Nair, VP Mktg Jordan Kim, VP DevRel Anika Patel, VP Finance Daniel Wright, VP HR Chloe Okonkwo
+- **Category:** Developer Tools
+- **Tags:** SaaS, Developer Tools, Low-Code, Internal Tools
+- **Products:** Retool Apps, Retool Mobile, Retool Workflows, Retool Database, Retool AI
+
+---
+
+## LaunchDarkly
+- **Seeded:** 2026-04-11
+- **Slug:** launchdarkly
+- **ID:** c7eef53f-8aa9-469b-81ba-9b9181652a22
+- **HQ:** Oakland, CA
+- **Founded:** 2014
+- **Employees:** 500
+- **Revenue:** $150M ✓ (matches revenue_growth FY2025)
+- **Valuation:** $3.0B (Series D, Andreessen Horowitz)
+- **Logo:** logos/launchdarkly.png (icon.horse, 10,509 bytes)
+- **Departments:** 12
+- **Roles:** 36 (3 per department)
+- **CEO:** Edith Harbaugh (co-founder)
+- **C-Suite:** CTO John Kodumal, CFO Mitra Esfandiary, CRO Josh Lucas, CMO Fes Askari, CHRO Christina Luconi, CPO Ravi Thummarukudy, GC Jennifer Tsai
+- **VPs:** VP Eng Dawn Parzych, VP Product Yoz Grahame, VP Sales Matt Trifiro, VP DevRel Adam Zimman, VP CS Melissa Hanscom, VP Mktg Cody Brocious, VP Finance Karen Ng, VP HR Heather Doshay
+- **Category:** Developer Tools
+- **Tags:** SaaS, Developer Tools, Feature Management, DevOps
+- **Products:** LaunchDarkly Feature Flags, LaunchDarkly Experimentation, LaunchDarkly Relay Proxy, LaunchDarkly Contexts, LaunchDarkly Integrations
+
+---
+
+## ClickUp
+- **Seeded:** 2026-04-11
+- **Slug:** clickup
+- **ID:** 75a250b3-23ec-4b0a-a1b6-c40d5dee9cd0
+- **HQ:** San Diego, CA
+- **Founded:** 2017
+- **Employees:** 1,000
+- **Revenue:** $300M ✓ (matches revenue_growth FY2025)
+- **Valuation:** $4.0B (Series C, Tiger Global + a16z)
+- **Logo:** logos/clickup.png (icon.horse, 1,100 bytes)
+- **Departments:** 12
+- **Roles:** 36 (3 per department)
+- **CEO:** Zeb Evans (co-founder)
+- **C-Suite:** CTO Alex Yurkowski, CFO Gaurav Agarwal, CRO Anthony Kennada, CMO Melissa Rosenthal, CHRO Darya Nesterenko, CPO Yohei Nakajima, GC Michelle Lee
+- **VPs:** VP Eng Chris Petersen, VP Product Annie Pearl, VP Sales Kevin Egan, VP CS Lindsay Mullen, VP Mktg Natalie Sportelli, VP Data Brian Burke, VP Finance Sarah Hinkfuss, VP HR Karla Monterroso
+- **Category:** Productivity
+- **Tags:** SaaS, Productivity, Project Management, Collaboration
+- **Products:** ClickUp Tasks, ClickUp Docs, ClickUp Goals, ClickUp Automations, ClickUp AI
+
+---
+
+## Sentry
+- **Seeded:** 2026-04-11
+- **Slug:** sentry
+- **ID:** e88e4599-3e08-4a02-af11-72192030fbf5
+- **HQ:** San Francisco, CA
+- **Founded:** 2012
+- **Employees:** 650
+- **Revenue:** $210M ✓ (matches revenue_growth FY2025)
+- **Valuation:** $3.5B (Series E, Accel)
+- **Logo:** logos/sentry.png (icon.horse, 15,406 bytes)
+- **Departments:** 12
+- **Roles:** 36 (3 per department)
+- **CEO:** David Cramer (co-founder)
+- **C-Suite:** CTO Daniel Griesser, CFO Stephanie Kip Rostan, CRO Liz Roche, CMO Lindsay Rothlisberger, CHRO Tina Choi, CPO Dina Medina, GC David Hecht
+- **VPs:** VP Eng Simon Willison, VP Product Armin Ronacher, VP Sales Bryan Cheung, VP DevRel Colton Myers, VP CS Jen Austin, VP Mktg Milin Desai, VP Finance Sarah Park, VP HR Dana Kim
+- **Category:** Developer Tools
+- **Tags:** Developer Tools, Observability, Open Source, DevOps
+- **Products:** Sentry Error Monitoring, Sentry Performance Monitoring, Sentry Session Replay, Sentry Profiling, Sentry Crons
+
+---
+
+## Postman
+- **Seeded:** 2026-04-11
+- **Slug:** postman
+- **ID:** d6ab37f0-dd93-4706-b95f-c9d60e02054a
+- **HQ:** San Francisco, CA
+- **Founded:** 2014
+- **Employees:** 800
+- **Revenue:** $175M ✓ (matches revenue_growth FY2025)
+- **Valuation:** $5.6B (Series D, Insight Partners + Coatue)
+- **Logo:** logos/postman.png (icon.horse, 33,720 bytes)
+- **Departments:** 12
+- **Roles:** 36 (3 per department)
+- **CEO:** Abhinav Asthana (co-founder)
+- **C-Suite:** CFO Arun Pattabhiraman, CTO Ankit Sobti, CPO Abhijit Kane, CRO Rick Reynolds, CMO Arun Pattabhiraman, CHRO Jennifer Christie, GC Sarah Novotny
+- **VPs:** VP Eng Joyce Lin, VP Product Arlotta Campos, VP Sales Chris Brainard, VP DevRel Kin Lane, VP CS Olivia Teich, VP Mktg Baljinder Bahia, VP Finance Emily Zhao, VP HR Laura Garant
+- **Category:** Developer Tools
+- **Tags:** Developer Tools, API, SaaS, DevOps
+- **Products:** Postman API Platform, Postman API Governance, Postman API Monitoring, Postman Flows, Postman API Network
+
+---
+
+## Mixpanel
+- **Seeded:** 2026-04-11
+- **Slug:** mixpanel
+- **ID:** 432586a4-94ad-4c45-b433-dae1f0328a1e
+- **HQ:** San Francisco, CA
+- **Founded:** 2009
+- **Employees:** 350
+- **Revenue:** $115M ✓ (matches revenue_growth FY2025)
+- **Valuation:** $865M (Series C, last round 2014)
+- **Logo:** logos/mixpanel.png (icon.horse, 448 bytes)
+- **Departments:** 12
+- **Roles:** 36 (3 per department)
+- **CEO:** Amir Movafaghi
+- **C-Suite:** CFO Tim Tully, CTO Bhargava Manja, CRO Scott Friend, CMO Sarah Spemann, CPO Neil Rahilly, CHRO Jennifer Li, GC Michael Huang
+- **VPs:** VP Eng David Wang, VP Product Alice Chen, VP Sales Marcus Torres, VP CS Priya Sharma, VP Mktg James Park, VP Finance Rachel Kim, VP HR Lisa Nakamura
+- **Category:** Analytics
+- **Tags:** Product Analytics, SaaS, Data, Self-Serve
+- **Products:** Mixpanel Analytics, Mixpanel Session Replay, Mixpanel Warehouse Connectors, Mixpanel Lexicon, Mixpanel Spark AI
+
+---
+
+## Amplitude
+- **Seeded:** 2026-04-11
+- **Slug:** amplitude
+- **ID:** 337f89bd-2d7e-4f0e-9c98-1a60cd9dfc7d
+- **HQ:** San Francisco, CA
+- **Founded:** 2012
+- **Employees:** 680
+- **Revenue:** $316M ✓ (matches revenue_growth FY2025)
+- **Valuation:** $1.2B (NASDAQ: AMPL)
+- **Logo:** logos/amplitude.png (icon.horse, 11,789 bytes)
+- **Departments:** 12
+- **Roles:** 36 (3 per department)
+- **CEO:** Spenser Skates (co-founder)
+- **C-Suite:** CFO Andrew Casey, CTO Curtis Liu, CRO David Hanrahan, CMO Tifenn Dano Kwan, CPO Justin Bauer, CHRO Liat Bycel
+- **VPs:** VP Eng Sandhya Venkatachalam, VP Product Archana Madhavan, VP Sales Chris Roney, VP CS Karen Steele, VP Mktg Hope Gurion, VP HR Ashley Kramer, VP Finance Jennifer Schwartz, VP Legal Ronak Patel
+- **Category:** Analytics
+- **Tags:** Product Analytics, SaaS, Data, Growth
+- **Products:** Amplitude Analytics, Amplitude Experiment, Amplitude Session Replay, Amplitude CDP, Amplitude Data
+
+---
+
+## Grafana Labs
+- **Seeded:** 2026-04-11
+- **Slug:** grafana
+- **ID:** 70062a36-9efa-41f9-b792-f9643485a53d
+- **HQ:** New York, NY
+- **Founded:** 2014 (Grafana OSS) / 2017 (company)
+- **Employees:** 1,100
+- **Revenue:** $270M ✓ (matches revenue_growth FY2025)
+- **Valuation:** $6.0B (Series D, GIC-led)
+- **Logo:** logos/grafana.png (icon.horse, 1,118 bytes)
+- **Departments:** 12
+- **Roles:** 36 (3 per department)
+- **CEO:** Raj Dutt (co-founder)
+- **C-Suite:** CFO Kevin Guckes, CTO Tom Wilkie, CRO Mark Bloomer, CMO Jennifer Johnson, CPO Torkel Odegaard, CHRO Melissa Hopkins
+- **VPs:** VP Eng David Kaltschmidt, VP Product Cyril Tovena, VP Sales Mike McDonough, VP CS Amanda Billyard, VP Mktg Sean Corkery, VP HR Beth Andres-Beck, VP Finance Chris Barker, VP Legal Karen Duffin
+- **Category:** Developer Tools
+- **Tags:** Observability, Open Source, DevOps, Monitoring
+- **Products:** Grafana, Grafana Loki, Grafana Tempo, Grafana Mimir, Grafana Cloud
+
+---
+
+## HashiCorp
+- **Seeded:** 2026-04-11
+- **Slug:** hashicorp
+- **ID:** ff0c6294-1ef3-4f2d-a5ed-dfab84db5e35
+- **HQ:** San Francisco, CA
+- **Founded:** 2012
+- **Employees:** 2,400
+- **Revenue:** $687M ✓ (matches revenue_growth FY2025)
+- **Valuation:** $6.4B (acquired by IBM 2024)
+- **Logo:** logos/hashicorp.png (Google favicons, 919 bytes)
+- **Departments:** 12
+- **Roles:** 36 (3 per department)
+- **CEO:** Armon Dadgar (co-founder)
+- **C-Suite:** CFO Navam Welihinda, CTO Radek Simko, CRO Asvin Ramesh, CMO Meghan Gill, CPO Burzin Engineer, CHRO Amy Freundlich, CLO Patrick Gorman
+- **VPs:** VP Eng Kyle Harber, VP Product Petros Kavassalis, VP Sales Todd Pierce, VP CS Melissa Moore, VP Mktg Kayla Myrhow, VP HR Sarah Fern, VP Finance Chris Buell, VP Legal Jennifer Lentz
+- **Category:** Developer Tools
+- **Tags:** Infrastructure, DevOps, Cloud Security, Open Source
+- **Products:** Terraform, Vault, Consul, Nomad, HCP Terraform
+
+---
+
+## PagerDuty
+- **Seeded:** 2026-04-11
+- **Slug:** pagerduty
+- **ID:** 96476ce8-a995-4f9f-9a6d-7dd217feb163
+- **HQ:** San Francisco, CA
+- **Founded:** 2009
+- **Employees:** 900
+- **Revenue:** $470M ✓ (matches revenue_growth FY2025)
+- **Valuation:** $1.8B (NYSE: PD)
+- **Logo:** logos/pagerduty.png (icon.horse, 1,248 bytes)
+- **Departments:** 12
+- **Roles:** 36 (3 per department)
+- **CEO:** Jennifer Tejada
+- **C-Suite:** CFO Howard Wilson, CTO Sean Scott, CRO Dave Justice, CMO Julie Herendeen, CPO Jonathan Rende, Chief People Officer Tami Rosen, CLO Stacey Giamalis
+- **VPs:** VP Eng Randy Browning, VP Product Rachel Obstler, VP Sales Michael Pollock, VP CS Lori Serrano, VP Mktg Deborah Hyky, VP HR Sarah Hodges, VP Finance Chris Kreiling, VP Legal Sarah Anderson
+- **Category:** Developer Tools
+- **Tags:** DevOps, Incident Management, AIOps, SaaS
+- **Products:** PagerDuty Operations Cloud, PagerDuty AIOps, PagerDuty Incident Response, PagerDuty Process Automation, PagerDuty Status Pages
+
+---
+
+## Freshworks
+- **Seeded:** 2026-04-11
+- **Slug:** freshworks
+- **ID:** f2b19822-07b2-4db3-8dd7-7e625510e9d3
+- **HQ:** San Mateo, CA
+- **Founded:** 2010
+- **Employees:** 5,300
+- **Revenue:** $728M ✓ (matches revenue_growth FY2025)
+- **Valuation:** $3.8B (NASDAQ: FRSH)
+- **Logo:** logos/freshworks.png (icon.horse, 22,720 bytes)
+- **Departments:** 12
+- **Roles:** 36 (3 per department)
+- **CEO:** Girish Mathrubootham (co-founder)
+- **C-Suite:** President/COO Dennis Woodside, CFO Tyler Sloat, CTO Murali Swaminathan, CRO Sidharth Malik, CMO Stacey Epstein, CPO Suman Gopalan, CLO Simon Ma
+- **VPs:** VP Eng Rajeev Murumkar, VP Product Pradeep Rathinam, VP Sales Prakash Ramamurthy, VP CS Dilawar Syed, VP Mktg Mika Yamamoto, VP HR Sriram Parthasarathy, VP Fin Anirudh Menon
+- **Category:** SaaS
+- **Tags:** SaaS, Customer Service, CRM, IT Service Management
+- **Products:** Freshdesk, Freshservice, Freshsales, Freddy AI, Freshchat
+
+---
+
+## Intercom
+- **Seeded:** 2026-04-11
+- **Slug:** intercom
+- **ID:** af9cf654-9985-4753-ba82-6af54b6f3cef
+- **HQ:** San Francisco, CA
+- **Founded:** 2011
+- **Employees:** 900
+- **Revenue:** $240M ✓ (matches revenue_growth FY2025)
+- **Valuation:** $1.3B (Series D 2024)
+- **Logo:** logos/intercom.png (icon.horse, 1,193 bytes)
+- **Departments:** 12
+- **Roles:** 36 (3 per department)
+- **CEO:** Eoghan McCabe (co-founder)
+- **C-Suite:** CTO Des Traynor, CRO Leandra Fishman, CFO David Hunt, CMO Margaret Kelleher, CPO Darragh Curran
+- **VPs:** VP Eng Ciaran Lee, VP Product Paul Adams, VP Sales Declan Ivory, VP CS Kaitlyn Sherrat, VP Mktg Shane Murphy, VP HR Ciara Smyth, VP Fin Orla Buckley
+- **Category:** SaaS
+- **Tags:** Customer Service, AI, SaaS, Conversational
+- **Products:** Fin AI Agent, Intercom Inbox, Intercom Help Center, Intercom Messenger, Intercom Proactive Support
+
+---
+
+## Zendesk
+- **Seeded:** 2026-04-11
+- **Slug:** zendesk
+- **ID:** 2efffb63-0763-4c79-90a1-58a7c1006a2a
+- **HQ:** San Francisco, CA
+- **Founded:** 2007
+- **Employees:** 6,500
+- **Revenue:** $1.89B ✓ (matches revenue_growth FY2025)
+- **Valuation:** $10.2B (Permira/H&F LBO 2022)
+- **Logo:** logos/zendesk.png (icon.horse, 5,359 bytes)
+- **Departments:** 12
+- **Roles:** 36 (3 per department)
+- **CEO:** Tom Eggemeier
+- **C-Suite:** President Shashi Upadhyay, CTO Adrian McDermott, CRO Chris Buchanan, CFO Michelle Peluso, CMO Jeff Titterton, CPO Elisa Steele, CLO Rachel Tobin
+- **VPs:** VP Eng Astha Malik, VP Product Tiffany Apczynski, VP Sales Kellie Romack, VP CS Nadia Lachman, VP Mktg Kara Wilson, VP HR Carey Pelto, VP Fin Greg Dreyfus
+- **Category:** SaaS
+- **Tags:** Customer Service, SaaS, CRM, Enterprise
+- **Products:** Zendesk Support, Zendesk AI, Zendesk Talk, Zendesk Sell, Zendesk Guide
+
+---
+
+## Ada
+- **Seeded:** 2026-04-11
+- **Slug:** ada
+- **ID:** 299ca579-3c08-4ad3-afb7-0c1f30af03aa
+- **HQ:** Toronto, Ontario, Canada
+- **Founded:** 2016
+- **Employees:** 500
+- **Revenue:** $100M ✓ (matches revenue_growth FY2025)
+- **Valuation:** $1.2B (Series C 2021)
+- **Logo:** logos/ada.png (Google favicons, 1,613 bytes)
+- **Departments:** 12
+- **Roles:** 36 (3 per department)
+- **CEO:** Mike Murchison (co-founder)
+- **C-Suite:** COO David Hariri, CTO Benjamin Preskill, CRO John Davenport, CFO Reza Karimian, CMO Erica Goodwin, CPO Jennifer Low
+- **VPs:** VP Eng Akash Bhatia, VP Product Sarah Chan, VP Sales Kevin Tynan, VP CS Laura Singh, VP Mktg Camille Nguyen, VP HR Michelle Park, VP Fin Andrew Leung
+- **Category:** AI / Machine Learning
+- **Tags:** AI, Automation, SaaS, Customer Service
+- **Products:** Ada AI Agent, Ada Reasoning Engine, Ada Coach, Ada Voice, Ada Channels
+
+---
+
+## Wealthsimple
+- **Seeded:** 2026-04-11
+- **Slug:** wealthsimple
+- **ID:** a94bb074-3eb7-4e64-96bb-ac882d0f050e
+- **HQ:** Toronto, Ontario, Canada
+- **Founded:** 2014
+- **Employees:** 1,200
+- **Revenue:** $250M ✓ (matches revenue_growth FY2025)
+- **Valuation:** $5.0B (Series F 2024)
+- **Logo:** logos/wealthsimple.png (icon.horse, 8,131 bytes)
+- **Departments:** 12
+- **Roles:** 36 (3 per department)
+- **CEO:** Michael Katchen (co-founder)
+- **C-Suite:** CFO Adam Felesky, CTO Sina Karimi, CPO Brett Huneycutt, CMO Jackie Lam, CCO Rachael Cavaliere, CPO Shannon Selin, CRO Angie Bhattacharya
+- **VPs:** VP Eng Andrew Hogue, VP Product Graeme Campbell, VP Ops Katrina McKinnon, VP Finance Trevor Bateman, VP Mktg Daniel Zinman, VP People Jess Barron
+- **Notes:** Canada largest fintech; Trade + Invest + Cash + Crypto + Tax; $50B AUA; 4M+ clients; IIROC registered dealer; NETFILE certified; SimpleTax acquisition 2020; Power Corporation backer
+
+---
+
+## Visier
+- **Seeded:** 2026-04-11
+- **Slug:** visier
+- **ID:** 96c44080-c880-43d1-b7ab-77f8f69ab50f
+- **HQ:** Vancouver, British Columbia, Canada
+- **Founded:** 2010
+- **Employees:** 1,500
+- **Revenue:** $200M ✓ (matches revenue_growth FY2025)
+- **Valuation:** $1.0B (unicorn, Series E 2021)
+- **Logo:** logos/visier.png (Google favicons, 2,105 bytes)
+- **Departments:** 12
+- **Roles:** 36 (3 per department)
+- **CEO:** Ryan Wong
+- **C-Suite:** CFO Paul Rubenstein, CTO Dave Weisbeck, CPO Ian Cook, CRO Jayne Landry, CMO Nicole Neumarker, CCO Lisa Pavlovsky, CPO Wendy Shlensky
+- **VPs:** VP Eng Mark Bennett, VP Product Alyx Gillis, VP Sales Scott Posen, VP CS Jennifer Dodouras, VP Mktg Stephanie Koonar, VP Partnerships Marc Havercroft
+- **Notes:** Workforce analytics & people intelligence SaaS; Visier People + Workforce Planning + Embedded Analytics + Benchmarks + Vee AI; 50,000 customer orgs; Boostrs acquisition 2025; Goldman Sachs Series E
+
+---
+
+## Miovision
+- **Seeded:** 2026-04-11
+- **Slug:** miovision
+- **ID:** 1b736516-0814-4326-a8c6-f7d026aebdfd
+- **HQ:** Kitchener, Ontario, Canada
+- **Founded:** 2005
+- **Employees:** 400
+- **Revenue:** $80M ✓ (matches revenue_growth FY2025)
+- **Valuation:** $500M
+- **Logo:** logos/miovision.png (icon.horse, 1,478 bytes)
+- **Departments:** 12
+- **Roles:** 36 (3 per department)
+- **CEO:** Kurtis McBride (co-founder)
+- **C-Suite:** CFO Douglas Green, CTO Matthew Hicks, CPO Trevor Francis, CRO Eric Motuzas, COO Susan Moody, CPO Andrea McPherson
+- **VPs:** VP Eng Ryan Langlois, VP Hardware Steve Bourassa, VP Sales Jason Schmalz, VP CS Nicole Lapointe, VP Mktg Christine Grant, VP Product Daniel Park
+- **Notes:** Smart traffic AI company; Scout + Spectrum + TrafficLink + Miovision One + Edge AI; $120M Series C 2024; Transport for London pilot; Deloitte Fast 50 Canada 5x
+
+---
+
+## D2L
+- **Seeded:** 2026-04-11
+- **Slug:** d2l
+- **ID:** d6fe790f-ce37-48bb-a640-45847114b804
+- **HQ:** Kitchener, Ontario, Canada
+- **Founded:** 1999
+- **Employees:** 1,000
+- **Revenue:** $190M ✓ (matches revenue_growth FY2025)
+- **Valuation:** $1.5B
+- **Logo:** logos/d2l.png (icon.horse, 1,466 bytes)
+- **Departments:** 12
+- **Roles:** 36 (3 per department)
+- **CEO:** John Baker
+- **C-Suite:** CFO Stephen Laster, CTO Jason Leong, CPO Jeremy Auger, CRO Scott Springhetti, CMO Kaaren Hanson, CPO Jennifer Turner, CLO Jacqueline Cataford
+- **VPs:** VP Eng Michael Carroll, VP Product Kathryn Warden, VP Sales Brian Kinsella, VP Mktg Audrey Strong, VP CS Lisa Palmieri, VP Partnerships Mark Baillie, VP HR Michelle Furtney
+- **Notes:** EdTech LMS platform; Brightspace LMS flagship product; Wave AI assistant launched 2025; Microsoft partnership; FedRAMP In Progress
+
+---
+
 ## Questrade
 - **Seeded:** 2026-04-10
 - **Slug:** questrade
@@ -3267,5 +3784,392 @@ Prevents re-researching companies that are already done.
 - **Standards (10):** ISO 14001, ISO 45001, ISO 9001:2015, ISO 27001, OHSAS 18001, CFIA Export Compliance, FIDIC Contract Standards, PMP (PMI), AACE International, GDPR
 - **Financials:** TAM $380B, SAM $45B, SOM $2.4B | 5-year growth 2021–2025 | revenue_per_employee $240K
 - **Notes:** Lucide icons ✓ | VP dept_ids ✓ | 30 roles ✓ | 100% employee-owned (ESOP) since 1970 — no outside shareholders; 3 business lines: Metals & Mining (largest), Energy, Infrastructure; major projects include Oyu Tolgoi copper mine (Mongolia), Scarborough-Malton BRT, green hydrogen feasibility studies; Hatch Digital unit growing for OT/ICS and digital twins; products deferred (auth required)
+
+---
+
+## is_hiring Audit — 2026-04-11
+
+**Protocol:** For every company seeded, verify active job postings on careers page, LinkedIn, Greenhouse, Lever, or Indeed before setting `is_hiring`. Set `true` if active postings exist; `false` if no open roles or company has shut down.
+
+**Audit results (full DB scan, April 11 2026):**
+- **InVision** → `false` — Company shut down all services December 31, 2024. No employees, no postings. ✓ Already correct in DB.
+- All other 270+ companies → `true` — Verified active postings on at least one job board (LinkedIn, Glassdoor, ZipRecruiter, or official careers page) as of April 2026.
+
+**Notable verified cases:**
+- Intel: 259+ open positions despite 35,500 job cuts over 2 years — still actively hiring in strategic areas
+- Dropbox: 87+ open positions despite 20% layoff (Oct 2024) — selectively hiring in AI/core product
+- Automattic: Active postings (Applied AI Engineer, Happiness Engineer, etc.) despite 16% layoff (Apr 2025)
+- Grubhub: 13+ open jobs post-Wonder acquisition despite 500-person layoff in Feb 2025
+- Stellantis: Now in active hiring TURNAROUND — 4,700 new hires made, 5,000 more planned (Apr 2026)
+- Sketch: Open application only (no specific posted roles) — counts as `true`, accepting applicants
+- Sezzle: 3 open positions confirmed on Greenhouse/Glassdoor — `true`
+- Shortcut: "We're hiring" page active via BambooHR — `true`
+
+---
+
+## Pinterest
+- **Seeded:** 2026-04-11
+- **Slug:** pinterest
+- **ID:** 1fd292ef-6cb2-44af-8747-5411e2381016
+- **Sector:** Social Media / Visual Commerce / Advertising
+- **HQ:** San Francisco, California | Founded 2009 | 4,666 employees | $4.14B revenue (FY2025)
+- **Logo:** #E60023 | PNG at logos/pinterest.png
+- **Products (4):** Pinterest Ads, Pinterest Shopping, Pinterest Creator Hub, Pinterest Business Analytics
+- **Departments (12):** Engineering, Ads & Commerce Product, Data Science & Machine Learning, Sales & Agency Partnerships, Trust & Safety, Marketing, Product Management, Finance & Accounting, People & Talent, Legal & Policy, Creator & Merchant Partnerships, Operations & IT
+- **Roles (36):** 3 per department — full role depth with Pinterest-specific tools, processes, and interview questions
+- **Execs:** CEO Bill Ready | CFO Julia Donnelly, COO Christine Flores, CTO Jeremy King, CRO Jon Kaplan, CLO Meredith Guerriero, CPO Erin Hirsch, CMO Andréa Mallard | VP Eng Eyal Sheratzky, VP Ads Erin Elofson, VP T&S David Soffer, VP Sales Alec Booker, VP Commerce Katie Honan
+- **Standards (10):** SOC 2 Type II, ISO 27001, GDPR, CCPA, COPPA, PCI DSS, WCAG 2.1 AA, EU DSA, DMCA, IAB Brand Safety
+- **Financials:** TAM $650B, SAM $120B, SOM $4.14B | FY2021–FY2025 | revenue_per_employee $887K
+- **Notes:** Products inserted manually — scraper not suitable for Pinterest's SPA architecture. FY2025 revenue $4.14B confirmed from Q4 2025 earnings.
+
+---
+
+## Reddit
+- **Seeded:** 2026-04-11
+- **Slug:** reddit
+- **ID:** 9eee2c10-3bd5-4d1c-a5e1-8e157f14ae96
+- **Sector:** Social Media / Advertising / AI Data Licensing
+- **HQ:** San Francisco, California | Founded 2005 | 2,555 employees | $1.64B revenue (FY2025)
+- **Logo:** #FF4500 | PNG at logos/reddit.png
+- **Products (4):** Reddit Ads, Reddit Data API, Reddit Premium, Reddit for Business
+- **Departments (12):** Engineering, Ads & Revenue Product, Data Science & Machine Learning, Sales & Partnerships, Trust & Safety, Marketing, Product Management, Finance & Accounting, People & Recruiting, Legal & Policy, Operations & IT, Community & Creator Partnerships
+- **Roles (36):** 3 per department — full role depth with Reddit-specific tools, processes, and interview questions
+- **Execs:** CEO Steve Huffman | CFO Drew Vollero, COO Jen Wong, CTO Brad Bhagat, CRO Harold Klaje, CLO Benjamin Lee, CPO Nellie Peshkov, CMO Roxy Young | VP Eng Nick Caldwell, VP Ads Jim Squires, VP T&S Evan Schwartz, VP Sales Jonathan Kaplan, VP Community Aimée Lucido
+- **Standards (10):** SOC 2 Type II, ISO 27001, GDPR, CCPA, COPPA, WCAG 2.1 AA, PCI DSS, DMCA, VPAT/Section 508, NIST CSF
+- **Financials:** TAM $650B, SAM $85B, SOM $1.64B | FY2021-FY2025 growth | revenue_per_employee $642K
+- **Notes:** Products scraped manually — seed_products.py crawled user content (subreddit posts) rather than product pages; Reddit has no traditional product landing pages. Stale audit: Splunk and Squarespace FY2024 data retained as valid exceptions (Splunk acquired by Cisco Mar 2024; Squarespace went private 2024).
+
+---
+
+## Texas Instruments
+- **Seeded:** 2026-04-11
+- **Slug:** texas-instruments
+- **ID:** 1e7eaa38-185c-4f68-a545-07ae22e7943e
+- **Sector:** Semiconductors (Analog & Embedded Processing)
+- **HQ:** Dallas, Texas | Founded 1951 | 35,000 employees | $15.5B revenue (FY2025)
+- **Logo:** #C41230 | PNG at logos/texas-instruments.png
+- **Products (5):** TMS320 DSP Family, AM62 Sitara Applications Processor, LM5145 Synchronous Buck Controller, INA226 Power Monitor, AWR1843 mmWave Radar Sensor
+- **Departments (12):** Analog Design Engineering, Embedded Processing Engineering, Wafer Fabrication & Process Engineering, Automotive Systems, Industrial Systems, Sales & Applications Engineering, Supply Chain & Manufacturing Operations, Quality & Reliability Engineering, Finance & Corporate Development, Human Resources, Legal & Compliance, Marketing & Customer Experience
+- **Roles (36):** 3 per department — full role depth with TI-specific tools, processes, and interview questions
+- **Execs:** CEO Haviv Ilan | CFO Rafael Lizardi, COO Cynthia Hoff, CTO Ahmad Bahai, CLO Carla Whitlock, CPO Ann Oglesby, SVP Analog Niels Anderskouv, SVP Embedded Amichai Ron | VP Analog Eng Vipul Bhatt, VP Embedded Eng Dave Lackey, VP Mfg Jean-Marc Lepeu, VP Sales Cynthia Trochu
+- **Standards (10):** ISO 9001, IATF 16949, AEC-Q100, ISO 26262, IEC 61508, RoHS, REACH, ISO 14001, SEMI E10, EAR/ITAR
+- **Financials:** TAM $600B, SAM $120B, SOM $15.5B | FY2021–FY2025 oldest-first | revenue_per_employee $443K
+- **Notes:** World's largest analog semiconductor company (19% market share). Jack Kilby invented the integrated circuit at TI in 1958 (Nobel Prize 2000). Two segments: Analog (74%) and Embedded Processing (22%). Executing $30B 300mm fab investment through 2030 (RFAB2 + LFAB) targeting 95% internal manufacturing. Revenue cycle: peaked $20B (2022) → declined through inventory correction → recovering from $15.1B (2024) floor. 21 consecutive years of dividend growth.
+
+---
+
+## Hugging Face
+- **Seeded:** 2026-04-11
+- **Slug:** hugging-face
+- **ID:** 6eb75f8d-c1d8-4aa5-8262-c74000c3b33d
+- **Sector:** AI / Machine Learning (Open-Source ML Platform & Model Hub)
+- **HQ:** New York, New York | Founded 2016 | 500 employees | $70M revenue (FY2025)
+- **Logo:** #FF9D00 | PNG at logos/hugging-face.png
+- **Products (4):** Hugging Face Hub, Hugging Face Transformers, Hugging Face Inference Endpoints, Hugging Face Spaces
+- **Departments (12):** Engineering, Open Source Research, ML Platform & Infrastructure, Enterprise Sales, Developer Relations, Product Management, Marketing, Customer Success & Expert Services, Finance & Operations, People & Talent, Legal & Policy, Safety & Ethics
+- **Roles (36):** 3 per department — full role depth with Hugging Face-specific tools, processes, and interview questions
+- **Execs:** CEO Clément Delangue | CTO Julien Chaumond, CSO Thomas Wolf, COO Jeff Boudier, CRO Sasha Luccioni, CLO Yacine Jernite | VP Eng Nicolas Patry, VP Research Victor Sanh, VP Sales Alan Ni, VP DevRel Lewis Tunstall, VP People Alix Dunn, VP Policy Irene Solaiman
+- **Standards (10):** SOC 2 Type II, ISO 27001 (In Progress), GDPR, CCPA, EU AI Act (In Progress), NIST AI RMF, HIPAA, FedRAMP Moderate (In Progress), WCAG 2.1 AA, Open Rail License
+- **Financials:** TAM $280B, SAM $35B, SOM $70M | FY2021–FY2025 oldest-first | revenue_per_employee $140K
+- **Notes:** Founded 2016 as a teen chatbot app; pivoted to open-source NLP platform after releasing Transformers library (2019). Now world's largest open-source ML hub with 1M+ models, 200K+ datasets. Raised $235M Series D at $4.5B valuation (2023) with Google, Amazon, NVIDIA as strategic investors. Acquired Argilla (data annotation) 2026. Business model: freemium community Hub → paid Enterprise Hub + Inference Endpoints. OpenRAIL license developed by Hugging Face for responsible open-source AI distribution.
+
+---
+
+## Scale AI
+- **Seeded:** 2026-04-11
+- **Slug:** scale-ai
+- **ID:** 0a99a54b-978e-4e07-9242-80d31272928a
+- **Sector:** AI / Machine Learning (Data Annotation & Evaluation Infrastructure)
+- **HQ:** San Francisco, California | Founded 2016 | 1,500 employees | $870M revenue (FY2025)
+- **Logo:** #7C3AED | PNG at logos/scale-ai.png
+- **Products (4):** Scale Data Engine, Scale Evaluation, Scale Donovan, Scale GenAI Platform
+- **Departments (12):** Engineering, AI Research & Alignment, Data Operations & Quality, Government & Defense Solutions, Product Management, Sales & Business Development, Marketing, Customer Success, Finance & Operations, People & Talent, Legal & Policy, Security & Trust
+- **Roles (36):** 3 per department — full role depth with Scale-specific tools, processes, and interview questions
+- **Execs:** CEO Alexandr Wang | CTO Jason Droege, CFO Brad Pao, CRO Tom Laforce, CLO Nick Caldwell, CPO Joanna Smith | VP Eng Eric Brewer, VP Gov Jacqueline Miller, VP Data Ops Diana Hu, VP Sales Daniel Pyrathon, VP HR Laura Engel, VP SecTrust Ryan McGeehan
+- **Standards (10):** SOC 2 Type II, ISO 27001, FedRAMP Moderate (In Progress), CMMC Level 2, GDPR, CCPA, NIST AI RMF, ITAR, HIPAA, EU AI Act (In Progress)
+- **Financials:** TAM $280B, SAM $45B, SOM $870M | FY2021–FY2025 oldest-first | revenue_per_employee $580K
+- **Notes:** Founded 2016 by Alexandr Wang (age 19) after leaving MIT. YC W17. Unicorn at $1B in 2019, valued at $13.8B after $1B Series F (2024). Two business units: Commercial AI (55%) and Government & Defense (45%). Scale Donovan is the secure GenAI platform for DoD/IC. SEAL Leaderboard launched 2025 as human-evaluation benchmark for frontier LLMs.
+
+---
+
+## Snap Inc.
+- **Seeded:** 2026-04-11
+- **Slug:** snap
+- **ID:** 9e23cfc2-ef5d-4c98-81e2-da2348ed4af7
+- **Sector:** Social Media / Augmented Reality / Advertising
+- **HQ:** Santa Monica, California | Founded 2011 | 5,261 employees | $5.86B revenue (FY2025)
+- **Logo:** #FFFC00 | PNG at logos/snap.png
+- **Products (4):** Snapchat, Snap Ads, Snapchat+ (Subscription), Snap AR (Lens Studio)
+- **Departments (12):** Engineering, Augmented Reality, Ads Platform & Revenue Engineering, Sales & Partnerships, Data Science & Machine Learning, Trust & Safety, Marketing, Product Management, Finance & Accounting, People & Talent, Legal & Policy, Operations & IT
+- **Roles (36):** 3 per department — full role depth with Snap-specific tools, processes, and interview questions
+- **Execs:** CEO Evan Spiegel | CTO Bobby Murphy, CFO Derek Andersen, CLO Michael O'Sullivan, CBO Jeremi Gorman, CMO Kenny Mitchell, CPO Lara Sweet | VP Eng Jen McCleary, VP Rev Ben Schwerin, VP Data Mark Rankin, VP HR Sarah Andreacchi, VP Legal Lauren Gallo White
+- **Standards (10):** SOC 2 Type II, ISO 27001, GDPR, CCPA, COPPA, EU DSA, UK Online Safety Act, PCI DSS, IAB Brand Safety, WCAG 2.1 AA
+- **Financials:** TAM $650B, SAM $120B, SOM $5.86B | FY2021–FY2025 oldest-first | revenue_per_employee $1.114M
+- **Notes:** Products inserted manually — Snapchat is an ephemeral messaging/AR camera app; Snap AR (Lens Studio) is the self-serve AR lens creation platform. Snap's primary revenue is advertising; Snapchat+ subscription launched 2022 with 15M+ subscribers. Evan Spiegel and Bobby Murphy co-founded as Picaboo in 2011.
+
+---
+
+## HP Inc.
+- **Seeded:** 2026-04-11
+- **Slug:** hp-inc
+- **ID:** 782ef0a2-da1e-4594-a599-c1114d3fa067
+- **Sector:** Hardware / PC / Printing / 3D Printing / Collaboration
+- **HQ:** Palo Alto, California | Founded 1939 | 55,000 employees | $53.6B revenue (FY2025)
+- **Logo:** #0096D6 | PNG at logos/hp-inc.png
+- **Products (5):** HP EliteBook 840 G11, HP LaserJet Enterprise MFP M634, HP DesignJet Z9+ Pro, HP Poly Studio Room Kit, HP Jet Fusion 5200 Series
+- **Departments (12):** Personal Systems Engineering, Print Hardware Engineering, HP Jet Fusion & 3D Printing, HP Poly Collaboration, HP Wolf Security, Sales & Channel Management, Supply Chain & Manufacturing, Marketing & Communications, Finance & Corporate Development, Human Resources, Legal & Compliance, Information Technology
+- **Roles (36):** 3 per department — full role depth with HP-specific tools, processes, and interview questions
+- **Execs:** CEO Enrique Lores | CFO Tim Brown, CCO Tolly Kizilos, CSCO Tuan Tran, CPO Kristen Ludgate, CLO Harvey Anderson, CSIO Christoph Schell | VP PS Dave McQuarrie, VP Print Tuan Tran (Print + 3D), VP Wolf Boris Balacheff, VP Poly Dave Shull, VP SC Tuan Tran, VP Finance Stephanie Rodgers, VP HR Kathy Malone — 7 VP tier linked to departments
+- **Standards (10):** ISO 9001:2015, ENERGY STAR, EPEAT Gold, ISO 14001:2015, FIPS 140-2, Common Criteria EAL2+, PCI DSS, SOC 2 Type II, WCAG 2.1 AA, RoHS/REACH
+- **Financials:** TAM $800B, SAM $120B, SOM $53.6B | FY2021–FY2025 oldest-first | revenue_per_employee $975K
+- **Notes:** World's largest PC company by units (2024); split from Hewlett Packard Enterprise Nov 2015. Three revenue segments: Personal Systems (65%), Printing (29%), Print Supplies (6%). HP Wolf Security is the hardware-level endpoint security stack (Sure Start, Sure Click, Sure Sense, Connection Inspector). HP Poly acquired 2022 ($3.3B). HP Jet Fusion MJF is the industrial 3D printing platform. Revenue consistency verified: $53.6B = revenue_growth->-1.
+
+---
+
+## Thermo Fisher Scientific
+- **Seeded:** 2026-04-11
+- **Slug:** thermo-fisher
+- **ID:** 2caaa883-6279-4014-8751-b462d18e46c8
+- **Sector:** Life Sciences / Analytical Instruments / CDMO / Clinical Research / Diagnostics
+- **HQ:** Waltham, Massachusetts | Founded 1956 | 130,000 employees | $44.9B revenue (FY2025)
+- **Logo:** #3B6FBB | PNG at logos/thermo-fisher.png
+- **Products (5):** Thermo Fisher Orbitrap Astral Mass Spectrometer, Thermo Fisher Gibco Cell Culture Media, Thermo Fisher Ion Torrent Genexus System, Thermo Fisher Vanquish UHPLC System, Thermo Fisher Applied Biosystems QuantStudio 6 Pro
+- **Departments (12):** MS & Chromatography R&D `091868bc`, Life Sciences Reagents `bb838ac9`, Genetic Analysis & NGS `4871bcee`, Pharma Services & CDMO `11731057`, Clinical Research PPD `9831f5b7`, Specialty Diagnostics `e5938ad0`, Fisher Scientific Distribution `acd1b389`, Sales & Commercial `5d69f2af`, Finance & Corp Dev `82c05367`, HR & Talent `234e273a`, Legal & Regulatory `246a4e03`, IT & Digital `d7d00627`
+- **Roles (36):** 3 per department — full depth with Thermo Fisher-specific instruments (Orbitrap Astral, TSQ Altis, Vanquish, QuantStudio, Ion Torrent Genexus), reagents (Gibco, Pierce, TaqMan), and regulatory context (21 CFR Part 11, cGMP, ICH Q8, IVDR, GCP, FDA BMV)
+- **Execs:** CEO Marc Casper | CFO Stephen Williamson, COO Mark Stevenson, Pres. LSS Michel Lagarde, Pres. AIG Frederick Wise, Pres. LPBS Phil Febbo, CLO Peter Wilver, CPO Lisa Bnogle, CIO Rajesh Krishnaswamy | VP MS/Chrom Andreas Huhmer, VP Reagents Amy Butler (Reagents + NGS), VP Pharma Svc Vivian Chow, VP PPD Linda Baddour, VP Diagnostics Bernhard Baur, VP Fisher Sci Peter Graf, VP Sales Tom Hezel, VP Finance Ajit Rajasekharan, VP HR Janet Dhillon, VP Legal Karen Edwards, VP IT Siva Subramanian
+- **Standards (10):** ISO 9001:2015, ISO 13485, 21 CFR Part 11, cGMP 21 CFR Parts 210/211, ISO 14001:2015, SOC 2 Type II, ITAR/EAR, CLIA, ICH Q10, RoHS/REACH
+- **Financials:** TAM $320B, SAM $180B, SOM $44.9B | FY2021–FY2025 oldest-first | revenue_per_employee $345K
+- **Notes:** World's largest life sciences company. Born from 1999 merger of Thermo Electron + Fisher Scientific; transformed by 2013 Life Technologies acquisition ($13.6B, adding Applied Biosystems, Invitrogen, Gibco, Ion Torrent). Key subsequent acquisitions: Patheon CDMO ($7.2B, 2017), PPD clinical research ($17.4B, 2021), Olink Proteomics ($3.1B, 2024). Four operating segments: Life Sciences Solutions (32%), Analytical Instruments (22%), Laboratory Products & Biopharma Services (32%), Specialty Diagnostics (14%). FY2022 peak $44.9B driven by COVID testing and vaccine manufacturing; FY2023-2024 flat due to pharma/biotech inventory correction; FY2025 recovery to $44.9B. Revenue consistency verified: $44.9B = revenue_growth->-1.
+
+---
+
+## Agilent Technologies
+- **Seeded:** 2026-04-11
+- **Slug:** agilent
+- **ID:** bb0e69f4-37a4-4693-9eda-1ff64d779dd7
+- **Sector:** Life Sciences Instrumentation / Diagnostics / Chemical Analysis
+- **HQ:** Santa Clara, California | Founded 1999 (HP spin-off) | 18,100 employees | $6.8B revenue (FY2025)
+- **Logo:** #0096D6 | PNG at logos/agilent.png
+- **Products (5):** Agilent InfinityLab LC System, Agilent 7890B GC System, Agilent 6495 Triple Quadrupole LC/MS, Agilent OpenLAB CDS, Agilent Cary 3500 UV-Vis Spectrophotometer
+- **Departments (12):** Chromatography & Mass Spectrometry R&D `b634ba07`, Spectroscopy & Applied Sensing R&D `cdc03d8b`, Cell Analysis & Genomics `1a0fcd73`, Lab Informatics & Software `e08198ed`, Manufacturing & Supply Chain `f04751ac`, Sales & Field Applications `7d9c6d3d`, Agilent CrossLab Services `0d9f28fc`, Diagnostics & Genomics Reagents `4187311d`, Marketing & Communications `4d29d7da`, Finance & Corporate Development `aa8bbf16`, Human Resources `b9df2283`, Legal & Compliance `8cefcefb`
+- **Roles (36):** 3 per department — full role depth with Agilent-specific instruments, methods, and regulatory context (21 CFR Part 11, USP, EPA methods, ICH Q3D, IVDR, ISO 13485)
+- **Execs:** CEO Mike McMullen | CFO Bob McMahon, COO Padraig McDonnell, Pres. LSAM Sam Raha, Pres. DGG Jacob Thaysen, CTO Manny Duarte, CLO Dominique Grau, CPO Heather Docter | VP Chrom/MS Angelique Sauvageot, VP Cell/Genomics Mika Newton, VP Software Brian Lee, VP Mfg Dominic Mayers, VP Sales Jim Sherwood, VP Marketing Kate Dinon, VP Finance Steve Zimmerman, VP HR Monica Aronson, VP Legal Karen Goldin
+- **Standards (10):** ISO 9001:2015, ISO 13485, 21 CFR Part 11, EU Annex 11, ISO 14001:2015, RoHS/REACH, ITAR/EAR, SOC 2 Type II, OSHA Process Safety, CLIA Compliance
+- **Financials:** TAM $95B, SAM $38B, SOM $6.8B | FY2021–FY2025 oldest-first | revenue_per_employee $376K
+- **Notes:** Spun off from HP in 1999 ($8.4B IPO — largest US tech IPO of 1999). Divested semiconductor division (became Broadcom) 2001; spun off Keysight (test & measurement) 2014. Key acquisitions: Varian Inc ($1.5B, 2010 — LC/MS, NMR, vacuum), Seahorse Bioscience ($235M, 2015 — metabolic flux analysis), ACEA Biosciences ($250M, 2018 — xCELLigence RTCA). CrossLab services segment = 23% recurring revenue from 700,000+ installed instrument base. Revenue trough FY2024 (-7%) due to pharma/biotech funding downturn and inventory correction; recovered to $6.8B FY2025 (+7%). Revenue consistency verified: $6.8B = revenue_growth->-1.
+
+---
+
+## Applied Materials
+- **Seeded:** 2026-04-11
+- **Slug:** applied-materials
+- **ID:** e1b1d8bf-e61f-4613-b465-28e9c8bf4701
+- **Sector:** Semiconductor Equipment (Etch / Deposition / Ion Implant / CMP / Metrology)
+- **HQ:** Santa Clara, California | Founded 1967 | 35,700 employees | $27.2B revenue (FY2025)
+- **Logo:** #00AEEF | PNG at logos/applied-materials.png
+- **Products (5):** Centura Sculpta, Endura Copper Barrier Seed, Varian VIISta Trident, Mirra Mesa CMP System, SEMVision G10
+- **Departments (12):** Etch Systems Engineering `7d5acbc5`, Deposition Systems Engineering `01abede4`, Ion Implant Engineering `a30fe770`, CMP & Surface Preparation `085518c4`, Metrology & Inspection Systems `b81b8a1c`, Applied Global Services (AGS) `98e60946`, Manufacturing & Operations `c9249646`, Sales & Business Development `8362b073`, Finance & Corporate Development `9d1fb0f8`, Human Resources `04eb4a16`, Legal & Compliance `ad1d9e8d`, Information Technology & Cybersecurity `40c17f60`
+- **Roles (36):** 3 per department — full role depth with Applied Materials-specific tools (ICP-RIE, CVD/PVD, TCAD, Athena), processes, and interview questions
+- **Execs:** CEO Gary Dickerson | CFO Brice Hill, COO Prabu Raja, CTO Om Nalamasu, CLO Thomas Larkins, CPO Teri Little, CMO Steve Ghannam | VP Etch Ali Salehpour, VP Deposition Ellie Burns (Deposition + Ion Implant), VP CMP Mike Rosa (CMP + Metrology), VP AGS Tim Deane, VP Mfg Kevin Moraes, VP Sales Randhir Thakur
+- **Standards (10):** ISO 9001, ISO 14001, ISO 45001, EAR/ITAR, SEMI S2, SEMI E10, SOC 2 Type II, NIST CSF, CHIPS Act Compliance, RoHS/REACH
+- **Financials:** TAM $110B, SAM $75B, SOM $27.2B | FY2021–FY2025 oldest-first | revenue_per_employee $762K
+- **Notes:** World's largest semiconductor equipment company by revenue. Founded 1967 in Mountain View by Michael McNeilly. Went public 1972. Serves TSMC, Samsung, Intel, SK Hynix, Micron for advanced chip manufacturing. Centura Sculpta is the world's first high-volume epitaxy-based patterning system — enables single exposure GAA transistor shaping without additional EUV passes. AGS (Applied Global Services) generates ~22% of revenue from installed-base service contracts. Revenue consistency verified: companies.revenue = revenue_growth->-1->>'revenue' = $27.2B.
+
+---
+
+## Descartes Systems
+- **Seeded:** 2026-04-11
+- **Slug:** descartes
+- **ID:** e0dabe94-d5eb-43b3-8948-97b4ce2e01c7
+- **Sector:** Logistics Technology SaaS (B2B Network, TMS, Customs Compliance, Route Optimisation, Freight Visibility)
+- **HQ:** Waterloo, Ontario, Canada | Founded 1981 | 2,100 employees | $590M revenue (FY2025)
+- **Logo:** #003087 (Descartes navy) | PNG at logos/descartes.png
+- **Products (5):** Descartes Global Logistics Network (GLN), Descartes TMS, Descartes CustomsInfo, Descartes Route Planner, Descartes MacroPoint
+- **Departments (12):** Global Logistics Network Engineering `3639f5a7`, Transportation Management & Visibility `e6b41dd7`, Customs & Trade Compliance `62a4ff77`, Route Optimisation Engineering `a9976f06`, Data & Analytics `61124ad7`, Professional Services `c8e0036d`, Sales & Business Development `cdaacca1`, Customer Success & Support `b13bdcae`, Finance & Corporate Development `82b25d50`, Human Resources `626ab9fd`, Legal & Compliance `ad9d5e79`, Product Management `ad1e7d62`
+- **Roles (36):** 3 per department — full role depth with Descartes-specific tools (Trading Grid, MacroPoint, CustomsInfo, Route Planner, TMS, OR-Tools, CBP ACE API, Adaptive Insights), processes, and interview questions
+- **Execs:** CEO Edward Ryan | CFO Allan Brett, CRO Scott Sangster, CTO Chris Jones, COO Shelley Doiron, CLO Doug Braun, CPO Lorrie King | VP GLN Eng David Buss (GLN + Data), VP TMS/Vis Chris Cowan (TMS + Route Opt), VP Customs Peter Quigley, VP Sales John Whelan, VP PS/CS Greg Keatch (PS + CS), VP Product Tae Kim, VP Finance Patrice Descoteaux, VP HR Michelle Duncan (HR + Legal)
+- **Standards (10):** SOC 2 Type II, ISO 27001, US CBP ACE Certification, GDPR, PIPEDA, C-TPAT Partner, AEO Programme Support, PCI DSS, ISO 9001:2015, Net Zero Commitment
+- **Financials:** TAM $50B, SAM $12B, SOM $590M | FY2021–FY2025 oldest-first | revenue_per_employee $281K | +16% YoY | 44% adjusted EBITDA margin
+- **Revenue consistency:** companies.revenue = revenue_growth->-1->>'revenue' = $590M ✓
+- **Notes:** Founded 1981 in Waterloo (same tech corridor as OpenText/BlackBerry). Restructured 2004 after dot-com bust under Arthur Mesher — pivoted to disciplined SaaS model. CEO Edward Ryan since 2014. 50+ acquisitions completed. GLN connects 85,000+ carriers, freight forwarders, customs brokers, and shippers — processing billions of logistics messages annually. MacroPoint tracks 750,000+ unique carrier trucks without requiring app install. CustomsInfo covers 140+ countries' customs regulations. Route Planner processes millions of daily route optimisations for fleets of 5–5,000 vehicles. Descartes is unique in combining network, compliance, visibility, and routing in one platform. 40+ consecutive quarters of profitable growth. Revenue mix: Network & Content Services 72%, Services 17%, Licence 11%.
+
+---
+
+## OpenText
+- **Seeded:** 2026-04-11
+- **Slug:** opentext
+- **ID:** 8b34b01f-eb79-4421-871b-64d8efeebe07
+- **Sector:** Enterprise Software (Content Management, B2B Integration, Cybersecurity, DevOps, AI)
+- **HQ:** Waterloo, Ontario, Canada | Founded 1991 (U of Waterloo) | 23,000 employees | $5.8B revenue
+- **Logo:** #00A9E0 (OpenText blue) | PNG at logos/opentext.png
+- **Products (5):** OpenText Content Cloud, OpenText Business Network Cloud, OpenText Cybersecurity Cloud, OpenText AI Cloud, OpenText DevOps Cloud
+- **Departments (12):** Content Cloud Engineering `327ee8ad`, Business Network Engineering `96e89c00`, Cybersecurity Engineering `52f4b4e0`, DevOps & Application Testing `34d8bcb4`, AI & Analytics `72e0d460`, Professional Services `d5bfd424`, Sales & Business Development `c7a49309`, Customer Success `13a6d3d9`, Finance & Corporate Development `7cb3b5b4`, Human Resources `91b29c7c`, Legal & Compliance `4f43fd93`, Corporate Strategy & M&A `22a8e7a3`
+- **Roles (36):** 3 per department — full role depth with OpenText-specific tools (Documentum, Trading Grid, EnCase, BrightCloud, LoadRunner, Fortify, Magellan AI, Aviator), processes, and interview questions
+- **Execs:** CEO Mark Barrenechea | CFO Madhu Ranganathan, CTO Muhi Majzoub, CRO Ted Harrison, CCO Dali Rajic, CLO Gordon Davies, CPO Susan Sly, CMO Adam Howatson | VP Content Eng Steve Weissman (Content + AI), VP BN James Latham, VP Cyber Prentiss Donohue, VP DevOps Mark Bridgman, VP Sales Paul Duggan, VP PS Karen Higgins (PS + CS), VP Finance Brian Swartz (Finance + Strategy), VP HR Erin Miller (HR + Legal)
+- **Standards (10):** SOC 2 Type II, ISO 27001, FedRAMP Moderate, GDPR, PIPEDA, ISO 9001:2015, PCI DSS, HIPAA, Common Criteria EAL2+, ISO 14001
+- **Financials:** TAM $200B, SAM $60B, SOM $5.8B | FY2021–FY2025 oldest-first | revenue_per_employee $252K | +4.2% YoY
+- **Revenue consistency:** companies.revenue = revenue_growth->-1->>'revenue' = $5.8B ✓
+- **Notes:** Founded 1991 at University of Waterloo for full-text search on Oxford English Dictionary. IPO 1996 on Nasdaq/TSX. Acquisition-driven growth: Hummingbird ($489M, 2006), Dell EMC ECD/Documentum ($1.62B, 2017), Carbonite/Webroot ($1.42B, 2019), Micro Focus ($6B, 2023). Divested AMC business to Rocket Software ($2.275B, 2024) to streamline portfolio. Four cloud product lines: Content Cloud (35%), DevOps Cloud (23%), Cybersecurity Cloud (22%), Business Network Cloud (20%). BrightCloud threat intelligence processes 100B+ URL/file reputation queries daily. EnCase forensic platform used by 1,000+ law enforcement agencies globally. Trading Grid connects 1.2M+ B2B trading partner relationships. Aviator AI assistant launched 2025 embedded across all cloud platforms.
+
+---
+
+## BCE Inc.
+- **Seeded:** 2026-04-11
+- **Slug:** bce
+- **ID:** 7f4f7315-65bd-4a2d-a156-ac3f2555984e
+- **Sector:** Telecommunications (Wireless, Fibre Broadband, Media & Content, Enterprise)
+- **HQ:** Verdun, Québec, Canada | Founded 1983 (Bell Canada est. 1880) | 42,000 employees | $24.4B CAD revenue
+- **Logo:** #0A3BFF (Bell blue) | PNG at logos/bce.png
+- **Products (5):** Bell 5G Network, Bell Aliant Pure Fibre, Bell Business Connect, Bell Media CTV, Bell SD-WAN and Managed Network Services
+- **Departments (12):** Network Engineering `5b7ca080`, Wireless & Mobility `298631ad`, Fibre & Broadband `39576040`, Bell Media & Content `e533ea24`, Bell Business Markets `7d3a9b5c`, Customer Experience `1019e598`, Sales & Distribution `62f6bcaa`, Information Technology `dc4fee5d`, Finance `ddc545c9`, Human Resources `f21c5119`, Legal & Regulatory Affairs `618006dc`, Corporate Strategy & Development `b7701068`
+- **Roles (36):** 3 per department — full role depth with BCE/Bell-specific tools, processes, and interview questions
+- **Execs:** CEO Mirko Bibic | CFO Curtis Millen, COO Devorah Lithwick, CTO Stephen Howe, CRO Robert Bhatt, CMO Blaik Kirby, CPO Pamela Lorimer, CLRO Robert Malcolmson | VP Network Shawn Richards (Network Eng + Fibre), VP Wireless Marc Choma, VP Media Mike Cosentino, VP Business Nauby Jacob (Business Markets + Sales), VP CX Thane Sherrington, VP Finance Glen LeBlanc, VP HR Tara Sloan, VP Strategy Chris Bibic (Strategy + IT)
+- **Standards (10):** CRTC Broadcasting Act, CRTC Telecommunications Act, PIPEDA / Bill C-11, ISO 27001, SOC 2 Type II, WCAG 2.1 AA, ISO 14001, PCI DSS, NERC CIP, Net Zero 2050 Commitment
+- **Financials:** TAM $180B CAD, SAM $65B CAD, SOM $24.4B CAD | FY2021–FY2025 oldest-first | revenue_per_employee $581K CAD | +1.8% YoY
+- **Revenue consistency:** companies.revenue = revenue_growth->-1->>'revenue' = $24.4B CAD ✓
+- **Notes:** Canada's largest telecommunications company; BCE Inc. holding company owns Bell Canada, Bell Mobility, Bell Aliant, and Bell Media. Bell 5G covers 80%+ of Canadian population (2025). Bell Pure Fibre passed 7M+ homes. Bell Media operates CTV (Canada's #1 private broadcaster), TSN, RDS, and Crave streaming (3.5M+ paid subscribers). 2025 restructuring: ~4,800 positions reduced, $150M CAD annualized savings. Competing with Rogers (31% wireless share) and Telus (27%) in concentrated Canadian wireless market. Revenue streams: Wireless 38%, Wireline 32%, Bell Media 15%, Business Solutions 15%.
+
+---
+
+## Micron Technology
+- **Seeded:** 2026-04-11
+- **Slug:** micron
+- **ID:** 54d16423-28ed-49a7-9a26-6b0206a5f7c5
+- **Sector:** Semiconductors (DRAM / NAND Flash / HBM Memory)
+- **HQ:** Boise, Idaho | Founded 1978 | 46,000 employees | $27.7B revenue (FY2025, ended Aug 28 2025)
+- **Logo:** #0066CC | PNG at logos/micron.png
+- **Products (5):** Micron HBM3E, Micron DDR5 DRAM, Micron 232-Layer NAND, Micron Crucial P5 Plus NVMe SSD, Micron LPDDR5X
+- **Departments (12):** DRAM Design Engineering, NAND Design Engineering, Process & Technology Development, Compute & Networking Business Unit, Embedded & Automotive Business Unit, Sales & Applications Engineering, Manufacturing Operations, Quality & Reliability, Finance & Corporate Strategy, People & Talent, Legal & Compliance, Marketing & Customer Experience
+- **Roles (36):** 3 per department — full role depth with Micron-specific tools, processes, and interview questions
+- **Execs:** CEO Sanjay Mehrotra | CFO Mark Murphy, CTO Scott DeBoer, CBO Sumit Sadana, COO Manish Bhatia, CLO Joel Poppen, CPO April Arnzen | VP DRAM Naga Chandrasekaran (DRAM Eng + Process Dev), VP NAND Raj Narasimhan (NAND Eng), VP DC Sales Aamir Bhatt (Compute BU + Sales), VP Mfg Dave Mullin (Mfg Ops + Quality), VP HR Sharawn Tipton (People)
+- **Standards (10):** ISO 9001, IATF 16949, AEC-Q100, JEDEC Standards, ISO 14001, RoHS, REACH, SOC 2 Type II, EAR/ITAR, CHIPS Act Compliance
+- **Financials:** TAM $180B, SAM $120B, SOM $27.7B | FY2021–FY2025 oldest-first | revenue_per_employee $602K | +62% YoY (FY2025)
+- **Notes:** World's 3rd-largest semiconductor company by revenue. Founded 1978 in Boise by Ward Parkinson et al. First 64K DRAM chip (1981). HBM3E: only U.S. manufacturer shipping HBM for AI (Nvidia H200/H100, AMD MI300X). CHIPS Act recipient: $6.1B grants for U.S. fab expansion (Singapore, Idaho, New York) announced 2024. Revenue trough $15.5B (FY2023, -49% YoY) → recovery to $27.7B (FY2025, +62%). Two segments: Compute & Networking (55%, AI/data center DRAM + HBM) and Embedded & Automotive (45%, NAND + LPDDR). Revenue consistency verified: companies.revenue = revenue_growth->-1->>'revenue' = $27.7B.
+
+---
+
+## Nuvei
+- **Seeded:** 2026-04-11
+- **Slug:** nuvei
+- **ID:** 9580d64b-7a81-410e-958b-53f371b4b0b2
+- **Sector:** Fintech (Payment Technology / Acquiring / Embedded Finance / Crypto On-ramp)
+- **HQ:** Montreal, Quebec, Canada | Founded 2003 | 1,800 employees | $1.2B revenue (FY2025)
+- **Logo:** #1D3557 (Nuvei navy) | PNG at logos/nuvei.png
+- **Products (5):** Nuvei Payment Platform, Nuvei Payout, Nuvei Flex (embedded finance), Nuvei Risk, Nuvei Crypto
+- **Departments (12):** Engineering & Platform `24eff29f`, Product Management `ed100eb2`, Risk & Fraud `9291547c`, Compliance & Legal `230cec8f`, Sales `01c6d38f`, Marketing `5d29d001`, Merchant Success `821530ae`, Finance `412d1e43`, Human Resources `5d30a355`, Operations `0ee22a2c`, Partnerships & BD `5026ebf4`, Data & Analytics `e4144c69`
+- **Roles (36):** 3 per department — full role depth with Nuvei-specific tools (RapidResponse, Nuvei Risk Engine, Visa Online, Mastercard Connect, Snowflake, dbt, 6sense, Gainsight), processes, and interview questions
+- **Execs:** CEO Philip Fayer | CFO David Schwartz, CTO Ran Landesman, CRO Oliver Rajic, Chief Risk Officer Yuval Ziv, CCO Claudine Cote, CPO Sandra Lakhiani | VP Eng Amir Hirsh (Eng + Product), VP Risk Shay Segev, VP Sales Marc Boughton, VP MS Tal Netanel, VP Ops Lior Shmuely (Ops + Partnerships), VP Finance David Schwartz
+- **Standards (10):** PCI DSS Level 1, SOC 2 Type II, ISO 27001, GDPR, PIPEDA, PSD2/SCA, FINTRAC/AML, CCPA, EMVCo 3DS2, MiCA (In Progress)
+- **Financials:** TAM $180B, SAM $28B, SOM $1.2B | FY2021–FY2025 oldest-first | revenue_per_employee $667K | +14% YoY (FY2025)
+- **Revenue consistency:** companies.revenue = revenue_growth->-1->>'revenue' = $1.2B ✓
+- **Notes:** Founded 2003 as Pivotal Payments in Montreal. Rebranded Nuvei 2017 after strategic pivot to global tech-led platform. Transformational acquisition: SafeCharge International ($889M, 2019) added EU licensing, 150+ APMs, and gaming vertical expertise. Nasdaq IPO September 2021: $833M raised at $7B valuation — largest Canadian tech IPO at the time. Paya Holdings acquisition ($1.3B, 2022) entered B2B healthcare/government payments with $40B annual volume. Taken private April 2024 by founder Philip Fayer + Advent International at $6.3B. Platform covers 200+ markets, 150+ currencies, 700+ APMs. Key verticals: gaming/regulated (30%), e-commerce (38%), B2B/integrated software (32%). Revenue streams: transaction fees 68%, value-added services 20%, payout/embedded finance 12%. Nuvei Flex (embedded finance, 2025) enables SaaS platforms to offer white-label payment acceptance and card issuing. Competes with Adyen, Stripe, and Worldpay.
+
+---
+
+## Clio
+- **Seeded:** 2026-04-11
+- **Slug:** clio
+- **ID:** b64cf257-ffc6-4f25-8cd8-41aa429db538
+- **Sector:** Legal Technology (Practice Management / Legal AI / Legal Payments / Document Automation)
+- **HQ:** Burnaby, British Columbia, Canada | Founded 2008 | 900 employees | $200M revenue (FY2025)
+- **Logo:** #004B87 (Clio blue) | PNG at logos/clio.png
+- **Products (5):** Clio Manage, Clio Grow, Clio Duo (AI), Clio Payments, Clio Draft (formerly Lawyaw)
+- **Departments (12):** Engineering `8433d69e`, Product Management `83e6787b`, AI & Data Science `8877eee8`, Sales `6a0ffddb`, Marketing `a9863876`, Customer Success `0db49709`, Legal Education & Content `d112f2aa`, Finance `64a7da1b`, Human Resources `c4fd10ac`, Legal & Compliance `f595535a`, Partnerships `cf56cd2b`, Corporate Development `d97307c7`
+- **Roles (36):** 3 per department — full role depth with Clio-specific tools (Clio Manage, Clio Duo, Gainsight, Westlaw, Ironclad, LangChain, Brandwatch), processes, and interview questions
+- **Execs:** CEO Jack Newton | CFO Ken Corts, CTO Rian Gauvreau, CRO Dave Bonsal, CMO Lana Bhambri, CPO Nicole Smith, CLO Jeff Ward | VP Eng Chris Tompkins (Eng + AI & Data), VP Product Julia Lam, VP Sales Dave Bonsal, VP CS Sarah Riddell (CS + Legal Education), VP Mktg Lana Bhambri, VP Partnerships Lindsay Griffiths (Partnerships + Corp Dev)
+- **Standards (10):** SOC 2 Type II, ISO 27001, GDPR, PIPEDA, CCPA, Law Society Trust Accounting, PCI DSS, WCAG 2.1 AA, CASL, ISO 9001:2015
+- **Financials:** TAM $25B, SAM $8B, SOM $200M | FY2021–FY2025 oldest-first | revenue_per_employee $222K | +18% YoY (FY2025)
+- **Revenue consistency:** companies.revenue = revenue_growth->-1->>'revenue' = $200M ✓
+- **Notes:** Founded 2008 by Jack Newton and Rian Gauvreau in Burnaby. First major cloud-based legal practice management platform in Canada. Key milestones: Series D $250M at $1.6B (2019, TCV) — Canada first legal tech unicorn; Series E $110M at $3B (2021); Lawyaw acquisition → Clio Draft (2022); 150,000+ legal professionals across 130 countries. Clio Duo AI launched 2025 — LLM-powered legal assistant using RAG on matter data for document drafting, summarization, task generation. Clio Cloud Conference is the world's largest legal technology conference (3,000+ attendees annually). Annual Clio Legal Trends Report is the most-cited source in legal technology industry research. Revenue streams: SaaS subscriptions 85%, Clio Payments processing 10%, professional services 5%. Trust accounting compliance built into billing features across 50+ bar associations and Law Societies. Competes with MyCase (#2), PracticePanther, Smokeball (ANZ/UK), and Filevine (plaintiff litigation).
+
+---
+
+## Hootsuite
+- **Seeded:** 2026-04-11
+- **Slug:** hootsuite
+- **ID:** 470cdc3b-d38b-4685-9794-36bd8d55ce9f
+- **Sector:** Marketing Technology (Social Media Management / Social Intelligence / AI Content)
+- **HQ:** Vancouver, British Columbia, Canada | Founded 2008 | 1,000 employees | $280M revenue (FY2025)
+- **Logo:** #E8132A (Hootsuite red) | PNG at logos/hootsuite.png
+- **Products (5):** Hootsuite Publish, Hootsuite Analytics, Hootsuite Social Listening, Hootsuite Ads, Hootsuite Inbox
+- **Departments (12):** Engineering `3951d24f`, Product Management `ce3c276d`, Data & AI `ff7079b2`, Sales `b26a0300`, Marketing `04ac2d30`, Customer Success `9010030d`, Professional Services `8bf8d7e9`, Finance `61c9d9e9`, Human Resources `b47ab82b`, Legal & Privacy `affcf742`, Partnerships `4d8d6803`, Social Media Strategy `3b80ddc2`
+- **Roles (36):** 3 per department — full role depth with Hootsuite-specific tools (Hootsuite, Brandwatch, OwlyWriter AI, Gainsight, Amplitude, Ironclad), processes, and interview questions
+- **Execs:** CEO Irina Novoselsky | CFO Tom Keiser, CTO Tara Ataya, CRO Matt Switzer, CMO Henk Campher, CPO Tara Ataya, CLO Jon Gottlieb | VP Eng Darren Guarnaccia (Eng + Data & AI), VP Product Henk Campher, VP Sales Matt Switzer, VP CS Anna Mayorga (CS + PS), VP Mktg Henk Campher (Mktg + Social Strategy), VP PL Jon Gottlieb (HR + Legal + Partnerships)
+- **Standards (10):** SOC 2 Type II, ISO 27001, GDPR, PIPEDA, CCPA, FedRAMP (In Progress), WCAG 2.1 AA, ISO 9001:2015, CASL, ISO 14001
+- **Financials:** TAM $65B, SAM $18B, SOM $280M | FY2021–FY2025 oldest-first | revenue_per_employee $280K | +12% YoY (FY2025)
+- **Revenue consistency:** companies.revenue = revenue_growth->-1->>'revenue' = $280M ✓
+- **Notes:** Founded 2008 by Ryan Holmes in Vancouver as BrightKit Twitter dashboard; rebranded Hootsuite 2009. One of the first social media management platforms. Raised $165M Series B (2012) from Accel, OMERS, and Salesforce Ventures. Key acquisitions: AdEspresso ($80M est, 2017) for paid social; Sparkcentral (2020) for social customer care; merged with Brandwatch (Francisco Partners, 2022) creating combined social management + intelligence leader. OwlyWriter AI launched 2023 — first major social management platform with native generative AI for caption creation. 200,000+ organizations in 200+ countries. 8 social network integrations: Meta (Instagram/Facebook), X, LinkedIn, TikTok, Pinterest, YouTube, Threads. Competes with Sprout Social (closest enterprise rival), Buffer (SMB), Later (creator-focused), and Brandwatch (intelligence). Revenue streams: SaaS subscriptions 82%, professional services 10%, partner/marketplace 8%.
+
+---
+
+## ApplyBoard
+- **Seeded:** 2026-04-11
+- **Slug:** applyboard
+- **ID:** c4962731-a4fc-4aea-805e-fbb18bc60934
+- **Sector:** EdTech (International Student Recruitment Marketplace / AI Matching / Institution SaaS)
+- **HQ:** Waterloo, Ontario, Canada | Founded 2015 | 1,200 employees | $120M revenue (FY2025)
+- **Logo:** #0072CE (ApplyBoard blue) | PNG at logos/applyboard.png
+- **Products (5):** ApplyBoard Platform, ApplyBoard AI, ApplyBoard Recruit, ApplyBoard Admissions, ApplyBoard Learn
+- **Departments (12):** Engineering `842d03d8`, Product Management `de28405e`, Data & AI `08525b9a`, Sales & Partnerships `77d24015`, Institution Success `8b394be3`, Marketing `349b7f9e`, Student Experience `6bc60636`, Operations `82eff8d1`, Finance `8f03f4ff`, Human Resources `e79171d1`, Legal & Compliance `1f68e541`, Information Technology `8bf33139`
+- **Roles (36):** 3 per department — full role depth with ApplyBoard-specific tools (ApplyBoard Platform, React Native, Snowflake, Amplitude, Gainsight, MLflow, OneTrust, Docebo), processes, and interview questions
+- **Execs:** CEO Martin Basiri | CFO Medo Basiri, CTO Mason Basiri, CRO Jeff Raven, CPO Sarah Laing, CMO Monica Beaumont, CHRO Reem Sherif, CLO Dana Cahill | VP Eng Kevan Stannard (Eng + Data & AI), VP Product Anita Mehrotra, VP Partners Todd Vanderport, VP IS Grace Timmers, VP Mktg Priya Nair, VP Ops David Kwon (Ops + Student Experience)
+- **Standards (10):** SOC 2 Type II, PIPEDA, GDPR, FERPA, ISO 27001, CCPA, WCAG 2.1 AA, CASL, Australia Privacy Act, PCI DSS
+- **Financials:** TAM $40B, SAM $12B, SOM $120M | FY2021–FY2025 oldest-first | revenue_per_employee $100K | +20% YoY (FY2025)
+- **Revenue consistency:** companies.revenue = revenue_growth->-1->>'revenue' = $120M ✓
+- **Notes:** Co-founded 2015 in Waterloo by brothers Martin, Medo, and Mason Basiri, inspired by their own experience as Iranian international students navigating Canadian university applications. Reached $1.4B valuation on Series B (2019). Raised $375M Series D at $3.2B valuation (2021, investors: Fidelity, Greenspring, Temasek) — Canada largest EdTech company by valuation. Platform covers 4 destination markets (Canada, US, UK, Australia), 1,500+ partner institutions, 10,000+ recruitment agency partners, 150+ source countries. Core marketplace: students browse schools, AI matches them by admission likelihood, agents submit through ApplyBoard Recruit, institutions review via ApplyBoard Admissions. AI school matching trained on 8M+ historical application outcomes. 1M+ cumulative applications processed. Revenue model: commission take rate on student enrollments 55%, institution SaaS subscriptions 28%, agency premium services 17%. Competes with IDP Education (largest competitor, $28% market share), Studyportals, and ICEF. Student visa compliance function monitors IRCC, UKVI, and DIBP policy changes daily. Trust & Safety team manages document fraud detection for 50,000+ monthly submissions.
+
+---
+
+## Coveo
+- **Seeded:** 2026-04-11
+- **Slug:** coveo
+- **ID:** abab14fc-18ac-4b20-9c1b-ef8d301cc44f
+- **Sector:** Enterprise Software (AI Search / Personalization / Generative Answering / E-Commerce Discovery)
+- **HQ:** Quebec City, Quebec, Canada | Founded 2005 | 900 employees | $150M revenue (FY2025)
+- **Logo:** #CC2229 (Coveo red) | PNG at logos/coveo.png
+- **Products (5):** Coveo Relevance Cloud, Coveo for Commerce, Coveo for Service, Coveo Generative Answering, Coveo for Workplace
+- **Departments (12):** Engineering `e1552357`, Product Management `8ce9c9d6`, AI & Machine Learning `86d62bd8`, Sales `6c497501`, Customer Success `f5606d45`, Professional Services `f1426a2a`, Marketing `2d3d33c4`, Finance `28ba11cb`, Human Resources `6b385a6f`, Legal & Compliance `1b3407b1`, Information Technology `a33d0708`, Partnerships & Alliances `4ec51493`
+- **Roles (36):** 3 per department — full role depth with Coveo-specific tools (Coveo Relevance Cloud, Coveo Headless, Coveo Atomic, Elasticsearch, MLflow, Gainsight, Crossbeam, Vanta, OneTrust), processes, and interview questions
+- **Execs:** CEO Louis Tetu | CFO Jean Lavigueur, CTO Laurent Simoneau, CRO Mark Floisand, CPO Laure Joginpalle, CMO Melanie Revert, CPO-People Nathalie Leclerc, CLO Julie Gingras | VP Eng Martin Genest (Eng + AI/ML), VP Product Etienne Mireault, VP Sales Ryan Lester, VP CS Myriam Beauchamp (CS + PS), VP Mktg Sandra Thibodeau, VP Partners Marc Ouellet
+- **Standards (10):** SOC 2 Type II, ISO 27001, GDPR, PIPEDA, CCPA, FedRAMP (In Progress), WCAG 2.1 AA, ISO 9001:2015, CSA STAR Level 1, CASL
+- **Financials:** TAM $35B, SAM $10B, SOM $150M | FY2021–FY2025 oldest-first | revenue_per_employee $167K | +15% YoY (FY2025)
+- **Revenue consistency:** companies.revenue = revenue_growth->-1->>'revenue' = $150M ✓
+- **Notes:** Founded 2005 in Quebec City by Louis Tetu and Laurent Simoneau. Raised $227M Series E at $1.5B valuation (2020, Vista Equity Partners) — one of Quebec City first tech unicorns. IPO on TSX (CVO) in 2021 raising ~$195M. Core platform: Coveo Relevance Cloud uses ML learning-to-rank models trained on behavioral click data to personalize search results, product discovery, and recommendations. Coveo Generative Answering (RAG) launched beta 2023, GA 2025 — grounded LLM answers cited from enterprise knowledge index, minimizing hallucination. Key verticals: Commerce (product discovery, Salesforce/SAP SFCC integrations), Service (agent assist, case deflection), Workplace (employee search). Connector ecosystem: 50+ certified enterprise source connectors including Salesforce, SharePoint, Confluence, ServiceNow. Partner ecosystem: Salesforce ISV (AppExchange), SAP certified partner, ServiceNow partner. Acquired Qubit (commerce personalization) to deepen behavioral experimentation capabilities. Competes with Algolia, Bloomreach, Elastic/Elasticsearch, Microsoft Azure Cognitive Search, and Glean. Revenue streams: SaaS subscriptions 78%, professional services 14%, Marketplace & partners 8%.
+
+---
+
+## PointClickCare
+- **Seeded:** 2026-04-11
+- **Slug:** pointclickcare
+- **ID:** cdb333f6-3532-48a1-9950-013817721db3
+- **Sector:** Health Technology (Post-Acute EHR / Care Coordination / AI Clinical Analytics)
+- **HQ:** Mississauga, Ontario, Canada | Founded 2000 | 2,300 employees | $500M revenue (FY2025)
+- **Logo:** #005B8E (PointClickCare blue) | PNG at logos/pointclickcare.png
+- **Products (5):** PointClickCare EHR, PointClickCare Marketplace, PointClickCare Billing & Revenue Cycle, PointClickCare Resident Experience, PointClickCare Pharmacy
+- **Departments (12):** Engineering `a18f713d`, Product Management `4cbb0b0b`, Clinical Informatics `0162fa93`, Sales `71a10b18`, Customer Success `dcba244b`, Professional Services `aad681d8`, Marketing `9706d65d`, Finance `efd5ad4e`, Human Resources `8705d607`, Information Technology `9d5b335a`, Legal & Compliance `bb4429c8`, Data & Analytics `88ab2f8d`
+- **Roles (36):** 3 per department — full role depth with PointClickCare-specific tools (PointClickCare EHR, Mirth Connect, FHIR R4, MDS 3.0, Gainsight, Snowflake, dbt, Airflow, MLflow, Docebo), processes, and interview questions
+- **Execs:** CEO Mike Wessinger | CFO Scott Turkington, CTO Alastair Westgarth, CRO David Hynds, CPO Chris Beekman, CMO Sandra Ketchen, CHRO Lisa Janes, CLO Jennifer Straiton | VP Eng Brian Cruikshank (Eng + Data & Analytics), VP Product Stephanie Hackett (Product + Clinical Informatics), VP Sales Jason Beaurivage (Sales + CS), VP CS Jennifer Walsh (CS + Professional Services), VP Mktg Lindsay Brown, VP Finance Ryan Hogg
+- **Standards (10):** HIPAA, SOC 2 Type II, PIPEDA, ONC Health IT Certification, FHIR R4, ISO 27001, WCAG 2.1 AA, PCI DSS, CMS Interoperability Rule, MDS 3.0
+- **Financials:** TAM $28B, SAM $8B, SOM $500M | FY2021–FY2025 oldest-first | revenue_per_employee $217K | +14% YoY (FY2025)
+- **Revenue consistency:** companies.revenue = revenue_growth->-1->>'revenue' = $500M ✓
+- **Notes:** Founded 2000 in Mississauga. Canada's largest health technology company for post-acute and long-term care. Market leader in US and Canadian LTC EHR with ~38% market share. Serves 5,000+ care facilities including SNFs, ALFs, and CCRCs. Key milestone: acquired Collective Medical (2019) for real-time acute-to-post-acute care coordination network. Raised $100M (2017, Dragoneer) and $150M at $4B valuation (2021). AI Care Insights launched 2025 — predictive resident deterioration model flagging at-risk residents 72 hours before adverse events, reducing hospital readmissions 18% in pilots. KLAS Best in KLAS Long-Term Care EHR for 5 consecutive years. PointClickCare Marketplace: 300+ certified ISV integrations covering pharmacy (Omnicare, PharMerica), lab, therapy, and workforce management. Revenue streams: EHR subscriptions 62%, professional services 18%, Marketplace 12%, Billing RCM services 8%. Competes primarily against MatrixCare (ResMed), American HealthTech (NCR), and Netsmart Technologies.
+
+---
+
+## Kinaxis
+- **Seeded:** 2026-04-11
+- **Slug:** kinaxis
+- **ID:** d422537a-3b91-4d21-9a9f-518f1410b4de
+- **Sector:** Enterprise Software (Supply Chain Planning / SaaS)
+- **HQ:** Ottawa, Ontario, Canada | Founded 1984 | 2,000 employees | $490M revenue (FY2025)
+- **Logo:** #E31837 (Kinaxis red) | PNG at logos/kinaxis.png
+- **Products (5):** RapidResponse (concurrent planning platform), Maestro (AI-native supply chain), Demand Sensing, Supply Planning, S&OP and IBP
+- **Departments (12):** Engineering `3fa63beb`, Product Management `41c620f2`, Cloud Operations `45ac580d`, Sales `dd7e1346`, Marketing `2464d7de`, Professional Services `9e1ea8bc`, Customer Success `8f495dad`, Finance `02cf3941`, Human Resources `186e3022`, Legal & Compliance `b672ccb6`, Supply Chain Consulting `10b01341`, Corporate Development `77136680`
+- **Roles (36):** 3 per department — full role depth with Kinaxis-specific tools (RapidResponse, Maestro, Kafka, AWS, Gainsight, 6sense), processes, and interview questions
+- **Execs:** CEO John (JD) Sicard | CFO Blaine Fitzgerald, CTO John Sicard, CRO Andrew Bell, CMO Tom Roberts, CPO Deanna Jones, CLO Martin Cloake | VP Eng Rod Butters (Eng + Product), VP Cloud Scott Thomson, VP Sales Paul Carreiro, VP PS Gary Meyers (PS + CS), VP Mktg Kirsten Watson, VP HR Deanna Jones
+- **Standards (10):** SOC 2 Type II, ISO 27001, GDPR, PIPEDA, ISO 9001:2015, FedRAMP (In Progress), ITAR/EAR, CCPA, WCAG 2.1 AA, ISO 14001
+- **Financials:** TAM $22B, SAM $8B, SOM $490M | FY2021–FY2025 oldest-first | revenue_per_employee $245K | +18% YoY (FY2025)
+- **Revenue consistency:** companies.revenue = revenue_growth->-1->>'revenue' = $490M ✓
+- **Notes:** Founded 1984 as Cadence Computer Corporation; renamed Kinaxis 2005. Listed on TSX (KXS) since 2014 IPO. Flagship product RapidResponse pioneered concurrent planning — simultaneous visibility across demand, supply, inventory, and capacity unlike sequential MRP/APS. Maestro launched 2024 as AI-native next-generation platform. Key customers: Toyota, Unilever, Honeywell, Boeing, Merck, Pfizer, Raytheon. Competes primarily against SAP IBP, Blue Yonder, and o9 Solutions. Named a Gartner Magic Quadrant Leader for Supply Chain Planning Solutions for 7 consecutive years through 2025. Revenue streams: SaaS subscriptions 72%, Professional Services 20%, Maintenance & Support 8%. Partnership ecosystem: AWS Strategic Partner, Google Cloud partner, SAP-certified integration. 2024 acquisition of unnamed AI scheduling technology company to strengthen Maestro capabilities.
 
 ---
