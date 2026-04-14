@@ -8,6 +8,7 @@ import { cn } from "@/lib/utils"
 import Header from "@/components/landing/header"
 import Footer from "@/components/landing/footer"
 import PaddleProviderWrapper from "@/components/PaddleProviderWrapper"
+import LoggedOutBanner from "@/components/LoggedOutBanner"
 
 export const metadata: Metadata = {
   title: 'ResearchOrg — Company Research for Job Seekers',
@@ -44,6 +45,7 @@ export default function RootLayout({
         <Analytics />
         <SpeedInsights />
         <PaddleProviderWrapper />
+        <LoggedOutBanner />
         <Header />
         <div style={{ paddingTop: '60px', display: 'flex', flexDirection: 'column', minHeight: 'calc(100vh - 60px)' }}>
           <div style={{ flex: 1 }}>
