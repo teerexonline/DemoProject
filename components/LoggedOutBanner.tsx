@@ -68,23 +68,26 @@ export default function LoggedOutBanner() {
   const [mounted, setMounted] = useState(false)
   const [message, setMessage] = useState('')
   const [loading, setLoading] = useState(true)
-  const hasChecked = useRef(false)
+  const isAuthed = useRef<boolean | null>(null)
 
   useEffect(() => {
-    if (hasChecked.current) return
-    hasChecked.current = true
-
     async function init() {
       // Check dismissal first (fast)
-      if (isDismissed()) return
+      if (isDismissed()) {
+        setMounted(false)
+        return
+      }
 
       const supabase = createClient()
 
-      // Check auth
-      const { data: { session } } = await supabase.auth.getSession()
-      if (session) return
+      // Check auth once, cache result
+      if (isAuthed.current === null) {
+        const { data: { session } } = await supabase.auth.getSession()
+        isAuthed.current = !!session
+      }
+      if (isAuthed.current) return
 
-      // Determine message
+      // Determine message for current page
       const companyMatch = pathname.match(/^\/company\/([^/]+)/)
       if (companyMatch) {
         const slug = companyMatch[1]
@@ -113,8 +116,7 @@ export default function LoggedOutBanner() {
 
       setLoading(false)
       setMounted(true)
-      // Slight delay for slide-up entrance
-      setTimeout(() => setVisible(true), 120)
+      setVisible(true)
     }
 
     init()
