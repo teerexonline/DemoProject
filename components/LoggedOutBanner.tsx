@@ -10,7 +10,7 @@ interface CompanyInfo {
 }
 
 const DISMISS_KEY = 'researchorg_banner_dismissed_v1'
-const DISMISS_EXPIRY_DAYS = 7
+const DISMISS_EXPIRY_DAYS = 1
 
 type Template = (company: CompanyInfo) => string
 
@@ -228,11 +228,6 @@ export default function LoggedOutBanner() {
               letterSpacing: '-0.01em',
               fontWeight: 500,
             }}>
-              <span style={{
-                color: '#fff',
-                fontWeight: 700,
-                marginRight: 4,
-              }}>Free access ends here.</span>
               {message}
             </p>
 
