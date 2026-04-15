@@ -15,19 +15,19 @@ const DISMISS_EXPIRY_DAYS = 1
 type Template = (company: CompanyInfo) => string
 
 const COMPANY_TEMPLATES: Template[] = [
-  (c) => `Sign up to understand the key differentiators ${c.name} has against its closest competitors`,
-  (c) => `${c.category} doesn't always equal stability — find out if ${c.name} should be your next move`,
-  (c) => `Got an interview at ${c.name}? Sign up to see their org structure, departments, and who's hiring`,
-  (c) => `You're viewing ${c.name} without an account — you're missing half the picture`,
-  (c) => `What does ${c.name}'s leadership actually look like? Sign up to find out before your interview`,
-  (c) => `Applying to ${c.name}? Know their financials, culture, and internal structure before you do`,
-  (c) => `${c.name}'s org chart, team breakdown, and hiring trends are locked — sign up for free access`,
-  (c) => `Don't walk into an interview at ${c.name} unprepared — your research is one sign-up away`,
+  (c) => `What makes ${c.name} different from its competitors? Sign up to find out`,
+  (c) => `Is ${c.name} actually stable? Sign up before you apply`,
+  (c) => `Interviewing at ${c.name}? Sign up to see their org structure first`,
+  (c) => `You're missing half the picture on ${c.name} — sign up free`,
+  (c) => `Who really runs ${c.name}? Sign up to see their leadership`,
+  (c) => `Applying to ${c.name}? Know their financials and culture first`,
+  (c) => `${c.name}'s org chart and hiring trends are locked — sign up free`,
+  (c) => `Don't interview at ${c.name} unprepared — sign up free`,
 ]
 
 const FALLBACK_MESSAGES = [
   'Sign up to research 270+ companies before your next interview',
-  'Your next employer is on ResearchOrg — sign up to start researching',
+  'Your next employer is here — sign up to start researching',
   'Job seekers who research companies get offers. Sign up free.',
 ]
 
