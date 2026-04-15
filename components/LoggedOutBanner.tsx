@@ -160,10 +160,11 @@ export default function LoggedOutBanner() {
         }
         @media (max-width: 640px) {
           .banner-lock-icon { display: none !important; }
-          .banner-inner { justify-content: flex-start !important; }
-          .banner-message { font-size: 12.5px !important; }
-          .banner-cta { font-size: 12px !important; padding: 7px 14px !important; }
-          .banner-dismiss { position: static !important; transform: none !important; margin-left: auto; }
+          .banner-inner { justify-content: flex-start !important; flex-wrap: nowrap !important; gap: 10px !important; }
+          .banner-group { flex-wrap: nowrap !important; gap: 10px !important; justify-content: flex-start !important; min-width: 0; }
+          .banner-message { font-size: 12.5px !important; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
+          .banner-cta { font-size: 12px !important; padding: 6px 12px !important; flex-shrink: 0; }
+          .banner-dismiss { position: static !important; transform: none !important; flex-shrink: 0; }
         }
       `}</style>
 
@@ -224,7 +225,7 @@ export default function LoggedOutBanner() {
             </div>
 
             {/* Message + CTA grouped */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: 16, flexWrap: 'wrap', justifyContent: 'center' }}>
+            <div className="banner-group" style={{ display: 'flex', alignItems: 'center', gap: 16, flexWrap: 'wrap', justifyContent: 'center' }}>
               <p className="banner-message" style={{
                 margin: 0,
                 fontSize: 15,
