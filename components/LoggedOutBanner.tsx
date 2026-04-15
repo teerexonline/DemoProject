@@ -160,9 +160,10 @@ export default function LoggedOutBanner() {
         }
         @media (max-width: 640px) {
           .banner-lock-icon { display: none !important; }
-          .banner-inner { flex-wrap: wrap !important; gap: 8px !important; }
-          .banner-message { font-size: 12.5px !important; width: calc(100% - 40px) !important; }
+          .banner-inner { justify-content: flex-start !important; }
+          .banner-message { font-size: 12.5px !important; }
           .banner-cta { font-size: 12px !important; padding: 7px 14px !important; }
+          .banner-dismiss { position: static !important; transform: none !important; margin-left: auto; }
         }
       `}</style>
 
