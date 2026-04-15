@@ -199,7 +199,9 @@ export default function LoggedOutBanner() {
               margin: '0 auto',
               display: 'flex',
               alignItems: 'center',
+              justifyContent: 'center',
               gap: 16,
+              position: 'relative',
             }}
           >
             {/* Icon */}
@@ -221,7 +223,7 @@ export default function LoggedOutBanner() {
             </div>
 
             {/* Message + CTA grouped */}
-            <div style={{ flex: 1, display: 'flex', alignItems: 'center', gap: 16, flexWrap: 'wrap' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 16, flexWrap: 'wrap', justifyContent: 'center' }}>
               <p className="banner-message" style={{
                 margin: 0,
                 fontSize: 15,
@@ -268,7 +270,10 @@ export default function LoggedOutBanner() {
               className="banner-dismiss"
               aria-label="Dismiss"
               style={{
-                flexShrink: 0,
+                position: 'absolute',
+                right: 0,
+                top: '50%',
+                transform: 'translateY(-50%)',
                 width: 28,
                 height: 28,
                 borderRadius: 6,
