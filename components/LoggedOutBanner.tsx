@@ -160,11 +160,11 @@ export default function LoggedOutBanner() {
         }
         @media (max-width: 640px) {
           .banner-lock-icon { display: none !important; }
-          .banner-inner { justify-content: flex-start !important; flex-wrap: nowrap !important; gap: 10px !important; }
-          .banner-group { flex: 1 !important; flex-wrap: nowrap !important; justify-content: flex-start !important; gap: 10px !important; min-width: 0; }
-          .banner-message { flex: 1 !important; font-size: 12.5px !important; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-          .banner-cta { font-size: 12px !important; padding: 6px 12px !important; flex-shrink: 0 !important; }
-          .banner-dismiss { position: static !important; transform: none !important; flex-shrink: 0 !important; }
+          .banner-inner { justify-content: flex-start !important; position: relative !important; padding-right: 36px !important; }
+          .banner-group { flex-direction: column !important; align-items: flex-start !important; gap: 10px !important; justify-content: flex-start !important; }
+          .banner-message { font-size: 13px !important; white-space: normal !important; }
+          .banner-cta { font-size: 12px !important; padding: 7px 16px !important; align-self: flex-start !important; }
+          .banner-dismiss { position: absolute !important; top: 0 !important; right: 0 !important; transform: none !important; }
         }
       `}</style>
 
