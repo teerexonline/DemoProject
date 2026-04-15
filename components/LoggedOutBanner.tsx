@@ -159,8 +159,10 @@ export default function LoggedOutBanner() {
           background: rgba(255,255,255,0.12) !important;
         }
         @media (max-width: 640px) {
-          .banner-inner { flex-direction: column !important; align-items: flex-start !important; gap: 12px !important; }
-          .banner-cta { align-self: stretch; text-align: center; justify-content: center; }
+          .banner-lock-icon { display: none !important; }
+          .banner-inner { flex-wrap: wrap !important; gap: 8px !important; }
+          .banner-message { font-size: 12.5px !important; width: calc(100% - 40px) !important; }
+          .banner-cta { font-size: 12px !important; padding: 7px 14px !important; }
         }
       `}</style>
 
@@ -201,7 +203,7 @@ export default function LoggedOutBanner() {
             }}
           >
             {/* Icon */}
-            <div style={{
+            <div className="banner-lock-icon" style={{
               flexShrink: 0,
               width: 32,
               height: 32,
@@ -219,7 +221,7 @@ export default function LoggedOutBanner() {
             </div>
 
             {/* Message */}
-            <p style={{
+            <p className="banner-message" style={{
               flex: 1,
               margin: 0,
               fontSize: 13.5,
