@@ -220,46 +220,47 @@ export default function LoggedOutBanner() {
               </svg>
             </div>
 
-            {/* Message */}
-            <p className="banner-message" style={{
-              flex: 1,
-              margin: 0,
-              fontSize: 13.5,
-              lineHeight: 1.5,
-              color: 'rgba(255,255,255,0.88)',
-              letterSpacing: '-0.01em',
-              fontWeight: 500,
-            }}>
-              {message}
-            </p>
-
-            {/* CTA */}
-            <button
-              onClick={handleSignUp}
-              className="banner-cta"
-              style={{
-                flexShrink: 0,
-                padding: '8px 20px',
-                borderRadius: 8,
-                background: 'rgba(255,255,255,0.13)',
-                border: '1px solid rgba(255,255,255,0.25)',
-                color: '#fff',
-                fontSize: 13,
-                fontWeight: 700,
-                cursor: 'pointer',
+            {/* Message + CTA grouped */}
+            <div style={{ flex: 1, display: 'flex', alignItems: 'center', gap: 16, flexWrap: 'wrap' }}>
+              <p className="banner-message" style={{
+                margin: 0,
+                fontSize: 15,
+                lineHeight: 1.5,
+                color: 'rgba(255,255,255,0.88)',
                 letterSpacing: '-0.01em',
-                transition: 'background 0.15s, color 0.15s, transform 0.1s',
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: 6,
-                whiteSpace: 'nowrap',
-              }}
-            >
-              Sign up free
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M5 12h14M12 5l7 7-7 7"/>
-              </svg>
-            </button>
+                fontWeight: 500,
+              }}>
+                {message}
+              </p>
+
+              {/* CTA */}
+              <button
+                onClick={handleSignUp}
+                className="banner-cta"
+                style={{
+                  flexShrink: 0,
+                  padding: '8px 20px',
+                  borderRadius: 8,
+                  background: 'rgba(255,255,255,0.13)',
+                  border: '1px solid rgba(255,255,255,0.25)',
+                  color: '#fff',
+                  fontSize: 13,
+                  fontWeight: 700,
+                  cursor: 'pointer',
+                  letterSpacing: '-0.01em',
+                  transition: 'background 0.15s, color 0.15s, transform 0.1s',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: 6,
+                  whiteSpace: 'nowrap',
+                }}
+              >
+                Sign up free
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M5 12h14M12 5l7 7-7 7"/>
+                </svg>
+              </button>
+            </div>
 
             {/* Dismiss */}
             <button
