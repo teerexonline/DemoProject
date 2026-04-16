@@ -47,16 +47,62 @@ Before inserting ANY scraper output, check:
    use fewer items rather than insert stale news.
    TYPE: Use the most accurate type for each item — see referenceData.md Section 3 for valid types and color mapping.
 
-━━━ PRE-FLIGHT: READ REFERENCE DATA ━━━
-Before starting any section, always:
-1. Read referenceData.md to load the gold standard structure into context.
-2. Pick ONE company at random from the "Companies with complete, verified data"
-   table in referenceData.md and run a quick spot-check query on it:
-     SELECT title, short_title, name, level FROM company_exec_groups
-     WHERE company_id = (SELECT id FROM companies WHERE slug = '[random-slug]')
-     ORDER BY sort_order LIMIT 5;
-   Use this single query result as your live quality reference for the session.
-   Do not check multiple companies — one random pick is enough.
+━━━ PRE-FLIGHT: LOAD ZEBRA TECHNOLOGIES AS GLOBAL BENCHMARK ━━━
+⛔ Zebra Technologies is the quality standard for EVERY section of EVERY company.
+Before seeding anything, run ALL of the following queries and study the output.
+Every section you seed must match Zebra's depth, specificity, and completeness.
+
+Run these queries now:
+
+  -- 1. OVERVIEW benchmark
+  SELECT name, description, revenue, employees, founded, hq, tags
+  FROM companies WHERE slug = 'zebra-technologies';
+
+  -- 2. PRODUCTS benchmark (customers, competitors, use_cases)
+  SELECT p.name, p.tagline, p.category, p.customers, p.competitors,
+    jsonb_array_element_text(p.use_cases, 0) AS first_use_case
+  FROM company_products p
+  WHERE p.company_id = (SELECT id FROM companies WHERE slug = 'zebra-technologies')
+  LIMIT 3;
+
+  -- 3. FINANCIALS benchmark
+  SELECT tam, sam, som, yoy_growth, revenue_per_employee,
+    revenue_streams, business_units, market_share, revenue_growth
+  FROM company_financials
+  WHERE company_id = (SELECT id FROM companies WHERE slug = 'zebra-technologies');
+
+  -- 4. MILESTONES benchmark
+  SELECT year, title, description FROM company_milestones
+  WHERE company_id = (SELECT id FROM companies WHERE slug = 'zebra-technologies')
+  ORDER BY year DESC LIMIT 3;
+
+  -- 5. NEWS benchmark
+  SELECT sort_order, published_date, headline, source_url FROM company_news
+  WHERE company_id = (SELECT id FROM companies WHERE slug = 'zebra-technologies')
+  ORDER BY sort_order;
+
+  -- 6. DEPARTMENTS benchmark
+  SELECT name, description, icon, color FROM company_departments
+  WHERE company_id = (SELECT id FROM companies WHERE slug = 'zebra-technologies')
+  LIMIT 5;
+
+  -- 7. ORG CHART benchmark (roles, tools, interview questions)
+  SELECT title, tools, interview_questions FROM company_org_roles
+  WHERE department_id IN (
+    SELECT id FROM company_departments
+    WHERE company_id = (SELECT id FROM companies WHERE slug = 'zebra-technologies')
+  ) LIMIT 3;
+
+  -- 8. LEADERSHIP benchmark
+  SELECT title, short_title, name, level FROM company_exec_groups
+  WHERE company_id = (SELECT id FROM companies WHERE slug = 'zebra-technologies')
+  ORDER BY sort_order LIMIT 8;
+
+After running: internalize what "good" looks like for each section.
+The company you are about to seed must match or exceed this bar in every section.
+If your output for any section looks thinner, vaguer, or less specific than Zebra's — fix it before moving on.
+
+Also read referenceData.md for structural rules and valid values.
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
@@ -580,8 +626,158 @@ IMPORTANT:
 - department_ids for VPs must use the actual UUIDs inserted in step 7.
 - Never use emoji in any field. name must never be null.
 
+━━━ MANDATORY AUDIT — RUN BEFORE LOGGING, EVERY COMPANY, NO EXCEPTIONS ━━━
+After inserting all sections, run ALL of the following audit queries.
+Fix every failure before moving to the next company. Do not skip this step.
+
+⛔ A company is NOT done until all audit checks pass.
+
+1. FINANCIALS STRUCTURE AUDIT — all must return 'array' / 'object':
+  SELECT
+    jsonb_typeof(market_share) AS ms_type,
+    jsonb_typeof(market_share->0) AS ms_elem,
+    jsonb_typeof(revenue_streams->0) AS rs_elem,
+    jsonb_typeof(business_units->0) AS bu_elem,
+    jsonb_typeof(competitors->0) AS comp_elem
+  FROM company_financials WHERE company_id = '[company_id]';
+  Expected: ms_type=array, ms_elem=object, rs_elem=object, bu_elem=object, comp_elem=object.
+  If ANY element is 'string' or ms_type is 'object' → rebuild that field as proper JSON objects before proceeding.
+
+2. REVENUE CONSISTENCY AUDIT:
+  SELECT c.revenue, cf.revenue_growth->-1->>'year' AS latest_year,
+    cf.revenue_growth->-1->>'revenue' AS latest_rev
+  FROM companies c JOIN company_financials cf ON cf.company_id = c.id
+  WHERE c.id = '[company_id]';
+  Expected: c.revenue matches latest_rev exactly (same format, same value).
+  revenue_growth->-1 must be the most recent completed FY (FY2024 or FY2025).
+  revenue format: "$X.XB" — never "CA$X.XB USD", never "$XXXM USD", never "FY2024" as year key.
+  Fix: UPDATE companies SET revenue = '[value]' WHERE id = '[company_id]';
+
+3. NEWS AUDIT — recency, format, sort order:
+  SELECT sort_order, published_date, headline,
+    CASE WHEN published_date < '[today minus 12 months]' THEN '❌ STALE' ELSE '✓' END AS date_check,
+    CASE WHEN published_date !~ '^\d{4}-\d{2}-\d{2}$' THEN '❌ WRONG FORMAT' ELSE '✓' END AS fmt_check,
+    CASE WHEN sort_order = 0 THEN '❌ SORT_ORDER=0' ELSE '✓' END AS sort_check
+  FROM company_news WHERE company_id = '[company_id]' ORDER BY sort_order;
+  Expected: all ✓. Fix failures:
+  - STALE: replace with a genuinely recent item (or update date if it was a format error).
+  - WRONG FORMAT: convert to YYYY-MM-DD.
+  - SORT_ORDER=0: renumber so newest=1, oldest=5.
+  After any fix, re-run the sort order normalizer:
+    WITH ranked AS (
+      SELECT id, ROW_NUMBER() OVER (PARTITION BY company_id ORDER BY published_date::date DESC) AS n
+      FROM company_news WHERE company_id = '[company_id]' AND published_date ~ '^\d{4}-\d{2}-\d{2}$'
+    )
+    UPDATE company_news cn SET sort_order = r.n FROM ranked r WHERE cn.id = r.id;
+
+4. MARKET SHARE SEGMENT AUDIT:
+  SELECT market_share->0->>'segment' FROM company_financials WHERE company_id = '[company_id]';
+  Expected: NOT "Global Market". Must be specific (e.g. "US Open Banking Network", "Canadian Restaurant POS Market").
+  Fix: UPDATE company_financials SET market_share = jsonb_set(market_share, '{0,segment}', '"Specific Segment Name"') WHERE company_id = '[company_id]';
+
+5. FINANCIALS FORMAT AUDIT — yoy_growth, revenue_per_employee, tam/sam/som:
+  SELECT yoy_growth, revenue_per_employee, tam, sam, som
+  FROM company_financials WHERE company_id = '[company_id]';
+  Expected:
+  - yoy_growth: must be "+X%" or "-X%" or "Pre-revenue". NEVER a raw number like "10.2".
+  - revenue_per_employee: must be "$XXXK" or "N/A". NEVER a raw number like "175342".
+  - tam/sam/som: must be clean dollar values only, e.g. "$45B", "CA$950B".
+    NEVER contain parenthetical descriptions like "$45B (Global cloud computing market)".
+  Fix any failures before proceeding.
+
+6. PRODUCT USE_CASES QUALITY AUDIT:
+  SELECT name, jsonb_array_element_text(use_cases, 0) AS first_use_case
+  FROM company_products WHERE company_id = '[company_id]';
+  Expected: every use_case entry must be a full real-world scenario sentence of at least 60
+  characters describing a specific actor using the product in a concrete situation.
+  NEVER accept short keyword phrases like "ISR missions", "KYC compliance", "fraud detection",
+  "overlanding", "legacy modernization". These are topic labels, not use cases.
+  A passing use_case looks like: "A logistics company using [Product] to automate X, reducing Y by Z%"
+  Fix: rewrite any short-phrase use_cases as full scenario sentences before proceeding.
+
+6b. PRODUCT CUSTOMERS & COMPETITORS AUDIT:
+  SELECT name, customers, competitors FROM company_products WHERE company_id = '[company_id]';
+
+  CUSTOMERS — required format: array of objects with name, abbr, bg fields:
+    [{"name": "Amazon", "abbr": "AMZ", "bg": "#FF9900"}, ...]
+  - 3–5 real known customers per product (named organizations or recognizable user groups)
+  - abbr: 2–3 character uppercase abbreviation of the customer name
+  - bg: the customer brand's primary hex color (research it — do not guess)
+  - NEVER store as plain strings like ["Amazon", "Boeing"] — this breaks the UI
+  Fix: UPDATE company_products SET customers = '[{"name":"...","abbr":"...","bg":"..."}]'::jsonb WHERE id = '...';
+
+  COMPETITORS — required format: array of objects with name, description, AND edge fields:
+    [{"name": "Salesforce", "description": "Dominant CRM with broad enterprise suite but heavy implementation overhead", "edge": "Faster onboarding, lower TCO, more flexible APIs"}, ...]
+  - 2–4 direct product-level competitors (not just company names from the market share chart)
+  - description: one sentence describing what the competitor offers — this is the "THEM" row shown in the UI
+  - edge: a specific one-line reason WHY this product wins against that competitor — the "EDGE" row
+  - ALL THREE FIELDS are required. Missing description = blank "THEM" row visible to every user
+  - NEVER leave competitors as [] — empty means no competitive positioning shown on the product page
+  Fix: UPDATE company_products SET competitors = '[{"name":"...","description":"...","edge":"..."}]'::jsonb WHERE id = '...';
+
+7. REVENUE YEAR CURRENCY AUDIT:
+  Check: is the latest year in revenue_growth the most recent completed fiscal year?
+  - If the company is publicly traded: FY2025 results are available as of early 2026.
+    The latest entry MUST be year 2025. If it shows 2024, research and add the FY2025 entry.
+  - If the company is private with no public reporting: 2024 is acceptable as latest.
+  Also update companies.revenue to match the latest revenue_growth entry.
+
+8. FULL CONTENT REVIEW — READ BACK AND MANUALLY CORRECT EVERY SECTION:
+  ⛔ This is NOT a SQL structure check. You must actually READ the content and fix anything
+  that looks wrong, inaccurate, generic, or low quality. Run each query and review the output.
+
+  a) OVERVIEW:
+    SELECT name, description, revenue, employees, founded, hq, tags FROM companies WHERE id = '[company_id]';
+    Check: description is accurate and specific (not truncated, not about the wrong entity).
+    tags reflect the actual market. revenue/employees match latest data.
+
+  b) PRODUCTS:
+    SELECT name, tagline, category, description FROM company_products WHERE company_id = '[company_id]';
+    Check: tagline is a real product tagline (not meta scraped text like "We're checking your connection").
+    category is correct (not misclassified). description is specific to this product.
+
+  c) FINANCIALS CONTENT:
+    SELECT tam, sam, som, arr, yoy_growth, revenue_per_employee,
+      revenue_streams, business_units, competitors, market_share
+    FROM company_financials WHERE company_id = '[company_id]';
+    Check: tam/sam/som are specific and defensible, not identical round numbers.
+    revenue_streams and business_units describe this company specifically (not generic labels).
+    competitors list makes sense for this company's actual market.
+    market_share percentages sum to 100.
+
+  d) REVENUE GROWTH:
+    SELECT revenue_growth FROM company_financials WHERE company_id = '[company_id]';
+    Check: array is oldest-first. All entries have year + revenue + growth_rate keys.
+    Values tell a coherent story (growth/decline consistent with known company trajectory).
+
+  e) MILESTONES:
+    SELECT year, title, description FROM company_milestones WHERE company_id = '[company_id]' ORDER BY year;
+    Check: at least one entry has year >= current_year - 2. All titles and descriptions
+    are accurate and specific. No placeholder or generic entries.
+
+  f) NEWS:
+    SELECT sort_order, published_date, headline, source_url FROM company_news
+    WHERE company_id = '[company_id]' ORDER BY sort_order;
+    Check: headlines are real, specific, recent. source_url is a direct article link
+    (not a homepage or section listing page). All items within the last 12 months.
+
+  Fix everything before proceeding. "The SQL checks passed" is NOT sufficient — the content
+  must also be accurate, specific, and coherent. If something looks wrong, fix it.
+
+  ⛔ ZEBRA BENCHMARK COMPARISON — final gate before logging:
+  For each section, ask: "Does this match the quality of Zebra Technologies' equivalent section?"
+  - Description as specific and accurate as Zebra's?
+  - Products with customers (name+abbr+bg), competitors (name+description+edge), use_cases (full sentences)?
+  - Financials with defensible TAM/SAM/SOM, specific revenue_streams and business_units?
+  - Milestones telling a coherent company story with real years and events?
+  - News items all recent, with direct article URLs, specific headlines?
+  - Departments with real icons, distinct colors, accurate descriptions?
+  - Org roles with company-specific tools and interview questions (not generic)?
+  - Leadership with real names at all three tiers (CEO, C-suite, VP)?
+  If ANY section falls below Zebra's bar — fix it before logging.
+
 ━━━ LOGGING ━━━
-After completing all sections, append the following block to company.md
+After ALL audit checks pass, append the following block to company.md
 in the project root:
 
 ## [COMPANY NAME]
@@ -590,6 +786,7 @@ in the project root:
 - **CEO:** [name found]
 - **Departments found:** [comma-separated list from job postings]
 - **Products count:** [n]
+- **Audit:** PASSED (financials ✓, revenue ✓, news ✓, market share ✓, formats ✓, use_cases ✓, revenue year ✓)
 - **Notes:** [anything missing, blocked, or unusual]
 
 ---

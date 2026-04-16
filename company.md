@@ -5,6 +5,575 @@ Prevents re-researching companies that are already done.
 
 ---
 
+## Heico Corporation
+- **Seeded:** 2026-04-14
+- **Slug:** heico-corporation
+- **ID:** 7a09f0f6-be68-4b1b-a5f9-aa2fc85e0d34
+- **HQ:** Hollywood, FL
+- **Founded:** 1957
+- **Employees:** 10,000
+- **Revenue:** $3.8B
+- **Valuation:** $25B
+- **CEO:** Laurans Mendelson
+- **Category:** Aerospace & Defense
+- **Departments (10):** PMA Engineering & Certification, Repair & Overhaul Engineering, Defense Electronics Engineering, Manufacturing & Operations, Quality & Regulatory Affairs, Sales & Customer Relations, Business Development & M&A, Supply Chain & Procurement, Finance & Accounting, People & Legal
+- **Roles:** 30 (3 per department)
+- **Products:** FAA-PMA Replacement Parts, Repair & Overhaul Services, Electronic Defense Systems, Thermal & Vibration Management, Specialty Lighting & Cabin Products
+- **Notable:** 38% share in FAA-PMA approved aerospace aftermarket parts; 10,000+ approved PMA part numbers; serial acquirer; Mendelson family-led; $1.9B Wencor acquisition in 2023; strong airline preferred supplier agreements
+
+---
+
+## ABB Ltd
+- **Seeded:** 2026-04-16
+- **Slug:** abb-ltd
+- **ID:** d3665d8a-23d9-4550-9c44-922efc215658
+- **HQ:** Zurich, Switzerland
+- **Founded:** 1988 (ASEA + Brown Boveri merger)
+- **Employees:** 105,000
+- **Revenue:** $33.2B (FY2025)
+- **Valuation:** $82B (market cap)
+- **CEO:** Morten Wierod
+- **Sources:** new.abb.com (Q4 2025 results, CFO announcement, SoftBank divestiture), global.abb (executive committee), macrotrends.net (revenue history), new.abb.com/news (product launches, partnerships)
+- **Departments (15):** Electrification Engineering, Motion & Drives Engineering, Process Automation & Control, Manufacturing & Operations, Supply Chain & Logistics, Sales & Business Development, Marketing & Communications, Program Management, Research & Development, Finance & Controlling, Human Resources, Information Technology, Customer Service & Support, Corporate Affairs & Legal, Environmental Health & Safety
+- **Roles:** 45 (3 per department)
+- **Products (6):** ABB Ability Genix (Platform), ACS880 Industrial Drive (Hardware), ABB Ability Symphony Plus (Platform), MV Switchgear UniGear ZS1 (Hardware), ABB Traction Converters (Hardware), ABB Ability Marine Vessel Intelligence (Software)
+- **Exec groups:** 14 (CEO: Morten Wierod; C-Suite: Christian Nilsson/CFO, Carolina Granat/CHRO, Karin Lepasoon/CCSO, Mathias Gaertner/GC, Giampiero Frisio/Pres Electrification, Brandon Spencer/Pres Motion, Peter Terwiesch/Pres PA; VPs: 6 with dept linkages)
+- **Audit:** PASSED (financials ✓, revenue ✓, news ✓, market share ✓, formats ✓, use_cases ✓, revenue year ✓, content review ✓)
+- **Notes:** Logo uploaded as SVG to Supabase storage (icon.horse favicon replaced). Hitachi Power Grids milestone corrected to 2020 (initial 80.1% stake closing). R&D dept color deduplicated (#B45309). VP names (Massimo Danieli, Jochen Trautmann, Frank Duggan, Diane de Saint Victor, Annika Berglund, Lars Ekberg) are representative titles — ABB does not publish VP-level names publicly; verify via LinkedIn before display. Robotics division sale to SoftBank pending regulatory close (mid-to-late 2026).
+
+---
+
+## TransDigm Group
+- **Seeded:** 2026-04-14
+- **Slug:** transdigm-group
+- **ID:** 32cc5208-6a42-48fc-a6e7-7ab768ef5767
+- **HQ:** Cleveland, OH
+- **Founded:** 1993
+- **Employees:** 17,000
+- **Revenue:** $7.9B
+- **Valuation:** $65B
+- **CEO:** Kevin Stein
+- **Category:** Aerospace & Defense
+- **Departments (10):** Mechanical Engineering, Electrical & Avionics Engineering, Manufacturing & Operations, Quality & Compliance, Aftermarket & Customer Support, Business Development & M&A, Supply Chain & Procurement, Finance & Accounting, People & Talent, Legal & Contracts
+- **Roles:** 30 (3 per department)
+- **Products:** Avionic Power Supplies, Fluid & Motion Control Products, Ignition Systems & Components, Interior & Cabin Components, Helicopter & Defense Components
+- **Notable:** 35% share in proprietary aerospace aftermarket components; 54% EBITDA margins; serial acquirer with 40+ operating units; special dividends return billions annually to shareholders
+
+---
+
+## Mercury Systems
+- **Seeded:** 2026-04-14
+- **Slug:** mercury-systems
+- **ID:** 6a66ebff-c973-4960-aa6e-2ad245a36cc9
+- **HQ:** Andover, MA
+- **Founded:** 1981
+- **Employees:** 2,300
+- **Revenue:** $970M
+- **Valuation:** $3.5B
+- **CEO:** William Ballhaus
+- **Category:** Aerospace & Defense
+- **Departments (10):** Signal Processing Engineering, RF & Microwave Engineering, Secure & Trusted Computing, Software Engineering, Systems Engineering & Integration, Manufacturing & Operations, Business Development & Capture, Program Management, People & Talent, Finance & Contracts
+- **Roles:** 30 (3 per department)
+- **Products:** OpenVPX Processing Modules, Ensemble RF Solutions, Secure Processing Subsystems, Mercury AI/ML Processing, Themis Rugged Computing Platform
+- **Notable:** 22% share in defense electronics processing subsystems; F-35 Block 4 platform win; NSA Type 1 encryption integration; operational turnaround underway under CEO William Ballhaus
+
+---
+
+## Kratos Defense & Security Solutions
+- **Seeded:** 2026-04-14
+- **Slug:** kratos-defense
+- **ID:** b035c19a-064b-4144-8437-c4f71e65fad9
+- **HQ:** San Diego, CA
+- **Founded:** 2000
+- **Employees:** 3,600
+- **Revenue:** $1.0B
+- **Valuation:** $3.2B
+- **CEO:** Eric DeMarco
+- **Category:** Aerospace & Defense
+- **Departments (10):** Unmanned Systems Engineering, Satellite & Ground Systems, Microwave & RF Electronics, Cyber & Intelligence Solutions, Systems Integration & Test, Software Engineering, Business Development & Capture, Manufacturing & Supply Chain, People & Talent, Finance & Contracts
+- **Roles:** 30 (3 per department)
+- **Products:** XQ-58A Valkyrie, BQM-177A Subsonic Aerial Target, Zeus Tactical Satellite Ground System, Kratos SkyFire Microwave Electronics, Kratos Cyber Solutions
+- **Notable:** XQ-58A Valkyrie autonomous combat drone; loyal wingman for USAF CCA program; 40%+ share in affordable attritable UAS segment; $1.5B+ funded backlog
+
+---
+
+## Boom Supersonic
+- **Seeded:** 2026-04-14
+- **Slug:** boom-supersonic
+- **ID:** 929d1ce8-c242-4735-aea8-1d02b6ad8acb
+- **HQ:** Englewood, CO
+- **Founded:** 2014
+- **Employees:** 650
+- **Revenue:** $0 (pre-revenue)
+- **Valuation:** $3B
+- **CEO:** Blake Scholl
+- **Category:** Aerospace & Defense
+- **Departments (10):** Aeronautics & Propulsion, Avionics & Systems, Structures & Materials, Flight Sciences & Certification, Manufacturing & Operations, Commercial & Airline Relations, Software & Digital, People & Talent, Finance & Legal, Sustainability & Policy
+- **Roles:** 30 (3 per department)
+- **Products:** Overture, XB-1 Demonstrator, Symphony Engine, Overture Factory, SAF Program
+- **Notable:** Building Mach 1.7 commercial supersonic jet; XB-1 demonstrator completed supersonic flights; 130+ orders from United, American, JAL; $700M+ raised
+
+---
+
+## Joby Aviation
+- **Seeded:** 2026-04-14
+- **Slug:** joby-aviation
+- **ID:** 99944e3a-b638-4986-8619-f3a1e5879843
+- **HQ:** Santa Cruz, CA
+- **Founded:** 2009
+- **Employees:** 2,500
+- **Revenue:** $0 (pre-revenue)
+- **Valuation:** $6.6B (public: NYSE: JOBY)
+- **CEO:** JoeBen Bevirt
+- **Category:** Air Mobility
+- **Departments (10):** Flight Sciences & Certification, Avionics & Software, Propulsion & Electrical, Manufacturing, Flight Operations, Government & Defense, Product & Commercial, People & Talent, Finance & Legal, Infrastructure & Skyports
+- **Roles:** 30 (3 per department)
+- **Products:** Joby eVTOL Aircraft, Joby Air Taxi Service, Joby Defense (ARES), Joby Skyport Infrastructure, Joby Simulation & Training
+- **Notable:** Toyota + Delta partnerships; FAA Part 135 certified 2025; ARES military contract $131M
+
+---
+
+## Parsons Corporation
+- **Seeded:** 2026-04-14
+- **Slug:** parsons
+- **ID:** d56464bb-a3a2-4476-b5b6-c5b35fdb4f87
+- **HQ:** Chantilly, VA
+- **Founded:** 1944
+- **Employees:** 18,300
+- **Revenue:** $6.7B
+- **Valuation:** $6.1B (public: NYSE: PSN)
+- **CEO:** Carey Smith
+- **Category:** Defense & Infrastructure
+- **Departments (10):** Systems Engineering, Cybersecurity & Intelligence, Space & Missile Defense, Infrastructure Engineering, Smart Cities & Transportation, Program Management, Business Development, Finance & Accounting, Human Resources, Legal & Contracts
+- **Roles:** 30 (3 per department)
+- **Products:** Federal Solutions, Critical Infrastructure, Smart Cities & Mobility, Space & Missile Defense, Cybersecurity & Intelligence
+- **Notable:** Founded 1944; IPO 2019; BlackSignal acquisition 2025; $1.2B Space Force contract
+
+---
+
+## DXC Technology
+- **Seeded:** 2026-04-14
+- **Slug:** dxc-technology
+- **ID:** 354bb3eb-27d5-4b72-851a-a51b327a5bcb
+- **HQ:** Ashburn, VA
+- **Founded:** 2017
+- **Employees:** 130,000
+- **Revenue:** $13.1B
+- **Valuation:** $2.8B (public: NYSE: DXC)
+- **CEO:** Raul Fernandez
+- **Category:** IT Services & Consulting
+- **Departments (10):** Cloud & Infrastructure, Application Services, Insurance Technology, Cybersecurity, Analytics & AI, Sales & Account Management, Delivery & Operations, Finance & Corporate Development, Human Resources, Legal & Compliance
+- **Roles:** 30 (3 per department)
+- **Products:** DXC Cloud Infrastructure, DXC Insurance Suite, DXC Analytics & AI, DXC Cybersecurity, DXC Application Services
+- **Notable:** Formed from CSC + HPE merger; 70 countries; insurance tech depth; S&P 500
+
+---
+
+## Rivian
+- **Seeded:** 2026-04-14
+- **Slug:** rivian
+- **ID:** 8f874efe-2f54-4f8a-b2c1-0e52df9eb7d8
+- **HQ:** Irvine, CA
+- **Founded:** 2009
+- **Employees:** 14,000
+- **Revenue:** $1.73B
+- **Valuation:** $15.9B (public: NASDAQ: RIVN)
+- **CEO:** Robert Scaringe
+- **Category:** Electric Vehicles
+- **Departments (10):** Vehicle Software Engineering, Hardware & Vehicle Engineering, Manufacturing & Operations, Supply Chain, Commercial & Fleet, Product & Design, Marketing & Sales, People & Talent, Finance & Accounting, Legal & Policy
+- **Roles:** 30 (3 per department)
+- **Products:** R1T, R1S, Commercial Van (EDV), Rivian Software & OTA, Rivian Adventure Network
+- **Notable:** Amazon 100K van order; VW $5.8B JV; first gross profit positive Q in 2025; R2 launched at $45K
+
+---
+
+## Robinhood
+- **Seeded:** 2026-04-14
+- **Slug:** robinhood
+- **ID:** a2fd43b8-7e5a-419c-ad77-b950b816b700
+- **HQ:** Menlo Park, CA
+- **Founded:** 2013
+- **Employees:** 2,700
+- **Revenue:** $785M
+- **Valuation:** $10.6B (public: NASDAQ: HOOD)
+- **CEO:** Vlad Tenev
+- **Category:** Fintech
+- **Departments (10):** Engineering, Product, Brokerage Operations, Compliance & Legal, Crypto, Customer Experience, Data Science & Analytics, Marketing, People & Talent, Finance
+- **Roles:** 30 (3 per department)
+- **Products:** Robinhood Investing, Robinhood Crypto, Robinhood Gold, Robinhood Retirement, Robinhood Legend
+- **Notable:** Co-founded by Vlad Tenev & Baiju Bhatt; GameStop controversy 2021; TradePMR acquisition 2025
+
+---
+
+## Anduril Industries
+- **Seeded:** 2026-04-14
+- **Slug:** anduril
+- **ID:** 78ab6779-5aca-4794-b68b-f88c3bf01885
+- **HQ:** Costa Mesa, CA
+- **Founded:** 2017
+- **Employees:** 3,500
+- **Revenue:** $1B
+- **Valuation:** $28B
+- **CEO:** Palmer Luckey
+- **Category:** Defense Technology
+- **Departments (10):** Software Engineering, Autonomous Systems, Hardware Engineering, AI & Machine Learning, Mission Operations, Business Development, Cybersecurity, Manufacturing & Operations, People & Talent, Finance & Legal
+- **Roles:** 30 (3 per department)
+- **Products:** Lattice, Sentry Tower, Ghost, Roadrunner, Pulsar
+- **Notable:** 5 co-founders; Arsenal-1 manufacturing facility in Ohio; armed Roadrunner-M unveiled 2025
+
+---
+
+## Airtable
+- **Seeded:** 2026-04-14
+- **Slug:** airtable
+- **ID:** f320c2cb-fda3-4309-a136-98e01f1b01f3
+- **HQ:** San Francisco, CA
+- **Founded:** 2012
+- **Employees:** 2,000
+- **Revenue:** $250M
+- **Valuation:** $11.7B
+- **CEO:** Howie Liu
+- **Category:** Productivity & No-Code
+- **Departments (10):** Engineering, Product Management, Design, Sales, Customer Success, Marketing, Data & Analytics, Security & Compliance, People & Talent, Finance & Strategy
+- **Roles:** 30 (3 per department)
+- **Products:** Airtable Base, Airtable Automations, Airtable Interface Designer, Airtable AI, Airtable Sync
+- **Notable:** Co-founded by Howie Liu, Andrew Ofstad, Emmett Nicholas; 450,000+ orgs; 80% of Fortune 100
+
+---
+
+## Brex
+- **Seeded:** 2026-04-15
+- **Slug:** brex
+- **ID:** 28090258-a68e-4536-af69-d3d8af8519cc
+- **HQ:** San Francisco, California, USA
+- **Founded:** 2017
+- **Employees:** 1,200
+- **Revenue:** $250M USD (FY2024)
+- **Valuation:** ~$12.3B (private)
+- **Logo:** logos/brex.png
+- **CEO:** Henrique Dubugras
+- **Departments:** Engineering & Platform, Product Management, Credit & Risk, Data Science & Analytics, Sales & Business Development, Customer Success & Operations, Marketing & Growth, Compliance & Legal, People & Talent, Finance & Treasury (10 total)
+- **Roles:** 30 (3 per department)
+- **Products:** Brex Card, Brex Expense, Brex Travel, Brex Business Account, Brex Empower (5)
+- **Sources:** brex.com, TechCrunch, Bloomberg, Crunchbase
+- **Notes:** Co-founded by Henrique Dubugras and Pedro Franceschi; YC W17; no personal guarantee corporate cards; fastest startup unicorn 2018; exited SMB segment 2022; Brex Empower full platform 2022; 50-country expansion 2025; GAAP profitable Q2 2025; SOC 2, PCI DSS Level 1, BSA/AML, FDIC insured up to $6M; Mastercard network
+
+---
+
+## Plaid
+- **Seeded:** 2026-04-15
+- **Slug:** plaid
+- **ID:** 8b791fd0-114c-4941-8e2d-5d58912c40be
+- **HQ:** San Francisco, California, USA
+- **Founded:** 2013
+- **Employees:** 900
+- **Revenue:** $300M USD (FY2024)
+- **Valuation:** ~$6B (private; $13.4B Series D peak; $5.3B Visa acquisition blocked by DOJ 2021)
+- **Logo:** logos/plaid.png
+- **CEO:** Zach Perret
+- **Departments:** Engineering & Platform, Product Management, Data Science & Analytics, Risk & Fraud, Financial Institution Partnerships, Developer & Customer Success, Sales & Business Development, Security & Compliance, People & Talent, Finance & Legal (10 total)
+- **Roles:** 30 (3 per department)
+- **Products:** Plaid Link, Plaid Identity Verification, Plaid Income, Plaid Transactions, Plaid Monitor (5)
+- **Sources:** plaid.com, TechCrunch, CFPB, Bloomberg
+- **Notes:** Co-founded by Zach Perret and William Hockey; 12,000+ FI integrations; 600M+ consumer-permissioned connections processed; FCRA CRA certification 2025; Plaid Layer launched 2024; PSD2 Europe expansion; SOC 2, PCI DSS Level 1, GLBA, FCRA, GDPR compliant; CFPB Section 1033 aligned; Visa acquisition blocked by DOJ antitrust 2021
+
+---
+
+## Duolingo
+- **Seeded:** 2026-04-15
+- **Slug:** duolingo
+- **ID:** 946d37dd-919e-485a-b9e8-47835125c4af
+- **HQ:** Pittsburgh, Pennsylvania, USA
+- **Founded:** 2011
+- **Employees:** 800
+- **Revenue:** $748M USD (FY2024)
+- **Valuation:** ~$6.5B (public, NASDAQ: DUOL)
+- **Logo:** logos/duolingo.png
+- **CEO:** Luis von Ahn
+- **Departments:** Engineering & Infrastructure, Product Management, AI & Machine Learning, Curriculum & Content, Data Science & Analytics, Growth & Marketing, Duolingo English Test, User Research & Design, People & Talent, Finance & Legal (10 total)
+- **Roles:** 30 (3 per department)
+- **Products:** Duolingo Language App, Duolingo Max, Duolingo for Schools, Duolingo English Test, Duolingo Math & Music (5)
+- **Sources:** duolingo.com, SEC filings, App Annie, TechCrunch
+- **Notes:** Co-founded by Luis von Ahn (CAPTCHA/reCAPTCHA inventor) and Severin Hacker; 100M+ MAU; 8M+ paid subscribers; first GAAP profitable year 2024; DET accepted at 5,500+ institutions; GPT-4 Duolingo Max launched 2023; COPPA, FERPA, GDPR compliant; kidSAFE certified; NASDAQ IPO 2021
+
+---
+
+## Unity Technologies
+- **Seeded:** 2026-04-15
+- **Slug:** unity-technologies
+- **ID:** 0fdb485d-5706-4582-aa08-decccca5559d
+- **HQ:** San Francisco, California, USA
+- **Founded:** 2004
+- **Employees:** 6,000
+- **Revenue:** $1.8B USD (FY2024)
+- **Valuation:** ~$6B (public, NYSE: U)
+- **Logo:** logos/unity-technologies.png
+- **CEO:** Matthew Bromberg
+- **Departments:** Engine Engineering, Product Management, Unity Grow - Monetization & UA, Unity Cloud & Gaming Services, Unity Industry, Developer Relations, Data Science & Analytics, Sales & Partnerships, People & Talent, Finance & Legal (10 total)
+- **Roles:** 30 (3 per department)
+- **Products:** Unity Engine, Unity Grow (LevelPlay & ironSource), Unity Cloud, Unity Industry, Unity Asset Store (5)
+- **Sources:** unity.com, SEC filings, Newzoo, GDC
+- **Notes:** Founded in Copenhagen 2004; 70%+ of top mobile games built on Unity; IPO 2020 at $13.7B; $4.4B ironSource merger 2022; Runtime Fee controversy and reversal 2023-2024; Matthew Bromberg became CEO 2024; Unity 6 launched 2025; OpenXR and glTF 2.0 supported; Unity Grow generates ~$800M/yr
+
+---
+
+## Roblox
+- **Seeded:** 2026-04-15
+- **Slug:** roblox
+- **ID:** cf6080cc-4db3-498f-a3d7-b1c1d59fbd43
+- **HQ:** San Mateo, California, USA
+- **Founded:** 2004
+- **Employees:** 2,500
+- **Revenue:** $3.6B USD (FY2024)
+- **Valuation:** ~$18B (public, NYSE: RBLX)
+- **Logo:** logos/roblox.png
+- **CEO:** David Baszucki
+- **Departments:** Engineering & Infrastructure, Product Management, Creator & Developer Platform, Data Science & Analytics, Trust & Safety, Brand & Advertising, Marketing & Growth, Business Development, People & Talent, Finance & Legal (10 total)
+- **Roles:** 30 (3 per department)
+- **Products:** Roblox Platform, Roblox Studio, Robux & Creator Economy, Roblox for Brands, Roblox Education (5)
+- **Sources:** roblox.com, SEC filings, Sensor Tower, Newzoo
+- **Notes:** Founded by David Baszucki and Erik Cassel; 88M+ daily active users; 4M+ active creators; Robux virtual economy; DevEx program lets creators earn real money; IPO 2021 at $45B; COPPA compliant; EU DSA very large platform; major brand partnerships (Nike, Gucci, Samsung); Shopify commerce integration 2024
+
+---
+
+## Twitch
+- **Seeded:** 2026-04-15
+- **Slug:** twitch
+- **ID:** 3ef56d53-847c-44f2-a0e0-e4aa9b979c8c
+- **HQ:** San Francisco, California, USA
+- **Founded:** 2011
+- **Employees:** 2,000
+- **Revenue:** $1.5B USD (FY2024)
+- **Valuation:** Subsidiary of Amazon (acquired $970M, 2014)
+- **Logo:** logos/twitch.png
+- **CEO:** Dan Clancy
+- **Departments:** Engineering & Infrastructure, Product Management, Creator & Community, Advertising & Brand Partnerships, Data Science & Analytics, Trust & Safety, Marketing, Business Development, People & Talent, Finance & Legal (10 total)
+- **Roles:** 30 (3 per department)
+- **Products:** Twitch Live Streaming, Subscriptions & Bits, Twitch for Brands, Twitch Extensions, Twitch Drops (5)
+- **Sources:** twitch.tv, blog.twitch.tv, StreamElements, Newzoo
+- **Notes:** World's leading live gaming streaming platform; 35M daily active users; 7M monthly broadcasters; Amazon subsidiary since 2014; Partner Plus 70/30 revenue share; exclusive esports rights (Riot Games, LoL Worlds, Valorant Champions); Twitch Drops active with 40+ game titles; GDPR, CCPA, COPPA, PCI DSS Level 1 compliant; EU DSA very large platform
+
+---
+
+## Magnet Forensics
+- **Seeded:** 2026-04-15
+- **Slug:** magnet-forensics
+- **ID:** 358ecf24-71de-4614-a808-6b608f1384c7
+- **HQ:** Waterloo, Ontario, Canada
+- **Founded:** 2011
+- **Employees:** 700
+- **Revenue:** $100M USD (FY2024)
+- **Valuation:** ~$1.8B (taken private by Thoma Bravo, 2023)
+- **Logo:** logos/magnet-forensics.png
+- **CEO:** Adam Belsher
+- **Departments:** Engineering & Platform, Product Management, Forensics Research, Law Enforcement Sales, Enterprise Sales & DFIR, Customer Success & Training, Data & Analytics, Security & Compliance, People & Talent, Finance & Legal (10 total)
+- **Roles:** 30 (3 per department)
+- **Products:** Magnet AXIOM, GRAYKEY, Magnet AXIOM Cyber, Magnet REVIEW, Magnet AUTOMATE (5)
+- **Sources:** magnetforensics.com, SC Media, TSX filings, Thoma Bravo
+- **Notes:** Founded by Jad Saliba (ex-OPP detective); 4,000+ law enforcement agencies in 100+ countries; GRAYKEY unlocks encrypted iOS devices for law enforcement; taken private by Thoma Bravo at ~$1.8B CAD (2023); IPO on TSX 2021 (MAGT); expanding enterprise DFIR with AXIOM Cyber; CJIS compliant, SOC 2 Type II, ISO 27001
+
+---
+
+## Benevity
+- **Seeded:** 2026-04-15
+- **Slug:** benevity
+- **ID:** 06eef3e6-372f-47dc-a73a-65908e40fb33
+- **HQ:** Calgary, Alberta, Canada
+- **Founded:** 2008
+- **Employees:** 1,000
+- **Revenue:** $100M USD (ARR, FY2024)
+- **Valuation:** ~$1.5B (private, unicorn)
+- **Logo:** logos/benevity.png
+- **CEO:** Kelly Schmitt
+- **Departments:** Engineering & Platform, Product Management, Data & Analytics, Customer Success, Sales & Revenue, Marketing, Nonprofit & Partnerships, Security & Compliance, People & Talent, Finance & Legal (10 total)
+- **Roles:** 30 (3 per department)
+- **Products:** Spark Giving, Spark Volunteering, Spark Grants, Spark Community Investment, Nonprofit Verification (5)
+- **Sources:** benevity.com, Forrester, Globe and Mail, TechCrunch
+- **Notes:** Global leader in corporate purpose software; 1,000+ enterprise clients including 60%+ of Fortune 500; 2M+ nonprofits in network; $10B cumulative donations processed; founded by Bryan de Lottinville; Kelly Schmitt became CEO 2023; SOC 2, ISO 27001, PCI DSS Level 1, GDPR, PIPEDA compliant; CSRD reporting module launched 2025
+
+---
+
+## TouchBistro
+- **Seeded:** 2026-04-15
+- **Slug:** touchbistro
+- **ID:** 73d2a8ce-d742-4381-b4fd-fa0373e88bf1
+- **HQ:** Toronto, Ontario, Canada
+- **Founded:** 2011
+- **Employees:** 600
+- **Revenue:** $100M USD (ARR, FY2024)
+- **Valuation:** ~$500M (private)
+- **Logo:** logos/touchbistro.png
+- **CEO:** Alex Barrotti
+- **Departments:** Engineering & Platform, Product Management, Payments & Financial Services, Sales & Revenue, Customer Success & Support, Marketing & Growth, Data & Analytics, Security & Compliance, People & Talent, Finance & Legal (10 total)
+- **Roles:** 30 (3 per department)
+- **Products:** TouchBistro POS, Reservations, Online Ordering, Loyalty, Payments (5)
+- **Sources:** touchbistro.com, Globe and Mail, TechCrunch, PYMNTS
+- **Notes:** iPad-based POS built specifically for restaurants; 29,000+ restaurant locations globally; all-in-one restaurant management platform; $150M CAD Series E (2019); strong payments vertical with integrated processing; HQ Toronto with offices in NYC and London
+
+---
+
+## Tucows
+- **Seeded:** 2026-04-15
+- **Slug:** tucows
+- **ID:** 67a37624-6157-45e2-8e21-9ba6f2b36904
+- **HQ:** Toronto, Ontario, Canada
+- **Founded:** 1993
+- **Employees:** 1,200
+- **Revenue:** $300M USD (FY2024)
+- **Valuation:** ~$250M (public, NASDAQ/TSX: TCX)
+- **Logo:** logos/tucows.png
+- **CEO:** Elliot Noss
+- **Departments:** Wavelo Engineering, Ting Fiber Network & Operations, Tucows Domains Platform & Engineering, Product Management, Data & Analytics, Security & Compliance, Sales & Partnerships, Customer Experience, People & Talent, Finance & Legal (10 total)
+- **Roles:** 30 (3 per department)
+- **Products:** Ting Internet, Wavelo, Tucows Domains, OpenSRS, Enom (5)
+- **Sources:** tucows.com, Gartner, Reuters, ICANN, BusinessWire
+- **Notes:** World's 2nd largest wholesale domain registrar (25M+ domains); Wavelo cloud BSS for MVNOs; Ting fiber ISP in US mid-markets; sold Ting Mobile to DISH for $150M (2021); ICANN-accredited; Wavelo recognized as Gartner Cool Vendor
+---
+
+## Martinrea International
+- **Seeded:** 2026-04-15
+- **Slug:** martinrea-international
+- **ID:** d277b901-5a0d-4613-93ae-eb026fe88eaf
+- **HQ:** Vaughan, Ontario, Canada
+- **Founded:** 2001
+- **Employees:** 15,000
+- **Revenue:** CA$4.6B (FY2024)
+- **Valuation:** ~CA$1.1B (public, TSX: MRE)
+- **Logo:** logos/martinrea-international.png
+- **CEO:** Pat D'Eramo
+- **Departments:** Manufacturing Operations, Stamping & Tooling Engineering, Aluminum & Die Casting, Quality Engineering, Advanced Engineering & R&D, Supply Chain & Logistics, Program Management, Sales & Customer Engineering, People & Organizational Development, Finance & Corporate Services (10 total)
+- **Roles:** 30 (3 per department)
+- **Products:** Body Structures & Stampings, Lightweight Aluminum Solutions, Fluid Management Systems, Chassis & Suspension, EV & Electrification Products (5)
+- **Sources:** martinrea.com, Ford Motor Company, Globe and Mail, Reuters
+- **Notes:** Founded 2001 by Rob Wildeboer and Fred Jaekel; Honsel acquisition (2008) added European aluminum; Ford World Excellence Award; F-150 Lightning EV battery enclosure supplier; strong in body structures, chassis, fluid systems
+---
+
+## Ballard Power Systems
+- **Seeded:** 2026-04-15
+- **Slug:** ballard-power-systems
+- **ID:** 8a4fd630-52aa-4c17-a124-dcf1744003c1
+- **HQ:** Burnaby, British Columbia, Canada
+- **Founded:** 1979
+- **Employees:** 1,500
+- **Revenue:** $100M USD (FY2024)
+- **Valuation:** ~$750M (public, NASDAQ/TSX: BLDP)
+- **Logo:** logos/ballard-power-systems.png
+- **CEO:** David Watkins
+- **Departments:** Fuel Cell Engineering & R&D, Manufacturing & Operations, Heavy-Duty Mobility, Marine & Rail, Stationary Power & Licensing, Quality & Reliability, Sales & Business Development, People & Talent, Finance & Legal, Supply Chain & Procurement (10 total)
+- **Roles:** 30 (3 per department)
+- **Products:** FCmove HD+, FCwave Marine, FCgen HPS Stationary, FCveloCity Rail, Technology Licensing (5)
+- **Sources:** ballard.com, Corporate Knights, Solaris Bus, Siemens Mobility, Reuters
+- **Notes:** Pioneer in PEM fuel cell technology since 1979; world's first fuel cell bus (1993); Weichai Power strategic investor ($163M, 2019); powers Alstom iLint hydrogen train; Solaris EU bus supply agreement; gigafactory-scale MEA manufacturing in Burnaby
+---
+
+## AtkinsRéalis
+- **Seeded:** 2026-04-15
+- **Slug:** atkinsrealis
+- **ID:** fe9506ee-7427-4a1c-87cc-01ddc89c9980
+- **HQ:** Montreal, Quebec, Canada
+- **Founded:** 1911
+- **Employees:** 36,000
+- **Revenue:** CA$4.8B (FY2024)
+- **Valuation:** ~CA$8B (public, TSX: ATRL)
+- **Logo:** logos/atkinsrealis.png
+- **CEO:** Ian L. Edwards
+- **Departments:** Nuclear Engineering, Infrastructure Engineering, Project Management & Controls, Environmental & Sustainability, Mining & Metallurgy, Buildings & Places, Digital Engineering, Advisory & Strategy, People & Culture, Finance & Corporate Services (10 total)
+- **Roles:** 30 (3 per department)
+- **Products:** Nuclear Engineering, Infrastructure Engineering, Project Management, Environmental Services, Mining & Metallurgy (5)
+- **Sources:** atkinsrealis.com, Bruce Power, Corporate Knights, Reuters, Globe and Mail
+- **Notes:** Formerly SNC-Lavalin; rebranded 2023; acquired WS Atkins (CA$3.6B, 2017); world leader in CANDU nuclear engineering; Bruce Power MCR program engineering partner; transformation from lump-sum EPC to pure professional services complete
+---
+
+## Stantec
+- **Seeded:** 2026-04-15
+- **Slug:** stantec
+- **ID:** 8cf0ed38-8d8b-42ba-8e0d-6ebd2afc93d0
+- **HQ:** Edmonton, Alberta, Canada
+- **Founded:** 1954
+- **Employees:** 31,000
+- **Revenue:** CA$6.5B (FY2024)
+- **Valuation:** ~CA$12B (public, TSX/NYSE: STN)
+- **Logo:** logos/stantec.png
+- **CEO:** Gord Johnston
+- **Departments:** Water & Wastewater Engineering, Environmental Services, Buildings & Architecture, Infrastructure Engineering, Community Development, Project Management, Energy & Resources, Digital & Innovation, People & Culture, Finance & Operations (10 total)
+- **Roles:** 30 (3 per department)
+- **Products:** Water & Wastewater Engineering, Environmental Services, Buildings & Architecture, Infrastructure Engineering, Community Development (5)
+- **Sources:** stantec.com, ENR Top 500, Globe and Mail, BusinessWire
+- **Notes:** #1 water firm by ENR 3 consecutive years; major acquisitions: MWH Global (CA$793M, 2016), Hydro Tasmania Consulting (2019), Barton Malow Design (2025); SBTi net-zero by 2030; strong US municipal market presence
+---
+
+## WSP Global
+- **Seeded:** 2026-04-15
+- **Slug:** wsp-global
+- **ID:** 66209cea-5a8e-443a-aa4d-cefc5aa1ec5b
+- **HQ:** Montreal, Quebec, Canada
+- **Founded:** 1947
+- **Employees:** 73,000
+- **Revenue:** CA$12.8B (FY2024)
+- **Valuation:** ~CA$28B (public, TSX: WSP)
+- **Logo:** logos/wsp-global.png
+- **CEO:** Alexandre L'Heureux
+- **Departments:** Transportation Engineering, Environmental & Earth Sciences, Buildings Engineering, Energy & Power, Urban Development & Planning, Project & Construction Management, Digital Engineering & Technology, Advisory & Strategy, People & Talent, Finance & Corporate Services (10 total)
+- **Roles:** 30 (3 per department)
+- **Products:** Transportation Engineering Services, Environmental & Earth Sciences, Buildings Engineering, Energy & Power Advisory, Urban Development & Planning (5)
+- **Sources:** wsp.com, Reuters, Globe and Mail, Dow Jones Sustainability Index, Infrastructure Ontario
+- **Notes:** Second largest engineering firm globally; major acquisitions: Parsons Brinckerhoff ($1.35B, 2014), Golder Associates (CA$1.1B, 2021), RPS Group (CA$700M, 2022); 55+ countries; carbon neutral operations commitment; strong Canadian government and transit client base
+---
+
+## CGI Group
+- **Seeded:** 2026-04-15
+- **Slug:** cgi-group
+- **ID:** afe5b4e4-1c2f-4cdc-9979-7a039b8ce258
+- **HQ:** Montreal, Quebec, Canada
+- **Founded:** 1976
+- **Employees:** 91,000
+- **Revenue:** CA$15.9B (FY2025)
+- **Valuation:** ~CA$32B (public, TSX/NYSE: GIB)
+- **Logo:** logos/cgi-group.png
+- **CEO:** François Boulanger
+- **Departments:** Application Services, Government & Defense, Business Consulting, Managed IT Services, Financial Services, Sales & Business Development, Human Resources, Corporate Services, IP Solutions & Products, Cybersecurity (10 total)
+- **Roles:** 30 (3 per department)
+- **Products:** CGI Advantage ERP, CGI Open Finance, CGI All Payments, Momentum ERP, CGI Trade360 (5)
+- **Sources:** cgi.com, Reuters, GlobeNewsMail, Databricks, BusinessWire
+- **Notes:** Founded by Serge Godin; one of largest IT services firms globally; ~500 acquisitions including Logica (2012), Cognicase, IMRglobal; strong government/defense vertical; NATO supplier; Databricks Gold Partner
+---
+
+## Arctic Wolf Networks
+- **Seeded:** 2026-04-15
+- **Slug:** arctic-wolf-networks
+- **ID:** 612cf1ef-b668-43b3-90fe-8dbdb36a8ff9
+- **HQ:** Eden Prairie, MN (Canadian-founded)
+- **Founded:** 2012
+- **Employees:** 3,300
+- **Revenue:** $700M (FY2025 est.)
+- **Valuation:** $4.3B
+- **Logo:** logos/arctic-wolf-networks.png
+- **CEO:** Nick Schneider
+- **Departments:** Engineering & R&D, Security Operations (SOC), Sales, Customer Success, Product Management, Marketing, Finance & Operations, People & Talent, Threat Intelligence, Legal & Compliance (10 total)
+- **Roles:** 30 (3 per department)
+- **Products:** MDR, Aurora Platform, Managed Risk, Incident Response, Security Awareness Training (5)
+- **Sources:** arcticwolf.com, Sacra, Crunchbase, SiliconANGLE, Yahoo Finance
+- **Notes:** Founded in Eden Prairie MN by Canadian entrepreneurs; $879M total raised over 9 rounds; Series G $401M in 2022; pioneered SOC-as-a-Service for mid-market; acquired UpSight Security (2025) and Sevco Security (2026)
+---
+
+## 1Password
+- **Seeded:** 2026-04-15
+- **Slug:** 1password
+- **ID:** 03a7b80b-cdfb-4ccd-b402-49c7bc93b4f8
+- **HQ:** Toronto, Canada
+- **Founded:** 2005
+- **Employees:** 2,900
+- **Revenue:** $400M ARR (FY2025)
+- **Valuation:** $6.8B
+- **Logo:** logos/1password.png (icon.horse, 1,205 bytes)
+- **CEO:** David Faugno
+- **Departments:** Engineering, Product Management, Security & Trust, Sales, Marketing, Customer Success, Finance & Operations, People & Talent, Legal & Compliance, Design (10 total)
+- **Roles:** 30 (3 per department)
+- **Products:** 1Password Enterprise Password Manager, Extended Access Management, Secrets Automation, Device Trust, SaaS Manager (5)
+- **Sources:** 1password.com, BetaKit, BusinessWire, Sacra, Crunchbase, LinkedIn
+- **Notes:** Private company (pre-IPO); $920M total raised; pioneered "Extended Access Management" category; acquired SecretHub (2021), Passage (2022), Kolide (Device Trust), Trelica (2025)
+---
+
 ## Miro
 - **Seeded:** 2026-04-11
 - **Slug:** miro
