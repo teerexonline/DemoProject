@@ -990,7 +990,7 @@ interface RelatedCompany {
   description: string | null; logo_color: string | null; logo_url: string | null
 }
 
-export default function CompanyFull({ company, initialSaved, dbContent, relatedCompanies = [] }: { company: Company; initialSaved: boolean; dbContent: DbContent; relatedCompanies?: RelatedCompany[] }) {
+export default function CompanyFull({ company, initialSaved, isLoggedIn = false, dbContent, relatedCompanies = [] }: { company: Company; initialSaved: boolean; isLoggedIn?: boolean; dbContent: DbContent; relatedCompanies?: RelatedCompany[] }) {
   const [activeSection, setActiveSection] = useState<SectionId>('overview')
   const [animKey, setAnimKey] = useState(0)
   const color = company.logo_color ?? '#063f76'
@@ -1015,7 +1015,7 @@ export default function CompanyFull({ company, initialSaved, dbContent, relatedC
           <span style={{ color: '#09090B', fontSize: '13px', fontWeight: 600 }}>{company.name}</span>
           <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: 8 }}>
             <ShareButton url={`https://researchorg.com/company/${company.slug}`} title={`${company.name} — ResearchOrg`} />
-            <SaveButton companyId={company.id} companyName={company.name} initialSaved={initialSaved} logoColor={color} />
+            <SaveButton companyId={company.id} companyName={company.name} initialSaved={initialSaved} isLoggedIn={isLoggedIn} logoColor={color} />
           </div>
         </div>
       </div>

@@ -29,7 +29,7 @@ const COMPANY_TEMPLATES: Template[] = [
 const FALLBACK_MESSAGES = [
   'Get alerts when companies you\'re researching update their data',
   'Save companies to your watchlist — no account needed',
-  'Track 270+ companies. Get notified when things change.',
+  'Track 500+ companies. Get notified when things change.',
 ]
 
 function pickIndex(slug: string, len: number): number {
@@ -221,6 +221,7 @@ export default function LoggedOutBanner() {
         }
         .bnr-submit:hover:not(:disabled) { opacity: 0.9; transform: translateY(-1px); }
         .bnr-submit:disabled { opacity: 0.5; cursor: not-allowed; }
+        @media (max-width: 480px) { .bnr-benefits { display: none !important; } }
         @media (max-width: 640px) {
           .bnr-icon { display: none !important; }
           .bnr-inner { justify-content: flex-start !important; gap: 8px !important; }
@@ -275,20 +276,37 @@ export default function LoggedOutBanner() {
                 ✓ You're on the list — we'll notify you when things change.
               </p>
             ) : uiState === 'idle' ? (
-              /* Default: message + CTA */
-              <div className="bnr-group" style={{ display: 'flex', alignItems: 'center', gap: 14, flexWrap: 'wrap', justifyContent: 'center' }}>
-                <p className="bnr-message" style={{
-                  margin: 0, fontSize: 14.5, lineHeight: 1.5,
-                  color: 'rgba(255,255,255,0.88)', letterSpacing: '-0.01em', fontWeight: 500,
-                }}>
-                  {message}
-                </p>
-                <button className="bnr-cta" onClick={() => setUiState('capturing')}>
-                  Save to watchlist
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M5 12h14M12 5l7 7-7 7"/>
-                  </svg>
-                </button>
+              /* Default: message + CTA + benefits */
+              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8 }}>
+                <div className="bnr-group" style={{ display: 'flex', alignItems: 'center', gap: 14, flexWrap: 'wrap', justifyContent: 'center' }}>
+                  <p className="bnr-message" style={{
+                    margin: 0, fontSize: 14.5, lineHeight: 1.5,
+                    color: 'rgba(255,255,255,0.88)', letterSpacing: '-0.01em', fontWeight: 500,
+                  }}>
+                    {message}
+                  </p>
+                  <button className="bnr-cta" onClick={() => setUiState('capturing')}>
+                    Save to watchlist
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M5 12h14M12 5l7 7-7 7"/>
+                    </svg>
+                  </button>
+                </div>
+                <div className="bnr-benefits" style={{ display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap', justifyContent: 'center' }}>
+                  {[
+                    { icon: '📋', text: 'Save research lists' },
+                    { icon: '🔔', text: 'Change alerts' },
+                    { icon: '📊', text: '500+ companies' },
+                  ].map(b => (
+                    <span key={b.text} style={{
+                      display: 'inline-flex', alignItems: 'center', gap: 4,
+                      fontSize: 11, color: 'rgba(255,255,255,0.45)', letterSpacing: '0.01em',
+                    }}>
+                      <span style={{ fontSize: 11 }}>{b.icon}</span>
+                      {b.text}
+                    </span>
+                  ))}
+                </div>
               </div>
             ) : (
               /* Email capture */

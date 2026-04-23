@@ -106,6 +106,7 @@ export default async function CompanyPage({ params }: Props) {
     <CompanyFull
       company={company}
       initialSaved={initialSaved}
+      isLoggedIn={!!user}
       dbContent={dbContent}
       relatedCompanies={relatedCompanies ?? []}
     />
