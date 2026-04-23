@@ -109,27 +109,37 @@ export default function SaveButton({ companyId, companyName, initialSaved, isLog
         </svg>
       </button>
 
-      {/* Signup prompt popover */}
+      {/* Signup prompt popover — opens below the button */}
       {showPrompt && (
         <div style={{
           position: 'absolute',
-          bottom: 'calc(100% + 10px)',
+          top: 'calc(100% + 10px)',
           right: 0,
-          width: 240,
+          width: 248,
           background: '#fff',
           border: '1px solid #E4E4E7',
           borderRadius: 12,
-          boxShadow: '0 8px 32px rgba(0,0,0,0.12), 0 2px 8px rgba(0,0,0,0.06)',
+          boxShadow: '0 8px 32px rgba(0,0,0,0.13), 0 2px 8px rgba(0,0,0,0.06)',
           zIndex: 1000,
           overflow: 'hidden',
           animation: 'savePromptIn 0.18s cubic-bezier(0.16,1,0.3,1)',
         }}>
           <style>{`
             @keyframes savePromptIn {
-              from { opacity: 0; transform: translateY(6px) scale(0.97); }
+              from { opacity: 0; transform: translateY(-6px) scale(0.97); }
               to   { opacity: 1; transform: translateY(0) scale(1); }
             }
           `}</style>
+
+          {/* Arrow pointing up */}
+          <div style={{
+            position: 'absolute', top: -6, right: 10,
+            width: 12, height: 12,
+            background: '#fff',
+            border: '1px solid #E4E4E7',
+            borderBottom: 'none', borderRight: 'none',
+            transform: 'rotate(45deg)',
+          }} />
 
           {/* Header */}
           <div style={{ padding: '12px 14px 10px', borderBottom: '1px solid #F4F4F5' }}>
@@ -181,16 +191,6 @@ export default function SaveButton({ companyId, companyName, initialSaved, isLog
               Already have an account? Log in
             </a>
           </div>
-
-          {/* Arrow */}
-          <div style={{
-            position: 'absolute', bottom: -6, right: 10,
-            width: 12, height: 12,
-            background: '#fff',
-            border: '1px solid #E4E4E7',
-            borderTop: 'none', borderLeft: 'none',
-            transform: 'rotate(45deg)',
-          }} />
         </div>
       )}
     </div>
