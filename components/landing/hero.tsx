@@ -540,7 +540,7 @@ export default function Hero() {
                 onMouseEnter={e => { const el = e.currentTarget as HTMLElement; el.style.background = '#04294f'; el.style.transform = 'translateY(-1px)' }}
                 onMouseLeave={e => { const el = e.currentTarget as HTMLElement; el.style.background = '#063f76'; el.style.transform = 'translateY(0)' }}
               >Explore companies</Link>
-              <span style={{ color: '#A1A1AA', fontSize: '13px' }}>270+ companies, free</span>
+              <span style={{ color: '#A1A1AA', fontSize: '13px' }}>500+ companies, free</span>
             </div>
           </div>
 

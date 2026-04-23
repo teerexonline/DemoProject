@@ -252,7 +252,7 @@ export default function MarketingPage() {
             <span style={{ color: '#609dd6' }}>more prepared than anyone else.</span>
           </h2>
           <p style={{ color: 'rgba(255,255,255,0.6)', fontSize: '16px', margin: '0 0 32px' }}>
-            270+ companies. Org charts, financials, team structure, and more — all free.
+            500+ companies. Org charts, financials, team structure, and more — all free.
           </p>
           <a
             href="/explore"
