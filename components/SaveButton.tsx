@@ -3,6 +3,7 @@
 import { useState, useTransition, useEffect, useRef } from 'react'
 import { saveCompany, unsaveCompany } from '@/app/actions/profile'
 import { createClient } from '@/lib/supabase/client'
+import { Bookmark, Bell, TrendingUp } from 'lucide-react'
 
 interface Props {
   companyId: string
@@ -14,9 +15,9 @@ interface Props {
 }
 
 const BENEFITS = [
-  { icon: '📋', text: 'Save companies to research lists' },
-  { icon: '🔔', text: 'Get alerts when data changes' },
-  { icon: '📊', text: 'Track hiring trends & org changes' },
+  { icon: <Bookmark size={13} strokeWidth={2} />, text: 'Save companies to research lists' },
+  { icon: <Bell size={13} strokeWidth={2} />, text: 'Get alerts when data changes' },
+  { icon: <TrendingUp size={13} strokeWidth={2} />, text: 'Track hiring trends & org changes' },
 ]
 
 export default function SaveButton({ companyId, companyName, initialSaved, isLoggedIn: isLoggedInProp = false, size = 'md', logoColor = '#063f76' }: Props) {
@@ -175,7 +176,13 @@ export default function SaveButton({ companyId, companyName, initialSaved, isLog
           <div style={{ padding: '10px 14px', display: 'flex', flexDirection: 'column', gap: 7 }}>
             {BENEFITS.map(b => (
               <div key={b.text} style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                <span style={{ fontSize: 13 }}>{b.icon}</span>
+                <span style={{
+                  flexShrink: 0, width: 22, height: 22, borderRadius: 6,
+                  background: '#eef4fb', color: '#063f76',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                }}>
+                  {b.icon}
+                </span>
                 <span style={{ fontSize: 11.5, color: '#52525B', lineHeight: 1.4 }}>{b.text}</span>
               </div>
             ))}
