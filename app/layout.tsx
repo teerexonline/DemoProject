@@ -51,7 +51,7 @@ export default function RootLayout({
         <Analytics />
         <SpeedInsights />
         <PaddleProviderWrapper />
-        <LoggedOutBanner />
+        {/* <LoggedOutBanner /> */}
         <Header />
         <div style={{ paddingTop: '60px', display: 'flex', flexDirection: 'column', minHeight: 'calc(100vh - 60px)' }}>
           <div style={{ flex: 1 }}>
