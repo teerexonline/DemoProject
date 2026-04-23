@@ -118,7 +118,7 @@ export default function Header() {
 
         {/* Nav links */}
         <nav className="header-nav" style={{ display: 'flex', gap: '2px', marginLeft: '4px' }}>
-          {([{ label: 'Features', href: '/features' }, { label: 'Explore', href: '/explore' }, { label: 'Pricing', href: '/pricing' }] as { label: string; href: string }[]).map(item => (
+          {([{ label: 'Features', href: '/features' }, { label: 'Explore', href: '/explore' }] as { label: string; href: string }[]).map(item => (
             <Link key={item.label} href={item.href}
               style={{ color: '#52525B', textDecoration: 'none', fontSize: '13.5px', fontWeight: 500, padding: '6px 11px', borderRadius: '7px', transition: 'color 0.15s, background 0.15s' }}
               onMouseEnter={e => { (e.currentTarget as HTMLElement).style.color = '#063f76'; (e.currentTarget as HTMLElement).style.background = '#eef4fb' }}
@@ -374,7 +374,7 @@ export default function Header() {
       {/* Mobile dropdown */}
       {mobileMenuOpen && (
         <div className="header-mobile-menu" style={{ borderTop: '1px solid #f0f6fc', background: '#fff', padding: '12px 16px 16px', display: 'flex', flexDirection: 'column', gap: '4px', position: 'relative', zIndex: 41 }}>
-          {([{ label: 'Features', href: '/features' }, { label: 'Explore', href: '/explore' }, { label: 'Pricing', href: '/pricing' }] as { label: string; href: string }[]).map(item => (
+          {([{ label: 'Features', href: '/features' }, { label: 'Explore', href: '/explore' }] as { label: string; href: string }[]).map(item => (
             <Link key={item.label} href={item.href} onClick={() => setMobileMenuOpen(false)}
               style={{ color: '#52525B', textDecoration: 'none', fontSize: '14px', fontWeight: 500, padding: '10px 12px', borderRadius: '8px', background: '#f8fbfe' }}
             >{item.label}</Link>
