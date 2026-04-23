@@ -2,6 +2,7 @@
 
 import { useState, useTransition, useEffect, useRef } from 'react'
 import { saveCompany, unsaveCompany } from '@/app/actions/profile'
+import { createClient } from '@/lib/supabase/client'
 
 interface Props {
   companyId: string
@@ -18,11 +19,30 @@ const BENEFITS = [
   { icon: '📊', text: 'Track hiring trends & org changes' },
 ]
 
-export default function SaveButton({ companyId, companyName, initialSaved, isLoggedIn = false, size = 'md', logoColor = '#063f76' }: Props) {
+export default function SaveButton({ companyId, companyName, initialSaved, isLoggedIn: isLoggedInProp = false, size = 'md', logoColor = '#063f76' }: Props) {
   const [saved, setSaved] = useState(initialSaved)
+  const [isLoggedIn, setIsLoggedIn] = useState(isLoggedInProp)
   const [isPending, startTransition] = useTransition()
   const [showPrompt, setShowPrompt] = useState(false)
   const wrapperRef = useRef<HTMLDivElement>(null)
+
+  // Client-side auth + saved state check.
+  // The page is ISR so the server always passes isLoggedIn=false/initialSaved=false.
+  // We hydrate the real state here after mount.
+  useEffect(() => {
+    const supabase = createClient()
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      if (!session) return
+      setIsLoggedIn(true)
+      supabase
+        .from('saved_companies')
+        .select('id')
+        .eq('user_id', session.user.id)
+        .eq('company_id', companyId)
+        .maybeSingle()
+        .then(({ data }) => { if (data) setSaved(true) })
+    })
+  }, [companyId])
 
   // Close prompt on outside click
   useEffect(() => {
