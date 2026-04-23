@@ -1,9 +1,6 @@
 import { notFound } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
-import { getUserTier, isPaidTier } from '@/lib/access'
-import { getMonthlyViewCount, hasViewedThisMonth, getNextResetAt } from '@/lib/quota'
 import CompanyFull from './CompanyFull'
-import CompanyFreeGated from './CompanyFreeGated'
 import type { Metadata } from 'next'
 
 // Always fetch fresh data — never serve a cached version of a company profile
@@ -73,18 +70,13 @@ export default async function CompanyPage({ params }: Props) {
         .limit(6)
     : { data: [] }
 
-  // Auth
+  // Auth — only used to personalise saved state, never to gate content
   const { data: { user } } = await supabase.auth.getUser()
 
-  if (!user) {
-    // Guests see company overview only — all other sections prompt sign-up
-    return <CompanyFreeGated company={company} hasToken={false} initialSaved={false} isGuest relatedCompanies={relatedCompanies ?? []} />
-  }
-
-  // Fetch plan + saved state + all company content in parallel
-  const [profileResult, savedResult, newsRes, milestonesRes, productsRes, financialsRes, standardsRes, deptsRes, rolesRes, execRes, leadersRes] = await Promise.all([
-    supabase.from('profiles').select('plan, free_token_reset_at').eq('id', user.id).single(),
-    supabase.from('saved_companies').select('id').eq('user_id', user.id).eq('company_id', company.id).maybeSingle(),
+  const [savedResult, newsRes, milestonesRes, productsRes, financialsRes, standardsRes, deptsRes, rolesRes, execRes, leadersRes] = await Promise.all([
+    user
+      ? supabase.from('saved_companies').select('id').eq('user_id', user.id).eq('company_id', company.id).maybeSingle()
+      : Promise.resolve({ data: null }),
     supabase.from('company_news').select('*').eq('company_id', company.id).order('published_date', { ascending: false }),
     supabase.from('company_milestones').select('*').eq('company_id', company.id).order('sort_order'),
     supabase.from('company_products').select('*').eq('company_id', company.id).order('sort_order'),
@@ -96,10 +88,8 @@ export default async function CompanyPage({ params }: Props) {
     supabase.from('company_leaders').select('*').eq('company_id', company.id).order('sort_order'),
   ])
 
-  const tier = getUserTier(user, profileResult.data?.plan)
   const initialSaved = savedResult.data !== null
 
-  // Bundle all DB content — components fall back to hardcoded defaults when arrays are empty
   const dbContent = {
     news:        newsRes.data ?? [],
     milestones:  milestonesRes.data ?? [],
@@ -112,20 +102,12 @@ export default async function CompanyPage({ params }: Props) {
     leaders:     leadersRes.data ?? [],
   }
 
-  const related = relatedCompanies ?? []
-
-  if (isPaidTier(tier)) {
-    return <CompanyFull company={company} initialSaved={initialSaved} dbContent={dbContent} relatedCompanies={related} />
-  }
-
-  const alreadyViewed = await hasViewedThisMonth(user.id, company.id)
-  if (alreadyViewed) {
-    return <CompanyFull company={company} initialSaved={initialSaved} dbContent={dbContent} relatedCompanies={related} />
-  }
-
-  const monthlyCount = await getMonthlyViewCount(user.id)
-  const hasToken = monthlyCount === 0
-  const nextResetAt = getNextResetAt()
-
-  return <CompanyFreeGated company={company} hasToken={hasToken} initialSaved={initialSaved} relatedCompanies={related} nextResetAt={nextResetAt} />
+  return (
+    <CompanyFull
+      company={company}
+      initialSaved={initialSaved}
+      dbContent={dbContent}
+      relatedCompanies={relatedCompanies ?? []}
+    />
+  )
 }

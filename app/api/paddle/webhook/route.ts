@@ -1,3 +1,4 @@
+// PAYMENTS_DISABLED: Paddle billing is archived. Re-enable by setting PAYMENTS_ENABLED=true in env.
 import { NextRequest, NextResponse } from 'next/server'
 import { createAdminClient } from '@/lib/supabase/admin'
 

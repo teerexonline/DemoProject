@@ -4,7 +4,6 @@ import Hero from '@/components/landing/hero'
 import Features from '@/components/landing/features'
 import Testimonials from '@/components/landing/testimonials'
 import Trending from '@/components/landing/trending'
-import Pricing from '@/components/landing/pricing'
 const EXPLORE_SECTORS = [
   { id: 'tech',       label: 'Technology',           desc: 'Software, AI, Cloud & Dev Tools',     accent: '#2563EB', img: 'https://images.unsplash.com/photo-1587620962725-abab7fe55159?w=480&h=260&fit=crop&auto=format&q=75' },
   { id: 'finance',    label: 'Finance',              desc: 'Banking, Fintech & Capital Markets',  accent: '#059669', img: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=480&h=260&fit=crop&auto=format&q=75' },
@@ -164,7 +163,7 @@ export default function MarketingPage() {
               <p style={{ color: '#71717A', fontSize: '15px', lineHeight: 1.7, margin: '0 0 24px' }}>
                 Build research lists by industry, role, or application stage. Never lose track of a company you wanted to research.
               </p>
-              <a href="/signup" style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', color: '#063f76', fontSize: '14px', fontWeight: 600, textDecoration: 'none' }}
+              <a href="/explore" style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', color: '#063f76', fontSize: '14px', fontWeight: 600, textDecoration: 'none' }}
                 onMouseEnter={e => (e.currentTarget as HTMLElement).style.gap = '10px'}
                 onMouseLeave={e => (e.currentTarget as HTMLElement).style.gap = '6px'}
               >
@@ -253,10 +252,10 @@ export default function MarketingPage() {
             <span style={{ color: '#609dd6' }}>more prepared than anyone else.</span>
           </h2>
           <p style={{ color: 'rgba(255,255,255,0.6)', fontSize: '16px', margin: '0 0 32px' }}>
-            Join 10,000+ job seekers who use ResearchOrg to research smarter and interview better.
+            270+ companies. Org charts, financials, team structure, and more — all free.
           </p>
           <a
-            href="/signup"
+            href="/explore"
             style={{
               display: 'inline-flex', alignItems: 'center', gap: '8px',
               color: '#063f76', textDecoration: 'none', fontSize: '15px', fontWeight: 600,
@@ -276,7 +275,8 @@ export default function MarketingPage() {
               el.style.transform = 'translateY(0)'
             }}
           >
-            Start for free — no credit card required
+            Start exploring — it&apos;s free
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
           </a>
         </div>
       </section>
@@ -328,7 +328,6 @@ export default function MarketingPage() {
         </div>
       </section>
 
-      <Pricing />
 
       <style>{`
         .section-2col {

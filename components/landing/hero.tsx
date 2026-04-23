@@ -535,12 +535,12 @@ export default function Hero() {
             </div>
 
             <div className="animate-fadeUp delay-375" style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
-              <Link href="/signup"
+              <Link href="/explore"
                 style={{ color: '#fff', textDecoration: 'none', fontSize: '14px', fontWeight: 600, padding: '11px 22px', borderRadius: '10px', background: '#063f76', boxShadow: '0 1px 4px rgba(6,63,118,0.3)', transition: 'background 0.15s, transform 0.1s' }}
                 onMouseEnter={e => { const el = e.currentTarget as HTMLElement; el.style.background = '#04294f'; el.style.transform = 'translateY(-1px)' }}
                 onMouseLeave={e => { const el = e.currentTarget as HTMLElement; el.style.background = '#063f76'; el.style.transform = 'translateY(0)' }}
-              >Start for free</Link>
-              <span style={{ color: '#A1A1AA', fontSize: '13px' }}>No credit card required</span>
+              >Explore companies</Link>
+              <span style={{ color: '#A1A1AA', fontSize: '13px' }}>270+ companies, free</span>
             </div>
           </div>
 
