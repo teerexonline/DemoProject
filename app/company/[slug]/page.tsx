@@ -27,17 +27,18 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   const title = `${company.name} Company Profile — Org Chart, Financials & Interview Prep | ResearchOrg`
 
-  // Build a rich description that targets actual search queries
-  const parts: string[] = []
-  if (company.employees) parts.push(`${company.employees.toLocaleString()} employees`)
-  if (company.hq) parts.push(company.hq)
-  if (company.revenue) parts.push(company.revenue + ' revenue')
+  // Build a description under 160 chars that targets actual search queries
+  const stats: string[] = []
+  if (company.employees) stats.push(`${company.employees.toLocaleString()} employees`)
+  if (company.hq) stats.push(company.hq)
 
-  const description = parts.length > 0
-    ? `Explore ${company.name}'s full company profile — org chart, financials, tech stack, and interview prep. ${parts.join(' · ')}. Free on ResearchOrg.`
-    : company.description
-      ? `${company.description.slice(0, 120)} Explore ${company.name}'s org chart, financials, and interview prep on ResearchOrg.`
-      : `Research ${company.name} on ResearchOrg — org chart, revenue, team structure, internal tools, and interview prep. Free access.`
+  const base = `${company.name} company profile — org chart, products, financials & competitors.`
+  const suffix = stats.length > 0 ? ` ${stats.join(' · ')}. Free on ResearchOrg.` : ' Free on ResearchOrg.'
+  const description = (base + suffix).length <= 160
+    ? base + suffix
+    : (base.length + ' Free on ResearchOrg.'.length) <= 160
+      ? base + ' Free on ResearchOrg.'
+      : base
 
   const canonicalUrl = `${BASE_URL}/company/${slug}`
   const ogImage = company.logo_url

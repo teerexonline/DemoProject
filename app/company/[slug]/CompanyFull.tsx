@@ -1087,13 +1087,34 @@ export default function CompanyFull({ company, initialSaved, isLoggedIn = false,
           ))}
         </div>
 
-        {/* Content panel */}
+        {/* Content panel — all sections rendered for SEO; only active section visible */}
         <div
-          key={animKey}
-          className="animate-tabIn company-panel"
+          className="company-panel"
           style={{ background: '#fff', borderRadius: '14px', border: '1px solid #E4E4E7', padding: '28px', boxShadow: '0 1px 4px rgba(0,0,0,0.04)', minHeight: '500px' }}
         >
-          <SectionContent id={activeSection} company={company} dbContent={dbContent} />
+          {([
+            { id: 'overview',   label: `${company.name} Company Overview` },
+            { id: 'org',        label: `${company.name} Organization Structure & Team` },
+            { id: 'financials', label: `${company.name} Financials, Revenue & Market Share` },
+            { id: 'internal',   label: `${company.name} Internal Tools & Processes` },
+            { id: 'prep',       label: `${company.name} Interview Preparation` },
+            { id: 'product',    label: `${company.name} Products & Competitors` },
+          ] as { id: SectionId; label: string }[]).map(({ id: sectionId, label }) => (
+            <div key={sectionId} style={{ display: activeSection === sectionId ? 'block' : 'none' }}>
+              {/* Visually-hidden h2 tells Google what this section is about */}
+              <h2 style={{ position: 'absolute', width: 1, height: 1, padding: 0, margin: -1, overflow: 'hidden', clip: 'rect(0,0,0,0)', whiteSpace: 'nowrap', border: 0 }}>
+                {label}
+              </h2>
+              {activeSection === sectionId ? (
+                // Re-mount active section on switch to replay the tab animation
+                <div key={animKey} className="animate-tabIn">
+                  <SectionContent id={sectionId} company={company} dbContent={dbContent} />
+                </div>
+              ) : (
+                <SectionContent id={sectionId} company={company} dbContent={dbContent} />
+              )}
+            </div>
+          ))}
         </div>
       </div>
 
